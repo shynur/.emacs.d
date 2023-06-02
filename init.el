@@ -1,8 +1,6 @@
-;;; ~shynur/.emacs.d/init.el --- Part of Shynur's .emacs  -*- lexical-binding: t; -*-
+;;; ~shynur/.emacs.d/init.el --- Part of Shynur's Emacs Configuration  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2023 Xie Qi <one.last.kiss@outlook.com>
-;;
-;;
+;; Copyright (C) 2023 谢骐 <one.last.kiss@outlook.com>
 
 ;;; Commentary:
 
@@ -29,7 +27,7 @@
                                            "%s"
                                            (format-spec
                                             #("%n GC (%ss total): %B VM, %mmin runtime"
-                                              7  9 (face bold)
+                                               7  9 (face bold)
                                               26 28 (face bold))
                                             `((?n . ,(format #("%d%s"
                                                                0 2 (face bold))
@@ -56,9 +54,13 @@
                               "暂时不需要修改,因为根据`package-menu-hide-low-priority',默认选取最新的包")
  '(package-menu-hide-low-priority t
                                   2 (package))
- '(package-archives '(("gnu"    . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/gnu/")
-                      ("nongnu" . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/nongnu/")
-                      ("melpa"  . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/melpa/"))
+ '(package-archives (if :official
+                        '(("gnu"    . "https://elpa.gnu.org/packages/")
+                          ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+                          ("melpa"  . "https://melpa.org/packages/"))
+                      '(("gnu"    . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/gnu/")
+                        ("nongnu" . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/nongnu/")
+                        ("melpa"  . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/melpa/")))
                     3 (package)
                     "[1]其它'ELPA'中的包会依赖gnu中的包[2]'nongnu'是官方维护的[3]'MELPA'滚动升级,收录的包的数量最大[4]stable-melpa依据源码的Tag(Git)升级,数量比'MELPA'少,因为很多包作者根本不打Tag[5]Org仅仅为了org-plus-contrib这一个包,Org重度用户使用[6]gnu-devel收录GNU中的包的开发中版本,一般不必启用(类似于'MELPA'与stable-melpa的关系)[7]nongnu-devel收录'nongnu'中的包的开发中版本,一般不必启用")
  '(package-selected-packages (progn
@@ -83,11 +85,11 @@
                                        ascii-table
                                        doom-themes
                                        use-package
+                                       company-jedi
                                        rainbow-mode
                                        all-the-icons
                                        doom-modeline
                                        markdown-mode
-                                       restart-emacs
                                        page-break-lines
                                        company-quickhelp
                                        rainbow-delimiters
@@ -118,20 +120,14 @@
  '(highlight-nonselected-windows t
                                  nil ()
                                  "除了当前选中的'window',还'高亮'非选中的'window'的'active-region'")
- '(transient-history-file (shynur/pathname-ensure-parent-directory-exist
-                           (concat
-                            shynur/etc/
-                            "transient-history-file.el"))
+ '(transient-history-file (shynur/pathname-~/.emacs.d/.shynur/
+                           "transient-history-file.el")
                           nil (transient))
- '(transient-levels-file (shynur/pathname-ensure-parent-directory-exist
-                          (concat
-                           shynur/etc/
-                           "transient-levels-file.el"))
+ '(transient-levels-file (shynur/pathname-~/.emacs.d/.shynur/
+                          "transient-levels-file.el")
                          nil (transient))
- '(transient-values-file (shynur/pathname-ensure-parent-directory-exist
-                          (concat
-                           shynur/etc/
-                           "transient-values-file.el"))
+ '(transient-values-file (shynur/pathname-~/.emacs.d/.shynur/
+                          "transient-values-file.el")
                          nil (transient))
  '(case-replace t
                 nil (replace)
@@ -172,11 +168,9 @@
  '(calendar-week-start-day 1
                            nil (calendar)
                            "'日历'中以星期一作为一周的开始")
- '(auth-sources (mapcar (lambda (filename-string)
-                          (shynur/pathname-ensure-parent-directory-exist
-                           (concat
-                            shynur/etc/
-                            (substring filename-string 2)))) auth-sources)
+ '(auth-sources (mapcar (lambda (pathname)
+                          (apply #'shynur/pathname-~/.emacs.d/.shynur/
+                                 (remove "~" (file-name-split pathname)))) auth-sources)
                 nil (auth-source)
                 "'远程登陆'的认证信息(包含明文密码)的存储位置")
  '(coding-system-for-write 'utf-8-unix
@@ -224,10 +218,8 @@
  '(custom-enabled-themes '(modus-vivendi)
                          nil (custom)
                          "深色背景")
- '(custom-file (shynur/pathname-ensure-parent-directory-exist
-                (concat
-                 shynur/etc/
-                 ".custom-file.el"))
+ '(custom-file (shynur/pathname-~/.emacs.d/.shynur/
+                "custom-file.el")
                nil (cus-edit)
                "修改Emacs导出'customization'的位置,以防Emacs搅乱这个文件的'custom-set-variables'形式和'custom-set-faces'形式")
  '(doom-modeline-mode t
@@ -286,25 +278,17 @@
                          nil (delsel)
                          "选中文本后输入字符,会先删除刚刚选择的文本,再插入输入的字符")
  '(enable-recursive-minibuffers t)
- '(eshell-directory-name (shynur/pathname-ensure-parent-directory-exist
-                          (concat
-                           shynur/etc/
-                           "eshell-directory-name/"))
+ '(eshell-directory-name (shynur/pathname-~/.emacs.d/.shynur/
+                          "eshell-directory-name/")
                          nil (esh-mode))
- '(eshell-history-file-name (shynur/pathname-ensure-parent-directory-exist
-                             (concat
-                              shynur/etc/
-                              "eshell-history-file-name.txt"))
+ '(eshell-history-file-name (shynur/pathname-~/.emacs.d/.shynur/
+                             "eshell-history-file-name.txt")
                             nil (em-hist))
- '(eshell-last-dir-ring-file-name (shynur/pathname-ensure-parent-directory-exist
-                                   (concat
-                                    shynur/etc/
-                                    "eshell-last-dir-ring-file-name.txt"))
+ '(eshell-last-dir-ring-file-name (shynur/pathname-~/.emacs.d/.shynur/
+                                   "eshell-last-dir-ring-file-name.txt")
                                   nil (em-dirs))
- '(eww-bookmarks-directory (shynur/pathname-ensure-parent-directory-exist
-                            (concat
-                             shynur/etc/
-                             "eww-bookmarks-directory/"))
+ '(eww-bookmarks-directory (shynur/pathname-~/.emacs.d/.shynur/
+                            "eww-bookmarks-directory/")
                            nil (eww))
  '(extended-command-suggest-shorter t
                                     nil (simple)
@@ -314,22 +298,8 @@
                           "保存'desktop'时,将'frame'和'window'的参数排除在外")
  '(desktop-save-mode nil
                      nil (desktop))
- '(desktop-path (list
-                 (shynur/pathname-ensure-parent-directory-exist
-                  (concat
-                   shynur/etc/
-                   "desktop-path/")))
-                nil (desktop)
-                "查找被保存的'desktop'的位置所在的目录")
- '(desktop-base-file-name "desktop-base-file-name.el"
-                          nil (desktop)
-                          "和`desktop-path'组合使用")
- '(desktop-base-lock-name "desktop-base-lock-name.el"
-                          nil (desktop))
- '(savehist-file (shynur/pathname-ensure-parent-directory-exist
-                  (concat
-                   shynur/etc/
-                   "savehist-file.el"))
+ '(savehist-file (shynur/pathname-~/.emacs.d/.shynur/
+                  "savehist-file.el")
                  nil (savehist)
                  "必须在打开`savehist-mode'之前设置此变量,否则`savehist-mode'将找不到该文件")
  '(savehist-mode t
@@ -347,6 +317,15 @@
  '(desktop-auto-save-timeout nil
                              nil (desktop)
                              "取消功能:在idle时自动保存'desktop'")
+ '(minibuffer-allow-text-properties t
+                                    nil ()
+                                    "大部分情况下,保留从`read-from-minibuffer'获取的文本的属性")
+ '(minibuffer-default-prompt-format #(" (default %s)"
+                                      10 12 (face (underline (:foreground "VioletRed1"))))
+                                    nil (minibuffer))
+ '(read-minibuffer-restore-windows t
+                                   nil ()
+                                   "从minibuffer获取输入之后,恢复进入minibuffer之前当前frame的window-configurations")
  '(file-name-shadow-mode t
                          nil (rfn-eshadow)
                          "`find-file'时,若输入绝对路径,则调暗默认值的前景")
@@ -399,7 +378,6 @@
  '(c-mode-common-hook (append c-mode-common-hook
                               (list
                                (lambda ()
-                                 ;;见<https://www.gnu.org/software/emacs/manual/html_node/efaq/Indenting-switch-statements.html>
                                  (c-set-offset 'case-label '+))
                                ;;只保留当前编译环境下,生效的ifdef从句
                                #'hide-ifdef-mode))
@@ -407,7 +385,7 @@
  '(neotree-mode-hook (append neotree-mode-hook
                              (list
                               (lambda ()
-                                ;;关闭'neotree'的行号
+                                "关闭'neotree'的行号"
                                 (display-line-numbers-mode -1))))
                      nil (neotree))
  '(global-hl-line-mode t
@@ -444,9 +422,6 @@
  '(indent-tabs-mode nil
                     nil ()
                     "制表符尽量用空格代替.(不过,诸如'Bash'脚本之类的文件编写还是需要tab字符的)")
- '(context-menu-mode t
-                     nil (mouse)
-                     "在空白处右击显示菜单")
  '(kill-whole-line nil
                    nil (simple)
                    "`C-k'不删除换行符")
@@ -459,22 +434,7 @@
  '(inhibit-startup-screen t
                           nil ()
                           "取消原本的 startup screen")
- '(initial-scratch-message (progn
-                             (defface shynur/face-sly-mrepl-output-face
-                               '((((class color)
-                                   (background dark))
-                                  (:foreground "VioletRed1"))
-                                 (((class color)
-                                   (background light))
-                                  (:foreground "steel blue"))
-                                 (t
-                                  (:bold t :italic t))) "")
-                             (shynur/buffer-eval-after-created "*scratch*"
-                               (while (/= (buffer-size) (length initial-scratch-message))
-                                 (sleep-for 1))
-                               (highlight-regexp (format-message (shynur/string-text->regexp initial-scratch-message))
-                                                 'shynur/face-sly-mrepl-output-face))
-                             #(";;     *
+ '(initial-scratch-message #(";;     *
 ;;      May the Code be with You!
 ;;     .                                 .
 ;;                               *
@@ -492,11 +452,8 @@
 ;; |  |  |  | )_) |  |  |  |))|  |  |  |  |  |
 ;; |  |  |  |  |  |  |  |  (/ |  |  |  |  |  |
 ;; |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-
-"
-                               0 665 ()))
-                           nil ()
-                           "'*scratch*'的初始内容")
+\n"
+                             0 665 (font-lock-face (:foreground "VioletRed1"))))
  '(overwrite-mode nil)
  '(insert-default-directory t
                             nil (minibuffer)
@@ -556,10 +513,8 @@
  '(inhibit-startup-echo-area-message user-login-name
                                      nil ()
                                      "只有将该变量设置为自己在OS中的'username',才能屏蔽'startup'时 echo area 的“For information about GNU Emacs and the GNU system, type C-h C-a.”")
- '(save-place-file (shynur/pathname-ensure-parent-directory-exist
-                    (concat
-                     shynur/etc/
-                     "save-place-file.el"))
+ '(save-place-file (shynur/pathname-~/.emacs.d/.shynur/
+                    "save-place-file.el")
                    nil (saveplace))
  '(save-place-mode t
                    nil (saveplace)
@@ -595,10 +550,8 @@
  '(suggest-key-bindings most-positive-fixnum
                         nil (simple)
                         "_1_通过函数名调用command时,在minibuffer中提示这个command可能绑定的快捷键;_2_决定`extended-command-suggest-shorter'的显示持续时间;_3_将前面这两个提示信息持续显示5秒;_4_使command候选词列表中,各函数名的后面显示该函数绑定的快捷键")
- '(temporary-file-directory (shynur/pathname-ensure-parent-directory-exist
-                             (concat
-                              shynur/etc/
-                              "temporary-file-directory/"))
+ '(temporary-file-directory (shynur/pathname-~/.emacs.d/.shynur/
+                             "temporary-file-directory/")
                             nil ()
                             "'临时文件'的放置目录(隐私文件放在“/tmp/”目录是不妥的)")
  '(text-quoting-style nil
@@ -647,15 +600,11 @@
  '(uniquify-strip-common-suffix t
                                 nil (uniquify)
                                 "当`uniquify-buffer-name-style'的设置涉及补全文件路径时,保留显示路径名之间相同的部分")
- '(url-cache-directory (shynur/pathname-ensure-parent-directory-exist
-                        (concat
-                         shynur/etc/
-                         "url-cache-directory/"))
+ '(url-cache-directory (shynur/pathname-~/.emacs.d/.shynur/
+                        "url-cache-directory/")
                        nil (url-cache))
- '(url-cookie-file (shynur/pathname-ensure-parent-directory-exist
-                    (concat
-                     shynur/etc/
-                     "url-cookie-file"))
+ '(url-cookie-file (shynur/pathname-~/.emacs.d/.shynur/
+                    "url-cookie-file")
                    nil (url-cookie))
  '(user-full-name "谢骐")
  '(user-mail-address "one.last.kiss@outlook.com"
@@ -687,9 +636,6 @@
  '(cursor-type 'box
                nil ()
                "GUI下的cursor的静态图标")
- '(x-stretch-cursor t
-                    nil ()
-                    "在tab字符上拉长显示cursor")
  '(cursor-in-non-selected-windows t
                                   nil ()
                                   "未选择的window中的cursor显示为静态镂空框")
@@ -699,12 +645,6 @@
  '(visual-line-fringe-indicators '(nil down-arrow)
                                  nil (simple)
                                  "word-wrap打开时在换行处显示down-arrow")
- '(window-divider-default-places 'right-only
-                                 nil (frame)
-                                 "横向'拖动条'可以用mode-line代替,所以只需要纵向'拖动条',也即,只在window的右侧显示'拖动条'")
- '(window-divider-default-right-width 12
-                                      nil (simple)
-                                      "设置window'拖动条'的宽度")
  '(global-company-mode t
                        nil (company))
  '(company-idle-delay 0
@@ -781,7 +721,8 @@
  '(minibuffer-setup-hook (append
                           minibuffer-setup-hook
                           (list
-                           (lambda () ;令ivy的minibuffer拥有'自适应'高度
+                           (lambda ()
+                             "令ivy的minibuffer拥有'自适应'高度"
                              (add-hook 'post-command-hook
                                        (lambda ()
                                          (when (progn
@@ -816,11 +757,7 @@
  '(make-pointer-invisible t
                           nil ()
                           "用户typing时隐藏鼠标指针")
- '(x-underline-at-descent-line nil)
- '(underline-minimum-offset 0
-                            nil ()
-                            "underline向下偏移基准线(相当于英语四线三格的3th线)的像素数")
- '(overline-margin 1
+ '(overline-margin 0
                    nil ()
                    "上划线的高度+宽度")
  '(display-raw-bytes-as-hex t
@@ -829,23 +766,26 @@
  '(mouse-highlight t
                    nil ()
                    "当鼠标位于clickable位置时,高亮此处的文本")
- '(mouse-yank-at-point nil
-                       nil (mouse)
-                       "在'click'的地方'yank'而不是'point'")
  '(global-highlight-changes-mode t
                                  nil (hilit-chg))
  '(highlight-changes-visibility-initial-state nil
                                               nil (hilit-chg))
+ '(python-shell-interpreter (pcase system-name
+                              ("ASUS-TX2"
+                               "python")
+                              (_
+                               "python3"))
+                            nil (python))
+ '(python-shell-interpreter-interactive-arg nil
+                                            nil (python))
  '(eval-expression-debug-on-error t
                                   nil (simple)
                                   "在`eval-expression'时暂时地将`debug-on-error'设置为t")
  '(debug-on-quit nil
                  nil ()
                  "按下'C-g'时是否要进入'debugger'")
- '(bookmark-default-file (shynur/pathname-ensure-parent-directory-exist
-                          (concat
-                           shynur/etc/
-                           "bookmark-default-file.el"))
+ '(bookmark-default-file (shynur/pathname-~/.emacs.d/.shynur/
+                          "bookmark-default-file.el")
                          nil (bookmark))
  '(bookmark-save-flag 1
                       nil (bookmark)
@@ -890,22 +830,18 @@
                        "默认关闭,要用的时候可以用快捷键暂时性打开")
  '(mark-even-if-inactive nil
                          nil ()
-                         "不把'inactive''region'当'region'看")
+                         "不把'inactive'的'region'当'region'看")
  '(explicit-shell-file-name (cond
                              (t
                               explicit-shell-file-name))
                             nil (shell)
                             "'shell-mode'的默认启动SHELL(见<https://www.gnu.org/software/emacs/manual/html_mono/efaq-w32.html#Using-shell>)")
- '(server-auth-dir (shynur/pathname-ensure-parent-directory-exist
-                    (concat
-                     shynur/etc/
-                     "server-auth-dir/"))
+ '(server-auth-dir (shynur/pathname-~/.emacs.d/.shynur/
+                    "server-auth-dir/")
                    nil (server)
                    "'server-auth-dir/server-name.txt',该变量需要在`server-start'之前设置好")
- '(server-socket-dir (shynur/pathname-ensure-parent-directory-exist
-                      (concat
-                       shynur/etc/
-                       "server-socket-dir/"))
+ '(server-socket-dir (shynur/pathname-~/.emacs.d/.shynur/
+                      "server-socket-dir/")
                      nil (server)
                      "'server-socket-dir/server-name.txt',该变量需要在`server-start'之前设置好")
  '(server-name "server-name.txt"
@@ -932,24 +868,22 @@
  '(after-init-hook (append after-init-hook
                            (list
                             (lambda ()
-                              (defconst user-init-file (shynur/pathname-ensure-parent-directory-exist
-                                                        (concat
-                                                         shynur/etc/
-                                                         ".user-init-file.el")))))))
+                              (setq user-init-file (shynur/pathname-~/.emacs.d/.shynur/
+                                                    "user-init-file.el"))))))
  '(emacs-startup-hook (append emacs-startup-hook
                               (list
                                (lambda ()
                                  (other-window 1)
                                  (delete-other-windows))
                                (lambda ()
-                                 ;;记录击键
-                                 ;;(bug#62277)
+                                 (make-directory temporary-file-directory t))
+                               (lambda ()
+                                 "记录击键(bug#62277)"
                                  (lossage-size (* 10000 10)))
                                (lambda ()
                                  (prefer-coding-system 'utf-8-unix)
                                  (set-coding-system-priority 'utf-8-unix))
-                               ;;[menu-bar]->[File]->[Filesets]
-                               #'filesets-init
+                               #'filesets-init ;[menu-bar]->[File]->[Filesets]
                                (lambda ()
                                  (progn
                                    (require 'zone)
@@ -965,9 +899,9 @@
                                                                      (_
                                                                       "~/"))))))
                                (lambda ()
-                                 (let ((shynur/machine "~/.emacs.d/shynur/machine.el"))
-                                   (when (file-exists-p shynur/machine)
-                                     (load-file shynur/machine))))
+                                 (let ((shynur/machine.el "~/.emacs.d/shynur/machine.el"))
+                                   (when (file-exists-p shynur/machine.el)
+                                     (load-file shynur/machine.el))))
                                (lambda ()
                                  (display-time-mode)
                                  (display-battery-mode))
@@ -978,21 +912,33 @@
                                    (set-register (progn
                                                    (require 'register)
                                                    register-separator) "\n\n")
-                                   ;;将本文件的位置保存在'register'中,以便随时访问
                                    (set-register ?i '(file . "~/.emacs.d/init.el"))))
                                (lambda ()
-                                 ;;调节'beep'的声音种类,而不是音量
+                                 "调节'beep'的声音种类,而不是音量"
                                  (set-message-beep nil))
                                (lambda ()
+                                 "解决`mouse-drag-and-drop-region'总是copy的问题"
+                                 (advice-add (prog1 'mouse-drag-and-drop-region
+                                               (require 'mouse)) :around
+                                             (lambda (funtion-named:mouse-drag-and-drop-region &rest arguments)
+                                               (let ((mark-even-if-inactive t))
+                                                 (apply funtion-named:mouse-drag-and-drop-region arguments)))))
+                               (lambda ()
                                  (shynur/message #("启动耗时[%.1f]s"
-                                            5 9 (face bold))
-                                          (/ (- (car (time-convert after-init-time 1000))
-                                                (car (time-convert before-init-time 1000)))
-                                             1000.0))))))
+                                                   5 9 (face bold))
+                                                 (/ (- (car (time-convert after-init-time 1000))
+                                                       (car (time-convert before-init-time 1000)))
+                                                    1000.0))))))
  '(tooltip-delay 0
                  nil (tooltip))
  '(tooltip-mode t
                 nil (tooltip))
+ '(tooltip-short-delay 0
+                       nil (tooltip))
+ '(tooltip-hide-delay most-positive-fixnum
+                      nil (tooltip))
+ '(tooltip-frame-parameters tooltip-frame-parameters
+                            nil (tooltip))
  '(doom-modeline-window-width-limit nil
                                     nil (doom-modeline)
                                     "即使当前窗口宽度很小,也尽量显示所有信息")
@@ -1003,8 +949,10 @@
                         nil (doom-modeline))
  '(inferior-lisp-program (cond
                           ((eq system-type 'windows-nt) (cond
-                                                         ((string= system-name "ASUS-TX2") "d:/Progs/Steel_Bank_Common_Lisp/sbcl.exe")
-                                                         (t                                inferior-lisp-program)))
+                                                         ((string= system-name "ASUS-TX2")
+                                                          "d:/Progs/Steel_Bank_Common_Lisp/sbcl.exe")
+                                                         (t
+                                                          inferior-lisp-program)))
                           (t                            inferior-lisp-program))
                          nil (sly))
  '(save-interprogram-paste-before-kill t
@@ -1013,27 +961,15 @@
  '(yank-pop-change-selection nil
                              nil (simple)
                              "'M-y'不改变'clipboard'的内容")
- '(select-enable-clipboard t
-                           nil (select)
-                           "允许与'clipboard'交互")
- '(x-select-enable-clipboard-manager nil
-                                     nil ()
-                                     "Emacs退出时不需要将`kill-ring'转交给'clipboard'")
- '(select-enable-primary nil
-                         nil (select)
-                         "置t则说明不使用'clipboard'")
- '(mouse-drag-copy-region nil
-                          nil (mouse)
-                          "不自动复制鼠标拖选的'region'")
  '(help-at-pt-display-when-idle t
                                 nil (help-at-pt)
                                 "光标移到active-text处时,在echo-area显示'tooltip'")
  '(help-at-pt-timer-delay 0
                           nil (help-at-pt)
                           "让`help-at-pt-display-when-idle'的效果没有延迟")
- '(x-select-request-type x-select-request-type
-                         nil (select)
-                         "如何与X的'clipboard'交互")
+ '(x-stretch-cursor t
+                    nil ()
+                    "在tab字符上拉长显示cursor")
  '(global-page-break-lines-mode t
                                 nil (page-break-lines)
                                 "将form-feed字符渲染成别致的下划线")
@@ -1057,7 +993,7 @@
  '(display-fill-column-indicator-column t
                                         nil (display-fill-column-indicator)
                                         "默认值参考`fill-column'")
- '(display-fill-column-indicator-character ?│
+ '(display-fill-column-indicator-character ?\N{BOX DRAWINGS LIGHT VERTICAL}
                                            nil (display-fill-column-indicator))
  '(indicate-buffer-boundaries nil
                               nil ()
@@ -1159,7 +1095,8 @@
                           nil (replace))
  '(replace-regexp-lax-whitespace nil
                                  nil (replace))
- '(query-replace-from-to-separator "—→"
+ '(query-replace-from-to-separator #("-→"
+                                     0 2 (face (:family "Courier New")))
                                    nil (replace))
  '(query-replace-highlight t
                            nil (replace))
@@ -1296,7 +1233,8 @@
  '(auto-save-timeout 30
                      nil ()
                      "经过如此之多的秒数的idleness之后auto-save,还可能执行一次GC.(这是一条heuristic的建议,Emacs可以不遵循,e.g.,编辑大文件)")
- '(auto-save-list-file-prefix "~/.emacs.d/.shynur/auto-save-list/")
+ '(auto-save-list-file-prefix (shynur/pathname-~/.emacs.d/.shynur/
+                               "auto-save-list/"))
  '(auto-save-no-message nil)
  '(auto-save-visited-mode nil
                           nil (files)
@@ -1322,21 +1260,19 @@
  '(tramp-mode t
               nil (tramp)
               "若置nil,直接关闭remote-filename识别")
- '(tramp-persistency-file-name (shynur/pathname-ensure-parent-directory-exist
-                                (concat
-                                 shynur/etc/
-                                 "tramp-persistency-file-name.el"))
+ '(tramp-persistency-file-name (shynur/pathname-~/.emacs.d/.shynur/
+                                "tramp-persistency-file-name.el")
                                nil (tramp-cache))
- '(tramp-auto-save-directory (shynur/pathname-ensure-parent-directory-exist
-                              (concat
-                               shynur/etc/
-                               "tramp-auto-save-directory/"))
+ '(tramp-auto-save-directory (shynur/pathname-~/.emacs.d/.shynur/
+                              "tramp-auto-save-directory/")
                              nil (tramp))
  '(recentf-mode t
                 nil (recentf))
- '(recentf-save-file "~/.emacs.d/.shynur/recentf.el"
+ '(recentf-save-file (shynur/pathname-~/.emacs.d/.shynur/
+                      "recentf-save-file.el")
                      nil (recentf))
- '(filesets-menu-cache-file "~/.emacs.d/.shynur/filesets-menu-cache.el"
+ '(filesets-menu-cache-file (shynur/pathname-~/.emacs.d/.shynur/
+                             "filesets-menu-cache-file.el")
                             nil (filesets))
  '(eval-expression-debug-on-error t
                                   nil (simple))
@@ -1360,56 +1296,120 @@
                      nil (window))
  '(window-min-width 1
                     nil (window))
+ '(x-underline-at-descent-line nil)
+ '(x-use-underline-position-properties t)
+ '(underline-minimum-offset 0
+                            nil ()
+                            "underline向下偏移baseline(相当于英语四线三格的3th线)的像素数")
+ '(select-enable-clipboard t
+                           nil (select)
+                           "允许与'clipboard'交互")
+ '(x-select-enable-clipboard-manager nil
+                                     nil ()
+                                     "Emacs退出时不需要将`kill-ring'转交给'clipboard'")
+ '(select-enable-primary nil
+                         nil (select)
+                         "置t则说明不使用'clipboard'")
+ '(mouse-drag-copy-region nil
+                          nil (mouse)
+                          "不自动复制鼠标拖选的'region'")
+ '(x-select-request-type x-select-request-type
+                         nil (select)
+                         "如何与X的'clipboard'交互")
+ '(x-mouse-click-focus-ignore-position nil)
+ '(focus-follows-mouse nil
+                       nil ()
+                       "告诉Emacs当前window manager通过鼠标指针选择聚焦窗口的方式,因为Emacs无法自动侦window manager使用何种策略")
+ '(mouse-scroll-min-lines 1
+                          nil (mouse)
+                          "按下左键拖动鼠标选中文本时,鼠标指针离开window边缘后会自动滚屏.一次最少滚动一行")
+ '(mouse-yank-at-point t
+                       nil (mouse)
+                       "<mouse-2>只yank而不移动point")
+ '(mouse-wheel-mode t
+                    nil (mwheel))
+ '(mouse-wheel-follow-mouse t
+                            nil (mwheel))
+ '(mouse-wheel-progressive-speed t
+                                 nil (mwheel))
+ '(mouse-wheel-scroll-amount-horizontal 1
+                                        nil (mwheel))
+ '(mouse-wheel-tilt-scroll t
+                           nil (mwheel))
+ '(mouse-select-region-move-to-beginning nil
+                                         nil (mouse)
+                                         "在开/闭括号处双击左键,point自动移动到闭括号处")
+ '(mouse-1-click-follows-link 400
+                              nil (mouse)
+                              "在button/hyperlink上点击,不放开鼠标按键持续一定毫秒数后,将仅设置point而不循入链接")
+ '(mouse-1-click-in-non-selected-windows t
+                                         nil (mouse)
+                                         "点击non-selected-window中的button/hyperlink同样会循入链接")
+ '(scroll-bar-adjust-thumb-portion nil
+                                   nil ()
+                                   "滚动条落至底部(overscrolling)时的行为")
+ '(kill-transform-function (lambda (killed-string)
+                             "若被复制的文本全部由whitespace组成,则直接返回;否则,trim首尾的whitespace"
+                             (if (string-blank-p killed-string)
+                                 killed-string
+                               (string-trim killed-string)))
+                           nil (simple))
+ '(window-divider-default-places 'right-only
+                                 nil (frame))
+ '(window-divider-default-right-width 12
+                                      nil (simple)
+                                      "设置window'拖动条'的宽度")
  '(window-divider-mode t
                        nil (frame)
-                       "在window的周围显示'拖动条',用来调整window的长和宽.(横向'拖动条'可以用mode-line代替,所以只需要纵向'拖动条',据此设置`window-divider-default-places'为right-only)(`window-divider-default-right-width'决定'拖动条'的宽度)"))
+                       "在window的周围显示'拖动条',用来调整window的长和宽.(横向'拖动条'可以用mode-line代替,所以只需要纵向'拖动条',据此设置`window-divider-default-places'为right-only)(`window-divider-default-right-width'决定'拖动条'的宽度)")
+ '(dnd-open-file-other-window nil
+                              nil (dnd))
+ '(mouse-drag-and-drop-region t
+                              nil (mouse))
+ '(mouse-drag-and-drop-region-cut-when-buffers-differ t
+                                                      nil (mouse))
+ '(mouse-drag-and-drop-region-show-tooltip 100
+                                           nil (mouse))
+ '(tool-bar-mode t)
+ '(tool-bar-style 'both)
+ '(use-dialog-box t)
+ '(use-file-dialog t)
+ '(x-gtk-show-hidden-files t
+                           nil ()
+                           "在GTK+的file-chooser-dialog中显示隐藏文件"))
 
 (custom-set-faces
  `(default
-    ((t
-      (:family ,(pcase system-name
-                  ("ASUS-TX2"
-                   "Maple Mono SC NF")
-                  (_
-                   "Consolas"))
-       :foundry "outline"
-       :slant  normal
-       :weight normal
-       :height ,(pcase system-name
-                  ("ASUS-TX2"
-                   141)
-                  (_
-                   131))
-       :width  normal))))
+    ((t . (:font ,(pcase system-name
+                    ("ASUS-TX2"
+                     "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing")
+                    (_
+                     "Courier New-10"))
+           :foundry "outline"))))
  '(cursor
-   ((t
-     (:background "chartreuse")))
+   ((t . (:background "chartreuse")))
    nil
    "该'face'仅有':background'字段有效")
- `(tooltip
-   ((t
-     (:family ,(face-attribute 'line-number :family)))))
+ '(tooltip
+   ((t . (:background "#004065"))))
  '(line-number
-   ((t
-     (:slant  italic
-      :weight light))))
+   ((t . (:slant  italic
+          :weight light))))
  `(line-number-major-tick
-   ((t
-     (:background ,(face-attribute 'line-number :background)
-      :slant      italic
-      :underline  t
-      :weight     light)))
+   ((t . (:foreground ,(face-attribute 'line-number :foreground)
+          :slant      italic
+          :underline  t
+          :weight     light)))
    nil
    "指定倍数的行号;除此以外,还有'line-number-minor-tick'实现相同的功能,但其优先级更低")
  '(line-number-current-line
-   ((t
-     (:slant  normal
-      :weight black))))
+   ((t . (:slant  normal
+          :weight black))))
+ '(window-divider
+   ((t . (:foreground "SlateBlue4"))))
  '(fill-column-indicator
-   ((t
-     (:foreground "yellow")))
-   nil
-   "该'face'仅有':foreground'字段有效"))
+   ((t . (:background "black"
+          :foreground "yellow")))))
 
 ;;详见 info emacs 10.9: 一些似乎没啥用的帮助信息
 (progn
@@ -1442,14 +1442,21 @@
 (global-unset-key (kbd "M-s h f")) ;`hi-lock-find-patterns'
 (global-unset-key (kbd "C-M-i")) ;`ispell-complete-word'
 (global-unset-key (kbd "C-x C-v")) ;`find-alternate-file'
-(global-unset-key (kbd "C-x 4 f")) ;`find-file-other-window'
-(global-unset-key (kbd "C-x 5 f")) ;`find-file-other-frame'
 (global-unset-key (kbd "C-x m")) ;`compose-mail'
-(global-unset-key (kbd "C-x 5 b")) ;`switch-to-buffer-other-frame'
 (global-unset-key (kbd "C-x <left>")) ;`previous-buffer'
 (global-unset-key (kbd "C-x <right>")) ;`next-buffer'
 (global-unset-key (kbd "C-x C-q")) ;`read-only-mode'
+(global-unset-key (kbd "C-<down-mouse-1>")) ;`mouse-buffer-menu'
+(global-unset-key (kbd "C-<down-mouse-3>")) ;右键菜单式(context-menu)的mode-specific menu-bar
 (global-unset-key (kbd "C-x 4 0")) ;`kill-buffer-and-window'
+(global-unset-key (kbd "C-x 4 f")) ;`find-file-other-window'
+(global-unset-key (kbd "C-x 5 f")) ;`find-file-other-frame'
+(global-unset-key (kbd "C-x 5 C-f")) ;`find-file-other-frame'
+(global-unset-key (kbd "C-x 5 C-o")) ;`display-buffer-other-frame'
+(global-unset-key (kbd "C-x 5 b")) ;`switch-to-buffer-other-frame'
+(global-unset-key (kbd "C-x 5 d")) ;`dired-other-frame'
+(global-unset-key (kbd "C-x 5 m")) ;`compose-mail-other-frame'
+(global-unset-key (kbd "C-x 5 r")) ;`find-file-read-only-other-frame'
 
 ;;保留`undo'绑定的'C-_',其余删除
 ;;(某些终端会将键入的'C-/'解释成'C-_')
@@ -1508,6 +1515,7 @@
   (global-unset-key (kbd "C-M-r")))
 
 (global-set-key (kbd "C-x C-b") #'bs-show)
+(global-set-key (kbd "<mouse-2>") #'mouse-yank-at-click)
 
 (mapc (lambda (postkey-function)
         (let ((postkey  (car postkey-function))
@@ -1547,9 +1555,7 @@
               ("d <up>"    . drag-stuff-up)
               ("d <right>" . drag-stuff-right)))
         ("g" . ,#'garbage-collect)
-        ("r" . ,(progn
-                  (require 'restart-emacs)
-                  #'restart-emacs))
+        ("r" . ,#'restart-emacs)
         ("s" . ,(progn
                   (require 'shortdoc)
                   #'shortdoc-display-group))))
@@ -1564,11 +1570,8 @@
 ;;以下代码摘编自:'<https://github.com/portacle/emacsd/blob/master/portacle-window.el>'
 ;;缺点:'窗口最大化'会被转换成'尺寸',而不是'窗口最大化'这个概念.所以新会话的'frame'仍然不是与屏幕紧密贴合的.
 (when (display-graphic-p)
-  (defconst shynur/frame-save-position-size-file
-    (shynur/pathname-ensure-parent-directory-exist
-     (concat
-      shynur/etc/
-      "shynur-frame-save-position-size-file.el")))
+  (defconst shynur/frame-save-position-size-file (shynur/pathname-~/.emacs.d/.shynur/
+                                                  "shynur-frame-save-position-size-file.el"))
   (add-hook 'emacs-startup-hook
             (lambda ()
               (when (file-exists-p shynur/frame-save-position-size-file)
@@ -1595,19 +1598,25 @@
 ;;; End of Code
 
 ;; TODO:
-;; [1]
+;; (1)
 ;; 不应该单纯开启`global-display-line-numbers-mode',
 ;; 而是应该给出一个分类机制,有需要的mode才打开`display-line-numbers-mode'.
 ;; 有些mode(例如,'neotree','calendar',...)显示行号反而会占用空间.
-;; [2]
+;; (2)
 ;; 将_非选中的window_且_是prog-mode的buffer_全部开启全局彩虹括号
 ;; 'highlight-parentheses'只会高亮光标附近的括号,其余地方还是一成不变.
 ;; 这样不够酷炫.
-;; [3]
+;; (3)
 ;; 拖动GUI时自动缩小应用窗口
-;; [4]
+;; (4)
 ;; 'C-h v' 按'TAB'补全时,过滤掉"prefix--*"和"*-internal"
+;; (5)
+;; 修改`minibuffer-local-map'和`minibuffer-local-ns-map'
+;; (6)
+;; 用`context-menu'替代'menu-bar'
 
+(add-to-list 'company-backends 'company-jedi)
+
 (defun shynur/set-property-at (where)
   (interactive "n")
   (set-text-properties (point) (1+ (point))

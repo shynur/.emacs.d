@@ -37,7 +37,7 @@
                                                                (2 "nd")
                                                                (3 "rd")
                                                                (_ "th"))))
-                                              (?m . ,shynur/emacs-running-minutes)
+                                              (?m . ,shynur/time-running-minutes)
                                               (?s . ,(round gc-elapsed))
                                               (?B . ,(cl-loop for memory = (memory-limit) then (/ memory 1024.0)
                                                               for mem-unit across "KMGT"
@@ -86,6 +86,7 @@
                                        doom-themes
                                        use-package
                                        company-jedi
+                                       indent-guide
                                        rainbow-mode
                                        all-the-icons
                                        doom-modeline
@@ -180,6 +181,10 @@
  '(completion-cycle-threshold nil
                               nil (minibuffer)
                               "minibuffer补全时,按TAB会轮换候选词")
+ '(indent-guide-global-mode t
+                            nil (indent-guide))
+ '(indent-guide-recursive t
+                          nil (indent-guide))
  '(current-language-environment (cond
                                  ((eq system-type 'windows-nt)
                                   "UTF-8")
@@ -214,7 +219,7 @@
                         nil (simple)
                         "`global-mark-ring'只会在离开某个'buffer'时,记住那个'buffer'最后设置的'mark',这相当于将'buffer'作为节点的路径;因此,可以设置为较大的值")
  '(cua-mode nil)
- '(completion-ignored-extensions ())
+ '(completion-ignored-extensions '())
  '(custom-enabled-themes '(modus-vivendi)
                          nil (custom)
                          "深色背景")
@@ -251,7 +256,7 @@
                                     (transwin-dec)
                                     (transwin-ask 77))))
                               (lambda ()
-                                (cl-incf shynur/emacs-running-minutes))))
+                                (cl-incf shynur/time-running-minutes))))
                      nil (time)
                      "`display-time-mode'每次更新'时间'时调用(也即,每`display-time-interval'秒一次)")
  '(display-time-interval 60
@@ -467,9 +472,9 @@
  '(line-number-mode nil
                     nil (simple)
                     "mode-line不显示行号")
- '(max-mini-window-height max-mini-window-height
+ '(max-mini-window-height 0.3
                           nil ()
-                          "minubuffer最大高度:占比(float)/绝对高度(int)")
+                          "minubuffer最大高度占比(float)/绝对高度(int)")
  '(message-log-max t
                    nil ()
                    "对于'*Messages*'的最大行数,不做限制")
@@ -498,9 +503,9 @@
  '(read-buffer-completion-ignore-case t
                                       nil ()
                                       "对buffer名字进行补全时,忽略大小写")
- '(read-extended-command-predicate read-extended-command-predicate
+ '(read-extended-command-predicate nil
                                    nil (simple)
-                                   "在minibuffer中,补全command时,决定要保留哪些候选词.默认不进行筛选")
+                                   "在minibuffer中,补全command时,决定是否要保留与当前modes不兼容的候选词")
  '(read-file-name-completion-ignore-case read-file-name-completion-ignore-case
                                          nil (minibuffer)
                                          "对文件路径进行补全时,是否忽略大小写(系统相关的)")
@@ -510,6 +515,9 @@
  '(resize-mini-windows t
                        nil ()
                        "minibuffer可以变宽变窄,由输入的字符串的行数决定")
+ '(resize-mini-frames #'fit-frame-to-buffer
+                      nil ()
+                      "trim首尾的空行")
  '(inhibit-startup-echo-area-message user-login-name
                                      nil ()
                                      "只有将该变量设置为自己在OS中的'username',才能屏蔽'startup'时 echo area 的“For information about GNU Emacs and the GNU system, type C-h C-a.”")
@@ -754,9 +762,11 @@
  '(hourglass-delay 0
                    nil ()
                    "当Emacs进入busy状态时,立刻将鼠标指针显示为漏斗(而不是过一段时间再显示)")
- '(make-pointer-invisible t
+ '(make-pointer-invisible nil
                           nil ()
-                          "用户typing时隐藏鼠标指针")
+                          "原本用户typing时鼠标指针会被隐藏,但现在可以用`mouse-avoidance-mode'达到更好的效果")
+ '(mouse-avoidance-mode nil
+                        nil (avoid))
  '(overline-margin 0
                    nil ()
                    "上划线的高度+宽度")
@@ -917,7 +927,7 @@
                                  "调节'beep'的声音种类,而不是音量"
                                  (set-message-beep nil))
                                (lambda ()
-                                 "解决`mouse-drag-and-drop-region'总是copy的问题"
+                                 "解决`mouse-drag-and-drop-region'总是copy的问题(bug#63872)"
                                  (advice-add (prog1 'mouse-drag-and-drop-region
                                                (require 'mouse)) :around
                                              (lambda (funtion-named:mouse-drag-and-drop-region &rest arguments)
@@ -988,6 +998,8 @@
  '(fill-column 70
                nil ()
                "`auto-fill-mode'折行的位置(zero-based)")
+ '(c-basic-offset 4
+                  nil (cc-mode))
  '(global-display-fill-column-indicator-mode t
                                              nil (display-fill-column-indicator))
  '(display-fill-column-indicator-column t
@@ -1013,6 +1025,9 @@
  '(line-spacing nil
                 nil ()
                 "行距")
+ '(minibuffer-message-timeout nil
+                              nil ()
+                              "使`minibuffer-message'的行为有点像`message'")
  '(case-fold-search t
                     nil ()
                     "search/match时忽略大小写(经试验,isearch仅在给定模式串全部是小写时忽略大小写);影响函数:`char-equal';无关函数:`string='")
@@ -1391,7 +1406,8 @@
    nil
    "该'face'仅有':background'字段有效")
  '(tooltip
-   ((t . (:background "#004065"))))
+   ((t . (:height     100
+          :background "dark slate gray"))))
  '(line-number
    ((t . (:slant  italic
           :weight light))))
@@ -1407,6 +1423,8 @@
           :weight black))))
  '(window-divider
    ((t . (:foreground "SlateBlue4"))))
+ '(indent-guide-face
+   ((t . (:foreground "dark sea green"))))
  '(fill-column-indicator
    ((t . (:background "black"
           :foreground "yellow")))))
@@ -1595,6 +1613,20 @@
                                        prop val)))
                   (write-file shynur/frame-save-position-size-file))))))
 
+;; 这页的函数有朝一日会移到 ~shynur/.emacs.d/shynur/ 目录下
+
+(defun shynur/view-set-region-properties-same-as (beginning end same-as-where)
+  "将选中区域的字符串的property设置得和指定的point所指处的一样"
+  (declare (interactive-only t)
+           (side-effect-free nil)
+           (completion (lambda (_symbol current-buffer)
+                         "read-only的缓冲区肯定改不了字符的property"
+                         (with-current-buffer current-buffer
+                           (not buffer-read-only)))))
+  (interactive "r\nnSet region's properties same as the character at point: ")
+  (set-text-properties beginning end
+                       (text-properties-at same-as-where)))
+
 ;;; End of Code
 
 ;; TODO:
@@ -1614,13 +1646,6 @@
 ;; 修改`minibuffer-local-map'和`minibuffer-local-ns-map'
 ;; (6)
 ;; 用`context-menu'替代'menu-bar'
-
-(add-to-list 'company-backends 'company-jedi)
-
-(defun shynur/set-property-at (where)
-  (interactive "n")
-  (set-text-properties (point) (1+ (point))
-                       (text-properties-at where)))
 
 ;; Local Variables:
 ;; coding: utf-8-unix

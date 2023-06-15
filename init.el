@@ -80,6 +80,7 @@
                                        helpful
                                        neotree
                                        transwin
+                                       highlight
                                        on-screen
                                        drag-stuff
                                        ascii-table
@@ -297,7 +298,7 @@
                            nil (eww))
  '(extended-command-suggest-shorter t
                                     nil (simple)
-                                    "通过不完整的函数名调用command时,在 echo area 中提示这个command的全名")
+                                    "通过不完整的函数名调用command时,在echo area中提示这个command的全名")
  '(desktop-restore-frames nil
                           nil (desktop)
                           "保存'desktop'时,将'frame'和'window'的参数排除在外")
@@ -503,9 +504,8 @@
  '(read-buffer-completion-ignore-case t
                                       nil ()
                                       "对buffer名字进行补全时,忽略大小写")
- '(read-extended-command-predicate nil
-                                   nil (simple)
-                                   "在minibuffer中,补全command时,决定是否要保留与当前modes不兼容的候选词")
+ '(read-extended-command-predicate #'command-completion-default-include-p
+                                   nil (simple))
  '(read-file-name-completion-ignore-case read-file-name-completion-ignore-case
                                          nil (minibuffer)
                                          "对文件路径进行补全时,是否忽略大小写(系统相关的)")

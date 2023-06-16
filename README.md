@@ -1,12 +1,13 @@
 # `~shynur/.emacs.d/`
 
-![Glimpse of Shynur’s Emacs](../tmp/pictures/emacs/2023-6-16.png)
+![Glimpse of Shynur’s Emacs](https://raw.githubusercontent.com/shynur/tmp/main/pictures/emacs/2023-6-17.png)
 
-这是我的 Emacs 个人配置方案, from scratch.
-当前正在阅读 [*GNU Emacs Manual*](https://www.gnu.org/software/emacs/manual/html_node/emacs) 和 [*GNU Emacs Lisp Reference Manual*](https://www.gnu.org/software/emacs/manual/html_node/elisp);
+🥰 这是我的 Emacs 个人配置方案, from scratch.
+
+🔬 当前正在阅读 [*GNU Emacs Manual*](https://www.gnu.org/software/emacs/manual/html_node/emacs) 和 [*GNU Emacs Lisp Reference Manual*](https://www.gnu.org/software/emacs/manual/html_node/elisp);
 之后将会使用 [`use-package`](https://github.com/jwiegley/use-package) 进行彻底的重构.
 
-目录结构 (点划线之下为执行 `emacs -u shynur` 之后会生成的文件):
+📖 目录结构 (点划线之下为执行 `emacs -u shynur` 之后会生成的文件):
 
 ```
 ./
@@ -17,20 +18,21 @@
  |
  |-- shynur/ (个人向的库合集)
  |    |
- |    |-- machine.el (该文件可有可无, 用于减弱在不同机器间使用本配置的难度:
+ |    |-- machine.el (该文件可有可无, 用于削减在不同机器间使用本配置的难度:
  |                    例如, 某机器上没有配置中提到的某字体, 那么那台机器就需要
  |                    在该文件中指定替代字体.)
  |
  |-- README.md (this file)
--|->8·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-
+-|->8·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-
  |-- elpa/
  |
- |-- .shynur/ (使用过程中生成的文件)
+ |-- .shynur/ (使用过程中生成的文件, 含临时文件.  这些文件都可能包含隐私信息,
+               所以不放在 /tmp/ 目录下.)
 ```
 
 ## Written for
 
-- Emacs-28.2 on Windows 11
+- 🪟 v28.2 on Windows 11, using GUI
 
 ## TODO
 
@@ -43,6 +45,6 @@
 
 ## LICENSE
 
-**For now**, I retain all rights to this repository.
+***For now*, I retain all rights to this repository.**
 
 Will include an open source license someday in the future when I’ve learned enough about open source licenses.

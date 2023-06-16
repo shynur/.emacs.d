@@ -1,9 +1,11 @@
-;;; ~shynur/.emacs.d/early-init.el --- Part of Shynur's Emacs Configuration  -*- lexical-binding: t; -*-
+;;; ~shynur/.emacs.d/early-init.el --- Part of Shynur’s Emacs Configuration  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2023 谢骐 <one.last.kiss@outlook.com>
 
 ;;; Code:
+
 
+
 (setq gc-cons-threshold 100000000
       gc-cons-percentage 0.36789
       load-prefer-newer nil)
@@ -24,7 +26,7 @@
   (insert (nreverse (delete-and-extract-region beginning end))))
 
 (defun shynur/message (format-string &rest arguments)
-  #("效果同`message',只是在开头加上\"Shynur: \""
+  #("效果同‘message’,只是在开头加上“Shynur: ”"
     21 29 (face (shadow italic)))
   (declare (indent 1)
            (side-effect-free nil))
@@ -48,9 +50,13 @@
          "~/.emacs.d/.shynur/" pathnames))
 
 (defvar shynur/time-running-minutes -2)
+
 
+
 ;;; End of Code
+
 
+
 ;; Local Variables:
 ;; coding: utf-8-unix
 ;; eval: (let ((case-fold-search t))

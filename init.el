@@ -99,7 +99,7 @@
  '(print-escape-newlines t)
  '(print-escape-control-characters nil
                                    nil ()
-                                   "打印成 ^C 而非 \3 , \n 和 \f 不受影响")
+                                   "打印成“^C”而非“\3”,“\n”和“\f”不受影响")
  '(print-length nil
                 nil ()
                 "当打印的列表元素数>该值时,超出部分用省略号表示")
@@ -388,9 +388,6 @@
  '(history-length t
                   nil ()
                   "使minibuffer历史记录的长度没有上限")
- '(horizontal-scroll-bar-mode nil
-                              nil (scroll-bar)
-                              "不显示横向滚动条")
  '(tab-width 4)
  '(global-tab-line-mode t
                         nil (tab-line))
@@ -439,7 +436,6 @@
 ;; |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 \n"
                              0 665 (font-lock-face (:foreground "VioletRed1"))))
- '(overwrite-mode nil)
  '(insert-default-directory t
                             nil (minibuffer)
                             "‘find-file’时,给出默认目录")
@@ -568,8 +564,6 @@
  '(recenter-redisplay recenter-redisplay
                       nil ()
                       "如果recenter时不redraw整个frame,则可能造成TUI屏幕有少许显示错误.使用默认值即可")
- '(global-hi-lock-mode nil
-                       nil (hi-lock))
  '(hi-lock-auto-select-face t
                             nil (hi-lock)
                             "每次‘highlight-regexp’自动选择且尽量使用不同的face")
@@ -597,8 +591,7 @@
                      nil ()
                      "用户的email")
  '(blink-cursor-mode nil
-                     nil (frame)
-                     "取消cursor闪烁")
+                     nil (frame))
  '(blink-cursor-delay 0
                       nil (frame)
                       "cursor开始闪烁的时间点")
@@ -737,9 +730,6 @@
                             ("->"     . ?→))
                           nil (prog-mode)
                           "此为默认值,不生效;仅供buffer-local时使用")
- '(global-prettify-symbols-mode nil
-                                nil (prog-mode)
-                                "先关闭,等buffer-local的‘prettify-symbols-alist’设置完成,再启动‘prettify-symbols-mode’")
  '(display-hourglass t
                      nil ()
                      "当Emacs是busy时,将鼠标指针显示为漏斗")
@@ -750,7 +740,8 @@
                           nil ()
                           "原本用户typing时鼠标指针会被隐藏,但现在可以用‘mouse-avoidance-mode’达到更好的效果")
  '(mouse-avoidance-mode nil
-                        nil (avoid))
+                        nil (avoid)
+                        "目前有bug")
  '(overline-margin 0
                    nil ()
                    "上划线的高度+宽度")
@@ -819,9 +810,6 @@
  '(set-mark-command-repeat-pop nil
                                nil (simple)
                                "置t的话,轮流跳转到‘mark-ring’中指定的位置时,只有第一次需要加‘C-u’前缀,后续全部只需要‘C-SPC’即可")
- '(rectangle-mark-mode nil
-                       nil (rect)
-                       "默认关闭,要用的时候可以用快捷键暂时性打开")
  '(mark-even-if-inactive nil)
  '(server-auth-dir (shynur/pathname-~/.emacs.d/.shynur/
                     "server-auth-dir/")
@@ -846,7 +834,7 @@
  '(scroll-preserve-screen-position nil
                                    nil ()
                                    "若非nil,则scroll时(尤其是鼠标滚轮)保持point在屏幕上的位置,但这样会扯坏region")
- '(frame-background-mode nil
+ '(frame-background-mode t
                          nil (frame)
                          "让Emacs根据当前背景颜色(light/dark)自动选择应该呈现的face属性")
  '(text-scale-mode-step text-scale-mode-step
@@ -1139,8 +1127,6 @@
                                 "“C-u F3”:附加定义;“C-u C-u ... F3”:重执行且附加定义")
  '(kmacro-ring-max most-positive-fixnum
                    nil (kmacro))
- '(midnight-mode nil
-                 nil (midnight))
  '(temp-buffer-resize-mode t
                            nil (help)
                            "e.g.,使*Completions*不会几乎占用整个frame")
@@ -1237,9 +1223,6 @@
  '(auto-save-list-file-prefix (shynur/pathname-~/.emacs.d/.shynur/
                                "auto-save-list/"))
  '(auto-save-no-message nil)
- '(auto-save-visited-mode nil
-                          nil (files)
-                          "这是与‘auto-save-mode’正交的另一种auto-saving,等价于定时地“C-x C-s”")
  '(delete-auto-save-files t
                           nil ()
                           "“C-x C-s”会自动删除auto-save-file")

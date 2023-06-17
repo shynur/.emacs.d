@@ -16,9 +16,7 @@
 ;;     --vertical-scroll-bars
 
 ;;; Code:
-
 
-
 (custom-set-variables
  '(post-gc-hook (append post-gc-hook
                         (list
@@ -56,17 +54,13 @@
                               "暂时不需要修改,因为根据‘package-menu-hide-low-priority’,默认选取最新的包")
  '(package-menu-hide-low-priority t
                                   2 (package))
- '(package-archives (if :official
-                        '(("gnu"    . "https://elpa.gnu.org/packages/")
-                          ("nongnu" . "https://elpa.nongnu.org/nongnu/")
-                          ("melpa"  . "https://melpa.org/packages/"))
-                      '(("gnu"    . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/gnu/")
-                        ("nongnu" . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/nongnu/")
-                        ("melpa"  . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/melpa/")))
+ '(package-archives '(("gnu"    . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/gnu/")
+                      ("nongnu" . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/nongnu/")
+                      ("melpa"  . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/melpa/"))
                     3 (package)
                     "[1]其它ELPA中的包会依赖gnu中的包[2]nongnu是官方维护的[3]MELPA滚动升级,收录的包的数量最大[4]stable-melpa依据源码的Tag(Git)升级,数量比MELPA少,因为很多包作者根本不打Tag[5]Org仅仅为了org-plus-contrib这一个包,Org重度用户使用[6]gnu-devel收录GNU中的包的开发中版本,一般不必启用(类似于MELPA与stable-melpa的关系)[7]nongnu-devel收录nongnu中的包的开发中版本,一般不必启用")
  '(package-selected-packages (progn
-                               ;;摘编自'https://orgmode.org/elpa.html'
+                               ;;摘编自<https://orgmode.org/elpa.html>
                                (let (message-log-max)
                                  (ignore-errors
                                    '(package-refresh-contents)))
@@ -182,7 +176,6 @@
  '(coding-system-for-write 'utf-8-unix
                            nil ()
                            "该customization中的NEW被Emacs设置为t")
- '(meta-prefix-char meta-prefix-char)
  '(completion-cycle-threshold nil
                               nil (minibuffer)
                               "minibuffer补全时,按TAB会轮换候选词")
@@ -190,8 +183,7 @@
                             nil (indent-guide))
  '(indent-guide-recursive t
                           nil (indent-guide))
- '(current-language-environment "UTF-8"
-                                nil ())
+ '(current-language-environment "UTF-8")
  '(kill-ring-max most-positive-fixnum
                  nil (simple))
  '(delete-trailing-lines t
@@ -199,12 +191,13 @@
                          "执行‘delete-trailing-whitespace’时,还删除首尾的多余的空行")
  '(show-trailing-whitespace nil
                             nil ()
-                            "不高亮行尾的whitespace")
+                            "不高亮行尾的whitespace,因为没必要")
+ '(change-major-mode-with-file-name t
+                                    nil (files)
+                                    "写入/重命名 文件时,执行‘normal-mode’以使用恰当的major mode")
  '(indicate-empty-lines nil
                         nil ()
                         "若开启,buffer尾行之后的区域的右流苏区域会显示密集的刻度线")
- '(global-whitespace-mode nil
-                          nil (whitespace))
  '(transient-mark-mode t
                        nil ()
                        "高亮region")
@@ -215,7 +208,6 @@
  '(global-mark-ring-max most-positive-fixnum
                         nil (simple)
                         "‘global-mark-ring’只会在离开某个buffer时,记住那个buffer最后设置的mark,这相当于将buffer作为节点的路径;因此,可以设置为较大的值")
- '(cua-mode nil)
  '(completion-ignored-extensions '())
  '(custom-enabled-themes '(modus-vivendi)
                          nil (custom)
@@ -633,9 +625,16 @@
  '(cursor-in-non-selected-windows t
                                   nil ()
                                   "未选择的window中的cursor显示为静态镂空框")
- '(global-visual-line-mode nil
-                           nil (simple)
-                           "关闭word-wrap")
+ '(Info-mode-hook (append Info-mode-hook
+                          (list
+                           (lambda ()
+                             "单词之间换行"
+                             (visual-line-mode)))))
+ '(help-mode-hook (append help-mode-hook
+                          (list
+                           (lambda ()
+                             "单词之间换行"
+                             (visual-line-mode)))))
  '(visual-line-fringe-indicators '(nil down-arrow)
                                  nil (simple)
                                  "word-wrap打开时在换行处显示down-arrow")
@@ -824,11 +823,6 @@
                        nil (rect)
                        "默认关闭,要用的时候可以用快捷键暂时性打开")
  '(mark-even-if-inactive nil)
- '(explicit-shell-file-name (cond
-                             (t
-                              explicit-shell-file-name))
-                            nil (shell)
-                            "‘shell-mode’的默认启动SHELL(见<https://www.gnu.org/software/emacs/manual/html_mono/efaq-w32.html#Using-shell>)")
  '(server-auth-dir (shynur/pathname-~/.emacs.d/.shynur/
                     "server-auth-dir/")
                    nil (server)
@@ -913,9 +907,9 @@
                                  "解决‘mouse-drag-and-drop-region’总是copy的问题(bug#63872)"
                                  (advice-add (prog1 'mouse-drag-and-drop-region
                                                (require 'mouse)) :around
-                                             (lambda (funtion-named:mouse-drag-and-drop-region &rest arguments)
+                                             (lambda (mouse-drag-and-drop-region_ &rest arguments)
                                                (let ((mark-even-if-inactive t))
-                                                 (apply funtion-named:mouse-drag-and-drop-region arguments)))))
+                                                 (apply mouse-drag-and-drop-region_ arguments)))))
                                (lambda ()
                                  (shynur/message #("启动耗时[%.1f]s"
                                                    5 9 (face bold))
@@ -963,6 +957,13 @@
  '(x-stretch-cursor t
                     nil ()
                     "在tab字符上拉长显示cursor")
+ '(shell-mode-hook (append shell-mode-hook
+                           (list
+                            (lambda ()
+                              (pcase (system-name)
+                                ("ASUS-TX2"
+                                 (set-buffer-process-coding-system 'chinese-gb18030 'chinese-gb18030))))))
+                   nil (shell))
  '(global-page-break-lines-mode t
                                 nil (page-break-lines)
                                 "将form-feed字符渲染成别致的下划线")
@@ -1176,7 +1177,7 @@
                                 "打开达到该字节数的大文件时询问相关事宜;重点在于可以借此开启literally读取模式,这会关闭一些昂贵的功能,以提高访问速度")
  '(find-file-wildcards t
                        nil (files)
-                       "允许Shell-style的路径通配符")
+                       "允许Bash style的路径通配符")
  '(confirm-kill-emacs nil
                       nil (files)
                       "退出时,不询问“Really exit Emacs?”")
@@ -1313,9 +1314,6 @@
  '(mouse-drag-copy-region nil
                           nil (mouse)
                           "不自动复制鼠标拖选的region")
- '(x-select-request-type x-select-request-type
-                         nil (select)
-                         "如何与X的clipboard交互")
  '(x-mouse-click-focus-ignore-position nil)
  '(focus-follows-mouse nil
                        nil ()
@@ -1377,9 +1375,7 @@
  '(x-gtk-show-hidden-files t
                            nil ()
                            "在GTK+的file-chooser-dialog中显示隐藏文件"))
-
 
-
 (custom-set-faces
  `(default
     ((t . (:font ,(pcase system-name
@@ -1400,6 +1396,7 @@
           :weight light))))
  `(line-number-major-tick
    ((t . (:foreground ,(face-attribute 'line-number :foreground)
+          :background ,(face-attribute 'line-number :background)
           :slant      italic
           :underline  t
           :weight     light)))
@@ -1415,19 +1412,14 @@
  '(fill-column-indicator
    ((t . (:background "black"
           :foreground "yellow")))))
-
 
-
-;;详见 info emacs 10.9: 一些似乎没啥用的帮助信息
-(progn
-  (global-unset-key (kbd "C-h C-c"))
-  (global-unset-key (kbd "C-h g"))
-  (global-unset-key (kbd "C-h h"))
-  (global-unset-key (kbd "C-h C-m"))
-  (global-unset-key (kbd "C-h C-o"))
-  (global-unset-key (kbd "C-h C-t"))
-  (global-unset-key (kbd "C-h C-w")))
-
+(global-unset-key (kbd "C-h C-c"))
+(global-unset-key (kbd "C-h g"))
+(global-unset-key (kbd "C-h h"))
+(global-unset-key (kbd "C-h C-m"))
+(global-unset-key (kbd "C-h C-o"))
+(global-unset-key (kbd "C-h C-t"))
+(global-unset-key (kbd "C-h C-w"))
 (global-unset-key (kbd "C-M-S-l")) ;‘recenter-other-window’
 (global-unset-key (kbd "C-x s")) ;‘save-some-buffers’
 (global-unset-key (kbd "C-x C-o")) ;删除附近空行
@@ -1436,7 +1428,7 @@
 (global-unset-key (kbd "C-x DEL")) ;kill至行首
 (global-unset-key (kbd "M-k")) ;kill至句尾
 (global-unset-key (kbd "M-z")) ;‘zap-to-char’一帧就删完了,动作太快 反应不过来
-(global-unset-key (kbd "C-M-w")) ;强制合并两次'kill',使其变成‘kill-ring’上的一个字符串
+(global-unset-key (kbd "C-M-w")) ;强制合并两次kill,使其变成‘kill-ring’上的一个字符串
 (global-unset-key (kbd "C-M-<mouse-1>")) ;就是鼠标左击
 (global-unset-key (kbd "C-x >")) ;‘scroll-right’
 (global-unset-key (kbd "C-x <")) ;‘scroll-left’
@@ -1455,7 +1447,7 @@
 (global-unset-key (kbd "C-x <right>")) ;‘next-buffer’
 (global-unset-key (kbd "C-x C-q")) ;‘read-only-mode’
 (global-unset-key (kbd "C-<down-mouse-1>")) ;‘mouse-buffer-menu’
-(global-unset-key (kbd "C-<down-mouse-3>")) ;右键菜单式(context-menu)的mode-specific menu-bar
+(global-unset-key (kbd "C-<down-mouse-3>")) ;右键菜单式(context-menu)的mode-specific menubar
 (global-unset-key (kbd "C-x 4 0")) ;‘kill-buffer-and-window’
 (global-unset-key (kbd "C-x 4 f")) ;‘find-file-other-window’
 (global-unset-key (kbd "C-x 5 f")) ;‘find-file-other-frame’
@@ -1467,43 +1459,27 @@
 (global-unset-key (kbd "C-x 5 r")) ;‘find-file-read-only-other-frame’
 (global-unset-key (kbd "C-x RET C-\\")) ;‘set-input-method’
 (global-unset-key (kbd "C-x \\")) ;‘activate-transient-input-method’
-
-;;保留‘undo’绑定的'C-_',其余删除
-;;(某些终端会将键入的'C-/'解释成'C-_')
-;;与‘undo’相对应的‘redo-undo’绑定也一并修改
-(progn
-  (global-unset-key (kbd "C-x u"))
-  (global-unset-key (kbd "C-/"))
-  (global-unset-key (kbd "C-?")))
-
-;;'Emacs-16.2-Transposing-Text'
-(progn
-  (global-unset-key (kbd "C-t")) ;‘transpose-chars’
-  (global-unset-key (kbd "M-t")) ;‘transpose-words’
-  (global-unset-key (kbd "C-x C-t"))) ;‘transpose-lines’
-
-;;关闭与X的'secondary_selection'兼容的功能
-;;'<https://www.gnu.org/software/emacs/manual/html_node/emacs/Secondary-Selection.html>'
-(progn
-  (global-unset-key (kbd "M-<drag-mouse-1>"))
-  (global-unset-key (kbd "M-<mouse-1>"))
-  (global-unset-key (kbd "M-<mouse-3>"))
-  (global-unset-key (kbd "M-<mouse-2>")))
-
-(progn
-  ;;区域大小写
-  (global-unset-key (kbd "C-x C-u"))
-  (global-unset-key (kbd "C-x C-l"))
-  ;;区域缩进
-  (global-unset-key (kbd "C-M-\\")))
-
-;;设置mark并移动point的组合命令.由于是功能上的组合,所以不是很有必要
-(progn
-  (global-unset-key (kbd "M-@"))
-  (global-unset-key (kbd "C-M-@"))
-  (global-unset-key (kbd "M-h"))
-  (global-unset-key (kbd "C-M-h"))
-  (global-unset-key (kbd "C-x C-p")))
+(global-unset-key (kbd "C-x RET F")) ;‘set-file-name-coding-system’
+(global-unset-key (kbd "C-x RET t")) ;‘set-terminal-coding-system’
+(global-unset-key (kbd "C-x RET k")) ;‘set-keyboard-coding-system’
+(global-unset-key (kbd "C-t")) ;‘transpose-chars’
+(global-unset-key (kbd "M-t")) ;‘transpose-words’
+(global-unset-key (kbd "C-x C-t")) ;‘transpose-lines’
+(global-unset-key (kbd "C-x u")) ;‘undo’
+(global-unset-key (kbd "C-/")) ;‘undo’
+(global-unset-key (kbd "C-?")) ;‘redo-undo’;有些终端不认识这个字符
+(global-unset-key (kbd "M-<drag-mouse-1>")) ;与X的secondary selection兼容的功能
+(global-unset-key (kbd "M-<mouse-1>")) ;与X的secondary selection兼容的功能
+(global-unset-key (kbd "M-<mouse-3>")) ;与X的secondary selection兼容的功能
+(global-unset-key (kbd "M-<mouse-2>")) ;与X的secondary selection兼容的功能
+(global-unset-key (kbd "C-x C-u"))
+(global-unset-key (kbd "C-x C-l"))
+(global-unset-key (kbd "C-M-\\"))
+(global-unset-key (kbd "M-@"))
+(global-unset-key (kbd "C-M-@"))
+(global-unset-key (kbd "M-h"))
+(global-unset-key (kbd "C-M-h"))
+(global-unset-key (kbd "C-x C-p"))
 
 (progn
   (global-set-key (kbd "C-s") (lambda ()
@@ -1523,10 +1499,8 @@
                                   (ivy-mode -1))))
   (global-unset-key (kbd "C-r"))
   (global-unset-key (kbd "C-M-r")))
-
 (global-set-key (kbd "C-x C-b") #'bs-show)
 (global-set-key (kbd "<mouse-2>") #'mouse-yank-at-click)
-
 (mapc (lambda (postkey-function)
         (let ((postkey  (car postkey-function))
               (function (cdr postkey-function)))
@@ -1575,11 +1549,8 @@
   (keyboard-translate ?\] ?\))
   (keyboard-translate ?\( ?\[)
   (keyboard-translate ?\) ?\]))
-
 
-
-;;保存并恢复不同session之间的frame的位置和尺寸:<https://emacs.stackexchange.com/questions/76087/remember-restore-the-frame-position-and-size-of-the-last-session>
-;;以下代码摘编自:<https://github.com/portacle/emacsd/blob/master/portacle-window.el>
+;;保存并恢复不同session之间的frame的位置和尺寸:<https://emacs.stackexchange.com/questions/76087>
 ;;缺点:窗口最大化会被转换成尺寸,而不是窗口最大化这个概念.所以新会话的frame仍然不是与屏幕紧密贴合的.
 (when (display-graphic-p)
   (defconst shynur/frame-save-position-size-file (shynur/pathname-~/.emacs.d/.shynur/
@@ -1606,9 +1577,7 @@
                                (format "(add-to-list 'initial-frame-alist '(%s . %d))\n"
                                        prop val)))
                   (write-file shynur/frame-save-position-size-file))))))
-
 
-
 ;; 这页的函数有朝一日会移到 ~shynur/.emacs.d/shynur/ 目录下
 
 (defun shynur/view-set-region-properties-same-as (beginning end same-as-where)
@@ -1622,14 +1591,9 @@
   (interactive "r\nnSet region’s properties same as the character at point: ")
   (set-text-properties beginning end
                        (text-properties-at same-as-where)))
-
 
-
 ;;; End of Code
-
-
 
-
 ;; Local Variables:
 ;; coding: utf-8-unix
 ;; eval: (let ((case-fold-search t))

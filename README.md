@@ -1,6 +1,6 @@
 # `~shynur/.emacs.d`
 
-![Glimpse of Shynur’s Emacs](https://raw.githubusercontent.com/shynur/tmp/main/pictures/emacs/2023-6-17.png "五子棋, 输了...")
+![Glimpse of Shynur’s Emacs](https://raw.githubusercontent.com/shynur/misc/main/pictures/emacs/2023-6-17.png "五子棋, 输了...")
 
 🥰 这是我的 Emacs 个人配置方案, from scratch.
 

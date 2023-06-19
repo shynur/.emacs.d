@@ -3,27 +3,12 @@
 ;; Copyright (C) 2023 谢骐 <one.last.kiss@outlook.com>
 
 ;;; Code:
-
 
-
 (setq gc-cons-threshold 100000000
       gc-cons-percentage 0.36789
       load-prefer-newer nil)
 
 (make-directory "~/.emacs.d/.shynur/" t)
-
-(defun shynur/edit-reverse-characters (beginning end)
-  "将选中的区域的所有字符倒序排列"
-  (declare (pure   nil)
-           (indent nil)
-           (interactive-only nil)
-           (side-effect-free nil)
-           (completion (lambda (_symbol current-buffer)
-                         "read-only的缓冲区肯定编辑不了"
-                         (with-current-buffer current-buffer
-                           (not buffer-read-only)))))
-  (interactive "r")
-  (insert (nreverse (delete-and-extract-region beginning end))))
 
 (defun shynur/message (format-string &rest arguments)
   #("效果同‘message’,只是在开头加上“Shynur: ”"
@@ -50,13 +35,9 @@
          "~/.emacs.d/.shynur/" pathnames))
 
 (defvar shynur/time-running-minutes -2)
-
 
-
 ;;; End of Code
-
 
-
 ;; Local Variables:
 ;; coding: utf-8-unix
 ;; eval: (let ((case-fold-search t))

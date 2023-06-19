@@ -18,34 +18,30 @@
 ;;; Code:
 
 (custom-set-variables
- '(post-gc-hook (append post-gc-hook
-                        (list
-                         (lambda ()
-                           (make-thread (lambda ()
-                                          (sleep-for 3)
-                                          (shynur/message
-                                           "%s"
-                                           (format-spec
-                                            #("%n GC (%ss total): %B VM, %mmin runtime"
-                                               7  9 (face bold)
-                                              26 28 (face bold))
-                                            `((?n . ,(format #("%d%s"
-                                                               0 2 (face bold))
-                                                             gcs-done
-                                                             (pcase (mod gcs-done 10)
-                                                               (1 "st")
-                                                               (2 "nd")
-                                                               (3 "rd")
-                                                               (_ "th"))))
-                                              (?m . ,shynur/time-running-minutes)
-                                              (?s . ,(round gc-elapsed))
-                                              (?B . ,(cl-loop for memory = (memory-limit) then (/ memory 1024.0)
-                                                              for mem-unit across "KMGT"
-                                                              when (< memory 1024)
-                                                              return (format #("%.1f%c"
-                                                                               0 4 (face bold))
-                                                                             memory
-                                                                             mem-unit))))))))))))
+ '(post-gc-hook `(,@post-gc-hook
+                  ,(lambda ()
+                     (shynur/message "%s"
+                       (format-spec
+                        #("%n GC (%ss total): %B VM, %mmin runtime"
+                          7  9 (face bold)
+                          26 28 (face bold))
+                        `((?n . ,(format #("%d%s"
+                                           0 2 (face bold))
+                                         gcs-done
+                                         (pcase (mod gcs-done 10)
+                                           (1 "st")
+                                           (2 "nd")
+                                           (3 "rd")
+                                           (_ "th"))))
+                          (?m . ,shynur/time-running-minutes)
+                          (?s . ,(round gc-elapsed))
+                          (?B . ,(cl-loop for memory = (memory-limit) then (/ memory 1024.0)
+                                          for mem-unit across "KMGT"
+                                          when (< memory 1024)
+                                          return (format #("%.1f%c"
+                                                           0 4 (face bold))
+                                                         memory
+                                                         mem-unit)))))))))
  '(load-path (remq nil load-path))
  '(package-archive-priorities '(("gnu"    . 0)
                                 ("nongnu" . 0)
@@ -236,16 +232,15 @@
  '(display-time-mail-directory nil
                                nil (time)
                                "该目录下的所有非空文件都被当成新送达的邮件")
- '(display-time-hook (append display-time-hook
-                             (list
-                              (lambda ()
-                                (let ((inhibit-message t))
-                                  (progn
-                                    (require 'transwin)
-                                    (transwin-dec)
-                                    (transwin-ask 77))))
-                              (lambda ()
-                                (cl-incf shynur/time-running-minutes))))
+ '(display-time-hook `(,@display-time-hook
+                       ,(lambda ()
+                          (let ((inhibit-message t))
+                            (progn
+                              (require 'transwin)
+                              (transwin-dec)
+                              (transwin-ask 77))))
+                       ,(lambda ()
+                          (cl-incf shynur/time-running-minutes)))
                      nil (time)
                      "‘display-time-mode’每次更新时间时调用(也即,每‘display-time-interval’秒一次)")
  '(display-time-interval 60
@@ -361,18 +356,17 @@
                            (_
                             t))
                          nil (jka-compr))
- '(c-mode-common-hook (append c-mode-common-hook
-                              (list
-                               (lambda ()
-                                 (c-set-offset 'case-label '+))
-                               ;;只保留当前编译环境下,生效的ifdef从句
-                               #'hide-ifdef-mode))
+ '(c-mode-common-hook `(,@c-mode-common-hook
+                        ,(lambda ()
+                           (c-set-offset 'case-label '+))
+                        ;;只保留当前编译环境下,生效的ifdef从句
+                        ,(lambda ()
+                           (hide-ifdef-mode)))
                       nil (cc-mode))
- '(neotree-mode-hook (append neotree-mode-hook
-                             (list
-                              (lambda ()
-                                "关闭neotree的行号"
-                                (display-line-numbers-mode -1))))
+ '(neotree-mode-hook `(,@neotree-mode-hook
+                       ,(lambda ()
+                          "关闭neotree的行号"
+                          (display-line-numbers-mode -1)))
                      nil (neotree))
  '(global-hl-line-mode t
                        nil (hl-line))
@@ -388,7 +382,6 @@
  '(history-length t
                   nil ()
                   "使minibuffer历史记录的长度没有上限")
- '(tab-width 4)
  '(global-tab-line-mode t
                         nil (tab-line))
  '(tab-line-close-button-show nil
@@ -401,9 +394,14 @@
  '(tab-line-separator ""
                       nil (tab-line)
                       "关闭tab-line-name之间默认的空格")
+ '(tab-width 4)
  '(indent-tabs-mode nil
                     nil ()
-                    "制表符尽量用空格代替.(不过,诸如Bash脚本之类的文件编写还是需要tab字符的)")
+                    "制表符尽量用空格代替.(需要特别考虑Makefile)")
+ '(tab-always-indent t)
+ '(electric-indent-mode t
+                        nil (electric)
+                        "RET后自动缩进")
  '(kill-whole-line nil
                    nil (simple)
                    "“C-k”不删除换行符")
@@ -618,16 +616,14 @@
  '(cursor-in-non-selected-windows t
                                   nil ()
                                   "未选择的window中的cursor显示为静态镂空框")
- '(Info-mode-hook (append Info-mode-hook
-                          (list
-                           (lambda ()
-                             "单词之间换行"
-                             (visual-line-mode)))))
- '(help-mode-hook (append help-mode-hook
-                          (list
-                           (lambda ()
-                             "单词之间换行"
-                             (visual-line-mode)))))
+ '(Info-mode-hook `(,@Info-mode-hook
+                    ,(lambda ()
+                       "单词之间换行"
+                       (visual-line-mode))))
+ '(help-mode-hook `(,@help-mode-hook
+                    ,(lambda ()
+                       "单词之间换行"
+                       (visual-line-mode))))
  '(visual-line-fringe-indicators '(nil down-arrow)
                                  nil (simple)
                                  "word-wrap打开时在换行处显示down-arrow")
@@ -678,11 +674,12 @@
                                      nil (highlight-parentheses)
                                      "给内层括号换种颜色")
  '(sentence-end-double-space t)
- '(prog-mode-hook (append prog-mode-hook
-                          (list
-                           #'rainbow-mode
-                           #'rainbow-delimiters-mode))
-                  nil (prog-mode rainbow-mode rainbow-delimiters)
+ '(prog-mode-hook `(,@prog-mode-hook
+                    ,(lambda ()
+                       (rainbow-mode))
+                    ,(lambda ()
+                       (rainbow-delimiters-mode)))
+                  nil (prog-mode)
                   "e.g.,让“#ffffff”显示白色")
  '(scroll-bar-width 28)
  '(initial-buffer-choice t
@@ -703,21 +700,23 @@
  '(ivy-height 6
               nil (ivy)
               "准确来说是最大高度")
- '(minibuffer-setup-hook (append
-                          minibuffer-setup-hook
-                          (list
-                           (lambda ()
-                             "令ivy的minibuffer拥有自适应高度"
-                             (add-hook 'post-command-hook
-                                       (lambda ()
-                                         (when (progn
-                                                 (require 'ivy)
-                                                 ivy-mode)
-                                           (shrink-window (1+ (progn
-                                                                (require 'ivy)
-                                                                ivy-height)))))
-                                       nil
-                                       t)))))
+ '(minibuffer-setup-hook `(,@minibuffer-setup-hook
+                           ,(lambda ()
+                              "令ivy的minibuffer拥有自适应高度"
+                              (add-hook 'post-command-hook
+                                        (lambda ()
+                                          (when (progn
+                                                  (require 'ivy)
+                                                  ivy-mode)
+                                            (shrink-window (1+ (progn
+                                                                 (require 'ivy)
+                                                                 ivy-height)))))
+                                        nil
+                                        t))))
+ ;; '(minibuffer-mode-hook `(,@minibuffer-mode-hook
+ ;;                          ,(lambda ()
+ ;;                             (display-fill-column-indicator-mode -1)))
+ ;;                        nil (minibuffer))
  '(calendar-mark-holidays-flag t
                                nil (calendar))
  '(prettify-symbols-alist '(("lambda" . ?λ)
@@ -840,70 +839,70 @@
  '(text-scale-mode-step text-scale-mode-step
                         nil (face-remap)
                         "放缩字体大小时的倍率")
- '(after-init-hook (append after-init-hook
-                           (list
-                            (lambda ()
-                              (setq user-init-file (shynur/pathname-~/.emacs.d/.shynur/
-                                                    "user-init-file.el"))))))
- '(emacs-startup-hook (append emacs-startup-hook
-                              (list
-                               (lambda ()
-                                 (other-window 1)
-                                 (delete-other-windows))
-                               (lambda ()
-                                 (make-directory temporary-file-directory t))
-                               (lambda ()
-                                 "记录击键(bug#62277)"
-                                 (lossage-size (* 10000 10)))
-                               (lambda ()
-                                 (prefer-coding-system 'utf-8-unix)
-                                 (set-coding-system-priority 'utf-8-unix))
-                               #'filesets-init ;[menu-bar]->[File]->[Filesets]
-                               (lambda ()
-                                 (progn
-                                   (require 'zone)
-                                   (zone-when-idle (* 60 30))))
-                               (lambda ()
-                                 (shynur/buffer-eval-after-created "*scratch*"
-                                   (with-current-buffer "*scratch*"
-                                     (setq-local prettify-symbols-alist (default-value 'prettify-symbols-alist))
-                                     (prettify-symbols-mode)
-                                     (setq-local default-directory (pcase system-name
-                                                                     ("ASUS-TX2"
-                                                                      "d:/Downloads/Tmp/")
-                                                                     (_
-                                                                      "~/"))))))
-                               (lambda ()
-                                 (let ((shynur/machine.el "~/.emacs.d/shynur/machine.el"))
-                                   (when (file-exists-p shynur/machine.el)
-                                     (load-file shynur/machine.el))))
-                               (lambda ()
-                                 (display-time-mode)
-                                 (display-battery-mode))
-                               (lambda ()
-                                 (progn
-                                   (require 'register)
-                                   ;;见‘register-separator’
-                                   (set-register (progn
-                                                   (require 'register)
-                                                   register-separator) "\n\n")
-                                   (set-register ?i '(file . "~/.emacs.d/init.el"))))
-                               (lambda ()
-                                 "调节beep的声音种类,而不是音量"
-                                 (set-message-beep nil))
-                               (lambda ()
-                                 "解决‘mouse-drag-and-drop-region’总是copy的问题(bug#63872)"
-                                 (advice-add (prog1 'mouse-drag-and-drop-region
-                                               (require 'mouse)) :around
-                                             (lambda (mouse-drag-and-drop-region_ &rest arguments)
-                                               (let ((mark-even-if-inactive t))
-                                                 (apply mouse-drag-and-drop-region_ arguments)))))
-                               (lambda ()
-                                 (shynur/message #("启动耗时[%.1f]s"
-                                                   5 9 (face bold))
-                                                 (/ (- (car (time-convert after-init-time 1000))
-                                                       (car (time-convert before-init-time 1000)))
-                                                    1000.0))))))
+ '(after-init-hook `(,@after-init-hook
+                     ,(lambda ()
+                        (setq user-init-file (shynur/pathname-~/.emacs.d/.shynur/
+                                              "user-init-file.el")))))
+ '(emacs-startup-hook `(,@emacs-startup-hook
+                        ,(lambda ()
+                           (other-window 1)
+                           (delete-other-windows))
+                        ,(lambda ()
+                           (make-directory temporary-file-directory t))
+                        ,(lambda ()
+                           "记录击键(bug#62277)"
+                           (lossage-size (* 10000 10)))
+                        ,(lambda ()
+                           (prefer-coding-system 'utf-8-unix)
+                           (set-coding-system-priority 'utf-8-unix))
+                        ,(lambda ()
+                           "[menu-bar]->[File]->[Filesets]"
+                           (filesets-init))
+                        ,(lambda ()
+                           (progn
+                             (require 'zone)
+                             (zone-when-idle (* 60 30))))
+                        ,(lambda ()
+                           (shynur/buffer-eval-after-created "*scratch*"
+                             (with-current-buffer "*scratch*"
+                               (setq-local prettify-symbols-alist (default-value 'prettify-symbols-alist))
+                               (prettify-symbols-mode)
+                               (setq-local default-directory (pcase system-name
+                                                               ("ASUS-TX2"
+                                                                "d:/Downloads/Tmp/")
+                                                               (_
+                                                                "~/"))))))
+                        ,(lambda ()
+                           (let ((shynur/machine.el "~/.emacs.d/shynur/machine.el"))
+                             (when (file-exists-p shynur/machine.el)
+                               (load-file shynur/machine.el))))
+                        ,(lambda ()
+                           (display-time-mode)
+                           (display-battery-mode))
+                        ,(lambda ()
+                           (progn
+                             (require 'register)
+                             ;;见‘register-separator’
+                             (set-register (progn
+                                             (require 'register)
+                                             register-separator) "\n\n")
+                             (set-register ?i '(file . "~/.emacs.d/init.el"))))
+                        ,(lambda ()
+                           "调节beep的声音种类,而不是音量"
+                           (set-message-beep nil))
+                        ,(lambda ()
+                           "解决‘mouse-drag-and-drop-region’总是copy的问题(bug#63872)"
+                           (advice-add (prog1 'mouse-drag-and-drop-region
+                                         (require 'mouse)) :around
+                                         (lambda (mouse-drag-and-drop-region_ &rest arguments)
+                                           (let ((mark-even-if-inactive t))
+                                             (apply mouse-drag-and-drop-region_ arguments)))))
+                        ,(lambda ()
+                           (shynur/message #("启动耗时[%.1f]s"
+                                             5 9 (face bold))
+                             (/ (- (car (time-convert after-init-time 1000))
+                                   (car (time-convert before-init-time 1000)))
+                                1000.0)))))
  '(tooltip-delay 0
                  nil (tooltip))
  '(tooltip-mode t
@@ -945,12 +944,11 @@
  '(x-stretch-cursor t
                     nil ()
                     "在tab字符上拉长显示cursor")
- '(shell-mode-hook (append shell-mode-hook
-                           (list
-                            (lambda ()
-                              (pcase (system-name)
-                                ("ASUS-TX2"
-                                 (set-buffer-process-coding-system 'chinese-gb18030 'chinese-gb18030))))))
+ '(shell-mode-hook `(,@shell-mode-hook
+                     ,(lambda ()
+                        (pcase (system-name)
+                          ("ASUS-TX2"
+                           (set-buffer-process-coding-system 'chinese-gb18030 'chinese-gb18030)))))
                    nil (shell))
  '(global-page-break-lines-mode t
                                 nil (page-break-lines)
@@ -1106,12 +1104,11 @@
  '(list-matching-lines-jump-to-current-line t
                                             nil (replace)
                                             "在“*Occur*”中显示调用‘occur’之前的那一行,并用‘list-matching-lines-current-line-face’高亮之(方便找到回家的路)")
- '(occur-mode-hook (append occur-mode-hook
-                           (list
-                            (lambda ()
-                              (progn
-                                (require 'display-line-numbers)
-                                (display-line-numbers-mode -1)))))
+ '(occur-mode-hook `(,@occur-mode-hook
+                     ,(lambda ()
+                        (progn
+                          (require 'display-line-numbers)
+                          (display-line-numbers-mode -1))))
                    nil (replace))
  '(undo-limit most-positive-fixnum
               nil ()
@@ -1153,10 +1150,11 @@
                           "退出时,不询问是否要kill子进程")
  '(require-final-newline t
                          nil (files))
- '(before-save-hook (append before-save-hook
-                            (list
-                             #'whitespace-cleanup
-                             #'time-stamp))
+ '(before-save-hook `(,@before-save-hook
+                      ,(lambda ()
+                         (whitespace-cleanup))
+                      ,(lambda ()
+                         (time-stamp)))
                     nil (files))
  '(large-file-warning-threshold 1000000
                                 nil (files)
@@ -1406,13 +1404,12 @@
 (global-unset-key (kbd "C-M-S-l")) ;‘recenter-other-window’
 (global-unset-key (kbd "C-x s")) ;‘save-some-buffers’
 (global-unset-key (kbd "C-x C-o")) ;删除附近空行
-(global-unset-key (kbd "M-^"))
 (global-unset-key (kbd "C-S-<backspace>")) ;删除一整行及其换行符
 (global-unset-key (kbd "C-x DEL")) ;kill至行首
 (global-unset-key (kbd "M-k")) ;kill至句尾
 (global-unset-key (kbd "M-z")) ;‘zap-to-char’一帧就删完了,动作太快 反应不过来
 (global-unset-key (kbd "C-M-w")) ;强制合并两次kill,使其变成‘kill-ring’上的一个字符串
-(global-unset-key (kbd "C-M-<mouse-1>")) ;就是鼠标左击
+(global-unset-key (kbd "C-M-<down-mouse-1>")) ;就是鼠标左击
 (global-unset-key (kbd "C-x >")) ;‘scroll-right’
 (global-unset-key (kbd "C-x <")) ;‘scroll-left’
 (global-unset-key (kbd "C-x n p")) ;‘narrow-to-page’
@@ -1452,17 +1449,20 @@
 (global-unset-key (kbd "C-/")) ;‘undo’
 (global-unset-key (kbd "C-?")) ;‘redo-undo’;有些终端不认识这个字符
 (global-unset-key (kbd "M-<drag-mouse-1>")) ;与X的secondary selection兼容的功能
-(global-unset-key (kbd "M-<mouse-1>")) ;与X的secondary selection兼容的功能
-(global-unset-key (kbd "M-<mouse-3>")) ;与X的secondary selection兼容的功能
-(global-unset-key (kbd "M-<mouse-2>")) ;与X的secondary selection兼容的功能
+(global-unset-key (kbd "M-<down-mouse-1>")) ;与X的secondary selection兼容的功能
+(global-unset-key (kbd "M-<down-mouse-3>")) ;与X的secondary selection兼容的功能
+(global-unset-key (kbd "M-<down-mouse-2>")) ;与X的secondary selection兼容的功能
 (global-unset-key (kbd "C-x C-u"))
 (global-unset-key (kbd "C-x C-l"))
-(global-unset-key (kbd "C-M-\\"))
+(global-unset-key (kbd "C-M-\\")) ;‘indent-region’
 (global-unset-key (kbd "M-@"))
 (global-unset-key (kbd "C-M-@"))
 (global-unset-key (kbd "M-h"))
 (global-unset-key (kbd "C-M-h"))
 (global-unset-key (kbd "C-x C-p"))
+(global-unset-key (kbd "C-M-o")) ;‘split-line’
+(global-unset-key (kbd "M-i")) ;‘tab-to-tab-stop’
+(global-unset-key (kbd "C-x TAB")) ;‘indent-rigidly’
 
 (progn
   (global-set-key (kbd "C-s") (lambda ()
@@ -1499,11 +1499,9 @@
                    (error "Invalid customized key: “C-c <letter><non-SPC>”"))
                (error "Invalid customized key: “C-c <non-letter>”"))))
           (global-set-key (kbd (concat "C-c " postkey)) function)))
-      `(("c" . ,(progn
-                  (require 'hilit-chg)
-                  #'highlight-changes-visible-mode))
+      `(("c" . ,#'highlight-changes-visible-mode)
         ,@(progn
-            (defvar shynur/drag-stuff-map
+            (defconst shynur/drag-stuff-map
               (let ((shynur/drag-stuff-map (make-sparse-keymap)))
                 (require 'drag-stuff)
                 (define-key shynur/drag-stuff-map (kbd "<left>")  #'drag-stuff-left)
@@ -1522,10 +1520,9 @@
               ("d <up>"    . drag-stuff-up)
               ("d <right>" . drag-stuff-right)))
         ("g" . ,#'garbage-collect)
+        ("h" . ,#'hlt-highlight-region)
         ("r" . ,#'restart-emacs)
-        ("s" . ,(progn
-                  (require 'shortdoc)
-                  #'shortdoc-display-group))))
+        ("s" . ,#'shortdoc-display-group)))
 
 (progn
   (keyboard-translate ?\[ ?\()
@@ -1563,7 +1560,20 @@
 
 ;; 这页的函数有朝一日会移到 ~shynur/.emacs.d/shynur/ 目录下
 
-(defun shynur/view-set-region-properties-same-as (beginning end same-as-where)
+(defun shynur/text-reverse-characters (beginning end)
+  "将选中的区域的所有字符倒序排列"
+  (declare (pure   nil)
+           (indent nil)
+           (interactive-only nil)
+           (side-effect-free nil)
+           (completion (lambda (_symbol current-buffer)
+                         "read-only的缓冲区肯定编辑不了"
+                         (with-current-buffer current-buffer
+                           (not buffer-read-only)))))
+  (interactive "r")
+  (insert (nreverse (delete-and-extract-region beginning end))))
+
+(defun shynur/text-set-region-properties-same-as (beginning end same-as-where)
   "将选中区域的字符串的property设置得和指定的point所指处的一样"
   (declare (interactive-only t)
            (side-effect-free nil)

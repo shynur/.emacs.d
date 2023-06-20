@@ -143,6 +143,15 @@
                   "没有对应的handler时进入debugger;debugger直接在error所在的环境中运行,所以很方便;但是有些package没有使用user-error,所以若此变量开启,会时常进入debugger,非常麻烦,所以暂时来说,应该关掉")
  '(electric-quote-mode t
                        nil (electric))
+ '(electric-quote-paragraph t
+                            nil (electric))
+ '(electric-quote-comment t
+                          nil (electric))
+ '(electric-quote-string t
+                         nil (electric))
+ '(electric-quote-replace-double nil
+                                 nil (electric)
+                                 "不替换“\"”")
  '(column-number-indicator-zero-based nil
                                       nil ()
                                       "obsolete")
@@ -522,9 +531,6 @@
  '(size-indication-mode t
                         nil (simple)
                         "mode-line显示buffer大小(k=10^3,M=10^6,...)")
- '(split-string-default-separators split-string-default-separators
-                                   nil ()
-                                   "‘split-string’分隔字符串时默认参考的分隔位点为“[ \\t\\n\\r]+”")
  '(hscroll-margin 5)
  '(hscroll-step 1)
  '(suggest-key-bindings most-positive-fixnum
@@ -674,6 +680,8 @@
                                      nil (highlight-parentheses)
                                      "给内层括号换种颜色")
  '(sentence-end-double-space t)
+ '(sentence-end-without-period nil)
+ '(colon-double-space nil)
  '(prog-mode-hook `(,@prog-mode-hook
                     ,(lambda ()
                        (rainbow-mode))
@@ -965,13 +973,15 @@
  '(font-lock-maximum-decoration t
                                 nil (font-lock)
                                 "不限制fontification的数量")
- '(fill-column 70
-               nil ()
-               "‘auto-fill-mode’折行的位置(zero-based)")
+ '(fill-column 70)
+ '(adaptive-fill-mode t
+                      nil ()
+                      "“M-q”时自动选择每行首的填充前缀")
+ '(text-mode-hook `(,@text-mode-hook
+                    ,(lambda ()
+                       (display-fill-column-indicator-mode))))
  '(c-basic-offset 4
                   nil (cc-mode))
- '(global-display-fill-column-indicator-mode t
-                                             nil (display-fill-column-indicator))
  '(display-fill-column-indicator-column t
                                         nil (display-fill-column-indicator)
                                         "默认值参考fill-column")
@@ -1409,7 +1419,6 @@
 (global-unset-key (kbd "M-k")) ;kill至句尾
 (global-unset-key (kbd "M-z")) ;‘zap-to-char’一帧就删完了,动作太快 反应不过来
 (global-unset-key (kbd "C-M-w")) ;强制合并两次kill,使其变成‘kill-ring’上的一个字符串
-(global-unset-key (kbd "C-M-<down-mouse-1>")) ;就是鼠标左击
 (global-unset-key (kbd "C-x >")) ;‘scroll-right’
 (global-unset-key (kbd "C-x <")) ;‘scroll-left’
 (global-unset-key (kbd "C-x n p")) ;‘narrow-to-page’
@@ -1445,9 +1454,9 @@
 (global-unset-key (kbd "C-t")) ;‘transpose-chars’
 (global-unset-key (kbd "M-t")) ;‘transpose-words’
 (global-unset-key (kbd "C-x C-t")) ;‘transpose-lines’
-(global-unset-key (kbd "C-x u")) ;‘undo’
-(global-unset-key (kbd "C-/")) ;‘undo’
-(global-unset-key (kbd "C-?")) ;‘redo-undo’;有些终端不认识这个字符
+(global-unset-key (kbd "C-x u")) ;“C-_”
+(global-unset-key (kbd "C-/")) ;“C-_”
+(global-unset-key (kbd "C-?")) ;“C-M-_”,有些终端不认识这个字符
 (global-unset-key (kbd "M-<drag-mouse-1>")) ;与X的secondary selection兼容的功能
 (global-unset-key (kbd "M-<down-mouse-1>")) ;与X的secondary selection兼容的功能
 (global-unset-key (kbd "M-<down-mouse-3>")) ;与X的secondary selection兼容的功能
@@ -1455,14 +1464,17 @@
 (global-unset-key (kbd "C-x C-u"))
 (global-unset-key (kbd "C-x C-l"))
 (global-unset-key (kbd "C-M-\\")) ;‘indent-region’
-(global-unset-key (kbd "M-@"))
+(global-unset-key (kbd "M-@")) ;‘mark-word’
 (global-unset-key (kbd "C-M-@"))
-(global-unset-key (kbd "M-h"))
+(global-unset-key (kbd "M-h")) ;‘mark-paragraph’
 (global-unset-key (kbd "C-M-h"))
-(global-unset-key (kbd "C-x C-p"))
+(global-unset-key (kbd "C-x C-p")) ;‘mark-page’
 (global-unset-key (kbd "C-M-o")) ;‘split-line’
 (global-unset-key (kbd "M-i")) ;‘tab-to-tab-stop’
 (global-unset-key (kbd "C-x TAB")) ;‘indent-rigidly’
+(global-unset-key (kbd "C-@")) ;“C-SPC”
+(global-unset-key (kbd "C-x f")) ;‘set-fill-column’
+(global-unset-key (kbd "C-x .")) ;‘set-fill-prefix’
 
 (progn
   (global-set-key (kbd "C-s") (lambda ()

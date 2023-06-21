@@ -1532,7 +1532,7 @@
               (put #'drag-stuff-up    'repeat-map 'shynur/drag-stuff-map)
               (put #'drag-stuff-right 'repeat-map 'shynur/drag-stuff-map)))
         ("f" . ,(lambda ()
-                  "调用“clang-format --Werror --fallback-style=none --ferror-limit=0 --style=file:\"~/.emacs.d/shynur/clang-format.yml\"”.
+                  "调用“clang-format --Werror --fallback-style=none --ferror-limit=0 --style=file:~/.emacs.d/shynur/clang-format.yaml”.
 在C语系中直接美化代码,否则美化选中区域"
                   (interactive)
                   (let ((clang-format (pcase (system-name)
@@ -1544,7 +1544,7 @@
                                    "--fallback-style=none"
                                    "--ferror-limit=0"
                                    ,(format "--style=file:%s"
-                                            (file-truename "~/.emacs.d/shynur/clang-format.yml"))))
+                                            (file-truename "~/.emacs.d/shynur/clang-format.yaml"))))
                         (programming-language (pcase major-mode
                                                 ('c-mode    "c")
                                                 ('c++-mode  "cpp")

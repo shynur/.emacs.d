@@ -1532,31 +1532,62 @@
               (put #'drag-stuff-up    'repeat-map 'shynur/drag-stuff-map)
               (put #'drag-stuff-right 'repeat-map 'shynur/drag-stuff-map)))
         ("f" . ,(lambda ()
-                  "调用“clang-format --Werror --fallback-style=none --ferror-limit=0 --style=file:\"~/.emacs.d/shynur/clang-format.yml\"”"
+                  "调用“clang-format --Werror --fallback-style=none --ferror-limit=0 --style=file:\"~/.emacs.d/shynur/clang-format.yml\"”.
+在C语系中直接美化代码,否则美化选中区域"
                   (interactive)
-                  (unless (seq-contains-p '(c-mode c++-mode java-mode js-mode objc-mode) major-mode)
-                    (user-error (shynur/message-format "“clang-format”无法处理当前编程语言")))
-                  (without-restriction
-                    (call-process-region 1 (point-max) (pcase (system-name)
-                                                         ("ASUS-TX2"
-                                                          "d:/Progs/LLVM/bin/clang-format.exe")
-                                                         (_
-                                                          "clang-format"))
-                                         t t nil
-                                         "--Werror"
-                                         "--fallback-style=none"
-                                         "--ferror-limit=0"
-                                         (format "--style=file:%s"
-                                                 (file-truename "~/.emacs.d/shynur/clang-format.yml"))
-                                         (format "--cursor=%d"
-                                                 (1- (point))))
-                    (beginning-of-buffer)
-                    (goto-char (1+ (string-to-number (prog1 (let ((case-fold-search nil))
-                                                              (save-match-data
-                                                                (buffer-substring-no-properties
-                                                                 (re-search-forward "\\`[[:blank:]]*{[[:blank:]]*\"Cursor\":[[:blank:]]*")
-                                                                 (re-search-forward "[[:digit:]]+"))))
-                                                       (delete-line))))))))
+                  (let ((clang-format (pcase (system-name)
+                                        ("ASUS-TX2"
+                                         "d:/Progs/LLVM/bin/clang-format.exe")
+                                        (_
+                                         "clang-format")))
+                        (options `("--Werror"
+                                   "--fallback-style=none"
+                                   "--ferror-limit=0"
+                                   ,(format "--style=file:%s"
+                                            (file-truename "~/.emacs.d/shynur/clang-format.yml"))))
+                        (programming-language (pcase major-mode
+                                                ('c-mode    "c")
+                                                ('c++-mode  "cpp")
+                                                ('java-mode "java")
+                                                ('js-mode   "js"))))
+                    (if (stringp programming-language)
+                        (without-restriction
+                          (apply #'call-process-region
+                                 1 (point-max) clang-format
+                                 t t nil
+                                 (format "--assume-filename=a.%s"
+                                         programming-language)
+                                 (format "--cursor=%d"
+                                         (1- (point)))
+                                 options)
+                          (beginning-of-buffer)
+                          (goto-char (1+ (string-to-number (prog1 (let ((case-fold-search nil))
+                                                                    (save-match-data
+                                                                      (buffer-substring-no-properties
+                                                                       (re-search-forward "\\`[[:blank:]]*{[[:blank:]]*\"Cursor\":[[:blank:]]*")
+                                                                       (re-search-forward "[[:digit:]]+"))))
+                                                             (delete-line))))))
+                      (unless mark-active
+                        (user-error (shynur/message-format "“clang-format”无法处理当前编程语言")))
+                      (let ((formatted-code (let ((buffer-substring `(,(current-buffer) ,(region-beginning) ,(region-end))))
+                                              (with-temp-buffer
+                                                (apply #'insert-buffer-substring-no-properties
+                                                       buffer-substring)
+                                                (apply #'call-process-region
+                                                       1 (point-max) clang-format
+                                                       t t nil
+                                                       (format "--assume-filename=a.%s"
+                                                               (completing-read #("assume language: "
+                                                                                  0 16 (face italic))
+                                                                                '("c" "cpp" "java" "js" "json" "cs")))
+                                                       options)
+                                                (buffer-substring-no-properties 1 (point-max)))))
+                            (point-at-region-end (prog1 (= (point) (region-end))
+                                                   (delete-active-region))))
+                        (if point-at-region-end
+                            (insert formatted-code)
+                          (save-excursion
+                            (insert formatted-code))))))))
         ("g" . ,#'garbage-collect)
         ("h" . ,#'hlt-highlight-region)
         ("r" . ,#'restart-emacs)

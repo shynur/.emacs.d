@@ -1,0 +1,5 @@
+---
+AlignAfterOpenBracket: Align
+---
+Language: Cpp
+AccessModifierOffset: 2

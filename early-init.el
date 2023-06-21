@@ -10,15 +10,14 @@
 
 (make-directory "~/.emacs.d/.shynur/" t)
 
-(defun shynur/message (format-string &rest arguments)
-  #("效果同‘message’,只是在开头加上“Shynur: ”"
-    21 29 (face (shadow italic)))
-  (declare (indent 1)
-           (side-effect-free nil))
-  (message #("Shynur: %s"
-             0 8 (face (shadow italic)))
-           (apply #'format
-                  format-string arguments)))
+(defun shynur/message-format (format-string)
+  #("在开头加上“Shynur: ”"
+    6 13 (face (shadow italic)))
+  (declare (pure t)
+           (indent 1))
+  (format #("Shynur: %s"
+            0 7 (face (shadow italic)))
+          format-string))
 
 (defmacro shynur/buffer-eval-after-created (buffer-or-name &rest body)
   (declare (indent 1))

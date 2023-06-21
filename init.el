@@ -20,28 +20,28 @@
 (custom-set-variables
  '(post-gc-hook `(,@post-gc-hook
                   ,(lambda ()
-                     (shynur/message "%s"
-                       (format-spec
-                        #("%n GC (%ss total): %B VM, %mmin runtime"
-                          7  9 (face bold)
-                          26 28 (face bold))
-                        `((?n . ,(format #("%d%s"
-                                           0 2 (face bold))
-                                         gcs-done
-                                         (pcase (mod gcs-done 10)
-                                           (1 "st")
-                                           (2 "nd")
-                                           (3 "rd")
-                                           (_ "th"))))
-                          (?m . ,shynur/time-running-minutes)
-                          (?s . ,(round gc-elapsed))
-                          (?B . ,(cl-loop for memory = (memory-limit) then (/ memory 1024.0)
-                                          for mem-unit across "KMGT"
-                                          when (< memory 1024)
-                                          return (format #("%.1f%c"
-                                                           0 4 (face bold))
-                                                         memory
-                                                         mem-unit)))))))))
+                     (message (shynur/message-format "%s")
+                              (format-spec
+                               #("%n GC (%ss total): %B VM, %mmin runtime"
+                                 7  9 (face bold)
+                                 26 28 (face bold))
+                               `((?n . ,(format #("%d%s"
+                                                  0 2 (face bold))
+                                                gcs-done
+                                                (pcase (mod gcs-done 10)
+                                                  (1 "st")
+                                                  (2 "nd")
+                                                  (3 "rd")
+                                                  (_ "th"))))
+                                 (?m . ,shynur/time-running-minutes)
+                                 (?s . ,(round gc-elapsed))
+                                 (?B . ,(cl-loop for memory = (memory-limit) then (/ memory 1024.0)
+                                                 for mem-unit across "KMGT"
+                                                 when (< memory 1024)
+                                                 return (format #("%.1f%c"
+                                                                  0 4 (face bold))
+                                                                memory
+                                                                mem-unit)))))))))
  '(load-path (remq nil load-path))
  '(package-archive-priorities '(("gnu"    . 0)
                                 ("nongnu" . 0)
@@ -906,11 +906,11 @@
                                            (let ((mark-even-if-inactive t))
                                              (apply mouse-drag-and-drop-region_ arguments)))))
                         ,(lambda ()
-                           (shynur/message #("启动耗时[%.1f]s"
-                                             5 9 (face bold))
-                             (/ (- (car (time-convert after-init-time 1000))
-                                   (car (time-convert before-init-time 1000)))
-                                1000.0)))))
+                           (message (shynur/message-format #("启动耗时[%.1f]s"
+                                                             5 9 (face bold)))
+                                    (/ (- (car (time-convert after-init-time 1000))
+                                          (car (time-convert before-init-time 1000)))
+                                       1000.0)))))
  '(tooltip-delay 0
                  nil (tooltip))
  '(tooltip-mode t
@@ -979,7 +979,8 @@
                       "“M-q”时自动选择每行首的填充前缀")
  '(text-mode-hook `(,@text-mode-hook
                     ,(lambda ()
-                       (display-fill-column-indicator-mode))))
+                       (when (eq major-mode 'text-mode)
+                         (display-fill-column-indicator-mode)))))
  '(c-basic-offset 4
                   nil (cc-mode))
  '(display-fill-column-indicator-column t
@@ -1512,7 +1513,10 @@
                (error "Invalid customized key: “C-c <non-letter>”"))))
           (global-set-key (kbd (concat "C-c " postkey)) function)))
       `(("c" . ,#'highlight-changes-visible-mode)
-        ,@(progn
+        ,@(prog1 '(("d <left>"  . drag-stuff-left)
+                   ("d <down>"  . drag-stuff-down)
+                   ("d <up>"    . drag-stuff-up)
+                   ("d <right>" . drag-stuff-right))
             (defconst shynur/drag-stuff-map
               (let ((shynur/drag-stuff-map (make-sparse-keymap)))
                 (require 'drag-stuff)
@@ -1526,11 +1530,33 @@
               (put #'drag-stuff-left  'repeat-map 'shynur/drag-stuff-map)
               (put #'drag-stuff-down  'repeat-map 'shynur/drag-stuff-map)
               (put #'drag-stuff-up    'repeat-map 'shynur/drag-stuff-map)
-              (put #'drag-stuff-right 'repeat-map 'shynur/drag-stuff-map))
-            '(("d <left>"  . drag-stuff-left)
-              ("d <down>"  . drag-stuff-down)
-              ("d <up>"    . drag-stuff-up)
-              ("d <right>" . drag-stuff-right)))
+              (put #'drag-stuff-right 'repeat-map 'shynur/drag-stuff-map)))
+        ("f" . ,(lambda ()
+                  "调用“clang-format --Werror --fallback-style=none --ferror-limit=0 --style=file:\"~/.emacs.d/shynur/clang-format.yml\"”"
+                  (interactive)
+                  (unless (seq-contains-p '(c-mode c++-mode java-mode js-mode objc-mode) major-mode)
+                    (user-error (shynur/message-format "“clang-format”无法处理当前编程语言")))
+                  (without-restriction
+                    (call-process-region 1 (point-max) (pcase (system-name)
+                                                         ("ASUS-TX2"
+                                                          "d:/Progs/LLVM/bin/clang-format.exe")
+                                                         (_
+                                                          "clang-format"))
+                                         t t nil
+                                         "--Werror"
+                                         "--fallback-style=none"
+                                         "--ferror-limit=0"
+                                         (format "--style=file:%s"
+                                                 (file-truename "~/.emacs.d/shynur/clang-format.yml"))
+                                         (format "--cursor=%d"
+                                                 (1- (point))))
+                    (beginning-of-buffer)
+                    (goto-char (1+ (string-to-number (prog1 (let ((case-fold-search nil))
+                                                              (save-match-data
+                                                                (buffer-substring-no-properties
+                                                                 (re-search-forward "\\`[[:blank:]]*{[[:blank:]]*\"Cursor\":[[:blank:]]*")
+                                                                 (re-search-forward "[[:digit:]]+"))))
+                                                       (delete-line))))))))
         ("g" . ,#'garbage-collect)
         ("h" . ,#'hlt-highlight-region)
         ("r" . ,#'restart-emacs)

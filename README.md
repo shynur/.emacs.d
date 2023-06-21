@@ -38,7 +38,7 @@
 ### 键盘输入
 
 对调了键盘上的*圆括号* (<kbd>(</kbd><kbd>)</kbd>) 与*方括号* (<kbd>[</kbd><kbd>]</kbd>”).  <br>
-而*大括号* (<kbd>[</kbd><kbd>]</kbd>) 与*数字* (<kbd>9</kbd><kbd>0</kbd>) 不受任何影响.  <br>
+而*大括号* (<kbd>{</kbd><kbd>}</kbd>) 与*数字* (<kbd>9</kbd><kbd>0</kbd>) 不受任何影响.  <br>
 (BTW, 其它软件做得到吗?)
 
 ### 快捷键

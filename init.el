@@ -74,6 +74,7 @@
                                        transwin
                                        highlight
                                        on-screen
+                                       yaml-mode
                                        drag-stuff
                                        ascii-table
                                        doom-themes

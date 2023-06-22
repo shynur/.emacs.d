@@ -67,7 +67,7 @@
 <kbd>C-c r</kbd><br>
 重启 Emacs.
 
-<kbd>C-c s</kbd>: <br>
+<kbd>C-c s</kbd><br>
 以 Elisp 数据类型为关键词, 搜索相关文档.
 
 ## Written for

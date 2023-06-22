@@ -37,7 +37,7 @@
 
 ### 键盘输入
 
-对调了键盘上的*圆括号* (<kbd>(</kbd><kbd>)</kbd>) 与*方括号* (<kbd>[</kbd><kbd>]</kbd>”).  <br>
+对调了键盘上的*圆括号* (<kbd>(</kbd><kbd>)</kbd>) 与*方括号* (<kbd>[</kbd><kbd>]</kbd>).  <br>
 而*大括号* (<kbd>{</kbd><kbd>}</kbd>) 与*数字* (<kbd>9</kbd><kbd>0</kbd>) 不受任何影响.  <br>
 (BTW, 其它软件做得到吗?)
 
@@ -49,22 +49,22 @@
 
 ### 新增快捷键 (<kbd>C-c <letter></kbd>)
 
-<kbd>C-c c</kbd>: <br>
+<kbd>C-c c</kbd><br>
 高亮截至目前为止, 修改过的文本部分.
 
-<kbd>C-c d</kbd>: <br>
+<kbd>C-c d</kbd><br>
 选中区域后执行此键, 按*方向键*可以上下左右平移选中的文本.
 
-<kbd>C-c f</kbd>: <br>
+<kbd>C-c f</kbd><br>
 调用 `clang-format` 美化代码.  光标的相对位置保持不变.  非编程语言的缓冲区中可选中一段可能是编程语言的区域进行美化.
 
-<kbd>C-c g</kbd>: <br>
+<kbd>C-c g</kbd><br>
 立刻执行垃圾收集.
 
-<kbd>C-c h</kbd>: <br>
+<kbd>C-c h</kbd><br>
 持久性地高亮选中区域.
 
-<kbd>C-c r</kbd>: <br>
+<kbd>C-c r</kbd><br>
 重启 Emacs.
 
 <kbd>C-c s</kbd>: <br>

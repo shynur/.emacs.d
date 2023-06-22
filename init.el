@@ -762,7 +762,7 @@
                                  nil (hilit-chg))
  '(highlight-changes-visibility-initial-state nil
                                               nil (hilit-chg))
- '(python-shell-interpreter (pcase system-name
+ '(python-shell-interpreter (pcase (system-name)
                               ("ASUS-TX2"
                                "python")
                               (_
@@ -875,7 +875,7 @@
                              (with-current-buffer "*scratch*"
                                (setq-local prettify-symbols-alist (default-value 'prettify-symbols-alist))
                                (prettify-symbols-mode)
-                               (setq-local default-directory (pcase system-name
+                               (setq-local default-directory (pcase (system-name)
                                                                ("ASUS-TX2"
                                                                 "d:/Downloads/Tmp/")
                                                                (_
@@ -931,7 +931,7 @@
                         nil (doom-modeline))
  '(inferior-lisp-program (cond
                           ((eq system-type 'windows-nt) (cond
-                                                         ((string= system-name "ASUS-TX2")
+                                                         ((string= (system-name) "ASUS-TX2")
                                                           "d:/Progs/Steel_Bank_Common_Lisp/sbcl.exe")
                                                          (t
                                                           inferior-lisp-program)))
@@ -1370,7 +1370,7 @@
 
 (custom-set-faces
  `(default
-    ((t . (:font ,(pcase system-name
+    ((t . (:font ,(pcase (system-name)
                     ("ASUS-TX2"
                      "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing")
                     (_
@@ -1502,15 +1502,15 @@
               (function (cdr postkey-function)))
           (pcase (length postkey)
             (0
-             (error "Invalid customized key: “C-c ”"))
+             (user-error (shynur/message-format "Invalid customized key: “C-c ”")))
             (length
              (if (let ((letter (aref postkey 0)))
                    (or (<= ?A letter ?Z)
                        (<= ?a letter ?z)))
                  (when (and (>= length 2)
                             (not (char-equal #x20 (aref postkey 1))))
-                   (error "Invalid customized key: “C-c <letter><non-SPC>”"))
-               (error "Invalid customized key: “C-c <non-letter>”"))))
+                   (user-error (shynur/message-format "Invalid customized key: “C-c <letter><non-SPC>”")))
+               (user-error (shynur/message-format "Invalid customized key: “C-c <non-letter>”")))))
           (global-set-key (kbd (concat "C-c " postkey)) function)))
       `(("c" . ,#'highlight-changes-visible-mode)
         ,@(prog1 '(("d <left>"  . drag-stuff-left)
@@ -1536,29 +1536,26 @@
 在C语系中直接美化代码,否则美化选中区域"
                   (interactive)
                   (let ((clang-format (pcase (system-name)
-                                        ("ASUS-TX2"
-                                         "d:/Progs/LLVM/bin/clang-format.exe")
-                                        (_
-                                         "clang-format")))
+                                        ("ASUS-TX2" "d:/Progs/LLVM/bin/clang-format.exe")
+                                        (_          "clang-format"                      )))
                         (options `("--Werror"
                                    "--fallback-style=none"
                                    "--ferror-limit=0"
                                    ,(format "--style=file:%s"
                                             (file-truename "~/.emacs.d/shynur/clang-format.yaml"))))
                         (programming-language (pcase major-mode
-                                                ('c-mode    "c")
-                                                ('c++-mode  "cpp")
+                                                ('c-mode    "c"   )
+                                                ('c++-mode  "cpp" )
                                                 ('java-mode "java")
-                                                ('js-mode   "js"))))
+                                                ('js-mode   "js"  )
+                                                (_ (unless mark-active
+                                                     (user-error (shynur/message-format "“clang-format”无法处理当前编程语言")))))))
                     (if (stringp programming-language)
                         (without-restriction
                           (apply #'call-process-region
-                                 1 (point-max) clang-format
-                                 t t nil
-                                 (format "--assume-filename=a.%s"
-                                         programming-language)
-                                 (format "--cursor=%d"
-                                         (1- (point)))
+                                 1 (point-max) clang-format t t nil
+                                 (format "--assume-filename=a.%s" programming-language)
+                                 (format "--cursor=%d" (1- (point)))
                                  options)
                           (beginning-of-buffer)
                           (goto-char (1+ (string-to-number (prog1 (let ((case-fold-search nil))
@@ -1567,15 +1564,12 @@
                                                                        (re-search-forward "\\`[[:blank:]]*{[[:blank:]]*\"Cursor\":[[:blank:]]*")
                                                                        (re-search-forward "[[:digit:]]+"))))
                                                              (delete-line))))))
-                      (unless mark-active
-                        (user-error (shynur/message-format "“clang-format”无法处理当前编程语言")))
                       (let ((formatted-code (let ((buffer-substring `(,(current-buffer) ,(region-beginning) ,(region-end))))
                                               (with-temp-buffer
                                                 (apply #'insert-buffer-substring-no-properties
                                                        buffer-substring)
                                                 (apply #'call-process-region
-                                                       1 (point-max) clang-format
-                                                       t t nil
+                                                       1 (point-max) clang-format t t nil
                                                        (format "--assume-filename=a.%s"
                                                                (completing-read #("assume language: "
                                                                                   0 16 (face italic))

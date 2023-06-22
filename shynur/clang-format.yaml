@@ -10,7 +10,7 @@ AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: Empty
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortEnumsOnASingleLine: true
-AllowShortFunctionsOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: All
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLambdasOnASingleLine: Empty
 AllowShortLoopsOnASingleLine: false
@@ -39,7 +39,6 @@ BreakStringLiterals: true
 ColumnLimit: 0
 EmptyLineAfterAccessModifier: Never
 EmptyLineBeforeAccessModifier: Leave
-IndentAccessModifiers: true
 IndentCaseBlocks: false
 IndentCaseLabels: true
 IndentGotoLabels: false
@@ -78,7 +77,7 @@ SpacesInParentheses: false
 SpacesInSquareBrackets: false
 ---
 Language: Cpp
-AccessModifierOffset: 0
+AccessModifierOffset: -2
 AlignEscapedNewlines: Left
 AlwaysBreakTemplateDeclarations: No
 BreakAfterAttributes: Leave
@@ -88,6 +87,7 @@ Cpp11BracedListStyle: true
 DerivePointerAlignment: true
 FixNamespaceComments: true
 IncludeBlocks: Preserve
+IndentAccessModifiers: false
 IndentExternBlock: NoIndent
 IndentPPDirectives: AfterHash
 IndentRequiresClause: true

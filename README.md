@@ -72,7 +72,10 @@
 
 ## Written for
 
-- 🪟 v28.2 on Windows 11, using GUI
+Latest version, using GUI
+
+- run as foreground process on MS-Windows
+- run as daemon-client on MS-Windows ([如何在 MS-Windows 上运行 Emacs 后台服务?](./shynur/Emacs-use_daemon.md))
 
 ## TODO
 

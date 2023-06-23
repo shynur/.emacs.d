@@ -182,6 +182,11 @@
  '(coding-system-for-write 'utf-8-unix
                            nil ()
                            "该customization中的NEW被Emacs设置为t")
+ '(file-name-coding-system (pcase (system-name)
+                             ("ASUS-TX2"
+                              'chinese-gb18030)
+                             (_
+                              file-name-coding-system)))
  '(completion-cycle-threshold nil
                               nil (minibuffer)
                               "minibuffer补全时,按TAB会轮换候选词")
@@ -253,6 +258,15 @@
                           (cl-incf shynur/time-running-minutes)))
                      nil (time)
                      "‘display-time-mode’每次更新时间时调用(也即,每‘display-time-interval’秒一次)")
+ '(server-after-make-frame-hook `(,@server-after-make-frame-hook
+                                  ,(lambda ()
+                                     (transwin-ask 77))
+                                  ,(lambda ()
+                                     (keyboard-translate ?\[ ?\()
+                                     (keyboard-translate ?\] ?\))
+                                     (keyboard-translate ?\( ?\[)
+                                     (keyboard-translate ?\) ?\])))
+                                nil (server))
  '(display-time-interval 60
                          nil (time)
                          "决定‘display-time-mode’显示时间的更新频率")
@@ -722,10 +736,6 @@
                                                                  ivy-height)))))
                                         nil
                                         t))))
- ;; '(minibuffer-mode-hook `(,@minibuffer-mode-hook
- ;;                          ,(lambda ()
- ;;                             (display-fill-column-indicator-mode -1)))
- ;;                        nil (minibuffer))
  '(calendar-mark-holidays-flag t
                                nil (calendar))
  '(prettify-symbols-alist '(("lambda" . ?λ)
@@ -955,9 +965,21 @@
                     "在tab字符上拉长显示cursor")
  '(shell-mode-hook `(,@shell-mode-hook
                      ,(lambda ()
+                        "设置编码"
                         (pcase (system-name)
                           ("ASUS-TX2"
-                           (set-buffer-process-coding-system 'chinese-gb18030 'chinese-gb18030)))))
+                           (set-buffer-process-coding-system 'chinese-gb18030 'chinese-gb18030))))
+                     ,(lambda ()
+                        "设置shell"
+                        (pcase (system-name)
+                          ("ASUS-TX2"
+                           (make-thread (lambda ()
+                                          (while (length> "Microsoft Windows" (buffer-size))
+                                            (thread-yield))
+                                          (when (save-excursion
+                                                  (save-match-data
+                                                    (re-search-backward "Microsoft Windows")))
+                                            (execute-kbd-macro "powershell\x0d"))))))))
                    nil (shell))
  '(global-page-break-lines-mode t
                                 nil (page-break-lines)

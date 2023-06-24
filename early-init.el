@@ -39,12 +39,16 @@
 
 ;; Local Variables:
 ;; coding: utf-8-unix
+;; no-byte-compile: t
+;; no-native-compile: t
+;; require-final-newline: t
 ;; eval: (let ((case-fold-search t))
 ;;         (highlight-phrase "shynur[^[:blank:][:space:][:cntrl:]()`'\"]*"
 ;;                           'underline))
 ;; prettify-symbols-alist: (("lambda" . ?λ))
 ;; eval: (prettify-symbols-mode)
-;; no-byte-compile: t
-;; no-native-compile: t
+;; eval: (indent-tabs-mode -1)
+;; delete-trailing-lines: t
+;; eval: (add-hook 'before-save-hook #'delete-trailing-whitespace)
 ;; End:
 ;;; ~shynur/.emacs.d/early-init.el ends here

@@ -21,10 +21,10 @@ Emacs 提供了 daemon-client 模型, 简而言之就像 QQ 那样: 在后台启
 
 ### 创建 daemon
 
-按 <kbd>Win-R</kbd>, 输入 `shell:startup` 后回车, 进入了一个目录.
+按 <kbd>Win-R</kbd>, 输入 `shell:startup` 后回车, 进入了一个文件夹.
 (用户在此处放置的文件将在登入时自动运行.)
 
-在该目录中创建一个指向 `c:/Users/shynur/bin/emacs-28.2/bin/runemacs.exe` 的*快捷方式*, 右键选择*属性*, 编辑*目标*, 使之成为 `c:/Users/shynur/bin/emacs-28.2/bin/runemacs.exe --daemon`.
+在该文件夹中创建一个指向 `c:/Users/shynur/bin/emacs-28.2/bin/runemacs.exe` 的*快捷方式*, 右键选择*属性*, 编辑*目标*, 使之成为 `c:/Users/shynur/bin/emacs-28.2/bin/runemacs.exe --daemon`.
 
 ### 打开 client
 
@@ -43,7 +43,7 @@ Emacs 提供了 daemon-client 模型, 简而言之就像 QQ 那样: 在后台启
 进入该目录, 看到 `(默认)` 这一项, 右键选择*修改*, 修改为 `C:\Users\shynur\bin\emacs-28.2\bin\emacsclientw.exe --server-file=c:/Users/shynur/emacs-server-auth-dir/server-name.txt --create-frame "%1"`.
 这里 `"%1"` 表示*右键选择使用 `emacsclientw.exe` 打开*时要编辑的文件的名字.
 
-由于中国大陆政府的规定, MS-Windows 在中国大陆默认使用 Chinese-GB18030 编码, 所以为了使 `emacsclientw.exe` 正确处理 `"%1"`, 需要在 `.emacs` 中添加:
+由于 MS-Windows 默认使用 Chinese-GB18030, 所以为了使 `emacsclientw.exe` 正确处理 `"%1"`, 需要在 `.emacs` 中添加:
 
 ```lisp
 (setq file-name-coding-system 'chinese-gb18030)

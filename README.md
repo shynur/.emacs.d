@@ -64,11 +64,8 @@
 <kbd>C-c h</kbd><br>
 持久性地高亮选中区域.
 
-<kbd>C-c r</kbd><br>
-重启 Emacs.
-
 <kbd>C-c s</kbd><br>
-以 Elisp 数据类型为关键词, 搜索相关文档.
+以 Elisp 数据类型为关键词, 搜索相关 API.
 
 ## Written for
 

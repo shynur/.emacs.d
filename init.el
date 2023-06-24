@@ -144,6 +144,10 @@
                   "没有对应的handler时进入debugger;debugger直接在error所在的环境中运行,所以很方便;但是有些package没有使用user-error,所以若此变量开启,会时常进入debugger,非常麻烦,所以暂时来说,应该关掉")
  '(electric-quote-mode t
                        nil (electric))
+ '(markdown-mode-hook `(,@markdown-mode-hook
+                        ,(lambda ()
+                           (electric-quote-local-mode -1)))
+                      nil (markdown-mode))
  '(electric-quote-paragraph t
                             nil (electric))
  '(electric-quote-comment t
@@ -250,23 +254,12 @@
  '(display-time-hook `(,@display-time-hook
                        ,(lambda ()
                           (let ((inhibit-message t))
-                            (progn
-                              (require 'transwin)
-                              (transwin-dec)
-                              (transwin-ask 77))))
+                            (transwin-dec)
+                            (transwin-ask 77)))
                        ,(lambda ()
                           (cl-incf shynur/time-running-minutes)))
                      nil (time)
                      "‘display-time-mode’每次更新时间时调用(也即,每‘display-time-interval’秒一次)")
- '(server-after-make-frame-hook `(,@server-after-make-frame-hook
-                                  ,(lambda ()
-                                     (transwin-ask 77))
-                                  ,(lambda ()
-                                     (keyboard-translate ?\[ ?\()
-                                     (keyboard-translate ?\] ?\))
-                                     (keyboard-translate ?\( ?\[)
-                                     (keyboard-translate ?\) ?\])))
-                                nil (server))
  '(display-time-interval 60
                          nil (time)
                          "决定‘display-time-mode’显示时间的更新频率")
@@ -466,7 +459,7 @@
                  "bignum的位宽")
  '(line-move-visual t
                     nil (simple)
-                    "按照 screen line 上下移动")
+                    "按照screen line上下移动")
  '(line-number-mode nil
                     nil (simple)
                     "mode-line不显示行号")
@@ -840,6 +833,18 @@
  '(server-name "server-name.txt"
                nil (server)
                "该变量需要在‘server-start’之前设置好")
+ `(server-after-make-frame-hook '(,@(boundp 'server-after-make-frame-hook)
+                                  ,(lambda ()
+                                     (transwin-ask 77))
+                  ,(letrec ((_ (lambda ()
+                                                 "daemon-client运行在同一个机器上,只需要在一个client进程中执行keyboard-translate,其余(以及后续)的client都能生效"
+                                                 (keyboard-translate ?\[ ?\()
+                                                 (keyboard-translate ?\] ?\))
+                                                 (keyboard-translate ?\( ?\[)
+                                                 (keyboard-translate ?\) ?\])
+                                                 (remove-hook 'server-after-make-frame-hook _))))
+                                          _))
+                                nil (server))
  '(register-preview-delay 0
                           nil (register)
                           "调用读写register的命令时,预览已赋值的register,0延迟")
@@ -877,10 +882,6 @@
                         ,(lambda ()
                            "[menu-bar]->[File]->[Filesets]"
                            (filesets-init))
-                        ,(lambda ()
-                           (progn
-                             (require 'zone)
-                             (zone-when-idle (* 60 30))))
                         ,(lambda ()
                            (shynur/buffer-eval-after-created "*scratch*"
                              (with-current-buffer "*scratch*"
@@ -1167,8 +1168,10 @@
                                                        'underline)))
                                 (prettify-symbols-alist
                                  . (("lambda" . ?λ)))
+                                (delete-trailing-lines
+                                 . t)
                                 (eval
-                                 . (prettify-symbols-mode)))
+                                 . (add-hook 'before-save-hook #'delete-trailing-whitespace)))
                               nil (files))
  '(enable-local-variables t
                           nil (files)
@@ -1607,14 +1610,7 @@
                             (insert formatted-code))))))))
         ("g" . ,#'garbage-collect)
         ("h" . ,#'hlt-highlight-region)
-        ("r" . ,#'restart-emacs)
         ("s" . ,#'shortdoc-display-group)))
-
-(progn
-  (keyboard-translate ?\[ ?\()
-  (keyboard-translate ?\] ?\))
-  (keyboard-translate ?\( ?\[)
-  (keyboard-translate ?\) ?\]))
 
 ;;保存并恢复不同session之间的frame的位置和尺寸:<https://emacs.stackexchange.com/questions/76087>
 ;;缺点:窗口最大化会被转换成尺寸,而不是窗口最大化这个概念.所以新会话的frame仍然不是与屏幕紧密贴合的.
@@ -1675,12 +1671,16 @@
 
 ;; Local Variables:
 ;; coding: utf-8-unix
+;; no-byte-compile: t
+;; no-native-compile: t
+;; require-final-newline: t
 ;; eval: (let ((case-fold-search t))
 ;;         (highlight-phrase "shynur[^[:blank:][:space:][:cntrl:]()`'\"]*"
 ;;                           'underline))
 ;; prettify-symbols-alist: (("lambda" . ?λ))
 ;; eval: (prettify-symbols-mode)
-;; no-byte-compile: t
-;; no-native-compile: t
+;; eval: (indent-tabs-mode -1)
+;; delete-trailing-lines: t
+;; eval: (add-hook 'before-save-hook #'delete-trailing-whitespace)
 ;; End:
 ;;; ~shynur/.emacs.d/init.el ends here

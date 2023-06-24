@@ -21,7 +21,7 @@
 
 (defmacro shynur/buffer-eval-after-created (buffer-or-name &rest body)
   (declare (indent 1))
-  (let ((&buffer-or-name (gensym "shynur/buffer-gensym-")))
+  (let ((&buffer-or-name (gensym "shynur/buffer-eval-after-created-")))
     `(let ((,&buffer-or-name ,buffer-or-name))
        (make-thread (lambda ()
                       (while (not (get-buffer ,&buffer-or-name))
@@ -41,7 +41,6 @@
 ;; coding: utf-8-unix
 ;; no-byte-compile: t
 ;; no-native-compile: t
-;; require-final-newline: t
 ;; eval: (let ((case-fold-search t))
 ;;         (highlight-phrase "shynur[^[:blank:][:space:][:cntrl:]()`'\"]*"
 ;;                           'underline))
@@ -49,6 +48,7 @@
 ;; eval: (prettify-symbols-mode)
 ;; eval: (indent-tabs-mode -1)
 ;; delete-trailing-lines: t
+;; require-final-newline: t
 ;; eval: (add-hook 'before-save-hook #'delete-trailing-whitespace)
 ;; End:
 ;;; ~shynur/.emacs.d/early-init.el ends here

@@ -544,10 +544,10 @@
  '(suggest-key-bindings most-positive-fixnum
                         nil (simple)
                         "_1_通过函数名调用command时,在minibuffer中提示这个command可能绑定的快捷键;_2_决定‘extended-command-suggest-shorter’的显示持续时间;_3_将前面这两个提示信息持续显示5秒;_4_使command候选词列表中,各函数名的后面显示该函数绑定的快捷键")
- '(temporary-file-directory (shynur/pathname-~/.emacs.d/.shynur/
-                             "temporary-file-directory/")
-                            nil ()
-                            "临时文件的放置目录(隐私文件放在“/tmp/”目录是不妥的)")
+ '(temporary-file-directory (let ((temporary-file-directory (shynur/pathname-~/.emacs.d/.shynur/
+                                                             "temporary-file-directory/")))
+                              (make-directory temporary-file-directory t)
+                              temporary-file-directory))
  '(text-quoting-style nil
                       nil ()
                       "渲染成对的单引号时,尽可能使用‘curve’这种样式,退而求此次地可以使用`grave'这种样式")
@@ -824,26 +824,16 @@
  '(mark-even-if-inactive nil)
  '(server-auth-dir (shynur/pathname-~/.emacs.d/.shynur/
                     "server-auth-dir/")
-                   nil (server)
-                   "该变量需要在‘server-start’之前设置好")
+                   nil (server))
  '(server-socket-dir (shynur/pathname-~/.emacs.d/.shynur/
                       "server-socket-dir/")
-                     nil (server)
-                     "该变量需要在‘server-start’之前设置好")
+                     nil (server))
  '(server-name "server-name.txt"
-               nil (server)
-               "该变量需要在‘server-start’之前设置好")
- `(server-after-make-frame-hook '(,@(boundp 'server-after-make-frame-hook)
+               nil (server))
+ '(server-after-make-frame-hook `(,@server-after-make-frame-hook
                                   ,(lambda ()
-                                     (transwin-ask 77))
-                  ,(letrec ((_ (lambda ()
-                                                 "daemon-client运行在同一个机器上,只需要在一个client进程中执行keyboard-translate,其余(以及后续)的client都能生效"
-                                                 (keyboard-translate ?\[ ?\()
-                                                 (keyboard-translate ?\] ?\))
-                                                 (keyboard-translate ?\( ?\[)
-                                                 (keyboard-translate ?\) ?\])
-                                                 (remove-hook 'server-after-make-frame-hook _))))
-                                          _))
+                                     (let ((inhibit-message t))
+                                       (transwin-ask 77))))
                                 nil (server))
  '(register-preview-delay 0
                           nil (register)
@@ -872,8 +862,6 @@
                            (other-window 1)
                            (delete-other-windows))
                         ,(lambda ()
-                           (make-directory temporary-file-directory t))
-                        ,(lambda ()
                            "记录击键(bug#62277)"
                            (lossage-size (* 10000 10)))
                         ,(lambda ()
@@ -888,10 +876,8 @@
                                (setq-local prettify-symbols-alist (default-value 'prettify-symbols-alist))
                                (prettify-symbols-mode)
                                (setq-local default-directory (pcase (system-name)
-                                                               ("ASUS-TX2"
-                                                                "d:/Downloads/Tmp/")
-                                                               (_
-                                                                "~/"))))))
+                                                               ("ASUS-TX2" "d:/Downloads/Tmp/")
+                                                               (_          "~/"               ))))))
                         ,(lambda ()
                            (let ((shynur/machine.el "~/.emacs.d/shynur/machine.el"))
                              (when (file-exists-p shynur/machine.el)
@@ -1611,6 +1597,19 @@
         ("g" . ,#'garbage-collect)
         ("h" . ,#'hlt-highlight-region)
         ("s" . ,#'shortdoc-display-group)))
+
+(let ((modify-keyboard-translation (lambda ()
+                                     (keyboard-translate ?\[ ?\()
+                                     (keyboard-translate ?\] ?\))
+                                     (keyboard-translate ?\( ?\[)
+                                     (keyboard-translate ?\) ?\]))))
+  (if (daemonp)
+      (letrec ((_ (lambda ()
+                    "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘keyboard-translate’,其余(以及后续)的client都能生效"
+                    (funcall modify-keyboard-translation)
+                    (remove-hook 'server-after-make-frame-hook _))))
+        (add-hook 'server-after-make-frame-hook _))
+    (funcall modify-keyboard-translation)))
 
 ;;保存并恢复不同session之间的frame的位置和尺寸:<https://emacs.stackexchange.com/questions/76087>
 ;;缺点:窗口最大化会被转换成尺寸,而不是窗口最大化这个概念.所以新会话的frame仍然不是与屏幕紧密贴合的.
@@ -1673,7 +1672,6 @@
 ;; coding: utf-8-unix
 ;; no-byte-compile: t
 ;; no-native-compile: t
-;; require-final-newline: t
 ;; eval: (let ((case-fold-search t))
 ;;         (highlight-phrase "shynur[^[:blank:][:space:][:cntrl:]()`'\"]*"
 ;;                           'underline))
@@ -1681,6 +1679,7 @@
 ;; eval: (prettify-symbols-mode)
 ;; eval: (indent-tabs-mode -1)
 ;; delete-trailing-lines: t
+;; require-final-newline: t
 ;; eval: (add-hook 'before-save-hook #'delete-trailing-whitespace)
 ;; End:
 ;;; ~shynur/.emacs.d/init.el ends here

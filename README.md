@@ -87,6 +87,7 @@ Latest version, using GUI, run as daemon-clients ([如何运行 Emacs 后台服�
 - <kbd>C-h v</kbd> 后按 <kbd>TAB</kbd> 补全时, 过滤掉 `prefix--*` 和 `*-internal`.
 - 修改 `minibuffer-local-map` 和 `minibuffer-local-ns-map`.
 - 用 context-menu 替代 menubar.
+- 写修改 <kbd>NumberLock</kbd> 映射到 <code>`</code>, <kbd>CapitalizedLock</kbd> 映射到 <code>Control</code> 的文章.
 
 ## LICENSE
 

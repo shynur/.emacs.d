@@ -15,7 +15,7 @@
 ./
  |
  |__ .dir-locals.el (本地变量, 应用于: .dir-locals.el, early-init.el,
- |                                     init.el, shynur/*, README.md)
+ |                                      init.el, shynur/*, README.md)
  |
  |__ early-init.el
  |

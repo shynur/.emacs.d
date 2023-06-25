@@ -1,3 +1,4 @@
+### ~shynur/.emacs.d/shynur/clang-format.yaml --- Shynur’s “.clang-format”
 ---
 AlignAfterOpenBracket: Align
 AlignArrayOfStructures: Right
@@ -116,3 +117,7 @@ Standard: Latest
 ---
 Language: JavaScript
 JavaScriptWrapImports: true
+
+# Local Variables:
+# coding: utf-8-unix
+# End:

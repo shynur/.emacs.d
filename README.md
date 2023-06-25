@@ -1,3 +1,5 @@
+<!-- ~shynur/.emacs.d/README.md -->
+
 # `~shynur/.emacs.d`
 
 ![Glimpse of Shynur’s Emacs](https://raw.githubusercontent.com/shynur/shynur/main/Pictures/Emacs/2023-6-17.png "五子棋, 输了...")
@@ -11,6 +13,10 @@
 
 ```
 ./
+ |
+ |__ .dir-locals.el (本地变量, 应用于: .dir-locals.el, early-init.el,
+ |                                     init.el, shynur/*, README.md)
+ |
  |__ early-init.el
  |
  |__ init.el
@@ -69,7 +75,7 @@
 
 ## Written for
 
-Latest version, using GUI, run as daemon-client ([如何运行 Emacs 后台服务?](./shynur/Emacs-use_daemon.md)).
+Latest version, using GUI, run as daemon-clients ([如何运行 Emacs 后台服务?](./shynur/Emacs-use_daemon.md)).
 
 - on MS-Windows 11
 
@@ -87,3 +93,7 @@ Latest version, using GUI, run as daemon-client ([如何运行 Emacs 后台服�
 ***For now*, I retain all rights to this repository.**
 
 Will include an open source license someday in the future when I’ve learned enough about open source licenses.
+
+<!-- Local Variables: -->
+<!-- coding: utf-8-unix -->
+<!-- End: -->

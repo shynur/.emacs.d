@@ -1,9 +1,5 @@
 ;;; ~shynur/.emacs.d/early-init.el --- Part of Shynur’s Emacs Configuration  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2023 谢骐 <one.last.kiss@outlook.com>
-
-;;; Code:
-
 (setq gc-cons-threshold 100000000
       gc-cons-percentage 0.36789
       load-prefer-newer nil)
@@ -35,20 +31,7 @@
 
 (defvar shynur/time-running-minutes -2)
 
-;;; End of Code
-
 ;; Local Variables:
 ;; coding: utf-8-unix
-;; no-byte-compile: t
-;; no-native-compile: t
-;; eval: (let ((case-fold-search t))
-;;         (highlight-phrase "shynur[^[:blank:][:space:][:cntrl:]()`'\"]*"
-;;                           'underline))
-;; prettify-symbols-alist: (("lambda" . ?λ))
-;; eval: (prettify-symbols-mode)
-;; eval: (indent-tabs-mode -1)
-;; delete-trailing-lines: t
-;; require-final-newline: t
-;; eval: (add-hook 'before-save-hook #'delete-trailing-whitespace)
 ;; End:
 ;;; ~shynur/.emacs.d/early-init.el ends here

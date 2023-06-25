@@ -1,7 +1,5 @@
 ;;; ~shynur/.emacs.d/init.el --- Part of Shynur’s Emacs Configuration  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2023 谢骐 <one.last.kiss@outlook.com>
-
 ;;; Commentary:
 
 ;; 1. 设置环境变量:
@@ -187,10 +185,8 @@
                            nil ()
                            "该customization中的NEW被Emacs设置为t")
  '(file-name-coding-system (pcase (system-name)
-                             ("ASUS-TX2"
-                              'chinese-gb18030)
-                             (_
-                              file-name-coding-system)))
+                             ("ASUS-TX2" 'chinese-gb18030       )
+                             (_          file-name-coding-system)))
  '(completion-cycle-threshold nil
                               nil (minibuffer)
                               "minibuffer补全时,按TAB会轮换候选词")
@@ -367,12 +363,6 @@
                                    "每10行就用‘line-number-major-tick’高亮一次行号")
  '(neo-show-hidden-files t
                          nil (neotree))
- '(auto-compression-mode (pcase system-type
-                           ('windows-nt
-                            nil)
-                           (_
-                            t))
-                         nil (jka-compr))
  '(c-mode-common-hook `(,@c-mode-common-hook
                         ,(lambda ()
                            (c-set-offset 'case-label '+))
@@ -767,10 +757,8 @@
  '(highlight-changes-visibility-initial-state nil
                                               nil (hilit-chg))
  '(python-shell-interpreter (pcase (system-name)
-                              ("ASUS-TX2"
-                               "python")
-                              (_
-                               "python3"))
+                              ("ASUS-TX2" "python" )
+                              (_          "python3"))
                             nil (python))
  '(python-shell-interpreter-interactive-arg nil
                                             nil (python))
@@ -954,19 +942,20 @@
                      ,(lambda ()
                         "设置编码"
                         (pcase (system-name)
-                          ("ASUS-TX2"
-                           (set-buffer-process-coding-system 'chinese-gb18030 'chinese-gb18030))))
+                          ("ASUS-TX2" (set-buffer-process-coding-system 'chinese-gb18030 'chinese-gb18030))))
                      ,(lambda ()
                         "设置shell"
                         (pcase (system-name)
-                          ("ASUS-TX2"
-                           (make-thread (lambda ()
-                                          (while (length> "Microsoft Windows" (buffer-size))
-                                            (thread-yield))
-                                          (when (save-excursion
-                                                  (save-match-data
-                                                    (re-search-backward "Microsoft Windows")))
-                                            (execute-kbd-macro "powershell\x0d"))))))))
+                          ("ASUS-TX2" (make-thread (lambda ()
+                                                     (let ((timeout 1000))
+                                                       (while (and (length> "Microsoft Windows" (buffer-size))
+                                                                   (natnump timeout))
+                                                         (thread-yield)
+                                                         (cl-decf timeout)))
+                                                     (when (save-excursion
+                                                             (save-match-data
+                                                               (re-search-backward "Microsoft Windows")))
+                                                       (execute-kbd-macro "powershell\x0d"))))))))
                    nil (shell))
  '(global-page-break-lines-mode t
                                 nil (page-break-lines)
@@ -1148,16 +1137,17 @@
  '(temp-buffer-resize-mode t
                            nil (help)
                            "e.g.,使*Completions*不会几乎占用整个frame")
- '(safe-local-variable-values '((eval
-                                 . (let ((case-fold-search t))
-                                     (highlight-phrase "shynur[^[:blank:][:space:][:cntrl:]()`'\"]*"
-                                                       'underline)))
-                                (prettify-symbols-alist
-                                 . (("lambda" . ?λ)))
-                                (delete-trailing-lines
-                                 . t)
-                                (eval
-                                 . (add-hook 'before-save-hook #'delete-trailing-whitespace)))
+ `(safe-local-variable-values ',(let ((safe-local-variable-values (list)))
+                                  (named-let get-vars ((dir-locals (with-temp-buffer
+                                                                     (insert-file-contents "~/.emacs.d/.dir-locals.el")
+                                                                     (read (current-buffer)))))
+                                    (dolist (mode-vars dir-locals)
+                                      (let ((vars (cdr mode-vars)))
+                                        (if (stringp (car mode-vars))
+                                            (get-vars vars)
+                                          (dolist (var-pair vars)
+                                            (push var-pair safe-local-variable-values))))))
+                                  safe-local-variable-values)
                               nil (files))
  '(enable-local-variables t
                           nil (files)
@@ -1380,42 +1370,44 @@
                            nil ()
                            "在GTK+的file-chooser-dialog中显示隐藏文件"))
 
-(custom-set-faces
- `(default
-    ((t . (:font ,(pcase (system-name)
-                    ("ASUS-TX2"
-                     "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing")
-                    (_
-                     "Courier New-10"))
-           :foundry "outline"))))
- '(cursor
-   ((t . (:background "chartreuse")))
-   nil
-   "该face仅有‘:background’字段有效")
- '(tooltip
-   ((t . (:height     100
-          :background "dark slate gray"))))
- '(line-number
-   ((t . (:slant  italic
-          :weight light))))
- `(line-number-major-tick
-   ((t . (:foreground ,(face-attribute 'line-number :foreground)
-          :background ,(face-attribute 'line-number :background)
-          :slant      italic
-          :underline  t
-          :weight     light)))
-   nil
-   "指定倍数的行号;除此以外,还有‘line-number-minor-tick’实现相同的功能,但其优先级更低")
- '(line-number-current-line
-   ((t . (:slant  normal
-          :weight black))))
- '(window-divider
-   ((t . (:foreground "SlateBlue4"))))
- '(indent-guide-face
-   ((t . (:foreground "dark sea green"))))
- '(fill-column-indicator
-   ((t . (:background "black"
-          :foreground "yellow")))))
+(letrec ((custom-faces (lambda ()
+                         "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘custom-set-faces’,其余(以及后续)的client都能生效"
+                         (custom-set-faces
+                          `(default
+                             ((t . (:font ,(pcase (system-name)
+                                             ("ASUS-TX2" "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing")
+                                             (_          "Courier New-10"                                              ))
+                                    :foundry "outline"))))
+                          '(cursor
+                            ((t . (:background "chartreuse")))
+                            nil
+                            "该face仅有‘:background’字段有效")
+                          '(tooltip
+                            ((t . (:height     100
+                                   :background "dark slate gray"))))
+                          '(line-number
+                            ((t . (:slant  italic
+                                   :weight light))))
+                          `(line-number-major-tick
+                            ((t . (:foreground ,(face-attribute 'line-number :foreground)
+                                   :background ,(face-attribute 'line-number :background)
+                                   :slant      italic
+                                   :underline  t
+                                   :weight     light)))
+                            nil
+                            "指定倍数的行号;除此以外,还有‘line-number-minor-tick’实现相同的功能,但其优先级更低")
+                          '(line-number-current-line
+                            ((t . (:slant  normal
+                                   :weight black))))
+                          '(window-divider
+                            ((t . (:foreground "SlateBlue4"))))
+                          '(indent-guide-face
+                            ((t . (:foreground "dark sea green"))))
+                          '(fill-column-indicator
+                            ((t . (:background "black"
+                                               :foreground "yellow")))))
+                         (remove-hook 'server-after-make-frame-hook custom-faces))))
+  (add-hook 'server-after-make-frame-hook custom-faces))
 
 (global-unset-key (kbd "C-h C-c"))
 (global-unset-key (kbd "C-h g"))
@@ -1513,16 +1505,14 @@
         (let ((postkey  (car postkey-function))
               (function (cdr postkey-function)))
           (pcase (length postkey)
-            (0
-             (user-error (shynur/message-format "Invalid customized key: “C-c ”")))
-            (length
-             (if (let ((letter (aref postkey 0)))
-                   (or (<= ?A letter ?Z)
-                       (<= ?a letter ?z)))
-                 (when (and (>= length 2)
-                            (not (char-equal #x20 (aref postkey 1))))
-                   (user-error (shynur/message-format "Invalid customized key: “C-c <letter><non-SPC>”")))
-               (user-error (shynur/message-format "Invalid customized key: “C-c <non-letter>”")))))
+            (0      (user-error (shynur/message-format "Invalid customized key: “C-c ”")))
+            (length (if (let ((letter (aref postkey 0)))
+                          (or (<= ?A letter ?Z)
+                              (<= ?a letter ?z)))
+                        (when (and (>= length 2)
+                                   (not (char-equal #x20 (aref postkey 1))))
+                          (user-error (shynur/message-format "Invalid customized key: “C-c <letter><non-SPC>”")))
+                      (user-error (shynur/message-format "Invalid customized key: “C-c <non-letter>”")))))
           (global-set-key (kbd (concat "C-c " postkey)) function)))
       `(("c" . ,#'highlight-changes-visible-mode)
         ,@(prog1 '(("d <left>"  . drag-stuff-left)
@@ -1561,7 +1551,7 @@
                                                 ('java-mode "java")
                                                 ('js-mode   "js"  )
                                                 (_ (unless mark-active
-                                                     (user-error (shynur/message-format "“clang-format”无法处理当前编程语言")))))))
+                                                     (user-error (shynur/message-format "无法使用“clang-format”处理当前语言")))))))
                     (if (stringp programming-language)
                         (without-restriction
                           (apply #'call-process-region
@@ -1598,46 +1588,41 @@
         ("h" . ,#'hlt-highlight-region)
         ("s" . ,#'shortdoc-display-group)))
 
-(let ((modify-keyboard-translation (lambda ()
-                                     (keyboard-translate ?\[ ?\()
-                                     (keyboard-translate ?\] ?\))
-                                     (keyboard-translate ?\( ?\[)
-                                     (keyboard-translate ?\) ?\]))))
-  (if (daemonp)
-      (letrec ((_ (lambda ()
-                    "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘keyboard-translate’,其余(以及后续)的client都能生效"
-                    (funcall modify-keyboard-translation)
-                    (remove-hook 'server-after-make-frame-hook _))))
-        (add-hook 'server-after-make-frame-hook _))
-    (funcall modify-keyboard-translation)))
+(letrec ((modify-keyboard-translation (lambda ()
+                                        "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘keyboard-translate’,其余(以及后续)的client都能生效"
+                                        (keyboard-translate ?\[ ?\()
+                                        (keyboard-translate ?\] ?\))
+                                        (keyboard-translate ?\( ?\[)
+                                        (keyboard-translate ?\) ?\])
+                                        (remove-hook 'server-after-make-frame-hook modify-keyboard-translation))))
+  (add-hook 'server-after-make-frame-hook modify-keyboard-translation))
 
 ;;保存并恢复不同session之间的frame的位置和尺寸:<https://emacs.stackexchange.com/questions/76087>
 ;;缺点:窗口最大化会被转换成尺寸,而不是窗口最大化这个概念.所以新会话的frame仍然不是与屏幕紧密贴合的.
-(when (display-graphic-p)
-  (defconst shynur/frame-save-position-size-file (shynur/pathname-~/.emacs.d/.shynur/
-                                                  "shynur-frame-save-position-size-file.el"))
-  (add-hook 'emacs-startup-hook
-            (lambda ()
-              (when (file-exists-p shynur/frame-save-position-size-file)
-                (load-file shynur/frame-save-position-size-file))))
-  (add-hook 'kill-emacs-hook
-            (lambda ()
-              (let* ((props
-                      '(left top width height))
-                     (values
-                      (mapcar (lambda (parameter)
-                                (let ((value
-                                       (frame-parameter (selected-frame) parameter)))
-                                  (if (number-or-marker-p value)
-                                      (max value 0)
-                                    0))) props)))
-                (with-temp-buffer
-                  (cl-loop for prop in props
-                           for val  in values
-                           do (insert
-                               (format "(add-to-list 'initial-frame-alist '(%s . %d))\n"
-                                       prop val)))
-                  (write-file shynur/frame-save-position-size-file))))))
+;; (defconst shynur/frame-save-position-size-file (shynur/pathname-~/.emacs.d/.shynur/
+;;                                                 "shynur-frame-save-position-size-file.el"))
+;; (add-hook 'emacs-startup-hook
+;;           (lambda ()
+;;             (when (file-exists-p shynur/frame-save-position-size-file)
+;;               (load-file shynur/frame-save-position-size-file))))
+;; (add-hook 'kill-emacs-hook
+;;           (lambda ()
+;;             (let* ((props
+;;                     '(left top width height))
+;;                    (values
+;;                     (mapcar (lambda (parameter)
+;;                               (let ((value
+;;                                      (frame-parameter (selected-frame) parameter)))
+;;                                 (if (number-or-marker-p value)
+;;                                     (max value 0)
+;;                                   0))) props)))
+;;               (with-temp-buffer
+;;                 (cl-loop for prop in props
+;;                          for val  in values
+;;                          do (insert
+;;                              (format "(add-to-list 'initial-frame-alist '(%s . %d))\n"
+;;                                      prop val)))
+;;                 (write-file shynur/frame-save-position-size-file)))))
 
 ;; 这页的函数有朝一日会移到 ~shynur/.emacs.d/shynur/ 目录下
 
@@ -1670,16 +1655,5 @@
 
 ;; Local Variables:
 ;; coding: utf-8-unix
-;; no-byte-compile: t
-;; no-native-compile: t
-;; eval: (let ((case-fold-search t))
-;;         (highlight-phrase "shynur[^[:blank:][:space:][:cntrl:]()`'\"]*"
-;;                           'underline))
-;; prettify-symbols-alist: (("lambda" . ?λ))
-;; eval: (prettify-symbols-mode)
-;; eval: (indent-tabs-mode -1)
-;; delete-trailing-lines: t
-;; require-final-newline: t
-;; eval: (add-hook 'before-save-hook #'delete-trailing-whitespace)
 ;; End:
 ;;; ~shynur/.emacs.d/init.el ends here

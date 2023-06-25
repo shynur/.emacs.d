@@ -788,8 +788,8 @@
                                nil (comint)
                                "‘shell-mode’对pathname补全时,在pathname之后添加的字符串.(e.g., cat+.emacs.d/init.el+该变量的值)")
  '(comint-process-echoes (pcase system-type
-                          ('windows-nt t                    )
-                          (_           comint-process-echoes))
+                           ('windows-nt t                    )
+                           (_           comint-process-echoes))
                          nil (comint)
                          "Windows上的PowerShell会回显输入的命令(至少在‘shell-mode’中是这样),设置此变量以删除它")
  '(selection-coding-system selection-coding-system
@@ -941,14 +941,13 @@
                         "设置shell"
                         (pcase (system-name)
                           ("ASUS-TX2" (make-thread (lambda ()
-                                                     (let ((timeout 1000))
-                                                       (while (and (length> "Microsoft Windows" (buffer-size))
-                                                                   (natnump timeout))
+                                                     (let ((attempts 100000))
+                                                       (while (and (natnump attempts)
+                                                                   (length> "Microsoft Windows" (buffer-size)))
                                                          (thread-yield)
-                                                         (cl-decf timeout)))
+                                                         (cl-decf attempts)))
                                                      (when (save-excursion
-                                                             (save-match-data
-                                                               (re-search-backward "Microsoft Windows")))
+                                                             (re-search-backward "Microsoft Windows"))
                                                        (execute-kbd-macro "powershell\x0d"))))))))
                    nil (shell))
  '(global-page-break-lines-mode t
@@ -1143,12 +1142,10 @@
                                             (push var-pair safe-local-variable-values))))))
                                   safe-local-variable-values)
                               nil (files))
- '(enable-local-variables t
-                          nil (files)
-                          "设置安全的变量,并(一次)询问unsafe的变量")
- '(enable-local-eval :maybe
-                     nil (files)
-                     "file local列表中可在“Eval:”后定义需要求值的形式,该变量的值表示执行前询问")
+ '(enable-local-variables :do-not-remember
+                          nil (files))
+ '(enable-dir-local-variables t
+                              nil (files))
  '(enable-remote-dir-locals t
                             nil (files)
                             "远程时也向上寻找“.dir-locals.el”以应用directory local变量")
@@ -1175,9 +1172,6 @@
  '(confirm-nonexistent-file-or-buffer 'after-completion
                                       nil (files)
                                       "‘switch-to-buffer’或‘find-file’时,输入前缀并按下TAB后,若有多个候选者但仍然RET,会再确认一遍")
- '(enable-dir-local-variables t
-                              nil (files)
-                              "“.dir-locals.el”")
  '(query-about-changed-file t
                             nil (files)
                             "外部改动发生后,重新访问已经读取到buffer中的文件时,询问是否要revert")

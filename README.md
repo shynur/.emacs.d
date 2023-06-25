@@ -69,10 +69,9 @@
 
 ## Written for
 
-Latest version, using GUI
+Latest version, using GUI, run as daemon-client ([如何运行 Emacs 后台服务?](./shynur/Emacs-use_daemon.md)).
 
-- run as foreground process on MS-Windows
-- run as daemon-client on MS-Windows ([如何在 MS-Windows 上运行 Emacs 后台服务?](./shynur/Emacs-use_daemon.md))
+- on MS-Windows 11
 
 ## TODO
 

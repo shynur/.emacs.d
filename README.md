@@ -15,7 +15,7 @@
 ./
  |
  |__ .dir-locals.el (本地变量, 应用于: .dir-locals.el, early-init.el,
- |                                      init.el, shynur/*, README.md)
+ |                                     init.el, shynur/*, README.md)
  |
  |__ early-init.el
  |
@@ -94,6 +94,10 @@ Latest version, using GUI, run as daemon-clients ([如何运行 Emacs 后台服�
 ***For now*, I retain all rights to this repository.**
 
 Will include an open source license someday in the future when I’ve learned enough about open source licenses.
+
+___
+
+Copyright &copy; 2023 谢骐 \<<one.last.kiss@outlook.com>\>.  All rights reserved.
 
 <!-- Local Variables: -->
 <!-- coding: utf-8-unix -->

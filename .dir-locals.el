@@ -24,6 +24,7 @@
                      (mode . prettify-symbols)))
 
  ("./shynur/" . (;;;将上述两份配置应用于该目录及其子目录
+
                  (nil . ((eval . (let ((case-fold-search t))
                                    (highlight-phrase "[~]shynur[^[:blank:][:space:][:cntrl:]()`'\"]*"
                                                      'underline)))

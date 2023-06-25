@@ -787,9 +787,9 @@
  '(comint-completion-addsuffix '("/" . " ")
                                nil (comint)
                                "‘shell-mode’对pathname补全时,在pathname之后添加的字符串.(e.g., cat+.emacs.d/init.el+该变量的值)")
- '(comint-process-echoes (cond
-                          ((eq system-type 'windows-nt) t                    )
-                          (t                            comint-process-echoes))
+ '(comint-process-echoes (pcase system-type
+                          ('windows-nt t                    )
+                          (_           comint-process-echoes))
                          nil (comint)
                          "Windows上的PowerShell会回显输入的命令(至少在‘shell-mode’中是这样),设置此变量以删除它")
  '(selection-coding-system selection-coding-system

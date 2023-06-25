@@ -1142,8 +1142,9 @@
                                             (push var-pair safe-local-variable-values))))))
                                   safe-local-variable-values)
                               nil (files))
- '(enable-local-variables :do-not-remember
-                          nil (files))
+ '(enable-local-variables t
+                          nil (files)
+                          "尽量不询问,但提供记忆功能(可能会修改‘custom-file’的文件内容)")
  '(enable-dir-local-variables t
                               nil (files))
  '(enable-remote-dir-locals t

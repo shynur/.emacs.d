@@ -1,4 +1,5 @@
 ### ~shynur/.emacs.d/shynur/clang-format.yaml --- Shynur’s “.clang-format”
+
 ---
 AlignAfterOpenBracket: Align
 AlignArrayOfStructures: Right

@@ -7,9 +7,6 @@
                    (highlight-phrase "[~]shynur[^[:blank:][:space:][:cntrl:]()`'\"]*"
                                      'underline)))
 
-         (prettify-symbols-alist . (("lambda" . ?λ)))
-         (mode . prettify-symbols)
-
          (eval . (indent-tabs-mode -1))
          (delete-trailing-lines . t)
          (require-final-newline . t)
@@ -21,15 +18,15 @@
                      (lexical-binding . t)
 
                      (no-byte-compile . t)
-                     (no-native-compile . t)))
+                     (no-native-compile . t)
+
+                     (prettify-symbols-alist . (("lambda" . ?λ)))
+                     (mode . prettify-symbols)))
 
  ("./shynur/" . (;;;将上述两份配置应用于该目录及其子目录
                  (nil . ((eval . (let ((case-fold-search t))
                                    (highlight-phrase "[~]shynur[^[:blank:][:space:][:cntrl:]()`'\"]*"
                                                      'underline)))
-
-                         (prettify-symbols-alist . (("lambda" . ?λ)))
-                         (mode . prettify-symbols)
 
                          (eval . (indent-tabs-mode -1))
                          (delete-trailing-lines . t)
@@ -39,7 +36,10 @@
                  (emacs-lisp-mode . ((lexical-binding . t)
 
                                      (no-byte-compile . t)
-                                     (no-native-compile . t))))))
+                                     (no-native-compile . t)
+
+                                     (prettify-symbols-alist . (("lambda" . ?λ)))
+                                     (mode . prettify-symbols))))))
 
 ;; Local Variables:
 ;; coding: utf-8-unix

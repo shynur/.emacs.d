@@ -788,10 +788,8 @@
                                nil (comint)
                                "‘shell-mode’对pathname补全时,在pathname之后添加的字符串.(e.g., cat+.emacs.d/init.el+该变量的值)")
  '(comint-process-echoes (cond
-                          ((eq system-type 'windows-nt)
-                           t)
-                          (t
-                           comint-process-echoes))
+                          ((eq system-type 'windows-nt) t                    )
+                          (t                            comint-process-echoes))
                          nil (comint)
                          "Windows上的PowerShell会回显输入的命令(至少在‘shell-mode’中是这样),设置此变量以删除它")
  '(selection-coding-system selection-coding-system
@@ -915,13 +913,9 @@
                            "doom-modeline左侧小竖条的宽度(装饰品)")
  '(doom-modeline-height 1
                         nil (doom-modeline))
- '(inferior-lisp-program (cond
-                          ((eq system-type 'windows-nt) (cond
-                                                         ((string= (system-name) "ASUS-TX2")
-                                                          "d:/Progs/Steel_Bank_Common_Lisp/sbcl.exe")
-                                                         (t
-                                                          inferior-lisp-program)))
-                          (t                            inferior-lisp-program))
+ '(inferior-lisp-program (pcase (system-name)
+                           ("ASUS-TX2" "d:/Progs/Steel_Bank_Common_Lisp/sbcl.exe")
+                           (_          inferior-lisp-program                     ))
                          nil (sly))
  '(save-interprogram-paste-before-kill t
                                        nil (simple)

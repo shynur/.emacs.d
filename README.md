@@ -75,9 +75,9 @@
 
 ## Written for
 
-Latest version, using GUI, run as daemon-clients ([如何运行 Emacs 后台服务?](./shynur/Emacs-use_daemon.md)).
+Latest release, using **GUI**, run as **daemon-client**s on same machine ([如何运行 Emacs 后台服务?](./shynur/Emacs-use_daemon.md)).
 
-- on MS-Windows 11
+- MS-Windows
 
 ## TODO
 
@@ -88,12 +88,14 @@ Latest version, using GUI, run as daemon-clients ([如何运行 Emacs 后台服�
 - 修改 `minibuffer-local-map` 和 `minibuffer-local-ns-map`.
 - 用 context-menu 替代 menubar.
 - 写修改 <kbd>NumberLock</kbd> 映射到 <code>`</code>, <kbd>CapitalizedLock</kbd> 映射到 <code>Control</code> 的文章.
+- PATCH:
+    - `dframe-mouse-click-function`: “our”.
 
 ## LICENSE
 
-***For now*, I retain all rights to this repository.**
+Haven’t chosen one; I retain all rights to this repository.
 
-Will include an open source license someday in the future when I’ve learned enough about open source licenses.
+*Will* include an open source license someday in the future when I’ve learned enough about open source licenses.
 
 ___
 

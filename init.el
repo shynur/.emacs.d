@@ -256,6 +256,12 @@
                           (cl-incf shynur/time-running-minutes)))
                      nil (time)
                      "‘display-time-mode’每次更新时间时调用(也即,每‘display-time-interval’秒一次)")
+ '(after-make-frame-functions `(,@after-make-frame-functions
+                                ,(lambda (frame-to-be-made)
+                                   (let ((inhibit-message t))
+                                     (with-selected-frame frame-to-be-made
+                                       (transwin-ask 77)))))
+                                nil (frame))
  '(display-time-interval 60
                          nil (time)
                          "决定‘display-time-mode’显示时间的更新频率")
@@ -800,7 +806,7 @@
                     "决定‘list-colors-display’如何排列颜色")
  '(use-empty-active-region nil
                            nil (simple)
-                           "有些命令的行为取决于是否有active region.Region长度为0时应该让那些命令无视region,因为用户很难识别长度为0的region")
+                           "有些命令的行为取决于是否有active region.  Region长度为0时应该让那些命令无视region,因为用户很难识别长度为0的region")
  '(delete-active-region t
                         nil (simple)
                         "当region是active时,删除命令删除整个region而非单个字符")
@@ -816,11 +822,6 @@
                      nil (server))
  '(server-name "server-name.txt"
                nil (server))
- '(server-after-make-frame-hook `(,@server-after-make-frame-hook
-                                  ,(lambda ()
-                                     (let ((inhibit-message t))
-                                       (transwin-ask 77))))
-                                nil (server))
  '(register-preview-delay 0
                           nil (register)
                           "调用读写register的命令时,预览已赋值的register,0延迟")
@@ -1491,18 +1492,7 @@
 (global-set-key (kbd "C-x C-b") #'bs-show)
 (global-set-key (kbd "<mouse-2>") #'mouse-yank-at-click)
 (mapc (lambda (postkey-function)
-        (let ((postkey  (car postkey-function))
-              (function (cdr postkey-function)))
-          (pcase (length postkey)
-            (0      (user-error (shynur/message-format "Invalid customized key: “C-c ”")))
-            (length (if (let ((letter (aref postkey 0)))
-                          (or (<= ?A letter ?Z)
-                              (<= ?a letter ?z)))
-                        (when (and (>= length 2)
-                                   (not (char-equal #x20 (aref postkey 1))))
-                          (user-error (shynur/message-format "Invalid customized key: “C-c <letter><non-SPC>”")))
-                      (user-error (shynur/message-format "Invalid customized key: “C-c <non-letter>”")))))
-          (global-set-key (kbd (concat "C-c " postkey)) function)))
+        (global-set-key (kbd (concat "C-c " (car postkey-function))) (cdr postkey-function)))
       `(("c" . ,#'highlight-changes-visible-mode)
         ,@(prog1 '(("d <left>"  . drag-stuff-left)
                    ("d <down>"  . drag-stuff-down)
@@ -1586,32 +1576,66 @@
                                         (remove-hook 'server-after-make-frame-hook modify-keyboard-translation))))
   (add-hook 'server-after-make-frame-hook modify-keyboard-translation))
 
-;;保存并恢复不同session之间的frame的位置和尺寸:<https://emacs.stackexchange.com/questions/76087>
-;;缺点:窗口最大化会被转换成尺寸,而不是窗口最大化这个概念.所以新会话的frame仍然不是与屏幕紧密贴合的.
-;; (defconst shynur/frame-save-position-size-file (shynur/pathname-~/.emacs.d/.shynur/
-;;                                                 "shynur-frame-save-position-size-file.el"))
-;; (add-hook 'emacs-startup-hook
-;;           (lambda ()
-;;             (when (file-exists-p shynur/frame-save-position-size-file)
-;;               (load-file shynur/frame-save-position-size-file))))
-;; (add-hook 'kill-emacs-hook
-;;           (lambda ()
-;;             (let* ((props
-;;                     '(left top width height))
-;;                    (values
-;;                     (mapcar (lambda (parameter)
-;;                               (let ((value
-;;                                      (frame-parameter (selected-frame) parameter)))
-;;                                 (if (number-or-marker-p value)
-;;                                     (max value 0)
-;;                                   0))) props)))
-;;               (with-temp-buffer
-;;                 (cl-loop for prop in props
-;;                          for val  in values
-;;                          do (insert
-;;                              (format "(add-to-list 'initial-frame-alist '(%s . %d))\n"
-;;                                      prop val)))
-;;                 (write-file shynur/frame-save-position-size-file)))))
+;;当最后一个frame关闭时,存入它的位置和尺寸;当桌面上没有frame时,下一个打开的frame将使用那个被存入的位置和尺寸.
+(let ((shynur/frame--size&position-relayer `(,(cons 'top    0)
+                                             ,(cons 'left   0)
+                                             ,(cons 'width  0)
+                                             ,(cons 'height 0))))
+  (put 'shynur/frame--size&position-relayer :shynur/frame--holding? nil)
+  (letrec ((shynur/frame--get-size&position (lambda ()
+                                              (when (get 'shynur/frame--size&position-relayer :shynur/frame--holding?)
+                                                (dolist (parameter-value shynur/frame--size&position-relayer)
+                                                  (set-frame-parameter nil (car parameter-value) (cdr parameter-value))))
+                                              (remove-hook 'server-after-make-frame-hook shynur/frame--get-size&position)
+                                              (   add-hook 'delete-frame-functions       shynur/frame--put-size&position)))
+           (shynur/frame--put-size&position (lambda (frame-to-be-deleted)
+                                              (when (length= (frames-on-display-list) 1)
+                                                (dolist (parameter-value shynur/frame--size&position-relayer)
+                                                  (setcdr parameter-value (frame-parameter frame-to-be-deleted (car parameter-value))))
+                                                (put 'shynur/frame--size&position-relayer :shynur/frame--holding? t)
+                                                (remove-hook 'delete-frame-functions       shynur/frame--put-size&position)
+                                                ;;当需要调用该λ表达式时,必然没有除此以外的其它frame了,因此之后新建的frame必然是server弹出的,所以此处无需使用‘after-make-frame-functions’
+                                                (   add-hook 'server-after-make-frame-hook shynur/frame--get-size&position)))))
+    (add-hook 'server-after-make-frame-hook shynur/frame--get-size&position)))
+
+(let* ((shynur/frame--normal:maximized-width  0.5)
+       (shynur/frame--normal:maximized-height 0.7)
+       (shynur/frame--normal-size (let ((shynur/frame--tmp-frame (let (default-frame-alist
+                                                                        window-system-default-frame-alist)
+                                                                   (let (before-make-frame-hook
+                                                                         after-make-frame-functions
+                                                                         server-after-make-frame-hook)
+                                                                     (make-frame)))))
+                                    (make-frame-invisible shynur/frame--tmp-frame t)
+                                    (toggle-frame-maximized shynur/frame--tmp-frame)
+                                    (prog1 `(,(floor (* (frame-parameter shynur/frame--tmp-frame 'width) shynur/frame--normal:maximized-width))
+                                             . ,(floor (* (frame-parameter shynur/frame--tmp-frame 'height) shynur/frame--normal:maximized-height)))
+                                      (let (delete-frame-functions
+                                            after-delete-frame-functions
+                                            dframe-delete-frame-function)
+                                        (delete-frame shynur/frame--tmp-frame t))))))
+  (add-hook 'move-frame-functions (let ((shynur/frame--frame-moved-delta-time most-positive-fixnum)
+                                        (shynur/frame--frame-moved-last-time (current-time))
+                                        shynur/frame--swayed-just-now)
+                                    (lambda (moved-frame)
+                                      (let ((current-time (current-time)))
+                                        (setq shynur/frame--frame-moved-delta-time (time-subtract current-time shynur/frame--frame-moved-last-time)
+                                              shynur/frame--frame-moved-last-time current-time)
+                                        (when (<= (time-to-seconds shynur/frame--frame-moved-delta-time) 0.05)
+                                          (when (not shynur/frame--swayed-just-now)
+                                            (setq shynur/frame--swayed-just-now t)
+                                            (make-thread (let ((shynur/frame--swayed-frame-position (frame-position moved-frame)))
+                                                           (lambda ()
+                                                             (while (or (let ((current-position (frame-position moved-frame)))
+                                                                          (if (equal current-position shynur/frame--swayed-frame-position)
+                                                                              nil
+                                                                            (setq shynur/frame--swayed-frame-position current-position)))
+                                                                        (<= (time-to-seconds shynur/frame--frame-moved-delta-time) 0.2))
+                                                               (thread-yield))
+                                                             (set-frame-parameter moved-frame 'width  (car shynur/frame--normal-size))
+                                                             (set-frame-parameter moved-frame 'height (cdr shynur/frame--normal-size))
+                                                             (setq shynur/frame--swayed-just-now nil)))))))))))
+(setq move-frame-functions ())
 
 ;; 这页的函数有朝一日会移到 ~shynur/.emacs.d/shynur/ 目录下
 

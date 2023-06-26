@@ -1565,7 +1565,10 @@
                             (insert formatted-code))))))))
         ("g" . ,#'garbage-collect)
         ("h" . ,#'hlt-highlight-region)
-        ("s" . ,#'shortdoc-display-group)))
+        ("s" . ,#'shortdoc-display-group)
+        ("z" . ,(lambda ()
+                  (interactive)
+                  (set-frame-size nil 1100 850 t)))))
 
 (letrec ((modify-keyboard-translation (lambda ()
                                         "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘keyboard-translate’,其余(以及后续)的client都能生效"
@@ -1597,45 +1600,6 @@
                                                 ;;当需要调用该λ表达式时,必然没有除此以外的其它frame了,因此之后新建的frame必然是server弹出的,所以此处无需使用‘after-make-frame-functions’
                                                 (   add-hook 'server-after-make-frame-hook shynur/frame--get-size&position)))))
     (add-hook 'server-after-make-frame-hook shynur/frame--get-size&position)))
-
-(let* ((shynur/frame--normal:maximized-width  0.5)
-       (shynur/frame--normal:maximized-height 0.7)
-       (shynur/frame--normal-size (let ((shynur/frame--tmp-frame (let (default-frame-alist
-                                                                        window-system-default-frame-alist)
-                                                                   (let (before-make-frame-hook
-                                                                         after-make-frame-functions
-                                                                         server-after-make-frame-hook)
-                                                                     (make-frame)))))
-                                    (make-frame-invisible shynur/frame--tmp-frame t)
-                                    (toggle-frame-maximized shynur/frame--tmp-frame)
-                                    (prog1 `(,(floor (* (frame-parameter shynur/frame--tmp-frame 'width) shynur/frame--normal:maximized-width))
-                                             . ,(floor (* (frame-parameter shynur/frame--tmp-frame 'height) shynur/frame--normal:maximized-height)))
-                                      (let (delete-frame-functions
-                                            after-delete-frame-functions
-                                            dframe-delete-frame-function)
-                                        (delete-frame shynur/frame--tmp-frame t))))))
-  (add-hook 'move-frame-functions (let ((shynur/frame--frame-moved-delta-time most-positive-fixnum)
-                                        (shynur/frame--frame-moved-last-time (current-time))
-                                        shynur/frame--swayed-just-now)
-                                    (lambda (moved-frame)
-                                      (let ((current-time (current-time)))
-                                        (setq shynur/frame--frame-moved-delta-time (time-subtract current-time shynur/frame--frame-moved-last-time)
-                                              shynur/frame--frame-moved-last-time current-time)
-                                        (when (<= (time-to-seconds shynur/frame--frame-moved-delta-time) 0.05)
-                                          (when (not shynur/frame--swayed-just-now)
-                                            (setq shynur/frame--swayed-just-now t)
-                                            (make-thread (let ((shynur/frame--swayed-frame-position (frame-position moved-frame)))
-                                                           (lambda ()
-                                                             (while (or (let ((current-position (frame-position moved-frame)))
-                                                                          (if (equal current-position shynur/frame--swayed-frame-position)
-                                                                              nil
-                                                                            (setq shynur/frame--swayed-frame-position current-position)))
-                                                                        (<= (time-to-seconds shynur/frame--frame-moved-delta-time) 0.2))
-                                                               (thread-yield))
-                                                             (set-frame-parameter moved-frame 'width  (car shynur/frame--normal-size))
-                                                             (set-frame-parameter moved-frame 'height (cdr shynur/frame--normal-size))
-                                                             (setq shynur/frame--swayed-just-now nil)))))))))))
-(setq move-frame-functions ())
 
 ;; 这页的函数有朝一日会移到 ~shynur/.emacs.d/shynur/ 目录下
 

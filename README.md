@@ -73,6 +73,9 @@
 <kbd>C-c s</kbd><br>
 以 Elisp 数据类型为关键词, 搜索相关 API.
 
+<kbd>C-c z</kbd><br>
+将 frame 尺寸调节为适中大小.
+
 ## Written for
 
 Latest release, using **GUI**, run as **daemon-client**s on same machine ([如何运行 Emacs 后台服务?](./shynur/Emacs-use_daemon.md)).

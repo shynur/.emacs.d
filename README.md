@@ -93,6 +93,8 @@ Latest release, using **GUI**, run as **daemon-client**s on same machine ([如�
 - 写修改 <kbd>NumberLock</kbd> 映射到 <code>`</code>, <kbd>CapitalizedLock</kbd> 映射到 <code>Control</code> 的文章.
 - PATCH:
     - `dframe-mouse-click-function`: “our”.
+- 添加一个 minor mode `shynur/shynur-global-mode`, 以 `shynur/shynur-global-mode-hook` 作为 `fundamental-mode-hook` 的替代方案.
+    - 在 hook 中加入对 `*scratch*` 的定制: 默认目录.
 
 ## LICENSE
 

@@ -1540,7 +1540,7 @@
                                  options)
                           (beginning-of-buffer)
                           (goto-char (1+ (string-to-number (prog1 (let ((case-fold-search nil))
-                                                                   (save-match-data
+                                                                    (save-match-data
                                                                       (buffer-substring-no-properties
                                                                        (re-search-forward "\\`[[:blank:]]*{[[:blank:]]*\"Cursor\":[[:blank:]]*")
                                                                        (re-search-forward "[[:digit:]]+"))))

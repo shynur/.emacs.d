@@ -1580,7 +1580,9 @@
   (add-hook 'server-after-make-frame-hook modify-keyboard-translation))
 
 ;;当最后一个frame关闭时,存入它的位置和尺寸;当桌面上没有frame时,下一个打开的frame将使用那个被存入的位置和尺寸.
-(let ((shynur/--size&position-relayer `(,(cons 'top 0) ,(cons 'left 0) ,(cons 'width 0) ,(cons 'height 0))))
+(let ((shynur/--size&position-relayer `(,(cons 'top 0) ,(cons 'left 0)
+                                        ;;‘fullscreen’放最后,以覆盖‘width’&‘height’的设置.
+                                        ,(cons 'width 0) ,(cons 'height 0) ,(cons 'fullscreen nil))))
   (put 'shynur/--size&position-relayer :shynur/--holding? nil)
   (letrec ((shynur/--get-size&position (lambda ()
                                          (when (get 'shynur/--size&position-relayer :shynur/--holding?)

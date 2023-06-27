@@ -1130,7 +1130,7 @@
                    nil (kmacro))
  '(temp-buffer-resize-mode t
                            nil (help)
-                           "e.g.,使*Completions*不会几乎占用整个frame")
+                           "e.g.,使“*Completions*”不会几乎占用整个frame")
  `(safe-local-variable-values ',(let ((safe-local-variable-values (list)))
                                   (named-let get-vars ((dir-locals (with-temp-buffer
                                                                      (insert-file-contents "~/.emacs.d/.dir-locals.el")
@@ -1540,7 +1540,7 @@
                                  options)
                           (beginning-of-buffer)
                           (goto-char (1+ (string-to-number (prog1 (let ((case-fold-search nil))
-                                                                    (save-match-data
+                                                                   (save-match-data
                                                                       (buffer-substring-no-properties
                                                                        (re-search-forward "\\`[[:blank:]]*{[[:blank:]]*\"Cursor\":[[:blank:]]*")
                                                                        (re-search-forward "[[:digit:]]+"))))
@@ -1580,26 +1580,23 @@
   (add-hook 'server-after-make-frame-hook modify-keyboard-translation))
 
 ;;当最后一个frame关闭时,存入它的位置和尺寸;当桌面上没有frame时,下一个打开的frame将使用那个被存入的位置和尺寸.
-(let ((shynur/frame--size&position-relayer `(,(cons 'top    0)
-                                             ,(cons 'left   0)
-                                             ,(cons 'width  0)
-                                             ,(cons 'height 0))))
-  (put 'shynur/frame--size&position-relayer :shynur/frame--holding? nil)
-  (letrec ((shynur/frame--get-size&position (lambda ()
-                                              (when (get 'shynur/frame--size&position-relayer :shynur/frame--holding?)
-                                                (dolist (parameter-value shynur/frame--size&position-relayer)
-                                                  (set-frame-parameter nil (car parameter-value) (cdr parameter-value))))
-                                              (remove-hook 'server-after-make-frame-hook shynur/frame--get-size&position)
-                                              (   add-hook 'delete-frame-functions       shynur/frame--put-size&position)))
-           (shynur/frame--put-size&position (lambda (frame-to-be-deleted)
-                                              (when (length= (frames-on-display-list) 1)
-                                                (dolist (parameter-value shynur/frame--size&position-relayer)
-                                                  (setcdr parameter-value (frame-parameter frame-to-be-deleted (car parameter-value))))
-                                                (put 'shynur/frame--size&position-relayer :shynur/frame--holding? t)
-                                                (remove-hook 'delete-frame-functions       shynur/frame--put-size&position)
-                                                ;;当需要调用该λ表达式时,必然没有除此以外的其它frame了,因此之后新建的frame必然是server弹出的,所以此处无需使用‘after-make-frame-functions’
-                                                (   add-hook 'server-after-make-frame-hook shynur/frame--get-size&position)))))
-    (add-hook 'server-after-make-frame-hook shynur/frame--get-size&position)))
+(let ((shynur/--size&position-relayer `(,(cons 'top 0) ,(cons 'left 0) ,(cons 'width 0) ,(cons 'height 0))))
+  (put 'shynur/--size&position-relayer :shynur/--holding? nil)
+  (letrec ((shynur/--get-size&position (lambda ()
+                                         (when (get 'shynur/--size&position-relayer :shynur/--holding?)
+                                           (dolist (parameter-value shynur/--size&position-relayer)
+                                             (set-frame-parameter nil (car parameter-value) (cdr parameter-value))))
+                                         (remove-hook 'server-after-make-frame-hook shynur/--get-size&position)
+                                         (   add-hook 'delete-frame-functions       shynur/--put-size&position)))
+           (shynur/--put-size&position (lambda (frame-to-be-deleted)
+                                         (when (length= (frames-on-display-list) 1)
+                                           (dolist (parameter-value shynur/--size&position-relayer)
+                                             (setcdr parameter-value (frame-parameter frame-to-be-deleted (car parameter-value))))
+                                           (put 'shynur/--size&position-relayer :shynur/--holding? t)
+                                           (remove-hook 'delete-frame-functions       shynur/--put-size&position)
+                                           ;;当需要调用该λ表达式时,必然没有除此以外的其它frame了,因此之后新建的frame必然是server弹出的,所以此处无需使用‘after-make-frame-functions’
+                                           (   add-hook 'server-after-make-frame-hook shynur/--get-size&position)))))
+    (add-hook 'server-after-make-frame-hook shynur/--get-size&position)))
 
 ;; 这页的函数有朝一日会移到 ~shynur/.emacs.d/shynur/ 目录下
 

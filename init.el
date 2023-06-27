@@ -1582,10 +1582,10 @@
 ;;当最后一个frame关闭时,存入它的位置和尺寸;当桌面上没有frame时,下一个打开的frame将使用那个被存入的位置和尺寸.
 (let ((shynur/--size&position-relayer `(,(cons 'top 0) ,(cons 'left 0)
                                         ;;‘fullscreen’放最后,以覆盖‘width’&‘height’的设置.
-                                        ,(cons 'width 0) ,(cons 'height 0) ,(cons 'fullscreen nil))))
-  (put 'shynur/--size&position-relayer :shynur/--holding? nil)
+                                        ,(cons 'width 0) ,(cons 'height 0) ,(cons 'fullscreen nil)))
+      shynur/--size&position-relayer-holding?)
   (letrec ((shynur/--get-size&position (lambda ()
-                                         (when (get 'shynur/--size&position-relayer :shynur/--holding?)
+                                         (when shynur/--size&position-relayer-holding?
                                            (dolist (parameter-value shynur/--size&position-relayer)
                                              (set-frame-parameter nil (car parameter-value) (cdr parameter-value))))
                                          (remove-hook 'server-after-make-frame-hook shynur/--get-size&position)
@@ -1594,11 +1594,12 @@
                                          (when (length= (frames-on-display-list) 1)
                                            (dolist (parameter-value shynur/--size&position-relayer)
                                              (setcdr parameter-value (frame-parameter frame-to-be-deleted (car parameter-value))))
-                                           (put 'shynur/--size&position-relayer :shynur/--holding? t)
+                                           (setq shynur/--size&position-relayer-holding? t)
                                            (remove-hook 'delete-frame-functions       shynur/--put-size&position)
                                            ;;当需要调用该λ表达式时,必然没有除此以外的其它frame了,因此之后新建的frame必然是server弹出的,所以此处无需使用‘after-make-frame-functions’
                                            (   add-hook 'server-after-make-frame-hook shynur/--get-size&position)))))
     (add-hook 'server-after-make-frame-hook shynur/--get-size&position)))
+;; (setq server-after-make-frame-hook () delete-frame-functions ())
 
 ;; 这页的函数有朝一日会移到 ~shynur/.emacs.d/shynur/ 目录下
 

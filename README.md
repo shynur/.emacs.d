@@ -86,7 +86,7 @@ Latest release, using **GUI**, run as **daemon-client**s on same machine ([如�
 
 ## TODO
 
-- [ ] 不应该单纯开启 `global-display-line-numbers-mode`, 而是应该给出一个分类机制, 有需要的 mode 才打开 `display-line-numbers-mode`.  有的 mode (e.g., neotree, calendar, ...) 显示行号反而会占用空间.
+- [ ] 不应该单纯开启 `global-display-line-numbers-mode`, 而是应该给出一个分类机制, 有需要的 mode 才打开 `display-line-numbers-mode`.  有的 mode (e.g., neotree, calendar, `vc-annotate-mode`) 显示行号反而会占用空间.
 - [ ] 将任何 non-selected window 且是 `prog-mode` 的 buffer 开启全局彩虹括号.  `highlight-parentheses` 只会高亮光标附近的括号, 其余地方还是一尘不变, 这样不太 fancy.
 - [ ] 拖动 GUI 时自动缩小应用窗口.
 - [ ] <kbd>C-h v</kbd> 后按 <kbd>TAB</kbd> 补全时, 过滤掉 `prefix--*` 和 `*-internal`.
@@ -95,7 +95,7 @@ Latest release, using **GUI**, run as **daemon-client**s on same machine ([如�
 - [ ] 写修改 <kbd>NumberLock</kbd> 映射到 <code>`</code>, <kbd>CapitalizedLock</kbd> 映射到 <code>Control</code> 的文章.
 - [ ] PATCH:
     - `dframe-mouse-click-function`: “our”.
-- [ ]添加一个 minor mode `shynur/shynur-global-mode`, 以 `shynur/shynur-global-mode-hook` 作为 `fundamental-mode-hook` 的替代方案.
+- [ ] 添加一个 minor mode `shynur/shynur-global-mode`, 以 `shynur/shynur-global-mode-hook` 作为 `fundamental-mode-hook` 的替代方案.
     - 在 hook 中加入对 `*scratch*` 的定制: 默认目录.
 
 ## LICENSE

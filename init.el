@@ -425,6 +425,9 @@
  '(visible-bell t
                 nil ()
                 "响铃可视化.在Windows上表现为,任务栏图标闪烁")
+ '(table-fixed-width-mode nil
+                          nil (table)
+                          "基于文本的表格自动调节尺寸")
  '(inhibit-startup-screen t
                           nil ()
                           "取消原本的 startup screen")
@@ -1479,6 +1482,8 @@
 (global-unset-key (kbd "C-@")) ;“C-SPC”
 (global-unset-key (kbd "C-x f")) ;‘set-fill-column’
 (global-unset-key (kbd "C-x .")) ;‘set-fill-prefix’
+(global-unset-key (kbd "<f2>")) ;‘2C-mode’相关的键
+(global-unset-key (kbd "C-x 6")) ;‘2C-mode’相关的键
 
 (progn
   (global-set-key (kbd "C-s") (lambda ()

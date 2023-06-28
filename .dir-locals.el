@@ -3,7 +3,7 @@
 ((nil . ((subdirs . nil)
 
          (eval . (let ((case-fold-search t))
-                   (highlight-phrase "[~]shynur[^[:blank:][:space:][:cntrl:]()`'\"]*"
+                   (highlight-phrase "~?\\(shynur\\|谢骐\\)[^[:blank:][:space:][:cntrl:]()`'\"]*"
                                      'underline)))
 
          (outline-minor-mode-cycle . [tab ?\S-\t])
@@ -26,7 +26,8 @@
                      ;; .2.3    Lv-2
                      ;; .4.5.6  Lv-3
                      ;; .
-                     (outline-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\.[[:blank:]]*$\\|\\(\\.[[:digit:]]+\\)+\\)\\($\\|[[:blank:]]+\\)")
+                     (outline-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\.\\|\\(\\.[[:digit:]]+\\)+\\)\\($\\|[[:blank:]]+\\)")
+                     (outline-heading-end-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\.[[:blank:]]*$\\|\\(\\.[[:digit:]]\\)+\\($\\|[[:blank:]]+\\)\\)")
                      (outline-level . (lambda ()
                                         (let ((dot-amount 0))
                                           (seq-doseq (character (match-string-no-properties 1))
@@ -40,7 +41,8 @@
 
  (lisp-data-mode . ((subdirs . nil)
 
-                    (outline-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\.[[:blank:]]*$\\|\\(\\.[[:digit:]]+\\)+\\)\\($\\|[[:blank:]]+\\)")
+                    (outline-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\.\\|\\(\\.[[:digit:]]+\\)+\\)\\($\\|[[:blank:]]+\\)")
+                    (outline-heading-end-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\.[[:blank:]]*$\\|\\(\\.[[:digit:]]\\)+\\($\\|[[:blank:]]+\\)\\)")
                     (outline-level . (lambda ()
                                        (let ((dot-amount 0))
                                          (seq-doseq (character (match-string-no-properties 1))
@@ -53,7 +55,7 @@
                     (mode . prettify-symbols)))
 
  ("./shynur/" . ((nil . ((eval . (let ((case-fold-search t))
-                                   (highlight-phrase "[~]shynur[^[:blank:][:space:][:cntrl:]()`'\"]*"
+                                   (highlight-phrase "~?\\(shynur\\|谢骐\\)[^[:blank:][:space:][:cntrl:]()`'\"]*"
                                                      'underline)))
 
                          (outline-minor-mode-cycle . [tab ?\S-\t])
@@ -68,7 +70,8 @@
                                      (no-byte-compile . t)
                                      (no-native-compile . t)
 
-                                     (outline-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\.[[:blank:]]*$\\|\\(\\.[[:digit:]]+\\)+\\)\\($\\|[[:blank:]]+\\)")
+                                     (outline-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\.\\|\\(\\.[[:digit:]]+\\)+\\)\\($\\|[[:blank:]]+\\)")
+                                     (outline-heading-end-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\.[[:blank:]]*$\\|\\(\\.[[:digit:]]\\)+\\($\\|[[:blank:]]+\\)\\)")
                                      (outline-level . (lambda ()
                                                         (let ((dot-amount 0))
                                                           (seq-doseq (character (match-string-no-properties 1))

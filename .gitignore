@@ -1,0 +1,15 @@
+### ~shynur/.emacs.d/.gitignore
+
+/*
+/*/
+
+!/.gitignore
+!/.dir-locals.el
+!/README.*
+!/early-init.el
+!/init.el
+!/shynur/
+
+# Local Variables:
+# coding: utf-8-unix
+# End:

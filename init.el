@@ -2,16 +2,17 @@
 
 ;;; Commentary:
 
-;; 1. 设置环境变量:
+;; .1 设置环境变量:
 ;;     - EDITOR=bin/emacsclientw
 ;;     - VISUAL=$EDITOR
 ;;     - ALTERNATE_EDITOR=bin/runemacs
 ;;
-;; 2. 通用命令行参数:
+;; .2 通用命令行参数:
 ;;     --no-splash
 ;;     --debug-init
 ;;     --no-blinking-cursor
 ;;     --vertical-scroll-bars
+;; .
 
 ;;; Code:
 
@@ -261,7 +262,7 @@
                                    (let ((inhibit-message t))
                                      (with-selected-frame frame-to-be-made
                                        (transwin-ask 77)))))
-                                nil (frame))
+                              nil (frame))
  '(display-time-interval 60
                          nil (time)
                          "决定‘display-time-mode’显示时间的更新频率")
@@ -849,6 +850,10 @@
                            (other-window 1)
                            (delete-other-windows))
                         ,(lambda ()
+                           (when (daemonp)
+                             (pcase (system-name)
+                               ("ASUS-TX2" (shell-command "start c:/WINDOWS/system32/Taskmgr.exe /0")))))
+                        ,(lambda ()
                            "记录击键(bug#62277)"
                            (lossage-size (* 10000 10)))
                         ,(lambda ()
@@ -1108,6 +1113,10 @@
  '(list-matching-lines-jump-to-current-line t
                                             nil (replace)
                                             "在“*Occur*”中显示调用‘occur’之前的那一行,并用‘list-matching-lines-current-line-face’高亮之(方便找到回家的路)")
+ '(outline-minor-mode-cycle [tab ?\S-\t]
+                            nil (outline))
+ '(outline-minor-mode-prefix [nil]
+                             nil (outline))
  '(occur-mode-hook `(,@occur-mode-hook
                      ,(lambda ()
                         (progn
@@ -1395,7 +1404,7 @@
                             ((t . (:foreground "dark sea green"))))
                           '(fill-column-indicator
                             ((t . (:background "black"
-                                               :foreground "yellow")))))
+                                   :foreground "yellow")))))
                          (remove-hook 'server-after-make-frame-hook custom-faces))))
   (add-hook 'server-after-make-frame-hook custom-faces))
 

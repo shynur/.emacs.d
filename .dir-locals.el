@@ -11,7 +11,9 @@
          (outline-minor-mode-cycle . [tab ?\S-\t])
          (outline-minor-mode-prefix . [nil])
 
-         (eval . (indent-tabs-mode -1))
+         (sentence-end-double-space . t)
+
+         (indent-tabs-mode . nil)
          (delete-trailing-lines . t)
          (require-final-newline . t)
          (eval . (add-hook 'before-save-hook #'delete-trailing-whitespace))))
@@ -28,8 +30,7 @@
                      ;; .2.3    Lv-2
                      ;; .4.5.6  Lv-3
                      ;; .
-                     (outline-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\.\\|\\(\\.[[:digit:]]+\\)+\\)\\($\\|[[:blank:]]+\\)")
-                     (outline-heading-end-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\.[[:blank:]]*$\\|\\(\\.[[:digit:]]\\)+\\($\\|[[:blank:]]+\\)\\)")
+                     (outline-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\(\\.[[:digit:]]+\\)+\\|\\.[[:blank:]]*$\\)\\([[:blank:]]*$\\|[[:blank:]]+\\)")
                      (outline-level . (lambda ()
                                         (let ((dot-amount 0))
                                           (seq-doseq (character (match-string-no-properties 1))
@@ -65,7 +66,9 @@
                          (outline-minor-mode-cycle . [tab ?\S-\t])
                          (outline-minor-mode-prefix . [nil])
 
-                         (eval . (indent-tabs-mode -1))
+                         (sentence-end-double-space . t)
+
+                         (indent-tabs-mode . nil)
                          (delete-trailing-lines . t)
                          (require-final-newline . t)
                          (eval . (add-hook 'before-save-hook #'delete-trailing-whitespace))))
@@ -74,8 +77,7 @@
                                      (no-byte-compile . t)
                                      (no-native-compile . t)
 
-                                     (outline-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\.\\|\\(\\.[[:digit:]]+\\)+\\)\\($\\|[[:blank:]]+\\)")
-                                     (outline-heading-end-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\.[[:blank:]]*$\\|\\(\\.[[:digit:]]\\)+\\($\\|[[:blank:]]+\\)\\)")
+                                     (outline-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\(\\.[[:digit:]]+\\)+\\|\\.[[:blank:]]*$\\)\\([[:blank:]]*$\\|[[:blank:]]+\\)")
                                      (outline-level . (lambda ()
                                                         (let ((dot-amount 0))
                                                           (seq-doseq (character (match-string-no-properties 1))

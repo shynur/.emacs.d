@@ -3,15 +3,15 @@
 ;;; Commentary:
 
 ;; .1 设置环境变量:
-;;     - EDITOR=bin/emacsclientw
-;;     - VISUAL=$EDITOR
-;;     - ALTERNATE_EDITOR=bin/runemacs
+;;   - EDITOR=bin/emacsclientw
+;;   - VISUAL=$EDITOR
+;;   - ALTERNATE_EDITOR=bin/runemacs
 ;;
 ;; .2 通用命令行参数:
-;;     --no-splash
-;;     --debug-init
-;;     --no-blinking-cursor
-;;     --vertical-scroll-bars
+;;   --no-splash
+;;   --debug-init
+;;   --no-blinking-cursor
+;;   --vertical-scroll-bars
 ;; .
 
 ;;; Code:
@@ -75,6 +75,7 @@
                                        on-screen
                                        yaml-mode
                                        drag-stuff
+                                       marginalia
                                        ascii-table
                                        doom-themes
                                        use-package
@@ -108,6 +109,35 @@
  '(print-gensym t)
  '(print-integers-as-characters nil)
  '(major-mode 'text-mode)
+ '(completion-list-mode-hook `(,@(when (boundp 'completion-list-mode-hook)
+                                   completion-list-mode-hook)
+                               (lambda ()
+                                 "把没用的minor mode都关了"
+                                 (make-thread (lambda ()
+                                                (sleep-for 0.4)
+                                                (company-mode -1)
+                                                (electric-indent-local-mode -1)
+                                                (electric-quote-local-mode -1)
+                                                (highlight-changes-mode -1)
+                                                (highlight-changes-visible-mode -1)
+                                                (page-break-lines-mode -1)
+                                                (indent-guide-mode -1)
+                                                (on-screen-mode -1))))
+                               (lambda ()
+                                 "1 screen line/一个条目"
+                                 (make-thread (lambda ()
+                                                (sleep-for 0.4)
+                                                (toggle-truncate-lines 1)))))
+                             nil (simple))
+ '(completion-regexp-list '("^[^-]+\\(-[^-]\\|$\\)" ;滤除‘*--’
+                            "\\([^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)$" ;滤除‘*-internal’
+                            ))
+ '(marginalia-mode t
+                   nil (marginalia)
+                   "注解“*Completions*”中的词条")
+ '(marginalia-separator ""
+                        nil ()
+                        "“*Completions*”字段之间自带“TAB”,不需要额外加separator")
  '(custom-unlispify-remove-prefixes nil
                                     nil (cus-edit)
                                     "无视‘defgroup’中的‘:prefix’关键字")
@@ -450,7 +480,7 @@
 ;; |  |  |  |  |  |  |  |  (/ |  |  |  |  |  |
 ;; |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 \n"
-                             0 671 (face (:foreground "VioletRed1"))))
+                             0 671 (font-lock-face (:foreground "VioletRed1"))))
  '(insert-default-directory t
                             nil (minibuffer)
                             "‘find-file’时,给出默认目录")
@@ -1094,8 +1124,7 @@
                           nil (replace))
  '(replace-regexp-lax-whitespace nil
                                  nil (replace))
- '(query-replace-from-to-separator #("-→"
-                                     0 2 (face (:family "Courier New")))
+ '(query-replace-from-to-separator "修改为"
                                    nil (replace))
  '(query-replace-highlight t
                            nil (replace))

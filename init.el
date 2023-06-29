@@ -436,9 +436,9 @@
 ;;     .                                 .
 ;;                               *
 ;;          /\\/|_      __/\\\\
-;;         /    -\\    /-   ~\\  .              '
+;;         /    -\\    /-   ~\\  .              \\='
 ;;         \\    = Y =T_ =   /
-;;          )==*(`     `) ~ \\
+;;          )==*(\\=`     \\=`) ~ \\
 ;;         /     \\     /     \\
 ;;         |     |     ) ~   (
 ;;        /       \\   /     ~ \\
@@ -450,7 +450,7 @@
 ;; |  |  |  |  |  |  |  |  (/ |  |  |  |  |  |
 ;; |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 \n"
-                             0 665 (font-lock-face (:foreground "VioletRed1"))))
+                             0 671 (face (:foreground "VioletRed1"))))
  '(insert-default-directory t
                             nil (minibuffer)
                             "‘find-file’时,给出默认目录")
@@ -957,7 +957,7 @@
                                                          (cl-decf attempts)))
                                                      (when (save-excursion
                                                              (re-search-backward "Microsoft Windows"))
-                                                       (execute-kbd-macro "powershell\x0d"))))))))
+                                                       (execute-kbd-macro [?p ?o ?w ?e ?r ?s ?h ?e ?l ?l ?\C-m]))))))))
                    nil (shell))
  '(global-page-break-lines-mode t
                                 nil (page-break-lines)

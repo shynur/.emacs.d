@@ -6,6 +6,8 @@
                    (highlight-phrase "~?\\(shynur\\|谢骐\\)[^[:blank:][:space:][:cntrl:]()`'\"]*"
                                      'underline)))
 
+         (auto-mode-alist . ())
+
          (outline-minor-mode-cycle . [tab ?\S-\t])
          (outline-minor-mode-prefix . [nil])
 
@@ -57,6 +59,8 @@
  ("./shynur/" . ((nil . ((eval . (let ((case-fold-search t))
                                    (highlight-phrase "~?\\(shynur\\|谢骐\\)[^[:blank:][:space:][:cntrl:]()`'\"]*"
                                                      'underline)))
+
+                         (auto-mode-alist . ())
 
                          (outline-minor-mode-cycle . [tab ?\S-\t])
                          (outline-minor-mode-prefix . [nil])

@@ -57,6 +57,8 @@
                     (prettify-symbols-alist . (("lambda" . ?λ)))
                     (mode . prettify-symbols)))
 
+ (makefile-gmake-mode . ((mode . indent-tabs)))
+
  ("./shynur/" . ((nil . ((eval . (let ((case-fold-search t))
                                    (highlight-phrase "~?\\(shynur\\|谢骐\\)[^[:blank:][:space:][:cntrl:]()`'\"]*"
                                                      'underline)))

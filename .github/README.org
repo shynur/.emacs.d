@@ -1,8 +1,9 @@
 # ~shynur/.emacs.d/README.md
 
+#+author: 谢骐 (Shynur)
+
 * =~shynur/.emacs.d=
 
-#+caption: Glimpse of Shynur's Emacs
 [[https://raw.githubusercontent.com/shynur/shynur/main/Pictures/Emacs/2023-6-17.png]]
 
 🥰 这是我的 Emacs 个人配置方案, from scratch.
@@ -14,8 +15,10 @@
 
 #+begin_example
 ./
- |
  |__ .gitignore
+ |
+ |__ Makefile (仅供参考, 因为 MS-Windows 上众多基础命令的参数都和 GNU/Linux 不
+               一样.)
  |
  |__ .dir-locals.el (本地变量, 应用于: .dir-locals.el, early-init.el,
  |                                     init.el, shynur/*, README.md)
@@ -31,8 +34,12 @@
  |    |               该文件中指定替代字体.)
  |    |
  |    |__ clang-format.yaml
+ |    |
+ |    |__ Emacs-use_daemon.md
  |
- |__ README.md (this file)
+ |__ .github/
+ |    |
+ |    |__ README.org (this file)
  |
 -|->8·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-
  |
@@ -82,30 +89,37 @@
 
 * Written for
 
-Latest release, using *GUI*, run as *daemon-clients* on same machine ([[./shynur/Emacs-use_daemon.md][如何运行 Emacs 后台服务?]]).
+Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:~/.emacs.d/shynur/Emacs-use_daemon.md][如何运行 Emacs 后台服务?]]).
 
 - MS-Windows
 
-* TODO 待办事项
+* TODO 待办事项 [0/1]
 
 - [ ] 不应该单纯开启 ~global-display-line-numbers-mode~, 而是应该给出一个分类机制, 有需要的 mode 才打开 ~display-line-numbers-mode~.
   有的 mode (e.g., ~neotree~, ~calendar~, ~vc-annotate-mode~) 显示行号反而会占用空间.
 - [ ] 将任何 non-selected window 且是 ~prog-mode~ 的 buffer 开启全局彩虹括号.
    ~highlight-parentheses~ 只会高亮光标附近的括号, 其余地方还是一尘不变, 这样不太 fancy.
 - [ ] 拖动 GUI 时自动缩小应用窗口.
-- [ ] (_shynur/bug#1_) =C-h v= 后按 =TAB= 补全时, 过滤掉 ~prefix--*~ 和 ~*-internal~.
+- [ ] bug :: (_shynur/bug#1_) =C-h v= 后按 =TAB= 补全时, 过滤掉 ~prefix--*~ 和 ~*-internal~.
 - [ ] 修改 ~minibuffer-local-map~ 和 ~minibuffer-local-ns-map~.
 - [ ] 用 context-menu 替代 menubar.
 - [ ] 写: 修改 =NumberLock= 映射到 =`=, =CapitalizedLock= 映射到 =Control= 的文章.
 - PATCH:
   - [ ] ~dframe-mouse-click-function~: "our".
-- [ ] 添加一个 minor mode ~shynur/shynur-global-mode~, 以 ~shynur/shynur-global-mode-hook~ 作为 ~fundamental-mode-hook~ 的替代方案.
+- [ ] 添加一个 minor mode ~shynur/shynur-global-mode~, 以 ~shynur/shynur-global-mode-hook~ 作为 +~fundamental-mode-hook~+ 的替代方案.
   - [ ] 在 hook 中加入对 =*scratch*= 的定制: 默认目录.
-- [ ] 设置一个 fontset, 解决 /Org/ 中某些区域, 中文无法显示 及 emoji 无法显示的问题.
+- [ ] 设置一个 fontset, 解决 Org 中某些区域, 中文无法显示 及 emoji 无法显示的问题.
+
+** TODO 新增文件流程
+1. [ ] =New-file-name=
+2. [ ] =.dir-locals.el=
+3. [ ] git :: =.gitignore=
+4. [ ] github :: =.github/README.org=
+5. [ ] rm :: =Makefile=
 
 * LICENSE
 
-Haven't chosen one; I retain all rights to this repository.
+Haven't chosen one; I retain all rights to [[file:../][this repository]].
 
 /Will/ include an open source license someday in the future when I've learned enough about open source licenses.
 

@@ -932,6 +932,11 @@
                                     (/ (- (car (time-convert after-init-time 1000))
                                           (car (time-convert before-init-time 1000)))
                                        1000.0)))))
+ '(makefile-gmake-mode-hook `(,@(when (boundp 'makefile-gmake-mode-hook)
+                                  makefile-gmake-mode-hook)
+                              ,(lambda ()
+                                 (indent-tabs-mode)))
+                            nil (make-mode)) ;shynur/bug#2: 没起作用
  '(tooltip-delay 0
                  nil (tooltip))
  '(tooltip-mode t

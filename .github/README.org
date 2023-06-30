@@ -93,14 +93,14 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:~/.
 
 - MS-Windows
 
-* TODO 待办事项 [0/1]
+* TODO 待办事项 [/]
 
 - [ ] 不应该单纯开启 ~global-display-line-numbers-mode~, 而是应该给出一个分类机制, 有需要的 mode 才打开 ~display-line-numbers-mode~.
   有的 mode (e.g., ~neotree~, ~calendar~, ~vc-annotate-mode~) 显示行号反而会占用空间.
 - [ ] 将任何 non-selected window 且是 ~prog-mode~ 的 buffer 开启全局彩虹括号.
-   ~highlight-parentheses~ 只会高亮光标附近的括号, 其余地方还是一尘不变, 这样不太 fancy.
+  ~highlight-parentheses~ 只会高亮光标附近的括号, 其余地方还是一尘不变, 这样不太 fancy.
 - [ ] 拖动 GUI 时自动缩小应用窗口.
-- [ ] bug :: (_shynur/bug#1_) =C-h v= 后按 =TAB= 补全时, 过滤掉 ~prefix--*~ 和 ~*-internal~.
+- [ ] bug :: (_=shynur/bug#1=_) =C-h v= 后按 =TAB= 补全时, 过滤掉 ~prefix--*~ 和 ~*-internal~.
 - [ ] 修改 ~minibuffer-local-map~ 和 ~minibuffer-local-ns-map~.
 - [ ] 用 context-menu 替代 menubar.
 - [ ] 写: 修改 =NumberLock= 映射到 =`=, =CapitalizedLock= 映射到 =Control= 的文章.

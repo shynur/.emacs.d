@@ -101,6 +101,7 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:~/.
   ~highlight-parentheses~ 只会高亮光标附近的括号, 其余地方还是一尘不变, 这样不太 fancy.
 - [ ] 拖动 GUI 时自动缩小应用窗口.
 - [ ] bug :: (_=shynur/bug#1=_) =C-h v= 后按 =TAB= 补全时, 过滤掉 ~prefix--*~ 和 ~*-internal~.
+  (由于 GitHub 对 Org 的支持比较孱弱, 所以此处及其余一些地方未必会有恰当的渲染.)
 - [ ] 修改 ~minibuffer-local-map~ 和 ~minibuffer-local-ns-map~.
 - [ ] 用 context-menu 替代 menubar.
 - [ ] 写: 修改 =NumberLock= 映射到 =`=, =CapitalizedLock= 映射到 =Control= 的文章.

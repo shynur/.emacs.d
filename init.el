@@ -73,6 +73,7 @@
                                        transwin
                                        highlight
                                        on-screen
+                                       which-key
                                        yaml-mode
                                        drag-stuff
                                        marginalia
@@ -129,12 +130,12 @@
                                                 (sleep-for 0.4)
                                                 (toggle-truncate-lines 1)))))
                              nil (simple))
- '(completion-regexp-list '("^[^-]+\\(-[^-]\\|$\\)" ;滤除‘*--’
-                            "\\([^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)$" ;滤除‘*-internal’
-                            ))
  '(marginalia-mode t
                    nil (marginalia)
                    "注解“*Completions*”中的词条")
+ '(completions-format 'one-column
+                      nil (minibuffer)
+                      "[[https://github.com/minad/marginalia/issues/149#issuecomment-1326437873][Marginalia works only well with completions-format one-column.]]")
  '(marginalia-separator ""
                         nil ()
                         "“*Completions*”字段之间自带“TAB”,不需要额外加separator")
@@ -162,9 +163,6 @@
  '(completion-styles '(basic partial-completion initials)
                      nil (minibuffer)
                      "minibuffer的补全风格(从‘completion-styles-alist’中选取)")
- '(completions-format 'horizontal
-                      nil (minibuffer)
-                      "minibuffer补全候选词在help窗口中排列的方式:尽可能的水平")
  '(column-number-mode t
                       nil (simple)
                       "mode line 显示列数")
@@ -1001,6 +999,8 @@
  '(page-break-lines-max-width nil
                               nil (page-break-lines)
                               "渲染的下划线将会占用两个screen-line")
+ '(which-key-mode t
+                  nil (which-key))
  '(font-lock-maximum-decoration t
                                 nil (font-lock)
                                 "不限制fontification的数量")
@@ -1514,6 +1514,14 @@
 (global-unset-key (kbd "<f2>")) ;‘2C-mode’相关的键
 (global-unset-key (kbd "C-x 6")) ;‘2C-mode’相关的键
 
+(advice-add 'describe-variable :around ;“C-h v”
+            (lambda (advice-added-function &rest arguments)
+              (let ((completion-regexp-list '(;;滤除‘*--*’
+                                              "^\\([^-]*$\\|\\([^-]+\\(-[^-]+\\)-?\\)\\)$"
+                                              ;;滤除‘*-internal’
+                                              "\\([^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)$")))
+                (apply advice-added-function
+                       arguments)))) ;shynur/bug#1: 似乎没能过滤成功,比如‘which-key--*’(bug#64351)
 (progn
   (global-set-key (kbd "C-s") (lambda ()
                                 (interactive)

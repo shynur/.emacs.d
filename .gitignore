@@ -5,11 +5,17 @@
 
 !/.gitignore
 !/.dir-locals.el
-!/README.md
-!/README.org
 !/early-init.el
 !/init.el
+
 !/shynur/
+/shynur/*
+!/shynur/clang-format.yaml
+!/shynur/Emacs-use_daemon.md
+
+!/.github/
+/.github/*
+!/.github/README.org
 
 # Local Variables:
 # coding: utf-8-unix

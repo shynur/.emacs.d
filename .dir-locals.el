@@ -1,12 +1,18 @@
 ;;; ~shynur/.emacs.d/.dir-locals.el
 
-((auto-mode-alist . (("/\\.emacs\\.d/\\(GNUmakefile\\|makefile\\|Makefile\\)\\'" . makefile-gmake-mode)
+((auto-mode-alist . (;;有些设置是多余的,但出于教学/参考的目的,保留下来
                      ("/\\.emacs\\.d/\\.dir-locals\\(-2\\)?\\.el\\'" . lisp-data-mode)
-                     ("/\\.emacs\\.d/\\(shynur/\\)?[^-].*\\.el\\'" . emacs-lisp-mode)
-                     ("/\\.emacs\\.d/\\(shynur/\\)?[^-].*\\.org\\'" . org-mode)
+                     ("/\\.emacs\\.d/\\(shynur/\\)?[^/-][^/]*\\.el\\'" . emacs-lisp-mode)
+
+                     ("/\\.emacs\\.d/\\(shynur/\\)?[^/-][^/]*\\.org\\'" . org-mode)
+                     ("/\\.emacs\\.d/\\(shynur/\\)?[[:alnum:]][[:alnum:]_]*[[:alnum:]]\\(-[[:alnum:]][[:alnum:]_]*[[:alnum:]]\\)+\\.md\\'" . markdown-mode)
+
+                     ("~\\'" . (ignore t))
+                     ("#[[:alnum:]]*\\'" . (ignore t))
+
                      ("/\\.emacs\\.d/\\(shynur/\\)?\\.gitignore\\'" . gitignore-mode)
-                     ("/\\.emacs\\.d/\\(shynur/\\)?[^-].*\\.ya?ml\\'" . yaml-mode)
-                     ("/\\.emacs\\.d/\\(shynur/\\)?[[:alnum:]][[:alnum:]_]*[[:alnum:]]\\(-[[:alnum:]][[:alnum:]_]*[[:alnum:]]\\)+\\.md\\'" . markdown-mode)))
+                     ("/\\.emacs\\.d/\\(shynur/\\)?[^/-][^/]*\\.ya?ml\\'" . yaml-mode)
+                     ("/\\.emacs\\.d/\\(GNUmakefile\\|makefile\\|Makefile\\)\\'" . makefile-gmake-mode)))
 
  (nil . ((subdirs . nil)
 
@@ -18,6 +24,8 @@
          (outline-minor-mode-prefix . [nil])
 
          (sentence-end-double-space . t)
+
+         (mode . auto-save)
 
          (indent-tabs-mode . nil)
          (delete-trailing-lines . t)
@@ -69,12 +77,12 @@
                                    (highlight-phrase "~?\\(shynur\\|谢骐\\)[^[:blank:][:space:][:cntrl:]()`'\"]*"
                                                      'underline)))
 
-                         (auto-mode-alist . ())
-
                          (outline-minor-mode-cycle . [tab ?\S-\t])
                          (outline-minor-mode-prefix . [nil])
 
                          (sentence-end-double-space . t)
+
+                         (mode . auto-save)
 
                          (indent-tabs-mode . nil)
                          (delete-trailing-lines . t)
@@ -92,10 +100,25 @@
                                                             (when (char-equal character ?.)
                                                               (cl-incf dot-amount)))
                                                           dot-amount)))
-                                     (mode . outline)
+                                     (mode . outline-minor)
 
                                      (prettify-symbols-alist . (("lambda" . ?λ)))
-                                     (mode . prettify-symbols))))))
+                                     (mode . prettify-symbols)))
+
+                 (lisp-data-mode . ((outline-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\.\\|\\(\\.[[:digit:]]+\\)+\\)\\($\\|[[:blank:]]+\\)")
+                                    (outline-heading-end-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\.[[:blank:]]*$\\|\\(\\.[[:digit:]]\\)+\\($\\|[[:blank:]]+\\)\\)")
+                                    (outline-level . (lambda ()
+                                                       (let ((dot-amount 0))
+                                                         (seq-doseq (character (match-string-no-properties 1))
+                                                           (when (char-equal character ?.)
+                                                             (cl-incf dot-amount)))
+                                                         dot-amount)))
+                                    (mode . outline-minor)
+
+                                    (prettify-symbols-alist . (("lambda" . ?λ)))
+                                    (mode . prettify-symbols)))
+
+                 (makefile-gmake-mode . ((mode . indent-tabs))))))
 
 ;; Local Variables:
 ;; coding: utf-8-unix

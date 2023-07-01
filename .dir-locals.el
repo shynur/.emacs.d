@@ -6,7 +6,7 @@
                      ("/\\.emacs\\.d/\\(shynur/\\)?[^-].*\\.org\\'" . org-mode)
                      ("/\\.emacs\\.d/\\(shynur/\\)?\\.gitignore\\'" . gitignore-mode)
                      ("/\\.emacs\\.d/\\(shynur/\\)?[^-].*\\.ya?ml\\'" . yaml-mode)
-                     ("/\\.emacs\\.d/\\(shynur/\\)?[[:alnum:]][[:alnum:]_]*[[:alnum:]]\\(-[[:alnum:]][[:alnum:]_]*[[:alnum:]]\\)+\\.ma\\'" . markdown-mode)))
+                     ("/\\.emacs\\.d/\\(shynur/\\)?[[:alnum:]][[:alnum:]_]*[[:alnum:]]\\(-[[:alnum:]][[:alnum:]_]*[[:alnum:]]\\)+\\.md\\'" . markdown-mode)))
 
  (nil . ((subdirs . nil)
 

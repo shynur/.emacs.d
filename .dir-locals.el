@@ -1,20 +1,20 @@
 ;;; ~shynur/.emacs.d/.dir-locals.el
 
-((auto-mode-alist . (;;有些设置是多余的,但出于教学/参考的目的,保留下来
-                     ("~\\'" . (ignore t))
-                     ("#[[:alnum:]]*\\'" . (ignore t))
+((nil . ((auto-mode-alist . (;;有些设置是多余的,但出于教学/参考的目的,保留下来
+                             ("~\\'" . (ignore t))
+                             ("#[[:alnum:]]*\\'" . (ignore t))
 
-                     ("/\\.dir-locals\\(-2\\)?\\.el\\'" . lisp-data-mode)
-                     ("/[^/-][^/]*\\.el\\'" . emacs-lisp-mode)
+                             ("/\\.dir-locals\\(-2\\)?\\.el\\'" . lisp-data-mode)
+                             ("/[^/-][^/]*\\.el\\'" . emacs-lisp-mode)
 
-                     ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'" . markdown-mode)
-                     ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.org\\'" . org-mode)
+                             ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'" . markdown-mode)
+                             ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.org\\'" . org-mode)
 
-                     ("/[^/-][^/]*\\.ya?ml\\'" . yaml-mode)
-                     ("/\\.gitignore\\'" . gitignore-mode)
-                     ("/\\(\\(\\(GNU\\)?m\\)\\|M\\)akefile\\'" . makefile-gmake-mode)))
+                             ("/[^/-][^/]*\\.ya?ml\\'" . yaml-mode)
+                             ("/\\.gitignore\\'" . gitignore-mode)
+                             ("/\\(\\(\\(GNU\\)?m\\)\\|M\\)akefile\\'" . makefile-gmake-mode)))
 
- (nil . ((outline-minor-mode-cycle . [tab ?\S-\t])
+         (outline-minor-mode-cycle . [tab ?\S-\t])
          (outline-minor-mode-prefix . [nil])
 
          (sentence-end-double-space . t)

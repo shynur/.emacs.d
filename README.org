@@ -1,4 +1,4 @@
-# ~shynur/.emacs.d/README.md
+# ~shynur/.emacs.d/README.org
 
 #+author: 谢骐 (Shynur)
 
@@ -114,18 +114,21 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 1. [X] (bug#64351) =C-h v= 后按 =TAB= 补全时, 过滤掉 ~prefix--*~ 和 ~*-internal~.
 2. [X]
 
-** TODO 新增文件流程 [/]
+** TODO 新增文件流程 [0/5]
 1. [ ] =New-file-name=
+   1. [ ] 在 prop line 指定文件路径
+   2. [ ] 在 文件末页指定 coding 为 utf-8-unix.
 2. [ ] [[file:./.dir-locals.el][=.dir-locals.el=]]
+   1. [ ] 若为新目录, 要创建新的关联键值对.
 3. [ ] git :: [[file:./.gitignore][=.gitignore=]]
 4. [ ] [[目录结构][=README.org=]]
 5. [ ] make :: [[file:./GNUmakefile][=GNUmakefile=]]
 
 * LICENSE
 
-Haven't chosen one; I retain all rights to [[file:./][this repository]].
+Haven’t chosen one; I retain all rights to [[file:./][this repository]].
 
-/Will/ include an open source license someday in the future when I've learned enough about open source licenses.
+/Will/ include an open source license someday in the future when I’ve learned enough about open source licenses.
 
 -----
 

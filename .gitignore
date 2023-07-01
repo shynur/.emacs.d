@@ -3,20 +3,21 @@
 /*
 /*/
 
-!/.gitignore
 !/.dir-locals.el
+!/.gitignore
+!/GNUmakefile
+!/README.org
 !/early-init.el
 !/init.el
-!/Makefile
+
+!/docs/
+/docs/*
+!/docs/Emacs-use_daemon.md
 
 !/shynur/
 /shynur/*
 !/shynur/clang-format.yaml
-!/shynur/Emacs-use_daemon.md
-
-!/.github/
-/.github/*
-!/.github/README.org
+!/shynur/machine.el
 
 # Local Variables:
 # coding: utf-8-unix

@@ -1197,6 +1197,12 @@
  '(enable-remote-dir-locals t
                             nil (files)
                             "远程时也向上寻找“.dir-locals.el”以应用directory local变量")
+ '(imenu-auto-rescan t
+                     nil (imenu))
+ '(imenu-sort-function #'imenu--sort-by-name
+                       nil (imenu))
+ '(which-function-mode t
+                       nil (which-func))
  '(confirm-kill-processes nil
                           nil (files)
                           "退出时,不询问是否要kill子进程")
@@ -1508,7 +1514,7 @@
 (global-unset-key (kbd "M-@")) ;‘mark-word’
 (global-unset-key (kbd "C-M-@"))
 (global-unset-key (kbd "M-h")) ;‘mark-paragraph’
-(global-unset-key (kbd "C-M-h"))
+(global-unset-key (kbd "C-M-h")) ;‘mark-defun’
 (global-unset-key (kbd "C-x C-p")) ;‘mark-page’
 (global-unset-key (kbd "C-M-o")) ;‘split-line’
 (global-unset-key (kbd "M-i")) ;‘tab-to-tab-stop’
@@ -1519,14 +1525,14 @@
 (global-unset-key (kbd "<f2>")) ;‘2C-mode’相关的键
 (global-unset-key (kbd "C-x 6")) ;‘2C-mode’相关的键
 
-(advice-add 'describe-variable :around ;“C-h v”
-            (lambda (advice-added-function &rest arguments)
-              (let ((completion-regexp-list '(;;滤除‘*--*’
-                                              "^\\([^-]*$\\|\\([^-]+\\(-[^-]+\\)-?\\)\\)$"
-                                              ;;滤除‘*-internal’
-                                              "\\([^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)$")))
-                (apply advice-added-function
-                       arguments)))) ;shynur/bug#1: 似乎没能过滤成功,比如‘which-key--*’(bug#64351)
+(global-set-key (kbd "C-h v") (lambda ()
+                                "(bug#64351#20)"
+                                (interactive)
+                                (let ((completion-regexp-list '(;;滤除‘*--*’
+                                                                "^\\([^-]*\\|\\([^-]+\\(-[^-]+\\)+-?\\)\\)$"
+                                                                ;;滤除‘*-internal’
+                                                                "\\(^\\|[^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)$")))
+                                  (call-interactively #'describe-variable))))
 (progn
   (global-set-key (kbd "C-s") (lambda ()
                                 (interactive)
@@ -1655,7 +1661,6 @@
                                            ;;当需要调用该λ表达式时,必然没有除此以外的其它frame了,因此之后新建的frame必然是server弹出的,所以此处无需使用‘after-make-frame-functions’
                                            (   add-hook 'server-after-make-frame-hook shynur/--get-size&position)))))
     (add-hook 'server-after-make-frame-hook shynur/--get-size&position)))
-;; (setq server-after-make-frame-hook () delete-frame-functions ())
 
 ;; 这页的函数有朝一日会移到 ~shynur/.emacs.d/shynur/ 目录下
 

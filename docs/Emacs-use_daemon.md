@@ -1,3 +1,5 @@
+<!-- ~shynur/.emacs.d/docs/Emacs-use_daemon.md -->
+
 # 如何运行 Emacs 作为后台服务?
 
 (仅考虑 GUI.)
@@ -48,3 +50,7 @@ Emacs 提供了 daemon-client 模型, 简而言之就像 QQ 那样: 在后台启
 ```lisp
 (setq file-name-coding-system 'chinese-gb18030)
 ```
+
+<!-- Local Variables: -->
+<!-- coding: utf-8-unix -->
+<!-- End: -->

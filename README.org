@@ -11,17 +11,22 @@
 🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/emacs][GNU Emacs Manual]]/ 和 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/.
 之后将会使用 [[https://github.com/jwiegley/use-package][=use-package=]] 进行彻底的重构.
 
-📖 目录结构 (点划线之下为执行 ~emacs -u shynur~ 之后会生成的文件):
+** <<目录结构>>
 
 #+begin_example
 ./
+ |__ .dir-locals.el (应用到该仓库的本地变量)
+ |
  |__ .gitignore
  |
- |__ Makefile (仅供参考, 因为 MS-Windows 上众多基础命令的参数都和 GNU/Linux 不
- |             一样.)
+ |__ GNUmakefile (仅供手动放置/删除目标文件时参考用, 毕竟 MS-Windows 上众多基础
+ |                命令的用法和 GNU/Linux 不一样.)
  |
- |__ .dir-locals.el (本地变量, 应用于: .dir-locals.el, early-init.el,
- |                                     init.el, shynur/*, README.md)
+ |__ README.org (this file)
+ |
+ |__ docs/
+ |    |
+ |    |__ Emacs-use_daemon.md
  |
  |__ early-init.el
  |
@@ -29,25 +34,21 @@
  |
  |__ shynur/ (个人向的库合集)
  |    |
- |    |__ machine.el (该文件可有可无, 用于削减在不同机器间使用本配置的难度: 例
- |    |               如, 某机器上没有配置中提到的某字体, 那么那台机器就需要在
- |    |               该文件中指定替代字体.)
- |    |
  |    |__ clang-format.yaml
  |    |
- |    |__ Emacs-use_daemon.md
- |
- |__ .github/
- |    |
- |    |__ README.org (this file)
+ |    |__ machine.el (该文件可有可无, 用于削减在不同机器间使用本配置的难度: 例
+ |                    如, 某机器上没有配置中提到的某字体, 那么那台机器就需要在
+ |                    该文件中指定替代字体.)
  |
 -|->8·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-
  |
- |__ elpa/
- |
  |__ .shynur/ (使用过程中生成的文件, 含临时文件.  这些文件都可能包含隐私信息,
-               所以不放在 /tmp/ 目录下.)
+ |             所以不放在 /tmp/ 目录下.)
+ |
+ |__ elpa/
 #+end_example
+
+(点划线之下为执行 ~emacs -u shynur~ 之后会生成的文件.)
 
 * 键位
 ** 键盘输入
@@ -89,19 +90,17 @@
 
 * Written for
 
-Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:~/.emacs.d/shynur/Emacs-use_daemon.md][如何运行 Emacs 后台服务?]]).
+Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./docs/Emacs-use_daemon.md][如何运行 Emacs 后台服务?]]).
 
 - MS-Windows
 
-* TODO 待办事项 [/]
+* TODO 待办事项
 
 - [ ] 不应该单纯开启 ~global-display-line-numbers-mode~, 而是应该给出一个分类机制, 有需要的 mode 才打开 ~display-line-numbers-mode~.
   有的 mode (e.g., ~neotree~, ~calendar~, ~vc-annotate-mode~) 显示行号反而会占用空间.
 - [ ] 将任何 non-selected window 且是 ~prog-mode~ 的 buffer 开启全局彩虹括号.
   ~highlight-parentheses~ 只会高亮光标附近的括号, 其余地方还是一尘不变, 这样不太 fancy.
 - [ ] 拖动 GUI 时自动缩小应用窗口.
-- [ ] bug :: (_=shynur/bug#1=_) =C-h v= 后按 =TAB= 补全时, 过滤掉 ~prefix--*~ 和 ~*-internal~.
-  (由于 GitHub 对 Org 的支持比较孱弱, 所以此处及其余一些地方未必会有恰当的渲染.)
 - [ ] 修改 ~minibuffer-local-map~ 和 ~minibuffer-local-ns-map~.
 - [ ] 用 context-menu 替代 menubar.
 - [ ] 写: 修改 =NumberLock= 映射到 =`=, =CapitalizedLock= 映射到 =Control= 的文章.
@@ -111,16 +110,20 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:~/.
   - [ ] 在 hook 中加入对 =*scratch*= 的定制: 默认目录.
 - [ ] 设置一个 fontset, 解决 Org 中某些区域, 中文无法显示 及 emoji 无法显示的问题.
 
-** TODO 新增文件流程
+** TODO shynur/BUG
+1. [X] (bug#64351) =C-h v= 后按 =TAB= 补全时, 过滤掉 ~prefix--*~ 和 ~*-internal~.
+2. [X]
+
+** TODO 新增文件流程 [/]
 1. [ ] =New-file-name=
-2. [ ] =.dir-locals.el=
-3. [ ] git :: =.gitignore=
-4. [ ] github :: =.github/README.org=
-5. [ ] rm :: =Makefile=
+2. [ ] [[file:./.dir-locals.el][=.dir-locals.el=]]
+3. [ ] git :: [[file:./.gitignore][=.gitignore=]]
+4. [ ] [[目录结构][=README.org=]]
+5. [ ] make :: [[file:./GNUmakefile][=GNUmakefile=]]
 
 * LICENSE
 
-Haven't chosen one; I retain all rights to [[file:../][this repository]].
+Haven't chosen one; I retain all rights to [[file:./][this repository]].
 
 /Will/ include an open source license someday in the future when I've learned enough about open source licenses.
 

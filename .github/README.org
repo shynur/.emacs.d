@@ -18,7 +18,7 @@
  |__ .gitignore
  |
  |__ Makefile (仅供参考, 因为 MS-Windows 上众多基础命令的参数都和 GNU/Linux 不
-               一样.)
+ |             一样.)
  |
  |__ .dir-locals.el (本地变量, 应用于: .dir-locals.el, early-init.el,
  |                                     init.el, shynur/*, README.md)

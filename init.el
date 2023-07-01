@@ -71,6 +71,7 @@
                                        helpful
                                        neotree
                                        transwin
+                                       git-modes
                                        highlight
                                        on-screen
                                        which-key
@@ -80,7 +81,6 @@
                                        ascii-table
                                        doom-themes
                                        use-package
-                                       company-jedi
                                        indent-guide
                                        rainbow-mode
                                        all-the-icons
@@ -936,7 +936,7 @@
                                   makefile-gmake-mode-hook)
                               ,(lambda ()
                                  (indent-tabs-mode)))
-                            nil (make-mode)) ;shynur/bug#2: 没起作用
+                            nil (make-mode))
  '(tooltip-delay 0
                  nil (tooltip))
  '(tooltip-mode t

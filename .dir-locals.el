@@ -1,12 +1,18 @@
 ;;; ~shynur/.emacs.d/.dir-locals.el
 
-((nil . ((subdirs . nil)
+((auto-mode-alist . (("/\\.emacs\\.d/\\(GNUmakefile\\|makefile\\|Makefile\\)\\'" . makefile-gmake-mode)
+                     ("/\\.emacs\\.d/\\.dir-locals\\(-2\\)?\\.el\\'" . lisp-data-mode)
+                     ("/\\.emacs\\.d/\\(shynur/\\)?[^-].*\\.el\\'" . emacs-lisp-mode)
+                     ("/\\.emacs\\.d/\\(shynur/\\)?[^-].*\\.org\\'" . org-mode)
+                     ("/\\.emacs\\.d/\\(shynur/\\)?\\.gitignore\\'" . gitignore-mode)
+                     ("/\\.emacs\\.d/\\(shynur/\\)?[^-].*\\.ya?ml\\'" . yaml-mode)
+                     ("/\\.emacs\\.d/\\(shynur/\\)?[[:alnum:]][[:alnum:]_]*[[:alnum:]]\\(-[[:alnum:]][[:alnum:]_]*[[:alnum:]]\\)+\\.ma\\'" . markdown-mode)))
+
+ (nil . ((subdirs . nil)
 
          (eval . (let ((case-fold-search t))
                    (highlight-phrase "~?\\(shynur\\|谢骐\\)[^[:blank:][:space:][:cntrl:]()`'\"]*"
                                      'underline)))
-
-         (auto-mode-alist . ())
 
          (outline-minor-mode-cycle . [tab ?\S-\t])
          (outline-minor-mode-prefix . [nil])

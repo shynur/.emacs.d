@@ -398,13 +398,6 @@
                                    "每10行就用‘line-number-major-tick’高亮一次行号")
  '(neo-show-hidden-files t
                          nil (neotree))
- '(c-mode-common-hook `(,@c-mode-common-hook
-                        ,(lambda ()
-                           (c-set-offset 'case-label '+))
-                        ;;只保留当前编译环境下,生效的ifdef从句
-                        ,(lambda ()
-                           (hide-ifdef-mode)))
-                      nil (cc-mode))
  '(neotree-mode-hook `(,@neotree-mode-hook
                        ,(lambda ()
                           "关闭neotree的行号"
@@ -558,12 +551,6 @@
  '(kill-do-not-save-duplicates t
                                nil (simple)
                                "kill重复的文本时,不将其加入到‘kill-ring’中(具体行为受‘equal-including-properties’影响)")
- '(show-paren-mode t
-                   nil (paren)
-                   "括号前后匹配时,高亮显示")
- '(show-paren-delay 0.125
-                    nil (paren)
-                    "延迟0.125s时间之后,高亮成对的括号")
  '(size-indication-mode t
                         nil (simple)
                         "mode-line显示buffer大小(k=10^3,M=10^6,...)")
@@ -1017,8 +1004,51 @@
                     ,(lambda ()
                        (when (eq major-mode 'text-mode)
                          (display-fill-column-indicator-mode)))))
+ '(c-mode-common-hook `(,@c-mode-common-hook
+                        ,(lambda ()
+                           (c-set-offset 'case-label '+))
+                        ;;只保留当前编译环境下,生效的ifdef从句
+                        ,(lambda ()
+                           (hide-ifdef-mode)))
+                      nil (cc-mode))
  '(c-basic-offset 4
                   nil (cc-mode))
+ '(c-default-style '((awk-mode . "awk" )
+                     (other    . "java"))
+                   nil (cc-mode))
+ '(c-tab-always-indent t
+                       nil (cc-mode))
+ '(blink-matching-paren nil
+                        nil (simple)
+                        "感觉不如‘show-paren-mode’")
+ '(show-paren-mode t
+                   nil (paren))
+ '(show-paren-delay 0.1
+                    nil (paren))
+ '(show-paren-highlight-openparen t
+                                  nil (paren)
+                                  "光标位于左paren上“.(...)时,高亮左paren")
+ '(show-paren-style 'parenthesis
+                    nil (paren)
+                    "只高亮两个paren")
+ '(show-paren-when-point-in-periphery nil
+                                      nil (paren)
+                                      "当光标置于sexp周边的空白区域时")
+ '(electric-pair-mode t
+                      nil (elec-pair))
+ '(electric-pair-preserve-balance t
+                                  nil (elec-pair)
+                                  "若nil,会出现这种情况“(((()”")
+ '(electric-pair-delete-adjacent-pairs t
+                                       nil (elec-pair)
+                                       "当成对的两个paren邻接时,删左paren时,同步地删除右paren")
+ '(electric-pair-open-newline-between-pairs t
+                                            nil (elec-pair)
+                                            "“{RET}”=>“{newline nnewline}”")
+ '(lisp-data-mode-hook `(,@(when (boundp 'lisp-data-mode-hook)
+                             lisp-data-mode-hook)
+                         ,(lambda ()
+                            (setq-local electric-pair-open-newline-between-pairs nil))))
  '(display-fill-column-indicator-column t
                                         nil (display-fill-column-indicator)
                                         "默认值参考fill-column")

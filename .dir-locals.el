@@ -1,20 +1,20 @@
 ;;; ~shynur/.emacs.d/.dir-locals.el
 
-((nil . ((auto-mode-alist . (;;有些设置是多余的,但出于教学/参考的目的,保留下来
-                             ("~\\'" . (ignore t))
-                             ("#[[:alnum:]]*\\'" . (ignore t))
+((auto-mode-alist . (;;有些设置是多余的,但出于教学/参考的目的,保留下来
+                     ("~\\'" . (ignore t))
+                     ("#[[:alnum:]]*\\'" . (ignore t))
 
-                             ("/\\.dir-locals\\(-2\\)?\\.el\\'" . lisp-data-mode)
-                             ("/[^/-][^/]*\\.el\\'" . emacs-lisp-mode)
+                     ("/\\.dir-locals\\(-2\\)?\\.el\\'" . lisp-data-mode) ;(bug#64415)
+                     ("/[^/-][^/]*\\.el\\'" . emacs-lisp-mode)
 
-                             ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'" . markdown-mode)
-                             ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.org\\'" . org-mode)
+                     ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'" . markdown-mode)
+                     ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.org\\'" . org-mode)
 
-                             ("/[^/-][^/]*\\.ya?ml\\'" . yaml-mode)
-                             ("/\\.gitignore\\'" . gitignore-mode)
-                             ("/\\(\\(\\(GNU\\)?m\\)\\|M\\)akefile\\'" . makefile-gmake-mode)))
+                     ("/[^/-][^/]*\\.ya?ml\\'" . yaml-mode)
+                     ("/\\.gitignore\\'" . gitignore-mode)
+                     ("/\\(\\(\\(GNU\\)?m\\)\\|M\\)akefile\\'" . makefile-gmake-mode)))
 
-         (outline-minor-mode-cycle . [tab ?\S-\t])
+ (nil . ((outline-minor-mode-cycle . [tab ?\S-\t])
          (outline-minor-mode-prefix . [nil])
 
          (sentence-end-double-space . t)
@@ -78,7 +78,7 @@
  ("shynur/" . ((nil . ((lexical-binding . t)
                        (no-byte-compile . t)
                        (no-native-compile . t))))))
-
+
 ;; Local Variables:
 ;; coding: utf-8-unix
 ;; End:

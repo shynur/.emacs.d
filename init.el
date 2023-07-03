@@ -223,6 +223,8 @@
                             nil (indent-guide))
  '(indent-guide-recursive t
                           nil (indent-guide))
+ '(indent-guide-char ?\N{BOX DRAWINGS LIGHT VERTICAL}
+                     nil (indent-guide))
  '(current-language-environment "UTF-8")
  '(kill-ring-max most-positive-fixnum
                  nil (simple))
@@ -712,9 +714,15 @@
                     ,(lambda ()
                        (rainbow-mode))
                     ,(lambda ()
-                       (rainbow-delimiters-mode)))
+                       (rainbow-delimiters-mode))
+                    ,(lambda ()
+                       (eldoc-mode)))
                   nil (prog-mode)
                   "e.g.,让“#ffffff”显示白色")
+ '(hs-hide-comments-when-hiding-all t
+                                    nil (hideshow))
+ '(hs-isearch-open t
+                   nil (hideshow))
  '(scroll-bar-width 28)
  '(initial-buffer-choice t
                          nil ()
@@ -1453,44 +1461,44 @@
                            nil ()
                            "在GTK+的file-chooser-dialog中显示隐藏文件"))
 
-(letrec ((custom-faces (lambda ()
-                         "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘custom-set-faces’,其余(以及后续)的client都能生效"
-                         (custom-set-faces
-                          `(default
-                             ((t . (:font ,(pcase (system-name)
-                                             ("ASUS-TX2" "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing")
-                                             (_          "Courier New-10"                                              ))
-                                    :foundry "outline"))))
-                          '(cursor
-                            ((t . (:background "chartreuse")))
-                            nil
-                            "该face仅有‘:background’字段有效")
-                          '(tooltip
-                            ((t . (:height     100
-                                   :background "dark slate gray"))))
-                          '(line-number
-                            ((t . (:slant  italic
-                                   :weight light))))
-                          `(line-number-major-tick
-                            ((t . (:foreground ,(face-attribute 'line-number :foreground)
-                                   :background ,(face-attribute 'line-number :background)
-                                   :slant      italic
-                                   :underline  t
-                                   :weight     light)))
-                            nil
-                            "指定倍数的行号;除此以外,还有‘line-number-minor-tick’实现相同的功能,但其优先级更低")
-                          '(line-number-current-line
-                            ((t . (:slant  normal
-                                   :weight black))))
-                          '(window-divider
-                            ((t . (:foreground "SlateBlue4"))))
-                          '(indent-guide-face
-                            ((t . (:foreground "dark sea green"))))
-                          '(fill-column-indicator
-                            ((t . (:background "black"
-                                   :foreground "yellow")))))
-                         (remove-hook 'server-after-make-frame-hook custom-faces))))
-  (add-hook 'server-after-make-frame-hook custom-faces))
+(letrec ((shynur--custom-set-faces (lambda ()
+                                     "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘custom-set-faces’,其余(以及后续)的client都能生效"
+                                     (custom-set-faces
+                                      `(default
+                                         ((t . ( :font ,(pcase (system-name)
+                                                          ("ASUS-TX2" "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing")
+                                                          (_          "Courier New-10"                                              ))
+                                                 :foundry "outline"))))
+                                      '(cursor
+                                        ((t . (:background "chartreuse")))
+                                        nil
+                                        "该face仅有‘:background’字段有效")
+                                      '(tooltip
+                                        ((t . ( :height     100
+                                                :background "dark slate gray"))))
+                                      '(line-number
+                                        ((t . ( :slant  italic
+                                                :weight light))))
+                                      `(line-number-major-tick
+                                        ((t . ( :foreground ,(face-attribute 'line-number :foreground)
+                                                :background ,(face-attribute 'line-number :background)
+                                                :slant      italic
+                                                :underline  t
+                                                :weight     light)))
+                                        nil
+                                        "指定倍数的行号;除此以外,还有‘line-number-minor-tick’实现相同的功能,但其优先级更低")
+                                      '(line-number-current-line
+                                        ((t . ( :slant  normal
+                                                :weight black))))
+                                      '(window-divider
+                                        ((t . (:foreground "SlateBlue4"))))
+                                      '(indent-guide-face
+                                        ((t . (:foreground "dark sea green"))))
+                                      '(fill-column-indicator
+                                        ((t . ( :background "black"
+                                                :foreground "yellow")))))
+                                     (remove-hook 'server-after-make-frame-hook shynur--custom-set-faces))))
+  (add-hook 'server-after-make-frame-hook shynur--custom-set-faces))
 
 (global-unset-key (kbd "C-h C-c"))
 (global-unset-key (kbd "C-h g"))
@@ -1567,10 +1575,14 @@
 (global-unset-key (kbd "C-x 6")) ;‘2C-mode’相关的键
 (global-unset-key (kbd "C-x ;")) ;‘comment-set-column’
 
-(let ((shynur--completion-regexp-list '(;;滤除‘*--*’
-                                        "^\\([^-]*\\|\\([^-]+\\(-[^-]+\\)+-?\\)\\)$"
-                                        ;;滤除‘*-internal’
-                                        "\\(^\\|[^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)$")))
+(let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
+                                                (concat
+                                                 "^shynur[^[:alpha:]]"
+                                                 "\\|"
+                                                 "\\(" regexp "\\)")) '(;;滤除‘prefix--*’
+                                                                        "^-?\\([^-]+-?\\)*$"
+                                                                        ;;滤除‘*-internal’
+                                                                        "\\(^\\|[^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)$"))))
   ;;(bug#64351#20)
   (global-set-key (kbd "C-h v") (lambda ()
                                   (interactive)
@@ -1619,7 +1631,7 @@
                                 (interactive)
                                 (progn
                                   (require 'ivy)
-                                  (ivy-mode 1))
+                                  (ivy-mode))
                                 (condition-case nil
                                     (progn
                                       (require 'swiper)

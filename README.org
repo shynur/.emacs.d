@@ -126,6 +126,10 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 4. [ ] [[目录结构][=README.org=]]
 5. [ ] make :: [[file:./GNUmakefile][=GNUmakefile=]]
 
+* Repo Stats
+
+- [[https://api.codetabs.com/v1/loc/?github=shynur/.emacs.d&branch=main][Languages]]
+
 * LICENSE
 
 Haven’t chosen one; I retain all rights to [[file:./][this repository]].

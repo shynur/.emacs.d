@@ -1567,13 +1567,13 @@
 (global-unset-key (kbd "C-x 6")) ;‘2C-mode’相关的键
 (global-unset-key (kbd "C-x ;")) ;‘comment-set-column’
 
-(global-set-key (kbd "C-h v") (lambda ()
-                                "(bug#64351#20)"
-                                (interactive)
-                                (let ((shynur--completion-regexp-list '(;;滤除‘*--*’
-                                                                        "^\\([^-]*\\|\\([^-]+\\(-[^-]+\\)+-?\\)\\)$"
-                                                                        ;;滤除‘*-internal’
-                                                                        "\\(^\\|[^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)$")))
+(let ((shynur--completion-regexp-list '(;;滤除‘*--*’
+                                        "^\\([^-]*\\|\\([^-]+\\(-[^-]+\\)+-?\\)\\)$"
+                                        ;;滤除‘*-internal’
+                                        "\\(^\\|[^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)$")))
+  ;;(bug#64351#20)
+  (global-set-key (kbd "C-h v") (lambda ()
+                                  (interactive)
                                   (advice-add 'try-completion :around
                                               (lambda (advised-function &rest arguments)
                                                 (let ((completion-regexp-list shynur--completion-regexp-list))
@@ -1588,11 +1588,32 @@
                                               (lambda (advised-function &rest arguments)
                                                 (let ((completion-regexp-list shynur--completion-regexp-list))
                                                   (apply advised-function
-                                                         arguments))) '((name . "shynur--let-bind-completion-regexp-list"))))
-                                (call-interactively #'describe-variable)
-                                (advice-remove 'try-completion  "shynur--let-bind-completion-regexp-list")
-                                (advice-remove 'test-completion "shynur--let-bind-completion-regexp-list")
-                                (advice-remove 'all-completions "shynur--let-bind-completion-regexp-list")))
+                                                         arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
+                                  (call-interactively #'describe-variable)
+                                  (advice-remove 'try-completion  "shynur--let-bind-completion-regexp-list")
+                                  (advice-remove 'test-completion "shynur--let-bind-completion-regexp-list")
+                                  (advice-remove 'all-completions "shynur--let-bind-completion-regexp-list")))
+  (global-set-key (kbd "C-h f") (lambda ()
+                                  (interactive)
+                                  (advice-add 'try-completion :around
+                                              (lambda (advised-function &rest arguments)
+                                                (let ((completion-regexp-list shynur--completion-regexp-list))
+                                                  (apply advised-function
+                                                         arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
+                                  (advice-add 'test-completion :around
+                                              (lambda (advised-function &rest arguments)
+                                                (let ((completion-regexp-list shynur--completion-regexp-list))
+                                                  (apply advised-function
+                                                         arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
+                                  (advice-add 'all-completions :around
+                                              (lambda (advised-function &rest arguments)
+                                                (let ((completion-regexp-list shynur--completion-regexp-list))
+                                                  (apply advised-function
+                                                         arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
+                                  (call-interactively #'describe-function)
+                                  (advice-remove 'try-completion  "shynur--let-bind-completion-regexp-list")
+                                  (advice-remove 'test-completion "shynur--let-bind-completion-regexp-list")
+                                  (advice-remove 'all-completions "shynur--let-bind-completion-regexp-list"))))
 (progn
   (global-set-key (kbd "C-s") (lambda ()
                                 (interactive)

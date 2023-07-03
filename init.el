@@ -684,6 +684,9 @@
  '(company-tooltip-limit 10
                          nil (company)
                          "一次性显示候选词的数量")
+ '(company-clang-executable (pcase (system-name)
+                              ("ASUS-TX2" "d:/Progs/LLVM/bin/clang.exe"))
+                            nil (company))
  '(next-screen-context-lines 5
                              nil ()
                              "scroll以使window底端的N行呈现到顶端")
@@ -997,6 +1000,11 @@
                                 nil (font-lock)
                                 "不限制fontification的数量")
  '(fill-column 70)
+ '(comment-column 0
+                  nil (newcomment)
+                  "“M-;”时comment的左边界")
+ '(comment-fill-column 80
+                       nil (newcomment))
  '(adaptive-fill-mode t
                       nil ()
                       "“M-q”时自动选择每行首的填充前缀")
@@ -1018,6 +1026,9 @@
                    nil (cc-mode))
  '(c-tab-always-indent t
                        nil (cc-mode))
+ '(comment-multi-line t
+                      nil (newcomment)
+                      "“M-j”时,“/* lines */”而不是“/* */ \n /* */”")
  '(blink-matching-paren nil
                         nil (simple)
                         "感觉不如‘show-paren-mode’")
@@ -1554,15 +1565,34 @@
 (global-unset-key (kbd "C-x .")) ;‘set-fill-prefix’
 (global-unset-key (kbd "<f2>")) ;‘2C-mode’相关的键
 (global-unset-key (kbd "C-x 6")) ;‘2C-mode’相关的键
+(global-unset-key (kbd "C-x ;")) ;‘comment-set-column’
 
 (global-set-key (kbd "C-h v") (lambda ()
                                 "(bug#64351#20)"
                                 (interactive)
-                                (let ((completion-regexp-list '(;;滤除‘*--*’
-                                                                "^\\([^-]*\\|\\([^-]+\\(-[^-]+\\)+-?\\)\\)$"
-                                                                ;;滤除‘*-internal’
-                                                                "\\(^\\|[^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)$")))
-                                  (call-interactively #'describe-variable))))
+                                (let ((shynur--completion-regexp-list '(;;滤除‘*--*’
+                                                                        "^\\([^-]*\\|\\([^-]+\\(-[^-]+\\)+-?\\)\\)$"
+                                                                        ;;滤除‘*-internal’
+                                                                        "\\(^\\|[^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)$")))
+                                  (advice-add 'try-completion :around
+                                              (lambda (advised-function &rest arguments)
+                                                (let ((completion-regexp-list shynur--completion-regexp-list))
+                                                  (apply advised-function
+                                                         arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
+                                  (advice-add 'test-completion :around
+                                              (lambda (advised-function &rest arguments)
+                                                (let ((completion-regexp-list shynur--completion-regexp-list))
+                                                  (apply advised-function
+                                                         arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
+                                  (advice-add 'all-completions :around
+                                              (lambda (advised-function &rest arguments)
+                                                (let ((completion-regexp-list shynur--completion-regexp-list))
+                                                  (apply advised-function
+                                                         arguments))) '((name . "shynur--let-bind-completion-regexp-list"))))
+                                (call-interactively #'describe-variable)
+                                (advice-remove 'try-completion  "shynur--let-bind-completion-regexp-list")
+                                (advice-remove 'test-completion "shynur--let-bind-completion-regexp-list")
+                                (advice-remove 'all-completions "shynur--let-bind-completion-regexp-list")))
 (progn
   (global-set-key (kbd "C-s") (lambda ()
                                 (interactive)

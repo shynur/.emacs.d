@@ -1034,6 +1034,15 @@
                    nil (cc-mode))
  '(c-tab-always-indent t
                        nil (cc-mode))
+ '(c-mode-common-hook `(,@(when (boundp 'c-mode-common-hook)
+                            c-mode-common-hook)
+                        ,(lambda ()
+                           "换行不够智能"
+                           (c-toggle-auto-newline -1))
+                        ,(lambda ()
+                           "键入特定字符后,自动缩进当前行"
+                           (c-toggle-electric-state 1)))
+                      nil (cc-mode))
  '(comment-multi-line t
                       nil (newcomment)
                       "“M-j”时,“/* lines */”而不是“/* */ \n /* */”")
@@ -1577,7 +1586,7 @@
 
 (let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
                                                 (concat
-                                                 "^shynur[^[:alpha:]]\\|"
+                                                 "^shynur[^[:alnum:]]" "\\|"
                                                  "\\(" regexp "\\)")) '(;;滤除‘prefix--*’
                                                                         "^-?\\([^-]+-?\\)*$"
                                                                         ;;滤除‘*-internal’

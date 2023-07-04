@@ -8,7 +8,7 @@
 
 🥰 这是我的 Emacs 个人配置方案, from scratch.
 
-🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/emacs][GNU Emacs Manual]]/ (26.8) 和 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/ (22).
+🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/emacs][GNU Emacs Manual]]/ (26.12.3) 和 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/ (22).
 之后将会使用 [[https://github.com/jwiegley/use-package][=use-package=]] 进行彻底的重构.
 
 (由于 GitHub 对 Org 的支持孱弱, 故些许地方渲染效果不佳.)

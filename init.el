@@ -119,8 +119,7 @@
                                                 (company-mode -1)
                                                 (electric-indent-local-mode -1)
                                                 (electric-quote-local-mode -1)
-                                                (highlight-changes-mode -1)
-                                                (highlight-changes-visible-mode -1)
+                                                (highlight-changes-mode -1) ;关了‘highlight-changes-visible-mode’会有错误信息:“Cannot remove highlighting from read-only mode buffer *Completions*”.
                                                 (page-break-lines-mode -1)
                                                 (indent-guide-mode -1)
                                                 (on-screen-mode -1))))
@@ -258,8 +257,6 @@
                 "custom-file.el")
                nil (cus-edit)
                "修改Emacs导出customization的位置,以防Emacs搅乱这个文件的‘custom-set-variables’形式和‘custom-set-faces’形式")
- '(doom-modeline-mode t
-                      nil (doom-modeline all-the-icons))
  '(display-time-day-and-date t
                              nil (time)
                              "使‘display-time-mode’显示日期")
@@ -758,15 +755,14 @@
  '(calendar-mark-holidays-flag t
                                nil (calendar))
  '(prettify-symbols-alist '(("lambda" . ?λ)
-                            ("<<"     . ?≪)
                             ("<="     . ?≤)
                             (">="     . ?≥)
-                            (">>"     . ?≫)
                             ("::"     . ?∷)
-                            ("=>"     . ?⇒)
                             ("->"     . ?→))
                           nil (prog-mode)
                           "此为默认值,不生效;仅供buffer-local时使用")
+ '(prettify-symbols-unprettify-at-point nil
+                                        nil (prog-mode))
  '(display-hourglass t
                      nil ()
                      "当Emacs是busy时,将鼠标指针显示为漏斗")
@@ -945,6 +941,10 @@
                       nil (tooltip))
  '(tooltip-frame-parameters tooltip-frame-parameters
                             nil (tooltip))
+ '(doom-modeline-mode t
+                      nil (doom-modeline all-the-icons))
+ '(doom-modeline-minor-modes t
+                             nil (doom-modeline))
  '(doom-modeline-window-width-limit nil
                                     nil (doom-modeline)
                                     "即使当前窗口宽度很小,也尽量显示所有信息")
@@ -1063,7 +1063,7 @@
                                        "当成对的两个paren邻接时,删左paren时,同步地删除右paren")
  '(electric-pair-open-newline-between-pairs t
                                             nil (elec-pair)
-                                            "“{RET}”=>“{newline nnewline}”")
+                                            "“{RET}”=>“{newline newline}”.(可考虑‘electric-layout-mode’作为替代方案:键入左paren自动补充右paren并换两行)")
  '(lisp-data-mode-hook `(,@(when (boundp 'lisp-data-mode-hook)
                              lisp-data-mode-hook)
                          ,(lambda ()
@@ -1577,41 +1577,33 @@
 
 (let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
                                                 (concat
-                                                 "^shynur[^[:alpha:]]"
-                                                 "\\|"
+                                                 "^shynur[^[:alpha:]]\\|"
                                                  "\\(" regexp "\\)")) '(;;滤除‘prefix--*’
                                                                         "^-?\\([^-]+-?\\)*$"
                                                                         ;;滤除‘*-internal’
-                                                                        "\\(^\\|[^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)$"))))
-  (mapc (lambda (key)
-          (let ((key-original-function (keymap-global-lookup key)))
-            (global-set-key (kbd key) (lambda ()
-                                        "(bug#64351#20)"
-                                        (interactive)
-                                        (let ((completion-regexp-list+shynur--completion-regexp-list `(,@completion-regexp-list
-                                                                                                       ,@shynur--completion-regexp-list)))
-                                          (advice-add 'try-completion :around
-                                                      (lambda (advised-function &rest arguments)
-                                                        (let ((completion-regexp-list completion-regexp-list+shynur--completion-regexp-list))
-                                                          (apply advised-function
-                                                                 arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
-                                          (advice-add 'test-completion :around
-                                                      (lambda (advised-function &rest arguments)
-                                                        (let ((completion-regexp-list completion-regexp-list+shynur--completion-regexp-list))
-                                                          (apply advised-function
-                                                                 arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
-                                          (advice-add 'all-completions :around
-                                                      (lambda (advised-function &rest arguments)
-                                                        (let ((completion-regexp-list completion-regexp-list+shynur--completion-regexp-list))
-                                                          (apply advised-function
-                                                                 arguments))) '((name . "shynur--let-bind-completion-regexp-list"))))
-                                        (unwind-protect
-                                            (call-interactively key-original-function)
-                                          (advice-remove 'try-completion  "shynur--let-bind-completion-regexp-list")
-                                          (advice-remove 'test-completion "shynur--let-bind-completion-regexp-list")
-                                          (advice-remove 'all-completions "shynur--let-bind-completion-regexp-list")))))) ["C-h f"
-                                                                                                                           "C-h v"
-                                                                                                                           "M-x"]))
+                                                                        "\\(^\\|[^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)$")))
+      (functions-for-completion [try-completion
+                                 test-completion
+                                 all-completions]))
+  (seq-doseq (key ["C-h f"
+                   "C-h v"
+                   "M-x"])
+    (let ((key-original-function (keymap-global-lookup key)))
+      (global-set-key (kbd key) (lambda ()
+                                  "(bug#64351#20)"
+                                  (interactive)
+                                  (let ((completion-regexp-list+shynur--completion-regexp-list `(,@completion-regexp-list
+                                                                                                 ,@shynur--completion-regexp-list)))
+                                    (seq-doseq (funtion-for-completion functions-for-completion)
+                                      (advice-add funtion-for-completion :around
+                                                  (lambda (advised-function &rest arguments)
+                                                    (let ((completion-regexp-list completion-regexp-list+shynur--completion-regexp-list))
+                                                      (apply advised-function
+                                                             arguments))) '((name . "shynur--let-bind-completion-regexp-list")))))
+                                  (unwind-protect
+                                      (call-interactively key-original-function)
+                                    (seq-doseq (funtion-for-completion functions-for-completion)
+                                      (advice-remove funtion-for-completion "shynur--let-bind-completion-regexp-list"))))))))
 (progn
   (global-set-key (kbd "C-s") (lambda ()
                                 (interactive)

@@ -113,8 +113,7 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 - [ ] 设置一个 fontset, 解决 Org 中某些区域, 中文无法显示 及 emoji 无法显示的问题.
 
 ** TODO shynur/BUG
-1. [X] (bug#64351) =C-h v= 后按 =TAB= 补全时, 过滤掉 ~prefix--*~ 和 ~*-internal~.
-2. [X]
+1. [ ] company: "clang failed with error 255".
 
 ** TODO 新增文件流程 [0/5]
 1. [ ] =New-file-name=

@@ -1037,9 +1037,9 @@
  '(comment-multi-line t
                       nil (newcomment)
                       "“M-j”时,“/* lines */”而不是“/* */ \n /* */”")
- '(blink-matching-paren nil
+ '(blink-matching-paren t
                         nil (simple)
-                        "感觉不如‘show-paren-mode’")
+                        "功能之一是在echo area显示匹配的paren")
  '(show-paren-mode t
                    nil (paren))
  '(show-paren-delay 0.1
@@ -1583,64 +1583,44 @@
                                                                         "^-?\\([^-]+-?\\)*$"
                                                                         ;;滤除‘*-internal’
                                                                         "\\(^\\|[^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)$"))))
-  ;;(bug#64351#20)
-  (global-set-key (kbd "C-h v") (lambda ()
-                                  (interactive)
-                                  (advice-add 'try-completion :around
-                                              (lambda (advised-function &rest arguments)
-                                                (let ((completion-regexp-list shynur--completion-regexp-list))
-                                                  (apply advised-function
-                                                         arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
-                                  (advice-add 'test-completion :around
-                                              (lambda (advised-function &rest arguments)
-                                                (let ((completion-regexp-list shynur--completion-regexp-list))
-                                                  (apply advised-function
-                                                         arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
-                                  (advice-add 'all-completions :around
-                                              (lambda (advised-function &rest arguments)
-                                                (let ((completion-regexp-list shynur--completion-regexp-list))
-                                                  (apply advised-function
-                                                         arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
-                                  (call-interactively #'describe-variable)
-                                  (advice-remove 'try-completion  "shynur--let-bind-completion-regexp-list")
-                                  (advice-remove 'test-completion "shynur--let-bind-completion-regexp-list")
-                                  (advice-remove 'all-completions "shynur--let-bind-completion-regexp-list")))
-  (global-set-key (kbd "C-h f") (lambda ()
-                                  (interactive)
-                                  (advice-add 'try-completion :around
-                                              (lambda (advised-function &rest arguments)
-                                                (let ((completion-regexp-list shynur--completion-regexp-list))
-                                                  (apply advised-function
-                                                         arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
-                                  (advice-add 'test-completion :around
-                                              (lambda (advised-function &rest arguments)
-                                                (let ((completion-regexp-list shynur--completion-regexp-list))
-                                                  (apply advised-function
-                                                         arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
-                                  (advice-add 'all-completions :around
-                                              (lambda (advised-function &rest arguments)
-                                                (let ((completion-regexp-list shynur--completion-regexp-list))
-                                                  (apply advised-function
-                                                         arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
-                                  (call-interactively #'describe-function)
-                                  (advice-remove 'try-completion  "shynur--let-bind-completion-regexp-list")
-                                  (advice-remove 'test-completion "shynur--let-bind-completion-regexp-list")
-                                  (advice-remove 'all-completions "shynur--let-bind-completion-regexp-list"))))
+  (mapc (lambda (key)
+          (let ((key-original-function (keymap-global-lookup key)))
+            (global-set-key (kbd key) (lambda ()
+                                        "(bug#64351#20)"
+                                        (interactive)
+                                        (let ((completion-regexp-list+shynur--completion-regexp-list `(,@completion-regexp-list
+                                                                                                       ,@shynur--completion-regexp-list)))
+                                          (advice-add 'try-completion :around
+                                                      (lambda (advised-function &rest arguments)
+                                                        (let ((completion-regexp-list completion-regexp-list+shynur--completion-regexp-list))
+                                                          (apply advised-function
+                                                                 arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
+                                          (advice-add 'test-completion :around
+                                                      (lambda (advised-function &rest arguments)
+                                                        (let ((completion-regexp-list completion-regexp-list+shynur--completion-regexp-list))
+                                                          (apply advised-function
+                                                                 arguments))) '((name . "shynur--let-bind-completion-regexp-list")))
+                                          (advice-add 'all-completions :around
+                                                      (lambda (advised-function &rest arguments)
+                                                        (let ((completion-regexp-list completion-regexp-list+shynur--completion-regexp-list))
+                                                          (apply advised-function
+                                                                 arguments))) '((name . "shynur--let-bind-completion-regexp-list"))))
+                                        (unwind-protect
+                                            (call-interactively key-original-function)
+                                          (advice-remove 'try-completion  "shynur--let-bind-completion-regexp-list")
+                                          (advice-remove 'test-completion "shynur--let-bind-completion-regexp-list")
+                                          (advice-remove 'all-completions "shynur--let-bind-completion-regexp-list")))))) ["C-h f"
+                                                                                                                           "C-h v"
+                                                                                                                           "M-x"]))
 (progn
   (global-set-key (kbd "C-s") (lambda ()
                                 (interactive)
-                                (progn
-                                  (require 'ivy)
-                                  (ivy-mode))
-                                (condition-case nil
+                                (require 'ivy)
+                                (ivy-mode)
+                                (unwind-protect
                                     (progn
                                       (require 'swiper)
                                       (swiper))
-                                  ('quit (progn
-                                           (require 'ivy)
-                                           (ivy-mode -1))))
-                                (progn
-                                  (require 'ivy)
                                   (ivy-mode -1))))
   (global-unset-key (kbd "C-r"))
   (global-unset-key (kbd "C-M-r")))

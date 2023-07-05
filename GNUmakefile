@@ -2,10 +2,12 @@
 ### ~shynur/.emacs.d/GNUmakefile
 
 .PHONY: clean
+
+# 改完了记得更新“.dir-locals.el”中的“(eval . (global-set-key (kbd "C-c c") ...))”
 clean:
 	rm --force --recursive .shynur/
-	rm --force             README.html
-	rm --force             docs/Emacs-regexp.html docs/Emacs-use_daemon.html
+	rm --force             README.html*
+	rm --force             docs/Emacs-regexp.html* docs/Emacs-use_daemon.html*
 	rm --force --recursive elpa/
 
 # Local Variables:

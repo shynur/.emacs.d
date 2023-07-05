@@ -1,5 +1,6 @@
 # ~shynur/.emacs.d/README.org
 
+#+title: Shynur’s Emacs [[https://git.savannah.gnu.org/cgit/emacs.git/plain/etc/images/icons/hicolor/48x48/apps/emacs.png]]
 #+author: 谢骐 (Shynur)
 
 * =~shynur/.emacs.d=
@@ -13,7 +14,7 @@
 
 (由于 GitHub 对 Org 的支持孱弱, 故些许地方渲染效果不佳.)
 
-** <<目录结构>>
+** 目录结构
 
 #+begin_example
 ./

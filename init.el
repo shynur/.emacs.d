@@ -115,11 +115,11 @@
                                (lambda ()
                                  "把没用的minor mode都关了"
                                  (make-thread (lambda ()
+                                                "关了‘highlight-changes-mode’和‘highlight-changes-visible-mode’会因为试图移除face导致报错"
                                                 (sleep-for 0.4)
                                                 (company-mode -1)
                                                 (electric-indent-local-mode -1)
                                                 (electric-quote-local-mode -1)
-                                                (highlight-changes-mode -1) ;关了‘highlight-changes-visible-mode’会有错误信息:“Cannot remove highlighting from read-only mode buffer *Completions*”.
                                                 (page-break-lines-mode -1)
                                                 (indent-guide-mode -1)
                                                 (on-screen-mode -1))))
@@ -222,7 +222,7 @@
                             nil (indent-guide))
  '(indent-guide-recursive t
                           nil (indent-guide))
- '(indent-guide-char ?\N{BOX DRAWINGS LIGHT VERTICAL}
+ '(indent-guide-char "\N{BOX DRAWINGS LIGHT VERTICAL}"
                      nil (indent-guide))
  '(current-language-environment "UTF-8")
  '(kill-ring-max most-positive-fixnum
@@ -1630,17 +1630,17 @@
 (mapc (lambda (postkey-function)
         (global-set-key (kbd (concat "C-c " (car postkey-function))) (cdr postkey-function)))
       `(("c" . ,#'highlight-changes-visible-mode)
-        ,@(prog1 '(("d <left>"  . drag-stuff-left)
-                   ("d <down>"  . drag-stuff-down)
-                   ("d <up>"    . drag-stuff-up)
-                   ("d <right>" . drag-stuff-right))
+        ,@(prog1 '(("d M-<left>"  . drag-stuff-left)
+                   ("d M-<down>"  . drag-stuff-down)
+                   ("d M-<up>"    . drag-stuff-up)
+                   ("d M-<right>" . drag-stuff-right))
             (defconst shynur/drag-stuff-map
               (let ((shynur/drag-stuff-map (make-sparse-keymap)))
                 (require 'drag-stuff)
-                (define-key shynur/drag-stuff-map (kbd "<left>")  #'drag-stuff-left)
-                (define-key shynur/drag-stuff-map (kbd "<down>")  #'drag-stuff-down)
-                (define-key shynur/drag-stuff-map (kbd "<up>")    #'drag-stuff-up)
-                (define-key shynur/drag-stuff-map (kbd "<right>") #'drag-stuff-right)
+                (define-key shynur/drag-stuff-map (kbd "M-<left>")  #'drag-stuff-left)
+                (define-key shynur/drag-stuff-map (kbd "M-<down>")  #'drag-stuff-down)
+                (define-key shynur/drag-stuff-map (kbd "M-<up>")    #'drag-stuff-up)
+                (define-key shynur/drag-stuff-map (kbd "M-<right>") #'drag-stuff-right)
                 shynur/drag-stuff-map))
             (progn
               (require 'repeat)

@@ -1,0 +1,8 @@
+# ~shynur/.emacs.d/docs/Emacs-regexp.org
+
+#+title: ELisp 中的正则表达式
+#+author: 谢骐 (Shynur)
+
+# Local Variables:
+# coding: utf-8-unix
+# End:

@@ -19,6 +19,7 @@
 /shynur/*
 !/shynur/clang-format.yaml
 !/shynur/machine.el
+!/shynur/org.el
 
 # Local Variables:
 # coding: utf-8-unix

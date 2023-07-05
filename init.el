@@ -110,24 +110,23 @@
  '(print-gensym t)
  '(print-integers-as-characters nil)
  '(major-mode 'text-mode)
- '(completion-list-mode-hook `(,@(when (boundp 'completion-list-mode-hook)
-                                   completion-list-mode-hook)
-                               (lambda ()
-                                 "把没用的minor mode都关了"
-                                 (make-thread (lambda ()
-                                                "关了‘highlight-changes-mode’和‘highlight-changes-visible-mode’会因为试图移除face导致报错"
-                                                (sleep-for 0.4)
-                                                (company-mode -1)
-                                                (electric-indent-local-mode -1)
-                                                (electric-quote-local-mode -1)
-                                                (page-break-lines-mode -1)
-                                                (indent-guide-mode -1)
-                                                (on-screen-mode -1))))
-                               (lambda ()
-                                 "1 screen line/一个条目"
-                                 (make-thread (lambda ()
-                                                (sleep-for 0.4)
-                                                (toggle-truncate-lines 1)))))
+ '(completion-list-mode-hook `(,@(bound-and-true-p 'completion-list-mode-hook)
+                               ,(lambda ()
+                                  "把没用的minor mode都关了"
+                                  (make-thread (lambda ()
+                                                 "关了‘highlight-changes-mode’和‘highlight-changes-visible-mode’会因为试图移除face导致报错"
+                                                 (sleep-for 0.4)
+                                                 (company-mode -1)
+                                                 (electric-indent-local-mode -1)
+                                                 (electric-quote-local-mode -1)
+                                                 (page-break-lines-mode -1)
+                                                 (indent-guide-mode -1)
+                                                 (on-screen-mode -1))))
+                               ,(lambda ()
+                                  "1 screen line/一个条目"
+                                  (make-thread (lambda ()
+                                                 (sleep-for 0.4)
+                                                 (toggle-truncate-lines 1)))))
                              nil (simple))
  '(marginalia-mode t
                    nil (marginalia)
@@ -926,8 +925,7 @@
                                     (/ (- (car (time-convert after-init-time 1000))
                                           (car (time-convert before-init-time 1000)))
                                        1000.0)))))
- '(makefile-gmake-mode-hook `(,@(when (boundp 'makefile-gmake-mode-hook)
-                                  makefile-gmake-mode-hook)
+ '(makefile-gmake-mode-hook `(,@(bound-and-true-p 'makefile-gmake-mode-hook)
                               ,(lambda ()
                                  (indent-tabs-mode)))
                             nil (make-mode))
@@ -1034,8 +1032,7 @@
                    nil (cc-mode))
  '(c-tab-always-indent t
                        nil (cc-mode))
- '(c-mode-common-hook `(,@(when (boundp 'c-mode-common-hook)
-                            c-mode-common-hook)
+ '(c-mode-common-hook `(,@(bound-and-true-p 'c-mode-common-hook)
                         ,(lambda ()
                            "换行不够智能"
                            (c-toggle-auto-newline -1))
@@ -1043,9 +1040,15 @@
                            "键入特定字符后,自动缩进当前行"
                            (c-toggle-electric-state 1)))
                       nil (cc-mode))
+ '(c-initialization-hook `(,@(bound-and-true-p 'c-initialization-hook)
+                           ,(lambda ()
+                              "写C宏时换行自动加反斜线;写注释时换行相当于“M-j”(‘c-indent-new-comment-line’)"
+                              (define-key c-mode-base-map "\C-m"
+                                #'c-context-line-break)))
+                         nil (cc-mode))
  '(comment-multi-line t
-                      nil (newcomment)
-                      "“M-j”时,“/* lines */”而不是“/* */ \n /* */”")
+                     nil (newcomment)
+                     "“M-j”时,“/* lines */”而不是“/* */ \n /* */”")
  '(blink-matching-paren t
                         nil (simple)
                         "功能之一是在echo area显示匹配的paren")
@@ -1073,8 +1076,7 @@
  '(electric-pair-open-newline-between-pairs t
                                             nil (elec-pair)
                                             "“{RET}”=>“{newline newline}”.(可考虑‘electric-layout-mode’作为替代方案:键入左paren自动补充右paren并换两行)")
- '(lisp-data-mode-hook `(,@(when (boundp 'lisp-data-mode-hook)
-                             lisp-data-mode-hook)
+ '(lisp-data-mode-hook `(,@(bound-and-true-p 'lisp-data-mode-hook)
                          ,(lambda ()
                             (setq-local electric-pair-open-newline-between-pairs nil))))
  '(display-fill-column-indicator-column t

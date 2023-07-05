@@ -1584,6 +1584,26 @@
 (global-unset-key (kbd "C-x 6")) ;‘2C-mode’相关的键
 (global-unset-key (kbd "C-x ;")) ;‘comment-set-column’
 
+(progn
+  (advice-add 'backward-kill-word :before-while
+              (lambda (&rest arguments)
+                "“<backspace>”"
+                (if (and (interactive-p)
+                         (= (cl-first arguments) 1))
+                    (let ((old-point (point)))
+                      (insert-char #x20)
+                      (c-hungry-backspace)
+                      (= old-point (point))))))
+  (advice-add 'kill-word :before-while
+              (lambda (&rest arguments)
+                "“M-d”"
+                (if (and (interactive-p)
+                         (= (cl-first arguments) 1))
+                    (let ((old-point (point)))
+                      (insert-char #x20)
+                      (backward-char)
+                      (c-hungry-delete-forward)
+                      (= old-point (point)))))))
 (let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
                                                 (concat
                                                  "\\`shynur[^[:alnum:]]" "\\|"

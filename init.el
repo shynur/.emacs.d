@@ -1600,11 +1600,11 @@
                 "“M-d”"
                 (if (and (interactive-p)
                          (= (cl-first arguments) 1))
-                    (let ((old-point (point)))
+                    (let ((old-size (buffer-size)))
                       (insert-char #x20)
                       (backward-char)
                       (c-hungry-delete-forward)
-                      (= old-point (point)))
+                      (= old-size (buffer-size)))
                   t))))
 (let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
                                                 (concat

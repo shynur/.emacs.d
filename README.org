@@ -14,7 +14,7 @@
 
 (由于 GitHub 对 Org 的支持孱弱, 故些许地方渲染效果不佳.)
 
-** 目录结构
+** 📖 目录结构
 
 #+begin_example
 ./
@@ -127,9 +127,9 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
    3. [ ] 在 文件末页指定 coding 为 utf-8-unix.
 2. [ ] [[file:./.dir-locals.el][=.dir-locals.el=]]
    1. [ ] 若为新目录, 要创建新的关联键值对.
-3. [ ] git :: [[file:./.gitignore][=.gitignore=]]
-4. [ ] [[目录结构][=README.org=]]
-5. [ ] make :: [[file:./GNUmakefile][=GNUmakefile=]]
+3. [ ] [[file:./.gitignore][=.gitignore=]]
+4. [ ] [[📖 目录结构][=README.org=]]
+5. [ ] [[file:./GNUmakefile][=GNUmakefile=]]
 
 * Repo Stats
 
@@ -143,7 +143,7 @@ Haven’t chosen one; I retain all rights to [[file:./][this repository]].
 
 -----
 
-Copyright © 2023 谢骐 <[[mailto:one.last.kiss@outlook.com][one.last.kiss@outlook.com]]>.  All rights reserved.
+Copyright \copy 2023 谢骐 <[[mailto:one.last.kiss@outlook.com][one.last.kiss@outlook.com]]>.  All rights reserved.
 
 # Local Variables:
 # coding: utf-8-unix

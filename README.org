@@ -1,9 +1,7 @@
 # ~shynur/.emacs.d/README.org
 
-#+title: Shynur’s Emacs
+#+title: Shynur’s Emacs [[https://raw.githubusercontent.com/shynur/misc/main/pictures/Emacs/icon.png]]
 #+author: 谢骐 (Shynur)
-
-[[https://git.savannah.gnu.org/cgit/emacs.git/plain/etc/images/icons/hicolor/128x128/apps/emacs.png]]
 
 * =~shynur/.emacs.d=
 

@@ -5,7 +5,7 @@
 clean:
 	rm --force --recursive .shynur/
 	rm --force             README.html
-	rm --force             docs/*.html
+	rm --force             docs/Emacs-regexp.html docs/Emacs-use_daemon.html
 	rm --force --recursive elpa/
 
 # Local Variables:

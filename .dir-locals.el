@@ -4,8 +4,9 @@
                      ("~\\'" . (ignore t))
                      ("#[[:alnum:]]*\\'" . (ignore t))
 
-                     ("/\\.dir-locals\\(-2\\)?\\.el\\'" . lisp-data-mode) ;(bug#64415)
+                     ;;(bug#64415)
                      ("/[^/-][^/]*\\.el\\'" . emacs-lisp-mode)
+                     ("/\\.dir-locals\\(-2\\)?\\.el\\'" . lisp-data-mode)
 
                      ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'" . markdown-mode)
                      ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.org\\'" . org-mode)

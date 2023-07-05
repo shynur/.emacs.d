@@ -1,8 +1,9 @@
 ;;; ~shynur/.emacs.d/early-init.el --- Part of Shynur’s Emacs Configuration  -*- lexical-binding: t; -*-
 
 (setq gc-cons-threshold 100000000
-      gc-cons-percentage 0.36789
-      load-prefer-newer nil)
+      gc-cons-percentage 0.36789)
+
+(setq load-prefer-newer nil)
 
 (make-directory "~/.emacs.d/.shynur/" t)
 

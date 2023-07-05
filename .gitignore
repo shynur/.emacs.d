@@ -12,6 +12,7 @@
 
 !/docs/
 /docs/*
+!/docs/Emacs-regexp.org
 !/docs/Emacs-use_daemon.md
 
 !/shynur/

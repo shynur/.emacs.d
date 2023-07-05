@@ -1586,11 +1586,11 @@
 
 (let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
                                                 (concat
-                                                 "^shynur[^[:alnum:]]" "\\|"
+                                                 "\\`shynur[^[:alnum:]]" "\\|"
                                                  "\\(" regexp "\\)")) '(;;滤除‘prefix--*’
-                                                                        "^-?\\([^-]+-?\\)*$"
+                                                                        ;"\\`-?\\([^-]+-?\\)*$"
                                                                         ;;滤除‘*-internal’
-                                                                        "\\(^\\|[^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)$")))
+                                                                        "\\(\\`\\|[^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)\\'")))
       (functions-for-completion [try-completion
                                  test-completion
                                  all-completions]))
@@ -1763,6 +1763,8 @@
   (set-text-properties beginning end
                        (text-properties-at same-as-where)))
 
+(require 'shynur/org "~/.emacs.d/shynur/org.el")
+
 ;;; End of Code
 
 ;; Local Variables:

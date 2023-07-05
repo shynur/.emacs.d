@@ -1593,7 +1593,8 @@
                     (let ((old-point (point)))
                       (insert-char #x20)
                       (c-hungry-backspace)
-                      (= old-point (point))))))
+                      (= old-point (point)))
+                  t)))
   (advice-add 'kill-word :before-while
               (lambda (&rest arguments)
                 "“M-d”"
@@ -1603,7 +1604,8 @@
                       (insert-char #x20)
                       (backward-char)
                       (c-hungry-delete-forward)
-                      (= old-point (point)))))))
+                      (= old-point (point)))
+                  t))))
 (let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
                                                 (concat
                                                  "\\`shynur[^[:alnum:]]" "\\|"

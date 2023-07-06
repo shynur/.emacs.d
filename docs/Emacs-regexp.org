@@ -1,8 +1,45 @@
 # ~shynur/.emacs.d/docs/Emacs-regexp.org
 
-#+title: ELisp 中的正则表达式
+#+title: ELisp 中的 /正则表达式/
 #+author: 谢骐 (Shynur)
 
-# Local Variables:
+* Syntax
+
+字符分为两类.  一类是 /ordinary/ 的; 除此以外皆为 special construct:
+- ‘​=.=​’, ‘​=*=​’, ‘​=+=​’, ‘​=?=​’, ‘​=[=​’, ‘​=^=​’, ‘​=$=​’, ‘​=\=​’;
+  未来不会再新增了.
+- ‘​=]=​’, ‘​=-=​’, ‘​=[:=​’&‘​=:]=​’ 有时特殊.
+- 跟在 ‘​=\=​’ 后的字符.
+
+** Special Characters
+
+*** ‘​=.=​’                                                         :construct:
+
+匹配任何字符, *除了* newline.
+
+*** ‘​=*=​’                                                  :postfix_operator:
+
+/尽可能多地/ (0\tilde\infty) 重复前一个 /最小的/ regexp.
+
+机制: 这个 matcher 先尽量多匹配, 当后续 regexp 匹配失败后再回溯.
+
+*** ‘​=+=​’                                                  :postfix_operator:
+
+与 [[‘​=*=​’][‘​=*=​’]] 类似, 但 /至少/ 匹配一次.
+
+*** ‘​=?=​’                                                  :postfix_operator:
+
+与 [[‘​=*=​’][‘​=*=​’]] 类似, 但 /至多/ 匹配一次.
+
+*** ‘​=*?=​’, ‘​=+?=​’, ‘​=??=​’                                 :postfix_operator:
+
+分别是 [[‘​=*=​’][‘​=*=​’]], [[‘​=+=​’][‘​=+=​’]], [[‘​=?=​’][‘​=?=​’]] 的 /non-greedy/ 变体.
+它们 /尽可能少地/ 重复.
+
+*** ‘​=[...]=​’                                         :character_alternative:
+
+http://localhost/elisp/Regexp-Special.html#index-character-alternative-_0028in-regexp_0029
+
+# local Variables:
 # coding: utf-8-unix
 # End:

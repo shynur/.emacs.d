@@ -110,7 +110,7 @@
  '(print-gensym t)
  '(print-integers-as-characters nil)
  '(major-mode 'text-mode)
- '(completion-list-mode-hook `(,@(bound-and-true-p 'completion-list-mode-hook)
+ '(completion-list-mode-hook `(,@(bound-and-true-p completion-list-mode-hook)
                                ,(lambda ()
                                   "把没用的minor mode都关了"
                                   (make-thread (lambda ()
@@ -925,7 +925,7 @@
                                     (/ (- (car (time-convert after-init-time 1000))
                                           (car (time-convert before-init-time 1000)))
                                        1000.0)))))
- '(makefile-gmake-mode-hook `(,@(bound-and-true-p 'makefile-gmake-mode-hook)
+ '(makefile-gmake-mode-hook `(,@(bound-and-true-p makefile-gmake-mode-hook)
                               ,(lambda ()
                                  (indent-tabs-mode)))
                             nil (make-mode))
@@ -1032,7 +1032,7 @@
                    nil (cc-mode))
  '(c-tab-always-indent t
                        nil (cc-mode))
- '(c-mode-common-hook `(,@(bound-and-true-p 'c-mode-common-hook)
+ '(c-mode-common-hook `(,@(bound-and-true-p c-mode-common-hook)
                         ,(lambda ()
                            "换行不够智能"
                            (c-toggle-auto-newline -1))
@@ -1040,7 +1040,7 @@
                            "键入特定字符后,自动缩进当前行"
                            (c-toggle-electric-state 1)))
                       nil (cc-mode))
- '(c-initialization-hook `(,@(bound-and-true-p 'c-initialization-hook)
+ '(c-initialization-hook `(,@(bound-and-true-p c-initialization-hook)
                            ,(lambda ()
                               "写C宏时换行自动加反斜线;写注释时换行相当于“M-j”(‘c-indent-new-comment-line’)"
                               (define-key c-mode-base-map "\C-m"
@@ -1076,7 +1076,7 @@
  '(electric-pair-open-newline-between-pairs t
                                             nil (elec-pair)
                                             "“{RET}”=>“{newline newline}”.(可考虑‘electric-layout-mode’作为替代方案:键入左paren自动补充右paren并换两行)")
- '(lisp-data-mode-hook `(,@(bound-and-true-p 'lisp-data-mode-hook)
+ '(lisp-data-mode-hook `(,@(bound-and-true-p lisp-data-mode-hook)
                          ,(lambda ()
                             (setq-local electric-pair-open-newline-between-pairs nil))))
  '(display-fill-column-indicator-column t
@@ -1586,28 +1586,26 @@
 (global-unset-key (kbd "C-x 6")) ;‘2C-mode’相关的键
 (global-unset-key (kbd "C-x ;")) ;‘comment-set-column’
 
-(progn
-  (advice-add 'backward-kill-word :before-while
-              (lambda (&rest arguments)
-                "“<backspace>”"
-                (if (and (interactive-p)
-                         (= (cl-first arguments) 1))
-                    (let ((old-point (point)))
-                      (insert-char #x20)
-                      (c-hungry-backspace)
-                      (= old-point (point)))
-                  t)))
-  (advice-add 'kill-word :before-while
-              (lambda (&rest arguments)
-                "“M-d”"
-                (if (and (interactive-p)
-                         (= (cl-first arguments) 1))
-                    (let ((old-size (buffer-size)))
-                      (insert-char #x20)
-                      (backward-char)
-                      (c-hungry-delete-forward)
-                      (= old-size (buffer-size)))
-                  t))))
+;; (progn
+;;   (advice-add 'backward-kill-word :before-while
+;;               (lambda (&rest arguments)
+;;                 "“<backspace>”"
+;;                 (if (and (interactive-p)
+;;                          (= (cl-first arguments) 1))
+;;                     (let ((old-point (point)))
+;;                       ...
+;;                   t)))
+;;   (advice-add 'kill-word :before-while
+;;               (lambda (&rest arguments)
+;;                 "“M-d”"
+;;                 (if (and (interactive-p)
+;;                          (= (cl-first arguments) 1))
+;;                     (let ((old-size (buffer-size)))
+;;                       (insert-char #x20)
+;;                       (backward-char)
+;;                       (c-hungry-delete-forward)
+;;                       (= old-size (buffer-size)))
+;;                   t))))
 (let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
                                                 (concat
                                                  "\\`shynur[^[:alnum:]]" "\\|"

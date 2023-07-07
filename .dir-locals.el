@@ -37,8 +37,8 @@
                                                  (let ((default-directory "~/.emacs.d/"))
                                                    (delete-file "README.html")
                                                    (delete-file "README.html~")
-                                                   (delete-file "docs/Emacs-regexp.html") (delete-file "docs/Emacs-regexp.html~")
-                                                   (delete-file "docs/Emacs-use_daemon.html") (delete-file "docs/Emacs-use_daemon.html~")))))
+                                                   (delete-file "docs/Emacs-regexp.html") (delete-file "docs/Emacs-regexp.html~") (delete-file "docs/Emacs-regexp.tex") (delete-file "docs/Emacs-regexp.tex~")
+                                                   (delete-file "docs/Emacs-use_daemon.html") (delete-file "docs/Emacs-use_daemon.html~") (delete-file "docs/Emacs-use_daemon.tex") (delete-file "docs/Emacs-use_daemon.tex~")))))
 
          (prettify-symbols-alist . (("lambda" . ?λ)))
          (mode . prettify-symbols)

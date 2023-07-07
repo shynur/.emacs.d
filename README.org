@@ -116,6 +116,7 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 - [ ] 添加一个 minor mode ~shynur/shynur-global-mode~, 以 ~shynur/shynur-global-mode-hook~ 作为 +~fundamental-mode-hook~+ 的替代方案.
   - [ ] 在 hook 中加入对 =*scratch*= 的定制: 默认目录.
 - [ ] 设置一个 fontset, 解决 Org 中某些区域, 中文无法显示 及 emoji 无法显示的问题.
+- [ ] =.gitignore= 设置 outline
 
 ** TODO shynur/BUG
 1. [ ] company: "clang failed with error 255".

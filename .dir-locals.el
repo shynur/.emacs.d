@@ -70,7 +70,9 @@
 
  (markdown-mode . ((eval . (imenu-add-menubar-index))))
 
- (org-mode . ((eval . (imenu-add-menubar-index))))
+ (org-mode . ((eval . (imenu-add-menubar-index))
+
+              (org-descriptive-links . nil)))
 
  (makefile-gmake-mode . ((eval . (imenu-add-menubar-index))
                          (mode . indent-tabs)))

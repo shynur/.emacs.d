@@ -2,6 +2,8 @@
 
 (setq-default org-descriptive-links nil) ;展开link.
 
+(setq-default org-support-shift-select t)
+
 (add-hook 'org-mode-hook (lambda ()
                            "有续行"
                            (toggle-truncate-lines 0)))

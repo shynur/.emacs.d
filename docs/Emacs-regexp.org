@@ -361,6 +361,8 @@ N.b., 编号只分配到个位数, 分完即止.
 * Problems
 
 -----
+Copyright \copy 2023 Shynur [[mailto:one.last.kiss@outlook.com][one.last.kiss@outlook.com]].  All rights reserved.
+-----
 
 # Local Variables:
 # coding: utf-8-unix

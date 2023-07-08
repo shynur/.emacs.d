@@ -1511,9 +1511,11 @@
                                      (remove-hook 'server-after-make-frame-hook shynur--custom-set-faces))))
   (add-hook 'server-after-make-frame-hook shynur--custom-set-faces))
 
-(global-unset-key (kbd "C-h C-c"))
 (global-unset-key (kbd "C-h g"))
 (global-unset-key (kbd "C-h h"))
+(global-unset-key (kbd "C-h t"))
+(global-unset-key (kbd "C-h C-a"))
+(global-unset-key (kbd "C-h C-c"))
 (global-unset-key (kbd "C-h C-m"))
 (global-unset-key (kbd "C-h C-o"))
 (global-unset-key (kbd "C-h C-t"))
@@ -1586,53 +1588,63 @@
 (global-unset-key (kbd "C-x 6")) ;‘2C-mode’相关的键
 (global-unset-key (kbd "C-x ;")) ;‘comment-set-column’
 
-;; (progn
-;;   (advice-add 'backward-kill-word :before-while
-;;               (lambda (&rest arguments)
-;;                 "“<backspace>”"
-;;                 (if (and (interactive-p)
-;;                          (= (cl-first arguments) 1))
-;;                     (let ((old-point (point)))
-;;                       ...
-;;                   t)))
-;;   (advice-add 'kill-word :before-while
-;;               (lambda (&rest arguments)
-;;                 "“M-d”"
-;;                 (if (and (interactive-p)
-;;                          (= (cl-first arguments) 1))
-;;                     (let ((old-size (buffer-size)))
-;;                       (insert-char #x20)
-;;                       (backward-char)
-;;                       (c-hungry-delete-forward)
-;;                       (= old-size (buffer-size)))
-;;                   t))))
+(progn
+  (advice-add 'backward-kill-word :before-while
+              (lambda (arg)
+                "前面顶多只有空白字符 或 后面顶多只有空白字符且前面有空白字符 时,删除前方所有空白"
+                (if (and (interactive-p)  ;只在使用键盘且
+                         (= 1 arg)        ;没有前缀参数时执行
+                         (or (save-match-data
+                               (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=")))
+                             (and (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
+                                  (save-match-data
+                                    (looking-back (concat search-whitespace-regexp "\\="))))))
+                    (prog1 nil
+                      (c-hungry-delete))
+                  t)))
+  (advice-add 'kill-word :before-while
+              (lambda (arg)
+                "后面顶多只有空白字符 或 前面顶多只有空白字符且后面有空白字符 时,删除后面所有空白"
+                (if (and (interactive-p)  ;只在使用键盘且
+                         (= 1 arg)        ;没有前缀参数时执行
+                         (or (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
+                             (and (save-match-data
+                                    (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=")))
+                                  (looking-at-p (concat "\\=" search-whitespace-regexp)))))
+                    (prog1 nil
+                      (c-hungry-delete-forward))
+                  t))))
 (let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
                                                 (concat
-                                                 "\\`shynur[^[:alnum:]]" "\\|"
-                                                 "\\(" regexp "\\)")) '(;;滤除‘prefix--*’
-                                                                        ;"\\`-?\\([^-]+-?\\)*$"
-                                                                        ;;滤除‘*-internal’
-                                                                        "\\(\\`\\|[^l]\\|[^a]l\\|[^n]al\\|[^r]nal\\|[^e]rnal\\|[^t]ernal\\|[^n]ternal\\|[^i]nternal\\|[^-]internal\\)\\'")))
+                                                 "\\(" regexp "\\)"
+                                                 "\\|\\`shynur[^[:alnum:]]")) '(;;滤除‘prefix--*’(i.e.,不允许两个“-”连续出现)
+                                                                                "\\`-?\\([^-]+\\(-[^-]+\\)*-?\\)?\\'"
+                                                                                ;;滤除‘*-internal’(i.e.,不允许出现“-internal”)
+                                                                                "\\(\\(\\`\\|[^l]\\)\\|\\(\\`\\|[^a]\\)l\\|\\(\\`\\|[^n]\\)al\\|\\(\\`\\|[^r]\\)nal\\|\\(\\`\\|[^e]\\)rnal\\|\\(\\`\\|[^t]\\)ernal\\|\\(\\`\\|[^n]\\)ternal\\|\\(\\`\\|[^i]\\)nternal\\|\\(\\`\\|[^-]\\)internal\\)\\'")))
       (functions-for-completion [try-completion
                                  test-completion
                                  all-completions]))
   (seq-doseq (key ["C-h f"
+                   "C-h o"
                    "C-h v"
+                   "C-h w"
+                   "C-h x"
                    "M-x"])
     (let ((key-original-function (keymap-global-lookup key)))
       (global-set-key (kbd key) (lambda ()
                                   "(bug#64351#20)"
                                   (interactive)
-                                  (let ((completion-regexp-list+shynur--completion-regexp-list `(,@completion-regexp-list
-                                                                                                 ,@shynur--completion-regexp-list)))
-                                    (seq-doseq (funtion-for-completion functions-for-completion)
-                                      (advice-add funtion-for-completion :around
-                                                  (lambda (advised-function &rest arguments)
-                                                    (let ((completion-regexp-list completion-regexp-list+shynur--completion-regexp-list))
-                                                      (apply advised-function
-                                                             arguments))) '((name . "shynur--let-bind-completion-regexp-list")))))
                                   (unwind-protect
-                                      (call-interactively key-original-function)
+                                      (progn
+                                        (let ((completion-regexp-list+shynur--completion-regexp-list `(,@completion-regexp-list
+                                                                                                       ,@shynur--completion-regexp-list)))
+                                          (seq-doseq (funtion-for-completion functions-for-completion)
+                                            (advice-add funtion-for-completion :around
+                                                        (lambda (advised-function &rest arguments)
+                                                          (let ((completion-regexp-list completion-regexp-list+shynur--completion-regexp-list))
+                                                            (apply advised-function
+                                                                   arguments))) '((name . "shynur--let-bind-completion-regexp-list")))))
+                                        (call-interactively key-original-function))
                                     (seq-doseq (funtion-for-completion functions-for-completion)
                                       (advice-remove funtion-for-completion "shynur--let-bind-completion-regexp-list"))))))))
 (progn

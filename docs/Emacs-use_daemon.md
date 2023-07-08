@@ -51,6 +51,10 @@ Emacs 提供了 daemon-client 模型, 简而言之就像 QQ 那样: 在后台启
 (setq file-name-coding-system 'chinese-gb18030)
 ```
 
+___
+
+Copyright &copy; 2023 [谢骐](https://github.com/shynur) \<<one.last.kiss@outlook.com>\>.  All rights reserved.
+
 <!-- Local Variables: -->
 <!-- coding: utf-8-unix -->
 <!-- End: -->

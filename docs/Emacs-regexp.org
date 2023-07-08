@@ -1,7 +1,7 @@
 # ~shynur/.emacs.d/docs/Emacs-regexp.org
 
 #+title: ELisp 中的正则表达式 (regexp)
-#+author: Shynur
+#+author: 谢骐 (shynur)
 #+email: one.last.kiss@outlook.com
 
 * Syntax
@@ -197,10 +197,10 @@ Character classes 被用在 [[‘​=\[...\]=​’][‘​=[...]=​’]] 中.
 显式地给被匹配的 substring 分配的一个编号.
 
 *** ‘​=\=​/=digit=/​’
-**** /digit/ 是如何分配的?
+**** /=digit=/ 是如何分配的?
 
 Regexp 中的 [[‘​=\(...\)=​’][‘​=\(...\)=​’]] 会按出现的顺序 (只看顺序, 所以嵌套的 [[‘​=\(...\)=​’][‘​=\(...\)=​’]] 能被识别), 被隐式地分配一个编号 (使用序数词, i.e., 从 1 开始); \\
-若有必要, [[‘​=\(?:...\)=​’, ‘​=\(?=​/=num=/​=:...\)=​’][‘​=\(?=​/=num=/​=:...\)=​’]] 会覆盖已经存在的编号 /num/; \\
+若有必要, [[‘​=\(?:...\)=​’, ‘​=\(?=​/=num=/​=:...\)=​’][‘​=\(?=​/=num=/​=:...\)=​’]] 会覆盖已经存在的编号 /=num=/; \\
 每次被隐式分配的编号, 会比先前已经分配的最大编号大 1.
 
 如果类似 [[‘​=\(...\)=​’][‘​=\(...\)=​’]] 这样的结构被重复了多次 (e.g., =\(a\|b\)+=), 则仅为最后一次匹配的 substring 分配编号.
@@ -212,7 +212,7 @@ N.b., 编号只分配到个位数, 分完即止.
 
 例如, =\(.+\)\1= 匹配同一行[fn::[[‘​=.=​’][‘​=.=​’]] 不匹配 newline.]中前半段与后半段一致的非空 string.
 
-若 /digit/ 没有被分配, 则 =\=​/=digit=/ 永不匹配.  \\
+若 /=digit=/ 没有被分配, 则 =\=​/=digit=/ 永不匹配.  \\
 例如 =\(one\(two\)\|three\)\2= 永远不会匹配 =three=, 因为当尝试匹配 =three= 时, 表达式中已经没有剩余的 [[‘​=\(...\)=​’][‘​=\(...\)=​’]] 了, 则代表永不匹配的 =\2= 会直接导致匹配失败:
 #+BEGIN_SRC emacs-lisp
 (string-match-p "\\(one\\(two\\)\\|three\\)\\2" "three")
@@ -233,8 +233,8 @@ N.b., 编号只分配到个位数, 分完即止.
 
 *** ‘​=\s=​/=code=/​’, ‘​=\S=​/=code=/​’
 
-前者匹配符合 /code/ syntax 的字符 (see [[info:elisp#Table of Syntax Classes][Table of Syntax Classes]]).[fn:Emacs]  \\
-因此, /code/ 处填写
+前者匹配符合 /=code=/ syntax 的字符 (see [[info:elisp#Table of Syntax Classes][Table of Syntax Classes]]).[fn:Emacs]  \\
+因此, /=code=/ 处填写
 - ‘​=w=​’ 以匹配 [[‘​=\w=​’, ‘​=\W=​’][word constituent]].
 - ‘​=-=​’ (或 一个空格) 以匹配 whitespace.
 - ‘​=(=​’ 以匹配 open parenthesis.
@@ -244,8 +244,8 @@ N.b., 编号只分配到个位数, 分完即止.
 
 *** ‘​=\c=​/=c=/​’, ‘​=\C=​/=c=/​’
 
-前者匹配 whose category is /c/ 的字符 (see [[info:elisp#Categories][Categories]]).[fn:Emacs]  \\
-因此, /c/ 处填写
+前者匹配 whose category is /=c=/ 的字符 (see [[info:elisp#Categories][Categories]]).[fn:Emacs]  \\
+因此, /=c=/ 处填写
 - ‘​=c=​’ 以匹配 汉字.
 - ‘​=g=​’ 以匹配 希腊字母.
 - etc.
@@ -361,7 +361,7 @@ N.b., 编号只分配到个位数, 分完即止.
 * Problems
 
 -----
-Copyright \copy 2023 Shynur [[mailto:one.last.kiss@outlook.com][one.last.kiss@outlook.com]].  All rights reserved.
+Copyright \copy 2023 [[https://github.com/shynur][谢骐]] <[[mailto:one.last.kiss@outlook.com][one.last.kiss@outlook.com]]>.  All rights reserved.
 -----
 
 # Local Variables:

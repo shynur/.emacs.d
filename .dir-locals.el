@@ -6,7 +6,7 @@
 
                      ;;(bug#64415)
                      ("/[^/-][^/]*\\.el\\'" . emacs-lisp-mode)
-                     ("/\\.dir-locals\\(-2\\)?\\.el\\'" . lisp-data-mode)
+                     ("/\\.dir-locals\\.el\\'" . lisp-data-mode) ;“.dir-locals-2.el”不在本仓库的考虑范围内
 
                      ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'" . markdown-mode)
                      ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.org\\'" . org-mode)
@@ -15,7 +15,7 @@
                      ("/\\.gitignore\\'" . gitignore-mode)
                      ("/\\(\\(\\(GNU\\)?m\\)\\|M\\)akefile\\'" . makefile-gmake-mode)))
 
- (nil . ((outline-minor-mode-cycle . [tab ?\S-\t])
+ (nil . ((outline-minor-mode-cycle . t)
          (outline-minor-mode-prefix . [nil])
 
          (sentence-end-double-space . t)
@@ -37,8 +37,14 @@
                                                  (let ((default-directory "~/.emacs.d/"))
                                                    (delete-file "README.html")
                                                    (delete-file "README.html~")
-                                                   (delete-file "docs/Emacs-regexp.html") (delete-file "docs/Emacs-regexp.html~") (delete-file "docs/Emacs-regexp.tex") (delete-file "docs/Emacs-regexp.tex~")
-                                                   (delete-file "docs/Emacs-use_daemon.html") (delete-file "docs/Emacs-use_daemon.html~") (delete-file "docs/Emacs-use_daemon.tex") (delete-file "docs/Emacs-use_daemon.tex~")))))
+                                                   (delete-file "docs/Emacs-regexp.html")
+                                                   (delete-file "docs/Emacs-regexp.html~")
+                                                   (delete-file "docs/Emacs-regexp.tex")
+                                                   (delete-file "docs/Emacs-regexp.tex~")
+                                                   (delete-file "docs/Emacs-regexp.pdf")
+                                                   (delete-file "docs/Emacs-use_daemon.html")
+                                                   (delete-file "docs/Emacs-use_daemon.html~")
+                                                   (delete-file "docs/Emacs-use_daemon.pdf")))))
 
          (prettify-symbols-alist . (("lambda" . ?λ)))
          (mode . prettify-symbols)
@@ -72,9 +78,19 @@
 
  (org-mode . ((eval . (imenu-add-menubar-index))
 
-              (org-descriptive-links . nil)))
+              (org-link-descriptive . nil)))
+
+ (gitignore-mode . ((outline-regexp . "^#outline:[[:blank:]]*\\([[:blank:]]*\\|[[:blank:]]+\\([._[:alpha:]][._[:alnum:]-]*/\\)+\\)[[:blank:]]*$")
+                    (outline-level . (lambda ()
+                                       (let ((slash-amount 0))
+                                         (seq-doseq (character (match-string-no-properties 1))
+                                           (when (char-equal character ?/)
+                                             (cl-incf slash-amount)))
+                                         slash-amount)))
+                    (mode . outline-minor)))
 
  (makefile-gmake-mode . ((eval . (imenu-add-menubar-index))
+
                          (mode . indent-tabs)))
 
  (nil . ((subdirs . nil)

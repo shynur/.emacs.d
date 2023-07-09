@@ -87,7 +87,14 @@
                                            (when (char-equal character ?/)
                                              (cl-incf slash-amount)))
                                          slash-amount)))
-                    (mode . outline-minor)))
+                    (mode . outline-minor)
+
+                    ;;(shynur/TODO)有持久性副作用,需要被优化
+                    (eval . (define-key gitignore-mode-map (kbd "TAB")
+                              (lambda ()
+                                (interactive)
+                                (back-to-indentation)
+                                (delete-horizontal-space))))))
 
  (makefile-gmake-mode . ((eval . (imenu-add-menubar-index))
 

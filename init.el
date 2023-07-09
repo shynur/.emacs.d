@@ -1364,6 +1364,10 @@
  '(recentf-save-file (shynur/pathname-~/.emacs.d/.shynur/
                       "recentf-save-file.el")
                      nil (recentf))
+ '(recentf-max-saved-items most-positive-fixnum
+                           nil (recentf))
+ '(recentf-max-menu-items 30
+                          nil (recentf))
  '(filesets-menu-cache-file (shynur/pathname-~/.emacs.d/.shynur/
                              "filesets-menu-cache-file.el")
                             nil (filesets))
@@ -1514,6 +1518,7 @@
 (global-unset-key (kbd "C-h C-c"))
 (global-unset-key (kbd "C-h C-m"))
 (global-unset-key (kbd "C-h C-o"))
+(global-unset-key (kbd "C-h C-p"))
 (global-unset-key (kbd "C-h C-t"))
 (global-unset-key (kbd "C-h C-w"))
 (global-unset-key (kbd "C-M-S-l")) ;‘recenter-other-window’

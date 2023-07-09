@@ -80,9 +80,9 @@
 
               (org-link-descriptive . nil)))
 
- (gitignore-mode . ((outline-regexp . "^#outline:[[:blank:]]*\\([[:blank:]]*\\|[[:blank:]]+\\([._[:alpha:]][._[:alnum:]-]*/\\)+\\)[[:blank:]]*$")
+ (gitignore-mode . ((outline-regexp . "^#outline:[[:blank:]]+/\\(\\([._[:alpha:]][._[:alnum:]-]*/\\)*\\)")
                     (outline-level . (lambda ()
-                                       (let ((slash-amount 0))
+                                       (let ((slash-amount 1))
                                          (seq-doseq (character (match-string-no-properties 1))
                                            (when (char-equal character ?/)
                                              (cl-incf slash-amount)))

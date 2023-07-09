@@ -1,25 +1,25 @@
 ### ~shynur/.emacs.d/.gitignore
 
-#outline: ./
+#outline: /.
 /*
-!/docs/
-!/shynur/
 !/.dir-locals.el
 !/.gitignore
 !/GNUmakefile
 !/README.org
+!/docs/
 !/early-init.el
 !/init.el
-#outline: ./docs/
+!/shynur/
+#outline: /docs/.
 /docs/*
 !/docs/Emacs-regexp.org
 !/docs/Emacs-use_daemon.md
-#outline: ./shynur/
+#outline: /shynur/.
 /shynur/*
 !/shynur/clang-format.yaml
 !/shynur/machine.el
 !/shynur/org.el
-#outline:
+#outline: /.
 
 # Local Variables:
 # coding: utf-8-unix

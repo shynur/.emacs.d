@@ -279,7 +279,6 @@ N.b., 编号只分配到个位数, 分完即止.
 
 如下是 Emacs 曾经用来匹配 句尾 (可能尾随 whitespace) 的 regexp:
     : [.?!][]'")}]*\($\| $\|Tab\|  \)[ TabNewline]*
-
 其中, 空白处指代空格, =Tab= 指代 tab 字符 =\t=, =Newline= 指代 newline 字符 =\n=.
 
 这个例子可以用 [[~rx~\[fn:Emacs\]: 结构化 regexp 标记法][~rx~]] 标记法编写:

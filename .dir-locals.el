@@ -1,12 +1,12 @@
 ;;; ~shynur/.emacs.d/.dir-locals.el
 
-((auto-mode-alist . (;;有些设置是多余的,但出于教学/参考的目的,保留下来
+((auto-mode-alist . (;; 有些设置是多余的,但出于教学/参考的目的,保留下来
                      ("~\\'" . (ignore t))
                      ("#[[:alnum:]]*\\'" . (ignore t))
 
-                     ;;(bug#64415)
+                     ;; (bug#64415)
                      ("/[^/-][^/]*\\.el\\'" . emacs-lisp-mode)
-                     ("/\\.dir-locals\\.el\\'" . lisp-data-mode) ;“.dir-locals-2.el”不在本仓库的考虑范围内
+                     ("/\\.dir-locals\\.el\\'" . lisp-data-mode)  ; “.dir-locals-2.el”不在本仓库的考虑范围内
 
                      ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'" . markdown-mode)
                      ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.org\\'" . org-mode)
@@ -89,7 +89,7 @@
                                          slash-amount)))
                     (mode . outline-minor)
 
-                    ;;(shynur/TODO)有持久性副作用,需要被优化
+                    ;; (shynur/TODO)有持久性副作用,需要被优化
                     (eval . (define-key gitignore-mode-map (kbd "TAB")
                               (lambda ()
                                 (interactive)

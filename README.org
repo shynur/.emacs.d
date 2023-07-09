@@ -138,13 +138,13 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 
 * LICENSE
 
-Haven’t chosen one; I retain all rights to [[file:./][this repository]].
+Haven’t chosen one; I retain all rights to [[https://github.com/shynur/.emacs.d][this repository]].
 
 /Will/ include an open source license someday in the future when I’ve learned enough about open source licenses.
 
 -----
 
-Copyright \copy 2023 谢骐 <[[mailto:one.last.kiss@outlook.com][one.last.kiss@outlook.com]]>.  All rights reserved.
+Copyright \copy 2023 [[https://github.com/shynur][谢骐]] <[[mailto:one.last.kiss@outlook.com][one.last.kiss@outlook.com]]>.  All rights reserved.
 
 # Local Variables:
 # coding: utf-8-unix

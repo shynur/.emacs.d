@@ -55,7 +55,7 @@
                     3 (package)
                     "[1]其它ELPA中的包会依赖gnu中的包[2]nongnu是官方维护的[3]MELPA滚动升级,收录的包的数量最大[4]stable-melpa依据源码的Tag(Git)升级,数量比MELPA少,因为很多包作者根本不打Tag[5]Org仅仅为了org-plus-contrib这一个包,Org重度用户使用[6]gnu-devel收录GNU中的包的开发中版本,一般不必启用(类似于MELPA与stable-melpa的关系)[7]nongnu-devel收录nongnu中的包的开发中版本,一般不必启用")
  '(package-selected-packages (progn
-                               ;;摘编自<https://orgmode.org/elpa.html>
+                               ;; 摘编自<https://orgmode.org/elpa.html>
                                (let (message-log-max)
                                  (ignore-errors
                                    '(package-refresh-contents)))
@@ -900,7 +900,7 @@
                         ,(lambda ()
                            (progn
                              (require 'register)
-                             ;;见‘register-separator’
+                             ;; 见‘register-separator’
                              (set-register (progn
                                              (require 'register)
                                              register-separator) "\n\n")
@@ -1017,7 +1017,7 @@
  '(c-mode-common-hook `(,@c-mode-common-hook
                         ,(lambda ()
                            (c-set-offset 'case-label '+))
-                        ;;只保留当前编译环境下,生效的ifdef从句
+                        ;; 只保留当前编译环境下,生效的ifdef从句
                         ,(lambda ()
                            (hide-ifdef-mode)))
                       nil (cc-mode))
@@ -1521,80 +1521,80 @@
 (global-unset-key (kbd "C-h C-p"))
 (global-unset-key (kbd "C-h C-t"))
 (global-unset-key (kbd "C-h C-w"))
-(global-unset-key (kbd "C-M-S-l")) ;‘recenter-other-window’
-(global-unset-key (kbd "C-x s")) ;‘save-some-buffers’
-(global-unset-key (kbd "C-x C-o")) ;删除附近空行
-(global-unset-key (kbd "C-S-<backspace>")) ;删除一整行及其换行符
-(global-unset-key (kbd "C-x DEL")) ;kill至行首
-(global-unset-key (kbd "M-k")) ;kill至句尾
-(global-unset-key (kbd "M-z")) ;‘zap-to-char’一帧就删完了,动作太快 反应不过来
-(global-unset-key (kbd "C-M-w")) ;强制合并两次kill,使其变成‘kill-ring’上的一个字符串
-(global-unset-key (kbd "C-x >")) ;‘scroll-right’
-(global-unset-key (kbd "C-x <")) ;‘scroll-left’
-(global-unset-key (kbd "C-x n p")) ;‘narrow-to-page’
-(global-unset-key (kbd "C-x n d")) ;‘narrow-to-defun’
-(global-unset-key (kbd "C-x C-+")) ;‘text-scale-adjust’
-(global-unset-key (kbd "C-x C-=")) ;‘text-scale-adjust’
-(global-unset-key (kbd "C-x C--")) ;‘text-scale-adjust’
-(global-unset-key (kbd "C-x C-0")) ;‘text-scale-adjust’
-(global-unset-key (kbd "M-s h w")) ;‘hi-lock-write-interactive-patterns’
-(global-unset-key (kbd "M-s h f")) ;‘hi-lock-find-patterns’
-(global-unset-key (kbd "C-M-i")) ;‘ispell-complete-word’
-(global-unset-key (kbd "C-x C-v")) ;‘find-alternate-file’
-(global-unset-key (kbd "C-x m")) ;‘compose-mail’
-(global-unset-key (kbd "C-x <left>")) ;‘previous-buffer’
-(global-unset-key (kbd "C-x <right>")) ;‘next-buffer’
-(global-unset-key (kbd "C-x C-q")) ;‘read-only-mode’
-(global-unset-key (kbd "C-<down-mouse-1>")) ;‘mouse-buffer-menu’
-(global-unset-key (kbd "C-<down-mouse-3>")) ;右键菜单式(context-menu)的mode-specific menubar
-(global-unset-key (kbd "C-x 4 0")) ;‘kill-buffer-and-window’
-(global-unset-key (kbd "C-x 4 f")) ;‘find-file-other-window’
-(global-unset-key (kbd "C-x 5 f")) ;‘find-file-other-frame’
-(global-unset-key (kbd "C-x 5 C-f")) ;‘find-file-other-frame’
-(global-unset-key (kbd "C-x 5 C-o")) ;‘display-buffer-other-frame’
-(global-unset-key (kbd "C-x 5 b")) ;‘switch-to-buffer-other-frame’
-(global-unset-key (kbd "C-x 5 d")) ;‘dired-other-frame’
-(global-unset-key (kbd "C-x 5 m")) ;‘compose-mail-other-frame’
-(global-unset-key (kbd "C-x 5 r")) ;‘find-file-read-only-other-frame’
-(global-unset-key (kbd "C-x RET C-\\")) ;‘set-input-method’
-(global-unset-key (kbd "C-x \\")) ;‘activate-transient-input-method’
-(global-unset-key (kbd "C-x RET F")) ;‘set-file-name-coding-system’
-(global-unset-key (kbd "C-x RET t")) ;‘set-terminal-coding-system’
-(global-unset-key (kbd "C-x RET k")) ;‘set-keyboard-coding-system’
-(global-unset-key (kbd "C-t")) ;‘transpose-chars’
-(global-unset-key (kbd "M-t")) ;‘transpose-words’
-(global-unset-key (kbd "C-x C-t")) ;‘transpose-lines’
-(global-unset-key (kbd "C-x u")) ;“C-_”
-(global-unset-key (kbd "C-/")) ;“C-_”
-(global-unset-key (kbd "C-?")) ;“C-M-_”,有些终端不认识这个字符
-(global-unset-key (kbd "M-<drag-mouse-1>")) ;与X的secondary selection兼容的功能
-(global-unset-key (kbd "M-<down-mouse-1>")) ;与X的secondary selection兼容的功能
-(global-unset-key (kbd "M-<down-mouse-3>")) ;与X的secondary selection兼容的功能
-(global-unset-key (kbd "M-<down-mouse-2>")) ;与X的secondary selection兼容的功能
+(global-unset-key (kbd "C-M-S-l"))  ; ‘recenter-other-window’
+(global-unset-key (kbd "C-x s"))    ; ‘save-some-buffers’
+(global-unset-key (kbd "C-x C-o"))  ; 删除附近空行
+(global-unset-key (kbd "C-S-<backspace>"))  ; 删除一整行及其换行符
+(global-unset-key (kbd "C-x DEL"))          ; kill至行首
+(global-unset-key (kbd "M-k"))      ; kill至句尾
+(global-unset-key (kbd "M-z"))      ; ‘zap-to-char’一帧就删完了,动作太快 反应不过来
+(global-unset-key (kbd "C-M-w"))    ; 强制合并两次kill,使其变成‘kill-ring’上的一个字符串
+(global-unset-key (kbd "C-x >"))    ; ‘scroll-right’
+(global-unset-key (kbd "C-x <"))    ; ‘scroll-left’
+(global-unset-key (kbd "C-x n p"))  ; ‘narrow-to-page’
+(global-unset-key (kbd "C-x n d"))  ; ‘narrow-to-defun’
+(global-unset-key (kbd "C-x C-+"))  ; ‘text-scale-adjust’
+(global-unset-key (kbd "C-x C-="))  ; ‘text-scale-adjust’
+(global-unset-key (kbd "C-x C--"))  ; ‘text-scale-adjust’
+(global-unset-key (kbd "C-x C-0"))  ; ‘text-scale-adjust’
+(global-unset-key (kbd "M-s h w"))  ; ‘hi-lock-write-interactive-patterns’
+(global-unset-key (kbd "M-s h f"))  ; ‘hi-lock-find-patterns’
+(global-unset-key (kbd "C-M-i"))    ; ‘ispell-complete-word’
+(global-unset-key (kbd "C-x C-v"))  ; ‘find-alternate-file’
+(global-unset-key (kbd "C-x m"))    ; ‘compose-mail’
+(global-unset-key (kbd "C-x <left>"))        ; ‘previous-buffer’
+(global-unset-key (kbd "C-x <right>"))       ; ‘next-buffer’
+(global-unset-key (kbd "C-x C-q"))           ; ‘read-only-mode’
+(global-unset-key (kbd "C-<down-mouse-1>"))  ; ‘mouse-buffer-menu’
+(global-unset-key (kbd "C-<down-mouse-3>"))  ; 右键菜单式(context-menu)的mode-specific menubar
+(global-unset-key (kbd "C-x 4 0"))    ; ‘kill-buffer-and-window’
+(global-unset-key (kbd "C-x 4 f"))    ; ‘find-file-other-window’
+(global-unset-key (kbd "C-x 5 f"))    ; ‘find-file-other-frame’
+(global-unset-key (kbd "C-x 5 C-f"))  ; ‘find-file-other-frame’
+(global-unset-key (kbd "C-x 5 C-o"))  ; ‘display-buffer-other-frame’
+(global-unset-key (kbd "C-x 5 b"))    ; ‘switch-to-buffer-other-frame’
+(global-unset-key (kbd "C-x 5 d"))    ; ‘dired-other-frame’
+(global-unset-key (kbd "C-x 5 m"))    ; ‘compose-mail-other-frame’
+(global-unset-key (kbd "C-x 5 r"))    ; ‘find-file-read-only-other-frame’
+(global-unset-key (kbd "C-x RET C-\\"))  ; ‘set-input-method’
+(global-unset-key (kbd "C-x \\"))     ; ‘activate-transient-input-method’
+(global-unset-key (kbd "C-x RET F"))  ; ‘set-file-name-coding-system’
+(global-unset-key (kbd "C-x RET t"))  ; ‘set-terminal-coding-system’
+(global-unset-key (kbd "C-x RET k"))  ; ‘set-keyboard-coding-system’
+(global-unset-key (kbd "C-t"))        ; ‘transpose-chars’
+(global-unset-key (kbd "M-t"))        ; ‘transpose-words’
+(global-unset-key (kbd "C-x C-t"))    ; ‘transpose-lines’
+(global-unset-key (kbd "C-x u"))      ; “C-_”
+(global-unset-key (kbd "C-/"))        ; “C-_”
+(global-unset-key (kbd "C-?"))        ; “C-M-_”,有些终端不认识这个字符
+(global-unset-key (kbd "M-<drag-mouse-1>"))  ; 与X的secondary selection兼容的功能
+(global-unset-key (kbd "M-<down-mouse-1>"))  ; 与X的secondary selection兼容的功能
+(global-unset-key (kbd "M-<down-mouse-3>"))  ; 与X的secondary selection兼容的功能
+(global-unset-key (kbd "M-<down-mouse-2>"))  ; 与X的secondary selection兼容的功能
 (global-unset-key (kbd "C-x C-u"))
 (global-unset-key (kbd "C-x C-l"))
-(global-unset-key (kbd "C-M-\\")) ;‘indent-region’
-(global-unset-key (kbd "M-@")) ;‘mark-word’
+(global-unset-key (kbd "C-M-\\"))   ; ‘indent-region’
+(global-unset-key (kbd "M-@"))      ; ‘mark-word’
 (global-unset-key (kbd "C-M-@"))
-(global-unset-key (kbd "M-h")) ;‘mark-paragraph’
-(global-unset-key (kbd "C-M-h")) ;‘mark-defun’
-(global-unset-key (kbd "C-x C-p")) ;‘mark-page’
-(global-unset-key (kbd "C-M-o")) ;‘split-line’
-(global-unset-key (kbd "M-i")) ;‘tab-to-tab-stop’
-(global-unset-key (kbd "C-x TAB")) ;‘indent-rigidly’
-(global-unset-key (kbd "C-@")) ;“C-SPC”
-(global-unset-key (kbd "C-x f")) ;‘set-fill-column’
-(global-unset-key (kbd "C-x .")) ;‘set-fill-prefix’
-(global-unset-key (kbd "<f2>")) ;‘2C-mode’相关的键
-(global-unset-key (kbd "C-x 6")) ;‘2C-mode’相关的键
-(global-unset-key (kbd "C-x ;")) ;‘comment-set-column’
+(global-unset-key (kbd "M-h"))      ; ‘mark-paragraph’
+(global-unset-key (kbd "C-M-h"))    ; ‘mark-defun’
+(global-unset-key (kbd "C-x C-p"))  ; ‘mark-page’
+(global-unset-key (kbd "C-M-o"))    ; ‘split-line’
+(global-unset-key (kbd "M-i"))      ; ‘tab-to-tab-stop’
+(global-unset-key (kbd "C-x TAB"))  ; ‘indent-rigidly’
+(global-unset-key (kbd "C-@"))      ; “C-SPC”
+(global-unset-key (kbd "C-x f"))    ; ‘set-fill-column’
+(global-unset-key (kbd "C-x ."))    ; ‘set-fill-prefix’
+(global-unset-key (kbd "<f2>"))     ; ‘2C-mode’相关的键
+(global-unset-key (kbd "C-x 6"))    ; ‘2C-mode’相关的键
+(global-unset-key (kbd "C-x ;"))    ; ‘comment-set-column’
 
 (progn
   (advice-add 'backward-kill-word :before-while
               (lambda (arg)
                 "前面顶多只有空白字符 或 后面顶多只有空白字符且前面有空白字符 时,删除前方所有空白"
-                (if (and (interactive-p)  ;只在使用键盘且
-                         (= 1 arg)        ;没有前缀参数时执行
+                (if (and (interactive-p)  ; 只在使用键盘且
+                         (= 1 arg)        ; 没有前缀参数时执行
                          (or (save-match-data
                                (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=")))
                              (and (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
@@ -1606,8 +1606,8 @@
   (advice-add 'kill-word :before-while
               (lambda (arg)
                 "后面顶多只有空白字符 或 前面顶多只有空白字符且后面有空白字符 时,删除后面所有空白"
-                (if (and (interactive-p)  ;只在使用键盘且
-                         (= 1 arg)        ;没有前缀参数时执行
+                (if (and (interactive-p)  ; 只在使用键盘且
+                         (= 1 arg)        ; 没有前缀参数时执行
                          (or (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
                              (and (save-match-data
                                     (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=")))
@@ -1618,9 +1618,9 @@
 (let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
                                                 (concat
                                                  "\\(" regexp "\\)"
-                                                 "\\|\\`shynur[^[:alnum:]]")) '(;;滤除‘prefix--*’(i.e.,不允许两个“-”连续出现)
+                                                 "\\|\\`shynur[^[:alnum:]]")) '(;; 滤除‘prefix--*’(i.e.,不允许两个“-”连续出现)
                                                                                 "\\`-?\\([^-]+\\(-[^-]+\\)*-?\\)?\\'"
-                                                                                ;;滤除‘*-internal’(i.e.,不允许出现“-internal”)
+                                                                                ;; 滤除‘*-internal’(i.e.,不允许出现“-internal”)
                                                                                 "\\(\\(\\`\\|[^l]\\)\\|\\(\\`\\|[^a]\\)l\\|\\(\\`\\|[^n]\\)al\\|\\(\\`\\|[^r]\\)nal\\|\\(\\`\\|[^e]\\)rnal\\|\\(\\`\\|[^t]\\)ernal\\|\\(\\`\\|[^n]\\)ternal\\|\\(\\`\\|[^i]\\)nternal\\|\\(\\`\\|[^-]\\)internal\\)\\'")))
       (functions-for-completion [try-completion
                                  test-completion
@@ -1750,9 +1750,9 @@
                                         (remove-hook 'server-after-make-frame-hook modify-keyboard-translation))))
   (add-hook 'server-after-make-frame-hook modify-keyboard-translation))
 
-;;当最后一个frame关闭时,存入它的位置和尺寸;当桌面上没有frame时,下一个打开的frame将使用那个被存入的位置和尺寸.
+;; 当最后一个frame关闭时,存入它的位置和尺寸;当桌面上没有frame时,下一个打开的frame将使用那个被存入的位置和尺寸.
 (let ((shynur/--size&position-relayer `(,(cons 'top 0) ,(cons 'left 0)
-                                        ;;‘fullscreen’放最后,以覆盖‘width’&‘height’的设置.
+                                        ;; ‘fullscreen’放最后,以覆盖‘width’&‘height’的设置.
                                         ,(cons 'width 0) ,(cons 'height 0) ,(cons 'fullscreen nil)))
       shynur/--size&position-relayer-holding?)
   (letrec ((shynur/--get-size&position (lambda ()
@@ -1767,7 +1767,7 @@
                                              (setcdr parameter-value (frame-parameter frame-to-be-deleted (car parameter-value))))
                                            (setq shynur/--size&position-relayer-holding? t)
                                            (remove-hook 'delete-frame-functions       shynur/--put-size&position)
-                                           ;;当需要调用该λ表达式时,必然没有除此以外的其它frame了,因此之后新建的frame必然是server弹出的,所以此处无需使用‘after-make-frame-functions’
+                                           ;; 当需要调用该λ表达式时,必然没有除此以外的其它frame了,因此之后新建的frame必然是server弹出的,所以此处无需使用‘after-make-frame-functions’
                                            (   add-hook 'server-after-make-frame-hook shynur/--get-size&position)))))
     (add-hook 'server-after-make-frame-hook shynur/--get-size&position)))
 

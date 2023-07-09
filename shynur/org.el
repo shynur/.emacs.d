@@ -1,6 +1,6 @@
 ;;; ~shynur/.emacs.d/shynur/org.el  -*- lexical-binding: t; -*-
 
-(setq-default org-link-descriptive nil) ;展开link.
+(setq-default org-link-descriptive nil)  ; 展开link.
 
 (setq-default org-support-shift-select t)
 

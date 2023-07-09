@@ -895,10 +895,6 @@
                                                                ("ASUS-TX2" "d:/Downloads/Tmp/")
                                                                (_          "~/"               ))))))
                         ,(lambda ()
-                           (let ((shynur/machine.el "~/.emacs.d/shynur/machine.el"))
-                             (when (file-exists-p shynur/machine.el)
-                               (load-file shynur/machine.el))))
-                        ,(lambda ()
                            (display-time-mode)
                            (display-battery-mode))
                         ,(lambda ()
@@ -1797,7 +1793,8 @@
   (set-text-properties beginning end
                        (text-properties-at same-as-where)))
 
-(require 'shynur/org "~/.emacs.d/shynur/org.el")
+(require 'shynur/machine "~/.emacs.d/shynur/machine.el")
+(require 'shynur/org     "~/.emacs.d/shynur/org.el"    )
 
 ;;; End of Code
 

@@ -10,6 +10,7 @@ clean:
 	rm --force             docs/Emacs-regexp.html*     docs/Emacs-regexp.tex*     docs/Emacs-regexp.pdf
 	rm --force             docs/Emacs-use_daemon.html* docs/Emacs-use_daemon.pdf
 	rm --force --recursive elpa/
+	rm --force             shynur/*.el[cn]
 
 # Local Variables:
 # coding: utf-8-unix

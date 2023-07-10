@@ -364,4 +364,5 @@ Copyright \copy 2023 [[https://github.com/shynur][谢骐]] <[[mailto:one.last.ki
 
 # Local Variables:
 # coding: utf-8-unix
+# eval: (local-set-key [f1] (lambda () "临时函数;该文件写完就删" (interactive) (browse-url "http://localhost/elisp/Rx-Constructs.html")))
 # End:

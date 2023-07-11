@@ -1197,6 +1197,7 @@
  '(query-replace-show-replacement t
                                   nil (replace)
                                   "逐个query时显示扩展后的replace-regexp(而非原始的)")
+ '(regexp-unmatchable ".\\`")
  '(query-replace-highlight-submatches t
                                       nil (replace))
  '(query-replace-skip-read-only t

@@ -146,10 +146,12 @@ Character classes 被用在 [[‘​=\[...\]=​’][‘​=[...]=​’]] 中.
 *** ‘​=[:space:]=​’
 
 匹配[[‘​=\s=​/=code=/​’, ‘​=\S=​/=code=/​’][符合 whitespace syntax 的字符]] (see [[info:elisp#Table of Syntax Classes][Table of Syntax Classes]]).
+IOW, 等价于 =\s-=.
 
 *** ‘​=[:word:]=​’
 
 匹配[[‘​=\s=​/=code=/​’, ‘​=\S=​/=code=/​’][符合 word syntax 的字符]] (see [[info:elisp#Table of Syntax Classes][Table of Syntax Classes]]).
+IOW, 等价于 =\sw=.
 
 *** ‘​=[:xdigit:]=​’
 
@@ -236,7 +238,9 @@ N.b., 编号只分配到个位数, 分完即止.
 前者匹配符合 /=code=/ syntax 的字符 (see [[info:elisp#Table of Syntax Classes][Table of Syntax Classes]]).[fn:Emacs]  \\
 因此, /=code=/ 处填写
 - ‘​=w=​’ 以匹配 [[‘​=\w=​’, ‘​=\W=​’][word constituent]].
+  等价于 [[‘​=\[:word:\]=​’][=:word:=]].
 - ‘​=-=​’ (或 一个空格) 以匹配 whitespace.
+  等价于 [[‘​=\[:space:\]=​’][=:space:=]].
 - ‘​=(=​’ 以匹配 open parenthesis.
 - etc.
 
@@ -298,8 +302,8 @@ N.b., 编号只分配到个位数, 分完即止.
 
 例如以下用于匹配 C 语言 块注释 的 regexp, 可被改写成两种同义的 ~rx~ 表达式:
 #+BEGIN_SRC emacs-lisp
-;; /\*\([^*]\|\*[^/]\)*\*+/
-"/\\*\\([^*]\\|\\*[^/]\\)*\\*+/"
+;; /\*\(?:[^*]\|\*[^/]\)*\*+/
+"/\\*\\(?:[^*]\\|\\*[^/]\\)*\\*+/"
 
 (rx "/*"
     (zero-or-more (or (not (any "*"))
@@ -317,6 +321,8 @@ N.b., 编号只分配到个位数, 分完即止.
 #+END_SRC
 
 ** Constructs in ~rx~
+
+(剩下的有空再写吧...)
 
 *** Literals
 
@@ -336,27 +342,69 @@ N.b., 编号只分配到个位数, 分完即止.
 
 ** Functions & macros [fn:Emacs] using ~rx~
 
-*** ~rx~ /~&rest~/ /~rx-form~/                                        :macro:
+*** ~rx~ /~&rest~ ~rx-form~/                                          :macro:
 
-*** ~rx-to-string~ /~rx-expr~/ /~&optional~/ /~no-group~/          :function:
+*** ~rx-to-string~ /~rx-expr~ ~&optional~ ~no-group~/              :function:
 
 *** ~pcase~ ~expression~ ~((rx~ /~rx-expr~/​~...)~ ~body-forms...)...~ :macro:
 
 * 相关函数[fn:Emacs]
 
-(If an invalid regexp is passed to any of the search functions, an ~invalid-regexp~ error is signaled.)
+期望被传入 regexp 的函数在接收到 invalid regexp 时, 会 signal 一个 ~invalid-regexp~ error.
 
 *** ~regexp-quote~ /~string~/                                      :function:
 
-*** ~regexp-opt~ /~strings~/ /~&optional~/ /~paren~/               :function:
+将 literal string 转换成 regexp.
+E.g.,
+    : (regexp-quote ".")  ; => "\\."
+
+*** ~regexp-opt~ /~strings~ ~&optional~ ~paren~/                   :function:
+
+/~strings~/ 是由 literal string 为元素组成的 list.
+该函数相当于逻辑或, 但是它希望返回的 regexp 匹配得尽可能长, e.g.,
+#+BEGIN_SRC emacs-lisp
+(regexp-opt '("23"
+              "1"
+              "123"))
+;; => "\\(?:1\\(?:23\\)?\\|23\\)"
+;; i.e., \(?:1\(?:23\)?\|23\)
+#+END_SRC
+虽然按照 /~strings~/ 的想法, 遇到 =1= 就可以结束尝试了, 但根据 ~regexp-opt~ 的结果来看, 还会继续尝试下个 substring 是不是 =23=.
 
 *** ~regexp-opt-depth~ /~regexp~/                                  :function:
 
+returns the total number of grouping constructs (不包括 shy group).
+E.g.,
+    : (regexp-opt-depth "\\(\\(?:\\)\\|\\(\\)\\)")  ; => 2
+
 *** ~regexp-opt-charset~ /~chars~/                                 :function:
+
+/~chars~/ 是由字符为元素组成的 list.
+该函数以 ‘​=[...]=​’ 的形式返回取逻辑或的结果, e.g.,
+    : (regexp-opt-charset '(?a ?b ?c ?z ?d))  ; => "[a-dz]"
 
 *** ~regexp-unmatchable~                                           :variable:
 
-* Problems
+保证匹配失败的值, 通常为 ~"\\`a\\`"~.
+(为了提高性能, 个人认为可以设为 ~".\\`"~.)
+
+作为对比:
+#+BEGIN_SRC emacs-lisp
+(string-match-p ""                 "aa")  ; => 0
+(string-match-p regexp-unmatchable "aa")  ; => nil
+#+END_SRC
+
+意义:
+有些 option 设置用来匹配文本, 但是需要它在默认时不匹配任何文本, 可以将此 variable 设为其默认值.
+
+* Suggestions on Optimization
+
+- ‘​=[ab]=​’ 比 ‘​=a\|b=​’ 更快.
+- 降低熵值.
+  E.g.,
+      : \(a*b*\)+  >  \(a\|b\)*  >  [ab]*
+- 尽量使用 shy group 而不是 capturing group.
+- ~rx~ 会优化一些 [[‘​=\|=​’][or-pattern]], 并且默认使用 shy group.
 
 -----
 Copyright \copy 2023 [[https://github.com/shynur][谢骐]] <[[mailto:one.last.kiss@outlook.com][one.last.kiss@outlook.com]]>.  All rights reserved.
@@ -364,5 +412,4 @@ Copyright \copy 2023 [[https://github.com/shynur][谢骐]] <[[mailto:one.last.ki
 
 # Local Variables:
 # coding: utf-8-unix
-# eval: (local-set-key [f1] (lambda () "临时函数;该文件写完就删" (interactive) (browse-url "http://localhost/elisp/Rx-Constructs.html")))
 # End:

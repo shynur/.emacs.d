@@ -1,10 +1,10 @@
 <!-- ~shynur/.emacs.d/docs/Emacs-use_daemon.md -->
 
-# 如何运行 Emacs 作为后台服务?
+# 如何运行 Emacs 作为后台服务进程?
 
 (仅考虑 GUI.)
 
-Emacs 提供了 daemon-client 模型, 简而言之就像 QQ 那样: 在后台启动一个服务, 每次打开新窗口都是后台的那个进程弹出的.
+Emacs 提供了 daemon-client 模型, 简而言之就像 Steam 那样: 在后台启动一个服务 (Steam 还会在 MS-Windows 的系统托盘中显示自身图标), 每次打开新窗口都是后台的那个进程弹出的.
 好处显而易见, 开机启动一次, 之后就不需要重复启动了.
 
 ## MS-Windows

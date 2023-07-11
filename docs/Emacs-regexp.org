@@ -386,7 +386,6 @@ E.g.,
 *** ~regexp-unmatchable~                                           :variable:
 
 保证匹配失败的值, 通常为 ~"\\`a\\`"~.
-(为了提高性能, 个人认为可以设为 ~".\\`"~.)
 
 作为对比:
 #+BEGIN_SRC emacs-lisp

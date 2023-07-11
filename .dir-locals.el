@@ -78,6 +78,8 @@
 
  (org-mode . ((eval . (imenu-add-menubar-index))
 
+              (eval . (local-set-key [f9] "\N{ZERO WIDTH SPACE}"))
+
               (org-link-descriptive . nil)))
 
  (gitignore-mode . ((outline-regexp . "^#outline:[[:blank:]]+/\\(\\([._[:alpha:]][._[:alnum:]-]*/\\)*\\)")
@@ -89,7 +91,6 @@
                                          slash-amount)))
                     (mode . outline-minor)
 
-                    ;; (shynur/TODO)有持久性副作用,需要被优化
                     (eval . (define-key gitignore-mode-map (kbd "TAB")
                               (lambda ()
                                 (interactive)

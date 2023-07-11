@@ -1063,6 +1063,9 @@
                                       "当光标置于sexp周边的空白区域时")
  '(electric-pair-mode t
                       nil (elec-pair))
+ '(ielm-mode-hook `(,@(bound-and-true-p ielm-mode-hook)
+                    ,(lambda ()
+                       (electric-pair-local-mode -1))))
  '(electric-pair-preserve-balance t
                                   nil (elec-pair)
                                   "若nil,会出现这种情况“(((()”")
@@ -1738,7 +1741,9 @@
         ("h" . ,#'hlt-highlight-region)
         ("s" . ,#'shortdoc-display-group)
         ("z" . ,(lambda ()
+                  "更换屏幕时记得修改这些参数"
                   (interactive)
+                  (set-frame-position nil 378 198)
                   (set-frame-size nil 1100 850 t)))))
 
 (letrec ((modify-keyboard-translation (lambda ()

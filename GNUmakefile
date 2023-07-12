@@ -2,7 +2,7 @@
 ### ~shynur/.emacs.d/GNUmakefile
 
 # [[https://www.gnu.org/prep/standards/html_node/Makefile-Basics.html#Makefile-Basics][Every Makefile should contain this line:]]
-SHELL = /bin/bash
+SHELL = /bin/sh
 
 .PHONY: clean
 

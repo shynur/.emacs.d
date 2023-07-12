@@ -6,7 +6,7 @@
 
                      ;; (bug#64415)
                      ("/[^/-][^/]*\\.el\\'" . emacs-lisp-mode)
-                     ("/\\.dir-locals\\.el\\'" . lisp-data-mode)  ; “.dir-locals-2.el”不在本仓库的考虑范围内
+                     ("/\\.dir-locals\\(-2\\)?\\.el\\'" . lisp-data-mode)
 
                      ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'" . markdown-mode)
                      ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.org\\'" . org-mode)
@@ -31,7 +31,7 @@
                               org-mode
                               makefile-gmake-mode))
 
-         (eval . (global-set-key (kbd "C-c c") (lambda ()
+         (eval . (global-set-key (kbd "C-c C") (lambda ()
                                                  "参考“GNUmakefile”中的“clean”项,进行适当的清理"
                                                  (interactive)
                                                  (let ((default-directory "~/.emacs.d/"))

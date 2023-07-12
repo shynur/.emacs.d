@@ -1237,9 +1237,12 @@
                            nil (help)
                            "e.g.,使“*Completions*”不会几乎占用整个frame")
  `(safe-local-variable-values ',(let ((safe-local-variable-values (list)))
-                                  (named-let get-vars ((dir-locals (with-temp-buffer
-                                                                     (insert-file-contents "~/.emacs.d/.dir-locals.el")
-                                                                     (read (current-buffer)))))
+                                  (named-let get-vars ((dir-locals (mapcan (lambda (file-path)
+                                                                             (when (file-exists-p file-path)
+                                                                               (with-temp-buffer
+                                                                                 (insert-file-contents file-path)
+                                                                                 (read (current-buffer))))) ["~/.emacs.d/.dir-locals.el"
+                                                                                                             "~/.emacs.d/.dir-locals-2.el"])))
                                     (dolist (mode-vars dir-locals)
                                       (let ((vars (cdr mode-vars)))
                                         (if (stringp (car mode-vars))

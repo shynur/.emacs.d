@@ -9,7 +9,7 @@
 
 🥰 这是我的 Emacs 个人配置方案, from scratch.
 
-🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/emacs][GNU Emacs Manual]]/ (27) 和 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/ (22).
+🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/emacs][GNU Emacs Manual]]/ 和 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/.
 之后将会使用 [[https://github.com/jwiegley/use-package][=use-package=]] 进行彻底的重构.
 
 (由于 GitHub 对 Org 的支持孱弱, 故些许地方渲染效果不佳.)
@@ -67,33 +67,9 @@
 
 - 未换绑任何默认快捷键, 除了那些自带备选方案的 (e.g., 手册中提到 =C-x C-b= 可换绑到 ~bs-show~);
 - 取消了很多不必要的默认快捷键;
-- 自定义了以 =C-c= 起手的快捷键.
-  See below.
-
-** 新增快捷键 (=C-c <letter>=)
-
-=C-c c=
-高亮截至目前为止, 修改过的文本部分.
-
-=C-c d=
-选中区域后执行此键, 按 /方向键/ 可以上下左右平移选中的文本.
-
-=C-c f=
-调用 ~clang-format~ 美化代码.
-光标的相对位置保持不变.
-非编程语言的缓冲区中可选中一段可能是编程语言的区域进行美化.
-
-=C-c g=
-立刻执行 GC (垃圾回收).
-
-=C-c h=
-持久性地高亮选中区域.
-
-=C-c s=
-以 ELisp 数据类型为关键词, 搜索相关 API.
-
-=C-c z=
-将 frame 尺寸调节为适中大小.
+- 定义了自用快捷键:
+  - =C-c <letter>=, where =<letter>= is either lower case or upper.
+  - =f5=​\tilde​=f9=.
 
 * Written for
 
@@ -136,7 +112,7 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 
 * Repo Stats
 
-- [[https://api.codetabs.com/v1/loc/?github=shynur/.emacs.d&branch=main][Languages]]
+- [[https://api.codetabs.com/v1/loc/?github=shynur/.emacs.d&branch=main][Languages Statistics]]
 
 * LICENSE
 

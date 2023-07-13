@@ -31,11 +31,14 @@
                               org-mode
                               makefile-gmake-mode))
 
+         (eval . (when (string-match-p "\\`LICENSE\\(\\.[[:alpha:]]+\\)?\\'" (file-name-nondirectory (buffer-file-name)))
+                   (setq-local buffer-read-only t)))
+
          (eval . (when (eq system-type 'windows-nt)  ; GNU/Linux上可以用‘compile’命令调用“make clean”
                    (local-set-key (kbd "C-c C") (lambda ()
                                                   "参考“GNUmakefile”中的“clean”项,进行适当的清理"
                                                   (interactive)
-                                                  (let ((default-directory "~/.emacs.d/"))
+                                                  (let ((default-directory user-emacs-directory))
                                                     (delete-file "README.html")
                                                     (delete-file "README.html~")
                                                     (delete-file "docs/Emacs-regexp.html")

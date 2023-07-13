@@ -126,7 +126,7 @@
                                   "1 screen line/一个条目"
                                   (make-thread (lambda ()
                                                  (sleep-for 0.4)
-                                                 (let (message-log-max)
+                                                 (let ((minibuffer-message-clear-timeout 0))
                                                    (toggle-truncate-lines 1))))))
                              nil (simple))
  '(marginalia-mode t
@@ -1237,7 +1237,7 @@
  '(temp-buffer-resize-mode t
                            nil (help)
                            "e.g.,使“*Completions*”不会几乎占用整个frame")
- `(safe-local-variable-values ',(let ((safe-local-variable-values (list)))
+ `(safe-local-variable-values ',(let ((shynur--safe-local-variable-values (list)))
                                   (named-let get-vars ((dir-locals (mapcan (lambda (file-path)
                                                                              (when (file-exists-p file-path)
                                                                                (with-temp-buffer
@@ -1249,8 +1249,8 @@
                                         (if (stringp (car mode-vars))
                                             (get-vars vars)
                                           (dolist (var-pair vars)
-                                            (push var-pair safe-local-variable-values))))))
-                                  safe-local-variable-values)
+                                            (push var-pair shynur--safe-local-variable-values))))))
+                                  (append safe-local-variable-values shynur--safe-local-variable-values))
                               nil (files))
  '(enable-local-variables t
                           nil (files)

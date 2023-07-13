@@ -9,7 +9,7 @@
 
 🥰 这是我的 Emacs 个人配置方案, from scratch.
 
-🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/emacs][GNU Emacs Manual]]/ 和 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/.
+🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/emacs][GNU Emacs Manual]]/ ([[http://localhost/emacs/Lisp-Libraries.html][27.8]]) 和 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/ (22).
 之后将会使用 [[https://github.com/jwiegley/use-package][=use-package=]] 进行彻底的重构.
 
 (由于 GitHub 对 Org 的支持孱弱, 故些许地方渲染效果不佳.)
@@ -24,6 +24,8 @@
  |
  |__ GNUmakefile (仅供手动放置/删除目标文件时参考用, 毕竟 MS-Windows 上众多基本
  |                命令的用法和 GNU/Linux 不一样.)
+ |
+ |__ LICENSE.txt (apache-2.0)
  |
  |__ README.org (this file)
  |
@@ -114,15 +116,13 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 
 - [[https://api.codetabs.com/v1/loc/?github=shynur/.emacs.d&branch=main][Languages Statistics]]
 
-* LICENSE
+* License
 
-Haven’t chosen one; I retain all rights to [[https://github.com/shynur/.emacs.d][this repository]].
-
-/Will/ include an open source license someday in the future when I’ve learned enough about open source licenses.
+See the [[file:./LICENSE.txt][LICENSE.txt]] file for license rights and limitations (Apache-2.0).
 
 -----
 
-Copyright \copy 2023 [[https://github.com/shynur][谢骐]] <[[mailto:one.last.kiss@outlook.com][one.last.kiss@outlook.com]]>.  All rights reserved.
+Copyright \copy 2023 [[https://github.com/shynur][谢骐]] <[[mailto:one.last.kiss@outlook.com][one.last.kiss@outlook.com]]>.
 
 # Local Variables:
 # coding: utf-8-unix

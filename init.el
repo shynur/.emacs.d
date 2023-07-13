@@ -1243,14 +1243,15 @@
                                                                                (with-temp-buffer
                                                                                  (insert-file-contents file-path)
                                                                                  (read (current-buffer))))) ["~/.emacs.d/.dir-locals.el"
-                                                                                                             "~/.emacs.d/.dir-locals-2.el"])))
+                                                                                                             ])))
                                     (dolist (mode-vars dir-locals)
                                       (let ((vars (cdr mode-vars)))
                                         (if (stringp (car mode-vars))
                                             (get-vars vars)
                                           (dolist (var-pair vars)
                                             (push var-pair shynur--safe-local-variable-values))))))
-                                  (append safe-local-variable-values shynur--safe-local-variable-values))
+                                  (append (bound-and-true-p safe-local-variable-values)
+                                          shynur--safe-local-variable-values))
                               nil (files))
  '(enable-local-variables t
                           nil (files)
@@ -1628,11 +1629,11 @@
                   t))))
 (let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
                                                 (concat
-                                                 "\\(" regexp "\\)"
+                                                 "\\(?:" regexp "\\)"
                                                  "\\|\\`shynur[^[:alnum:]]")) '(;; 滤除‘prefix--*’(i.e.,不允许两个“-”连续出现)
-                                                                                "\\`-?\\([^-]+\\(-[^-]+\\)*-?\\)?\\'"
+                                                                                "\\`-?\\(?:[^-]+\\(?:-[^-]+\\)*-?\\)?\\'"
                                                                                 ;; 滤除‘*-internal’(i.e.,不允许出现“-internal”)
-                                                                                "\\(\\(\\`\\|[^l]\\)\\|\\(\\`\\|[^a]\\)l\\|\\(\\`\\|[^n]\\)al\\|\\(\\`\\|[^r]\\)nal\\|\\(\\`\\|[^e]\\)rnal\\|\\(\\`\\|[^t]\\)ernal\\|\\(\\`\\|[^n]\\)ternal\\|\\(\\`\\|[^i]\\)nternal\\|\\(\\`\\|[^-]\\)internal\\)\\'")))
+                                                                                "\\(?:\\(?:\\`\\|[^l]\\)\\|\\(?:\\`\\|[^a]\\)l\\|\\(?:\\`\\|[^n]\\)al\\|\\(?:\\`\\|[^r]\\)nal\\|\\(?:\\`\\|[^e]\\)rnal\\|\\(?:\\`\\|[^t]\\)ernal\\|\\(?:\\`\\|[^n]\\)ternal\\|\\(?:\\`\\|[^i]\\)nternal\\|\\(?:\\`\\|[^-]\\)internal\\)\\'")))
       (functions-for-completion [try-completion
                                  test-completion
                                  all-completions]))

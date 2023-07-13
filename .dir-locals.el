@@ -31,7 +31,8 @@
                               org-mode
                               makefile-gmake-mode))
 
-         (eval . (when (string-match-p "\\`LICENSE\\(\\.[[:alpha:]]+\\)?\\'" (file-name-nondirectory (buffer-file-name)))
+         (eval . (when (when-let ((buffer-file-name (buffer-file-name)))
+                         (string-match-p "\\`LICENSE\\(\\.[[:alpha:]]+\\)?\\'" (file-name-nondirectory buffer-file-name)))
                    (setq-local buffer-read-only t)))
 
          (eval . (when (eq system-type 'windows-nt)  ; GNU/Linux上可以用‘compile’命令调用“make clean”

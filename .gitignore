@@ -5,20 +5,24 @@
 !/.dir-locals.el
 !/.gitignore
 !/GNUmakefile
+!/LICENSE.txt
 !/README.org
 !/docs/
 !/early-init.el
 !/init.el
 !/shynur/
+
 #outline: /docs/.
 /docs/*
 !/docs/Emacs-regexp.org
 !/docs/Emacs-use_daemon.md
+
 #outline: /shynur/.
 /shynur/*
 !/shynur/clang-format.yaml
 !/shynur/machine.el
 !/shynur/org.el
+
 #outline: /.
 
 # Local Variables:

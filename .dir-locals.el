@@ -31,20 +31,21 @@
                               org-mode
                               makefile-gmake-mode))
 
-         (eval . (global-set-key (kbd "C-c C") (lambda ()
-                                                 "参考“GNUmakefile”中的“clean”项,进行适当的清理"
-                                                 (interactive)
-                                                 (let ((default-directory "~/.emacs.d/"))
-                                                   (delete-file "README.html")
-                                                   (delete-file "README.html~")
-                                                   (delete-file "docs/Emacs-regexp.html")
-                                                   (delete-file "docs/Emacs-regexp.html~")
-                                                   (delete-file "docs/Emacs-regexp.tex")
-                                                   (delete-file "docs/Emacs-regexp.tex~")
-                                                   (delete-file "docs/Emacs-regexp.pdf")
-                                                   (delete-file "docs/Emacs-use_daemon.html")
-                                                   (delete-file "docs/Emacs-use_daemon.html~")
-                                                   (delete-file "docs/Emacs-use_daemon.pdf")))))
+         (eval . (when (eq system-type 'windows-nt)  ; GNU/Linux上可以用‘compile’命令调用“make clean”
+                   (local-set-key (kbd "C-c C") (lambda ()
+                                                  "参考“GNUmakefile”中的“clean”项,进行适当的清理"
+                                                  (interactive)
+                                                  (let ((default-directory "~/.emacs.d/"))
+                                                    (delete-file "README.html")
+                                                    (delete-file "README.html~")
+                                                    (delete-file "docs/Emacs-regexp.html")
+                                                    (delete-file "docs/Emacs-regexp.html~")
+                                                    (delete-file "docs/Emacs-regexp.tex")
+                                                    (delete-file "docs/Emacs-regexp.tex~")
+                                                    (delete-file "docs/Emacs-regexp.pdf")
+                                                    (delete-file "docs/Emacs-use_daemon.html")
+                                                    (delete-file "docs/Emacs-use_daemon.html~")
+                                                    (delete-file "docs/Emacs-use_daemon.pdf"))))))
 
          (prettify-symbols-alist . (("lambda" . ?λ)))
          (mode . prettify-symbols)

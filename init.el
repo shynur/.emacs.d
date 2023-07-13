@@ -126,7 +126,8 @@
                                   "1 screen line/一个条目"
                                   (make-thread (lambda ()
                                                  (sleep-for 0.4)
-                                                 (toggle-truncate-lines 1)))))
+                                                 (let (message-log-max)
+                                                   (toggle-truncate-lines 1))))))
                              nil (simple))
  '(marginalia-mode t
                    nil (marginalia)
@@ -1476,7 +1477,11 @@
  '(use-file-dialog t)
  '(x-gtk-show-hidden-files t
                            nil ()
-                           "在GTK+的file-chooser-dialog中显示隐藏文件"))
+                           "在GTK+的file-chooser-dialog中显示隐藏文件")
+ '(compilation-scroll-output 'first-error
+                             nil (compile))
+ '(compilation-always-kill nil
+                           nil (compile)))
 
 (letrec ((shynur--custom-set-faces (lambda ()
                                      "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘custom-set-faces’,其余(以及后续)的client都能生效"

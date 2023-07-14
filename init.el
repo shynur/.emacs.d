@@ -126,7 +126,7 @@
                                   "1 screen line/一个条目"
                                   (make-thread (lambda ()
                                                  (sleep-for 0.4)
-                                                 (let ((minibuffer-message-clear-timeout 0))
+                                                 (let ((inhibit-message t))
                                                    (toggle-truncate-lines 1))))))
                              nil (simple))
  '(marginalia-mode t
@@ -891,21 +891,12 @@
                            (shynur/buffer-eval-after-created "*scratch*"
                              (with-current-buffer "*scratch*"
                                (setq-local prettify-symbols-alist (default-value 'prettify-symbols-alist))
-                               (prettify-symbols-mode)
-                               (setq-local default-directory (pcase (system-name)
-                                                               ("ASUS-TX2" "d:/Downloads/Tmp/")
-                                                               (_          "~/"               ))))))
+                               (prettify-symbols-mode))))
                         ,(lambda ()
                            (display-time-mode)
                            (display-battery-mode))
                         ,(lambda ()
-                           (progn
-                             (require 'register)
-                             ;; 见‘register-separator’
-                             (set-register (progn
-                                             (require 'register)
-                                             register-separator) "\n\n")
-                             (set-register ?i '(file . "~/.emacs.d/init.el"))))
+                           (set-register ?i '(file . "~/.emacs.d/init.el")))
                         ,(lambda ()
                            "调节beep的声音种类,而不是音量"
                            (set-message-beep nil))
@@ -1456,6 +1447,8 @@
                                  killed-string
                                (string-trim killed-string)))
                            nil (simple))
+ '(register-separator "\n\n"
+                      nil (register))
  '(window-divider-default-places 'right-only
                                  nil (frame))
  '(window-divider-default-right-width 12
@@ -1765,25 +1758,25 @@
   (add-hook 'server-after-make-frame-hook modify-keyboard-translation))
 
 ;; 当最后一个frame关闭时,存入它的位置和尺寸;当桌面上没有frame时,下一个打开的frame将使用那个被存入的位置和尺寸.
-(let ((shynur/--size&position-relayer `(,(cons 'top 0) ,(cons 'left 0)
+(let ((shynur--size&position-relayer `(,(cons 'top 0) ,(cons 'left 0)
                                         ;; ‘fullscreen’放最后,以覆盖‘width’&‘height’的设置.
                                         ,(cons 'width 0) ,(cons 'height 0) ,(cons 'fullscreen nil)))
-      shynur/--size&position-relayer-holding?)
-  (letrec ((shynur/--get-size&position (lambda ()
-                                         (when shynur/--size&position-relayer-holding?
-                                           (dolist (parameter-value shynur/--size&position-relayer)
+      shynur--size&position-relayer-holding?)
+  (letrec ((shynur--get-size&position (lambda ()
+                                         (when shynur--size&position-relayer-holding?
+                                           (dolist (parameter-value shynur--size&position-relayer)
                                              (set-frame-parameter nil (car parameter-value) (cdr parameter-value))))
-                                         (remove-hook 'server-after-make-frame-hook shynur/--get-size&position)
-                                         (   add-hook 'delete-frame-functions       shynur/--put-size&position)))
-           (shynur/--put-size&position (lambda (frame-to-be-deleted)
+                                         (remove-hook 'server-after-make-frame-hook shynur--get-size&position)
+                                         (   add-hook 'delete-frame-functions       shynur--put-size&position)))
+           (shynur--put-size&position (lambda (frame-to-be-deleted)
                                          (when (length= (frames-on-display-list) 1)
-                                           (dolist (parameter-value shynur/--size&position-relayer)
+                                           (dolist (parameter-value shynur--size&position-relayer)
                                              (setcdr parameter-value (frame-parameter frame-to-be-deleted (car parameter-value))))
-                                           (setq shynur/--size&position-relayer-holding? t)
-                                           (remove-hook 'delete-frame-functions       shynur/--put-size&position)
+                                           (setq shynur--size&position-relayer-holding? t)
+                                           (remove-hook 'delete-frame-functions       shynur--put-size&position)
                                            ;; 当需要调用该λ表达式时,必然没有除此以外的其它frame了,因此之后新建的frame必然是server弹出的,所以此处无需使用‘after-make-frame-functions’
-                                           (   add-hook 'server-after-make-frame-hook shynur/--get-size&position)))))
-    (add-hook 'server-after-make-frame-hook shynur/--get-size&position)))
+                                           (   add-hook 'server-after-make-frame-hook shynur--get-size&position)))))
+    (add-hook 'server-after-make-frame-hook shynur--get-size&position)))
 
 ;; 这页的函数有朝一日会移到 ~shynur/.emacs.d/shynur/ 目录下
 

@@ -19,11 +19,12 @@
 (defmacro shynur/buffer-eval-after-created (buffer-or-name &rest body)
   (declare (indent 1))
   (let ((&buffer-or-name (gensym "shynur/buffer-eval-after-created-")))
-    `(let ((,&buffer-or-name ,buffer-or-name))
+    `(progn
+       (setq ,&buffer-or-name ,buffer-or-name)
        (make-thread (lambda ()
                       (while (not (get-buffer ,&buffer-or-name))
-                        (thread-yield)))
-                    ,@body))))
+                        (thread-yield))
+                      ,@body)))))
 
 (defun shynur/pathname-~/.emacs.d/.shynur/ (&rest pathnames)
   (declare (pure t))

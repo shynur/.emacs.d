@@ -41,7 +41,7 @@
                                                                   0 4 (face bold))
                                                                 memory
                                                                 mem-unit)))))))))
- '(load-path (remq nil load-path))
+ '(load-prefer-newer nil)
  '(package-archive-priorities '(("gnu"    . 0)
                                 ("nongnu" . 0)
                                 ("melpa"  . 0))
@@ -109,6 +109,9 @@
                 "打印成#N=(#N#)而非(#level)")
  '(print-gensym t)
  '(print-integers-as-characters nil)
+ '(eval-expression-print-maximum-character most-positive-fixnum
+                                           nil (simple)
+                                           "大于此值的整数在打印时不会附带其字符图形")
  '(major-mode 'text-mode)
  '(completion-list-mode-hook `(,@(bound-and-true-p completion-list-mode-hook)
                                ,(lambda ()
@@ -410,6 +413,10 @@
  '(help-enable-symbol-autoload t
                                nil (help-fns)
                                "如果一个autoloaded符号的autoload形式没有提供docstring,那就加载包含它的定义的文件,以查看它是否有docstring")
+ '(help-enable-autoload t
+                        nil (help))
+ '(help-enable-completion-autoload t
+                                   nil (help-fns))
  '(history-delete-duplicates t
                              nil ()
                              "去重minibuffer历史记录列表")
@@ -1370,8 +1377,6 @@
  '(filesets-menu-cache-file (shynur/pathname-~/.emacs.d/.shynur/
                              "filesets-menu-cache-file.el")
                             nil (filesets))
- '(eval-expression-debug-on-error t
-                                  nil (simple))
  '(debugger-stack-frame-as-list nil
                                 nil ()
                                 "debugger以C风格显示函数调用栈,而不是Lisp风格")

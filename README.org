@@ -31,6 +31,8 @@
  |
  |__ README.org (this file)
  |
+ |__ clang-format.yaml
+ |
  |__ docs/
  |    |
  |    |__ Emacs-regexp.org
@@ -43,13 +45,11 @@
  |
  |__ shynur/ (个人向的库合集)
  |    |
- |    |__ clang-format.yaml
- |    |
  |    |__ machine.el (用于削减在不同机器间使用本配置的难度: 例如, 某机器上没有
  |    |               配置中提到的某字体, 那么那台机器就需要在该文件中指定替代
  |    |               字体.)
  |    |
- |    |__ org.el (provide 'shynur/org)
+ |    |__ org.el (provides 'shynur/org)
  |
 -|->8·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-
  |

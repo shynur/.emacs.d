@@ -6,19 +6,21 @@
 
                      ;; (bug#64415)
                      ("/[^/-][^/]*\\.el\\'" . emacs-lisp-mode)
-                     ("/\\.dir-locals\\(-2\\)?\\.el\\'" . lisp-data-mode)
+                     ("/\\.dir-locals\\(?:-2\\)?\\.el\\'" . lisp-data-mode)
 
-                     ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'" . markdown-mode)
-                     ("/[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\(\\(-[[:alnum:]]\\([[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.org\\'" . org-mode)
+                     ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'" . markdown-mode)
+                     ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.org\\'" . org-mode)
 
                      ("/[^/-][^/]*\\.ya?ml\\'" . yaml-mode)
                      ("/\\.gitignore\\'" . gitignore-mode)
-                     ("/\\(\\(\\(GNU\\)?m\\)\\|M\\)akefile\\'" . makefile-gmake-mode)))
+                     ("/\\(?:\\(?:\\(?:GNU\\)?m\\)\\|M\\)akefile\\'" . makefile-gmake-mode)))
 
  (nil . ((outline-minor-mode-cycle . t)
          (outline-minor-mode-prefix . [nil])
 
          (sentence-end-double-space . t)
+
+         (lexical-binding . t)
 
          (mode . auto-save)
 
@@ -32,7 +34,7 @@
                               makefile-gmake-mode))
 
          (eval . (when (when-let ((buffer-file-name (buffer-file-name)))
-                         (string-match-p "\\`LICENSE\\(\\.[[:alpha:]]+\\)?\\'" (file-name-nondirectory buffer-file-name)))
+                         (string-match-p "\\`LICENSE\\(?:\\.[[:alpha:]]+\\)?\\'" (file-name-nondirectory buffer-file-name)))
                    (setq-local buffer-read-only t)))
 
          (eval . (when (eq system-type 'windows-nt)  ; GNU/Linux上可以用‘compile’命令调用“make clean”
@@ -55,7 +57,7 @@
          (mode . prettify-symbols)
 
          (eval . (let ((case-fold-search t))
-                   (highlight-phrase "~?\\(shynur\\|谢骐\\)[^[:blank:][:space:][:cntrl:]()`'\"]*"
+                   (highlight-phrase "~?\\(?:shynur\\|谢骐\\)[^[:blank:][:space:][:cntrl:]()`'\"]*"
                                      'underline)))
 
          (delete-trailing-lines . t)
@@ -63,21 +65,7 @@
          (indent-tabs-mode . nil)
          (eval . (add-hook 'before-save-hook #'delete-trailing-whitespace))))
 
- (emacs-lisp-mode . ((eval . (imenu-add-menubar-index))
-
-                     ;; outline head line 格式如下:
-                     ;; .1      Lv-1
-                     ;; .2.3    Lv-2
-                     ;; .4.5.6  Lv-3
-                     ;; .
-                     (outline-regexp . "^[[:blank:]]*;;+[[:blank:]]+\\(\\(\\.[[:digit:]]+\\)+\\|\\.[[:blank:]]*$\\)\\([[:blank:]]*$\\|[[:blank:]]+\\)")
-                     (outline-level . (lambda ()
-                                        (let ((dot-amount 0))
-                                          (seq-doseq (character (match-string-no-properties 1))
-                                            (when (char-equal character ?.)
-                                              (cl-incf dot-amount)))
-                                          dot-amount)))
-                     (mode . outline-minor)))
+ (emacs-lisp-mode . ((eval . (imenu-add-menubar-index))))
 
  (markdown-mode . ((eval . (imenu-add-menubar-index))))
 
@@ -87,9 +75,10 @@
 
               (org-link-descriptive . nil)))
 
- (gitignore-mode . ((outline-regexp . "^#outline:[[:blank:]]+/\\(\\([._[:alpha:]][._[:alnum:]-]*/\\)*\\)")
+ (gitignore-mode . ((outline-regexp . "^#outline:\\(?1:[[:blank:]]+\\(?:[._[:alpha:]][._[:alnum:]]*/\\)+\\)?")
+                    (outline-heading-end-regexp . "/\n")
                     (outline-level . (lambda ()
-                                       (let ((slash-amount 1))
+                                       (let ((slash-amount 0))
                                          (seq-doseq (character (match-string-no-properties 1))
                                            (when (char-equal character ?/)
                                              (cl-incf slash-amount)))
@@ -106,18 +95,7 @@
 
                          (mode . indent-tabs)))
 
- (nil . ((subdirs . nil)
-
-         (lexical-binding . t)
-         (no-byte-compile . t)
-         (no-native-compile . t)))
-
- ("docs/" . ((nil . ((lexical-binding . t)
-                     (no-byte-compile . t)
-                     (no-native-compile . t)))))
-
- ("shynur/" . ((nil . ((lexical-binding . t)
-                       (no-byte-compile . t)
+ ("shynur/" . ((nil . ((no-byte-compile . t)
                        (no-native-compile . t))))))
 
 ;; Local Variables:

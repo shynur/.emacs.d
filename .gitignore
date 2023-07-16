@@ -3,6 +3,7 @@
 #outline: ./
 /*
 !/.dir-locals.el
+!/.github
 !/.gitignore
 !/GNUmakefile
 !/LICENSE.txt
@@ -12,6 +13,10 @@
 !/early-init.el
 !/init.el
 !/shynur/
+
+#outline: ./.github/
+/.github/*
+!/.github/FUNDING.yaml
 
 #outline: ./docs/
 /docs/*

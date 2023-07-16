@@ -3,7 +3,7 @@
 #outline: ./
 /*
 !/.dir-locals.el
-!/.github
+!/.github/
 !/.gitignore
 !/GNUmakefile
 !/LICENSE.txt
@@ -12,7 +12,7 @@
 !/docs/
 !/early-init.el
 !/init.el
-!/shynur/
+!/lisp/
 
 #outline: ./.github/
 /.github/*
@@ -20,13 +20,16 @@
 
 #outline: ./docs/
 /docs/*
+!/docs/Emacs-FAQ.txt
 !/docs/Emacs-regexp.org
 !/docs/Emacs-use_daemon.md
 
-#outline: ./shynur/
-/shynur/*
-!/shynur/machine.el
-!/shynur/org.el
+#outline: ./lisp/
+/lisp/*
+!/lisp/shynur-early-init.el
+!/lisp/shynur-init.el
+!/lisp/shynur-org.el
+!/lisp/shynur-tmp.el
 
 #outline:
 

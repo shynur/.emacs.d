@@ -1,0 +1,8 @@
+Q#1: 打开 Emacs 时, 如何设置 默认目录?
+
+A#1: 如果你使用 MS-Windows, 并且使用 快捷方式 打开 Emacs, 那么就将 快捷方式 的
+     “属性”中的“起始位置”设置为你想要的 默认目录.  这相当于 working directory.
+
+;; Local Variables:
+;; coding: utf-8-unix
+;; End:

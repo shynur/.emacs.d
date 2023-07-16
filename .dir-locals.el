@@ -33,6 +33,7 @@
                               org-mode
                               makefile-gmake-mode))
 
+         ;; This is for LICENSE file which doesn’t have syntax for comments.
          (eval . (when (when-let ((buffer-file-name (buffer-file-name)))
                          (string-match-p "\\`LICENSE\\(?:\\.[[:alpha:]]+\\)?\\'" (file-name-nondirectory buffer-file-name)))
                    (setq-local buffer-read-only t)))
@@ -41,28 +42,20 @@
                    (local-set-key (kbd "C-c C") (lambda ()
                                                   "参考“GNUmakefile”中的“clean”项,进行适当的清理"
                                                   (interactive)
-                                                  (let ((default-directory user-emacs-directory))
-                                                    (delete-file "README.html")
-                                                    (delete-file "README.html~")
-                                                    (delete-file "docs/Emacs-regexp.html")
-                                                    (delete-file "docs/Emacs-regexp.html~")
-                                                    (delete-file "docs/Emacs-regexp.tex")
-                                                    (delete-file "docs/Emacs-regexp.tex~")
-                                                    (delete-file "docs/Emacs-regexp.pdf")
-                                                    (delete-file "docs/Emacs-use_daemon.html")
-                                                    (delete-file "docs/Emacs-use_daemon.html~")
-                                                    (delete-file "docs/Emacs-use_daemon.pdf"))))))
-
-         (prettify-symbols-alist . (("lambda" . ?λ)))
-         (mode . prettify-symbols)
+                                                  (mapc (lambda (relative-filename)
+                                                          (delete-file (file-name-concat user-emacs-directory
+                                                                                         relative-filename)))
+                                                        ["README.html~"
+                                                         "docs/Emacs-regexp.html" "docs/Emacs-regexp.html~" "docs/Emacs-regexp.tex" "docs/Emacs-regexp.tex~" "docs/Emacs-regexp.pdf"  "docs/Emacs-use_daemon.html" "docs/Emacs-use_daemon.html~" "docs/Emacs-use_daemon.pdf"])))))
 
          (eval . (let ((case-fold-search t))
                    (highlight-phrase "~?\\(?:shynur\\|谢骐\\)[^[:blank:][:space:][:cntrl:]()`'\"]*"
                                      'underline)))
 
+         (indent-tabs-mode . nil)
+
          (delete-trailing-lines . t)
          (require-final-newline . t)
-         (indent-tabs-mode . nil)
          (eval . (add-hook 'before-save-hook #'delete-trailing-whitespace))))
 
  (emacs-lisp-mode . ((eval . (imenu-add-menubar-index))))
@@ -95,8 +88,8 @@
 
                          (mode . indent-tabs)))
 
- ("shynur/" . ((nil . ((no-byte-compile . t)
-                       (no-native-compile . t))))))
+ ("lisp/" . ((nil . ((no-byte-compile . t)
+                     (no-native-compile . t))))))
 
 ;; Local Variables:
 ;; coding: utf-8-unix

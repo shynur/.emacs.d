@@ -9,11 +9,9 @@ SHELL = /bin/sh
 # 只需删除会对路径_补全_有影响的文件;“elpa/”这种平时根本用不到,而且也不在“.gitignore”中的,就属于没必要删除的.
 # 改完了记得更新“.dir-locals.el”中的“(eval . (global-set-key (kbd "C-c C") ...))”
 clean:
-	rm --force  *.el[cn]
+	rm --force  *.el[cn]  lisp/*.el[cn]
 	rm --force  README.html*
-	rm --force  docs/Emacs-regexp.html*     docs/Emacs-regexp.tex*     docs/Emacs-regexp.pdf
-	rm --force  docs/Emacs-use_daemon.html* docs/Emacs-use_daemon.pdf
-	rm --force  shynur/*.el[cn]
+	rm --force  docs/Emacs-regexp.html* docs/Emacs-regexp.tex* docs/Emacs-regexp.pdf  docs/Emacs-use_daemon.html* docs/Emacs-use_daemon.pdf
 
 # Local Variables:
 # coding: utf-8-unix

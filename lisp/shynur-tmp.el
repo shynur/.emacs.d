@@ -867,10 +867,6 @@
                            (other-window 1)
                            (delete-other-windows))
                         ,(lambda ()
-                           (when (daemonp)
-                             (pcase (system-name)
-                               ("ASUS-TX2" (shell-command "start c:/WINDOWS/system32/Taskmgr.exe /0")))))
-                        ,(lambda ()
                            "记录击键(bug#62277)"
                            (lossage-size (* 10000 10)))
                         ,(lambda ()
@@ -887,8 +883,6 @@
                         ,(lambda ()
                            (display-time-mode)
                            (display-battery-mode))
-                        ,(lambda ()
-                           (set-register ?i '(file . "~/.emacs.d/lisp/shynur-tmp.el")))
                         ,(lambda ()
                            "调节beep的声音种类,而不是音量"
                            (set-message-beep nil))
@@ -1311,6 +1305,9 @@
  '(auto-revert-interval 5
                         nil (autorevert)
                         "buffer-menu只使用poll更新")
+ '(auto-revert-check-vc-info t
+                             nil (autorevert)
+                             "autorevert时检查VC状态,即使文件没有修改时也检查")
  '(buffer-auto-revert-by-notification t
                                       nil (files)
                                       "dired可以使用file-notification")
@@ -1506,83 +1503,85 @@
                                      (remove-hook 'server-after-make-frame-hook shynur--custom-set-faces))))
   (add-hook 'server-after-make-frame-hook shynur--custom-set-faces))
 
-(global-unset-key (kbd "C-h g"))
-(global-unset-key (kbd "C-h h"))
-(global-unset-key (kbd "C-h t"))
-(global-unset-key (kbd "C-h C-a"))
-(global-unset-key (kbd "C-h C-c"))
-(global-unset-key (kbd "C-h C-m"))
-(global-unset-key (kbd "C-h C-o"))
-(global-unset-key (kbd "C-h C-p"))
-(global-unset-key (kbd "C-h C-t"))
-(global-unset-key (kbd "C-h C-w"))
-(global-unset-key (kbd "C-M-S-l"))  ; ‘recenter-other-window’
-(global-unset-key (kbd "C-x s"))    ; ‘save-some-buffers’
-(global-unset-key (kbd "C-x C-o"))  ; 删除附近空行
-(global-unset-key (kbd "C-S-<backspace>"))  ; 删除一整行及其换行符
-(global-unset-key (kbd "C-x DEL"))          ; kill至行首
-(global-unset-key (kbd "M-k"))      ; kill至句尾
-(global-unset-key (kbd "M-z"))      ; ‘zap-to-char’一帧就删完了,动作太快 反应不过来
-(global-unset-key (kbd "C-M-w"))    ; 强制合并两次kill,使其变成‘kill-ring’上的一个字符串
-(global-unset-key (kbd "C-x >"))    ; ‘scroll-right’
-(global-unset-key (kbd "C-x <"))    ; ‘scroll-left’
-(global-unset-key (kbd "C-x n p"))  ; ‘narrow-to-page’
-(global-unset-key (kbd "C-x n d"))  ; ‘narrow-to-defun’
-(global-unset-key (kbd "C-x C-+"))  ; ‘text-scale-adjust’
-(global-unset-key (kbd "C-x C-="))  ; ‘text-scale-adjust’
-(global-unset-key (kbd "C-x C--"))  ; ‘text-scale-adjust’
-(global-unset-key (kbd "C-x C-0"))  ; ‘text-scale-adjust’
-(global-unset-key (kbd "M-s h w"))  ; ‘hi-lock-write-interactive-patterns’
-(global-unset-key (kbd "M-s h f"))  ; ‘hi-lock-find-patterns’
-(global-unset-key (kbd "C-M-i"))    ; ‘ispell-complete-word’
-(global-unset-key (kbd "C-x C-v"))  ; ‘find-alternate-file’
-(global-unset-key (kbd "C-x m"))    ; ‘compose-mail’
-(global-unset-key (kbd "C-x <left>"))        ; ‘previous-buffer’
-(global-unset-key (kbd "C-x <right>"))       ; ‘next-buffer’
-(global-unset-key (kbd "C-x C-q"))           ; ‘read-only-mode’
-(global-unset-key (kbd "C-<down-mouse-1>"))  ; ‘mouse-buffer-menu’
-(global-unset-key (kbd "C-<down-mouse-3>"))  ; 右键菜单式(context-menu)的mode-specific menubar
-(global-unset-key (kbd "C-x 4 0"))    ; ‘kill-buffer-and-window’
-(global-unset-key (kbd "C-x 4 f"))    ; ‘find-file-other-window’
-(global-unset-key (kbd "C-x 5 f"))    ; ‘find-file-other-frame’
-(global-unset-key (kbd "C-x 5 C-f"))  ; ‘find-file-other-frame’
-(global-unset-key (kbd "C-x 5 C-o"))  ; ‘display-buffer-other-frame’
-(global-unset-key (kbd "C-x 5 b"))    ; ‘switch-to-buffer-other-frame’
-(global-unset-key (kbd "C-x 5 d"))    ; ‘dired-other-frame’
-(global-unset-key (kbd "C-x 5 m"))    ; ‘compose-mail-other-frame’
-(global-unset-key (kbd "C-x 5 r"))    ; ‘find-file-read-only-other-frame’
-(global-unset-key (kbd "C-x RET C-\\"))  ; ‘set-input-method’
-(global-unset-key (kbd "C-x \\"))     ; ‘activate-transient-input-method’
-(global-unset-key (kbd "C-x RET F"))  ; ‘set-file-name-coding-system’
-(global-unset-key (kbd "C-x RET t"))  ; ‘set-terminal-coding-system’
-(global-unset-key (kbd "C-x RET k"))  ; ‘set-keyboard-coding-system’
-(global-unset-key (kbd "C-t"))        ; ‘transpose-chars’
-(global-unset-key (kbd "M-t"))        ; ‘transpose-words’
-(global-unset-key (kbd "C-x C-t"))    ; ‘transpose-lines’
-(global-unset-key (kbd "C-x u"))      ; “C-_”
-(global-unset-key (kbd "C-/"))        ; “C-_”
-(global-unset-key (kbd "C-?"))        ; “C-M-_”,有些终端不认识这个字符
-(global-unset-key (kbd "M-<drag-mouse-1>"))  ; 与X的secondary selection兼容的功能
-(global-unset-key (kbd "M-<down-mouse-1>"))  ; 与X的secondary selection兼容的功能
-(global-unset-key (kbd "M-<down-mouse-3>"))  ; 与X的secondary selection兼容的功能
-(global-unset-key (kbd "M-<down-mouse-2>"))  ; 与X的secondary selection兼容的功能
-(global-unset-key (kbd "C-x C-u"))
-(global-unset-key (kbd "C-x C-l"))
-(global-unset-key (kbd "C-M-\\"))   ; ‘indent-region’
-(global-unset-key (kbd "M-@"))      ; ‘mark-word’
-(global-unset-key (kbd "C-M-@"))
-(global-unset-key (kbd "M-h"))      ; ‘mark-paragraph’
-(global-unset-key (kbd "C-M-h"))    ; ‘mark-defun’
-(global-unset-key (kbd "C-x C-p"))  ; ‘mark-page’
-(global-unset-key (kbd "C-M-o"))    ; ‘split-line’
-(global-unset-key (kbd "M-i"))      ; ‘tab-to-tab-stop’
-(global-unset-key (kbd "C-x TAB"))  ; ‘indent-rigidly’
-(global-unset-key (kbd "C-@"))      ; “C-SPC”
-(global-unset-key (kbd "C-x f"))    ; ‘set-fill-column’
-(global-unset-key (kbd "C-x ."))    ; ‘set-fill-prefix’
-(global-unset-key (kbd "<f2>"))     ; ‘2C-mode’相关的键
-(global-unset-key (kbd "C-x 6"))    ; ‘2C-mode’相关的键
-(global-unset-key (kbd "C-x ;"))    ; ‘comment-set-column’
+(keymap-global-unset "C-h g")
+(keymap-global-unset "C-h h")
+(keymap-global-unset "C-h t")
+(keymap-global-unset "C-h C-a")
+(keymap-global-unset "C-h C-c")
+(keymap-global-unset "C-h C-m")
+(keymap-global-unset "C-h C-o")
+(keymap-global-unset "C-h C-p")
+(keymap-global-unset "C-h C-t")
+(keymap-global-unset "C-h C-w")
+(keymap-global-unset "C-M-S-l")  ; ‘recenter-other-window’
+(keymap-global-unset "C-x s")    ; ‘save-some-buffers’
+(keymap-global-unset "C-x C-o")  ; 删除附近空行
+(keymap-global-unset "C-S-<backspace>")  ; 删除一整行及其换行符
+(keymap-global-unset "C-x DEL")          ; kill至行首
+(keymap-global-unset "M-k")      ; kill至句尾
+(keymap-global-unset "M-z")      ; ‘zap-to-char’一帧就删完了,动作太快 反应不过来
+(keymap-global-unset "C-M-w")    ; 强制合并两次kill,使其变成‘kill-ring’上的一个字符串
+(keymap-global-unset "C-x >")    ; ‘scroll-right’
+(keymap-global-unset "C-x <")    ; ‘scroll-left’
+(keymap-global-unset "C-x n p")  ; ‘narrow-to-page’
+(keymap-global-unset "C-x n d")  ; ‘narrow-to-defun’
+(keymap-global-unset "C-x C-+")  ; ‘text-scale-adjust’
+(keymap-global-unset "C-x C-=")  ; ‘text-scale-adjust’
+(keymap-global-unset "C-x C--")  ; ‘text-scale-adjust’
+(keymap-global-unset "C-x C-0")  ; ‘text-scale-adjust’
+(keymap-global-unset "M-s h w")  ; ‘hi-lock-write-interactive-patterns’
+(keymap-global-unset "M-s h f")  ; ‘hi-lock-find-patterns’
+(keymap-global-unset "C-M-i")    ; ‘ispell-complete-word’
+(keymap-global-unset "C-x C-v")  ; ‘find-alternate-file’
+(keymap-global-unset "C-x m")    ; ‘compose-mail’
+(keymap-global-unset "C-x <left>")        ; ‘previous-buffer’
+(keymap-global-unset "C-x <right>")       ; ‘next-buffer’
+(keymap-global-unset "C-x C-q")           ; ‘read-only-mode’
+(keymap-global-unset "C-<down-mouse-1>")  ; ‘mouse-buffer-menu’
+(keymap-global-unset "C-<down-mouse-3>")  ; 右键菜单式(context-menu)的mode-specific menubar
+(keymap-global-unset "C-x 4 0")    ; ‘kill-buffer-and-window’
+(keymap-global-unset "C-x 4 f")    ; ‘find-file-other-window’
+(keymap-global-unset "C-x 5 f")    ; ‘find-file-other-frame’
+(keymap-global-unset "C-x 5 C-f")  ; ‘find-file-other-frame’
+(keymap-global-unset "C-x 5 C-o")  ; ‘display-buffer-other-frame’
+(keymap-global-unset "C-x 5 b")    ; ‘switch-to-buffer-other-frame’
+(keymap-global-unset "C-x 5 d")    ; ‘dired-other-frame’
+(keymap-global-unset "C-x 5 m")    ; ‘compose-mail-other-frame’
+(keymap-global-unset "C-x 5 r")    ; ‘find-file-read-only-other-frame’
+(keymap-global-unset "C-x RET C-\\")  ; ‘set-input-method’
+(keymap-global-unset "C-x \\")     ; ‘activate-transient-input-method’
+(keymap-global-unset "C-x RET F")  ; ‘set-file-name-coding-system’
+(keymap-global-unset "C-x RET t")  ; ‘set-terminal-coding-system’
+(keymap-global-unset "C-x RET k")  ; ‘set-keyboard-coding-system’
+(keymap-global-unset "C-t")        ; ‘transpose-chars’
+(keymap-global-unset "M-t")        ; ‘transpose-words’
+(keymap-global-unset "C-x C-t")    ; ‘transpose-lines’
+(keymap-global-unset "C-x u")      ; “C-_”
+(keymap-global-unset "C-/")        ; “C-_”
+(keymap-global-unset "C-?")        ; “C-M-_”,有些终端不认识这个字符
+(keymap-global-unset "M-<drag-mouse-1>")  ; 与X的secondary selection兼容的功能
+(keymap-global-unset "M-<down-mouse-1>")  ; 与X的secondary selection兼容的功能
+(keymap-global-unset "M-<down-mouse-3>")  ; 与X的secondary selection兼容的功能
+(keymap-global-unset "M-<down-mouse-2>")  ; 与X的secondary selection兼容的功能
+(keymap-global-unset "C-x C-u")
+(keymap-global-unset "C-x C-l")
+(keymap-global-unset "C-M-\\")   ; ‘indent-region’
+(keymap-global-unset "M-@")      ; ‘mark-word’
+(keymap-global-unset "C-M-@")
+(keymap-global-unset "M-h")      ; ‘mark-paragraph’
+(keymap-global-unset "C-M-h")    ; ‘mark-defun’
+(keymap-global-unset "C-x C-p")  ; ‘mark-page’
+(keymap-global-unset "C-M-o")    ; ‘split-line’
+(keymap-global-unset "M-i")      ; ‘tab-to-tab-stop’
+(keymap-global-unset "C-x TAB")  ; ‘indent-rigidly’
+(keymap-global-unset "C-@")      ; “C-SPC”
+(keymap-global-unset "C-x f")    ; ‘set-fill-column’
+(keymap-global-unset "C-x .")    ; ‘set-fill-prefix’
+(keymap-global-unset "<f2>")     ; ‘2C-mode’相关的键
+(keymap-global-unset "C-x 6")    ; ‘2C-mode’相关的键
+(keymap-global-unset "C-x ;")    ; ‘comment-set-column’
+(keymap-global-unset "C-x p D")  ; ‘project-dired’
+(keymap-global-unset "C-x p b")  ; ‘project-switch-to-buffer’
 
 (progn
   (advice-add 'backward-kill-word :before-while

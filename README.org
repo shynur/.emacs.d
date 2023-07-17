@@ -59,14 +59,12 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
   有的 mode (e.g., ~neotree~, ~calendar~, ~vc-annotate-mode~) 显示行号反而会占用空间.
 - [ ] 将任何 non-selected window 且是 ~prog-mode~ 的 buffer 开启全局彩虹括号.
   ~highlight-parentheses~ 只会高亮光标附近的括号, 其余地方还是一尘不变, 这样不太 fancy.
-- [ ] 拖动 GUI 时自动缩小应用窗口.
 - [ ] 修改 ~minibuffer-local-map~ 和 ~minibuffer-local-ns-map~.
-- [ ] 用 context-menu 替代 menubar.
 - [ ] 写: 修改 =NumberLock= 映射到 =`=, =CapitalizedLock= 映射到 =Control= 的文章.
 - PATCH:
   - [ ] ~dframe-mouse-click-function~: "our".
+  - [ ] (emacs) =C-x p d=: not root
 - [ ] 设置一个 fontset, 解决 Org 中某些区域, 中文无法显示 及 emoji 无法显示的问题.
-- [ ] =.gitignore= 设置 outline
 
 ** TODO shynur/BUG
 1. [ ] company: "clang failed with error 255".

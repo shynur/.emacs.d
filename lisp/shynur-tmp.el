@@ -308,15 +308,6 @@
  '(savehist-autosave-interval nil
                               nil (savehist)
                               "每多少秒保存一次minibuffer的历史记录")
- '(desktop-restore-eager t
-                         nil (desktop)
-                         "不使用懒惰策略去恢复desktop")
- '(desktop-load-locked-desktop nil
-                               nil (desktop)
-                               "Emacs运行时会创建一个locked的dekstop文件,如果Emacs崩溃了再启动,将忽略这个文件")
- '(desktop-auto-save-timeout nil
-                             nil (desktop)
-                             "取消功能:在idle时自动保存desktop")
  '(minibuffer-allow-text-properties t
                                     nil ()
                                     "大部分情况下,保留从‘read-from-minibuffer’获取的文本的属性")
@@ -806,12 +797,6 @@
                                nil (simple)
                                "置t的话,轮流跳转到‘mark-ring’中指定的位置时,只有第一次需要加‘C-u’前缀,后续全部只需要‘C-SPC’即可")
  '(mark-even-if-inactive nil)
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'server-auth-dir "/")
-   nil (server))
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'server-socket-dir "/")
-   nil (server))
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'server-name ".txt")
-   nil (server))
  '(register-preview-delay 0
                           nil (register)
                           "调用读写register的命令时,预览已赋值的register,0延迟")
@@ -1217,11 +1202,8 @@
                           "退出时,不询问是否要kill子进程")
  '(require-final-newline t
                          nil (files))
- '(before-save-hook `(,@before-save-hook
-                      ,(lambda ()
-                         (whitespace-cleanup))
-                      ,(lambda ()
-                         (time-stamp)))
+ '(before-save-hook `(,@(bound-and-true-p before-save-hook)
+                      ,#'whitespace-cleanup)
                     nil (files))
  '(large-file-warning-threshold 1000000
                                 nil (files)
@@ -1312,14 +1294,6 @@
    nil (tramp-cache))
  `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'tramp-auto-save-directory "/")
    nil (tramp))
- '(recentf-mode t
-                nil (recentf))
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'recentf-save-file ".el")
-   nil (recentf))
- '(recentf-max-saved-items most-positive-fixnum
-                           nil (recentf))
- '(recentf-max-menu-items 30
-                          nil (recentf))
  `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'filesets-menu-cache-file ".el")
    nil (filesets))
  '(debugger-stack-frame-as-list nil
@@ -1428,10 +1402,48 @@
                            nil (compile)))
 
 ;;; Feature: ‘project’
-;; 记住有哪些已知项目.
 (shynur/init-data/ 'project-list-file ".el")
-;; “C-x p p”选中项目后, 立刻执行指定的 command.
-(setq project-switch-commands #'project-find-file)
+(setq project-switch-commands #'project-find-file)  ; “C-x p p”选中项目后, 立刻执行指定的 command.
+
+;;; Feature: ‘dired’
+(keymap-global-unset "C-x C-j")    ; ‘dired-jump’
+(keymap-global-unset "C-x 4 C-j")  ; ‘dired-jump-other-window’
+(keymap-global-unset "C-x 5 d")    ; ‘dired-other-frame’
+(setq dired-maybe-use-globstar t)
+;; (setq dired-listing-switches list-directory-verbose-switches) 在 MS-Windows 上用不了
+(setq dired-switches-in-mode-line nil)
+
+;;; Feature: ‘simple’
+(keymap-global-unset "C-x m")    ; ‘compose-mail’
+(keymap-global-unset "C-x 4 m")  ; ‘compose-mail’
+(keymap-global-unset "C-x 5 m")  ; ‘compose-mail’
+
+;;; Feature: ‘nsm’ GNU/Linux
+(setq network-security-level 'low)
+(shynur/init-data/ 'nsm-settings-file ".data")
+
+;;; Feature: ‘server’
+(shynur/init-data/ 'server-auth-dir "/")
+(shynur/init-data/ 'server-socket-dir "/")
+(setq server-name "server-name.txt")  ; Server 的名字, 也被用来命名 server file (见 emacsclient 的命令行参数 “--server-file”).
+(setq server-client-instructions nil)  ; 启动时不要提示 完成编辑 之后要告知 emacsclient 正常/出错 退出.
+
+;;; Feature: ‘desktop’ [X]
+(setq desktop-restore-eager t)  ; 尽快恢复 buffer, 而不是 idle 时逐步恢复.
+(setq desktop-load-locked-desktop t)  ; Lock 文件 是为了 防止其它 Emacs 实例将其复写, 但我的电脑上只会有一个 Emacs 实例. 所以即使文件是 locked, 也只能是因为上一次 session 中 Emacs 崩溃了.
+(setq desktop-auto-save-timeout nil)  ; Idle 时不自动保存, 毕竟 session 结束时会自动保存.
+(setq desktop-restore-frames nil)
+;; ‘desktop-files-not-to-save’: 默认不保存 Remote file.
+(setq desktop-path `(,(shynur/init-data/ 'desktop-dirname "/"))
+      desktop-base-file-name "desktop-base-file-name.el"
+      desktop-base-lock-name "desktop-base-lock-name.el")
+(setq desktop-save t)
+
+;;; Feature: ‘recentf’
+(shynur/init-data/ 'recentf-save-file ".el")
+(setq recentf-max-saved-items nil)
+(setq recentf-max-menu-items 30)
+(recentf-mode)
 
 (letrec ((shynur--custom-set-faces (lambda ()
                                      "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘custom-set-faces’,其余(以及后续)的client都能生效"
@@ -1502,7 +1514,6 @@
 (keymap-global-unset "M-s h f")  ; ‘hi-lock-find-patterns’
 (keymap-global-unset "C-M-i")    ; ‘ispell-complete-word’
 (keymap-global-unset "C-x C-v")  ; ‘find-alternate-file’
-(keymap-global-unset "C-x m")    ; ‘compose-mail’
 (keymap-global-unset "C-x <left>")        ; ‘previous-buffer’
 (keymap-global-unset "C-x <right>")       ; ‘next-buffer’
 (keymap-global-unset "C-x C-q")           ; ‘read-only-mode’
@@ -1551,6 +1562,9 @@
 (keymap-global-unset "C-x ;")    ; ‘comment-set-column’
 (keymap-global-unset "C-x p D")  ; ‘project-dired’
 (keymap-global-unset "C-x p b")  ; ‘project-switch-to-buffer’
+(keymap-global-unset "C-x 5 .")  ; ‘xref-find-definitions-other-frame’
+(keymap-global-unset "C-x C-d")  ; ‘list-directory’
+(keymap-global-unset "C-x C-z")  ; ‘suspend-frame’
 
 (progn
   (advice-add 'backward-kill-word :before-while
@@ -1703,8 +1717,8 @@
         ("z" . ,(lambda ()
                   "更换屏幕时记得修改这些参数"
                   (interactive)
-                  (set-frame-position nil 378 198)
-                  (set-frame-size nil 1100 850 t)))))
+                  (set-frame-position nil 220 130)
+                  (set-frame-size nil 800 600 t)))))
 
 (letrec ((modify-keyboard-translation (lambda ()
                                         "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘keyboard-translate’,其余(以及后续)的client都能生效"

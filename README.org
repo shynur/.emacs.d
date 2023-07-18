@@ -6,7 +6,7 @@
 
 🥰 这是我的 Emacs 个人配置方案, from scratch.
 
-🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/emacs][GNU Emacs Manual]]/ ([[http://localhost/emacs/Lisp-Libraries.html][28.3]]) 和 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/ (22).
+🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/emacs][GNU Emacs Manual]]/ ([[http://localhost/emacs/Lisp-Libraries.html][45]]) 和 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/ (22).
 之后将会使用 [[https://github.com/jwiegley/use-package][=use-package=]] 进行彻底的重构.
 
 (由于 GitHub 对 Org 的支持孱弱, 故些许地方渲染效果不佳.
@@ -50,21 +50,19 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 
 考虑到从零开始按照本配置初始化 Emacs 时, 可能会遇到各种意想不到的问题, 所以可以直接[[https://github.com/shynur/misc/tree/main/tmp/shynur-emacs-directory/][从这里找到自己需要的目录的打包文件, 并整个下载下来]], 以替换掉原本的 =~/.emacs.d/= 目录.
 
-* TODO 待办事项
+* TODO 待办
 
 - [ ] 不应该单纯开启 ~global-display-line-numbers-mode~, 而是应该给出一个分类机制, 有需要的 mode 才打开 ~display-line-numbers-mode~.
   有的 mode (e.g., ~neotree~, ~calendar~, ~vc-annotate-mode~) 显示行号反而会占用空间.
 - [ ] 将任何 non-selected window 且是 ~prog-mode~ 的 buffer 开启全局彩虹括号.
   ~highlight-parentheses~ 只会高亮光标附近的括号, 其余地方还是一尘不变, 这样不太 fancy.
-- [ ] 修改 ~minibuffer-local-map~ 和 ~minibuffer-local-ns-map~.
-- [ ] 写: 修改 =NumberLock= 映射到 =`=, =CapitalizedLock= 映射到 =Control= 的文章.
 - PATCH:
   - [ ] ~dframe-mouse-click-function~: "our".
   - [ ] (emacs) =C-x p d=: not root
-- [ ] 设置一个 fontset, 解决 Org 中某些区域, 中文无法显示 及 emoji 无法显示的问题.
 
-** TODO shynur/BUG
-1. [ ] company: "clang failed with error 255".
+** BUG
+- company: "clang failed with error 255".
+- hexl-mode: 保存文件时会删除一些字符.
 
 ** TODO 新增文件流程 [0/5]
 1. [ ] =New-file-name=

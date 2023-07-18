@@ -2,7 +2,8 @@
 
 (defun shynur/init-data/ (option type)
   "确保在“USER-EMACS-DIRECTORY/.data/”下有一个新路径, 其名为 OPTION, 类型为 TYPE; 将该绝对路径赋给 OPTION.
-TYPE 的可能值为: \"\" 无后缀, \"/\" 目录, \".EXTENSION\" 文件类型."
+TYPE 的可能值为: \"\" 无后缀, \"/\" 目录, \".EXTENSION\" 文件类型.
+返回值为该绝对路径."
   (let ((shynur/init-data/path (file-name-concat user-emacs-directory ".data/"
                                                  (concat (symbol-name option)
                                                          type))))

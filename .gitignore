@@ -23,6 +23,7 @@
 !/docs/Emacs-FAQ.txt
 !/docs/Emacs-regexp.org
 !/docs/Emacs-use_daemon.md
+!/docs/MS_Windows-keyboard_remap.txt
 
 #outline: ./lisp/
 /lisp/*

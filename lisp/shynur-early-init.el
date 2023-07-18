@@ -1,11 +1,7 @@
-;;; ~shynur/.emacs.d/lisp/shynur-early-init.el  -*- lexical-binding: t; -*-
+;;; -*- lexical-binding: t; -*-
 
-;;; Code:
-
 (setq gc-cons-threshold 100000000
       gc-cons-percentage 0.36789)
-
-(make-directory "~/.emacs.d/.shynur/" t)
 
 (defun shynur/message-format (format-string)
   #("在开头加上“Shynur: ”"
@@ -26,16 +22,9 @@
                         (thread-yield))
                       ,@body)))))
 
-(defun shynur/pathname-~/.emacs.d/.shynur/ (&rest pathnames)
-  (declare (pure t))
-  (apply #'file-name-concat
-         "~/.emacs.d/.shynur/" pathnames))
-
 (defvar shynur/time-running-minutes -2)
 
 (provide 'shynur-early-init)
-
-;;; End of Code
 
 ;; Local Variables:
 ;; coding: utf-8-unix

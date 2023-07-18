@@ -1,4 +1,4 @@
-### ~shynur/.emacs.d/.gitignore
+## 启用 outline mode, 将 cursor 放在 “#outline: ./PATH/” 上按 “TAB” 以折叠目录.
 
 #outline: ./
 /*

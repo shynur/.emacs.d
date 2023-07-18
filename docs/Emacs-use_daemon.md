@@ -1,5 +1,3 @@
-<!-- ~shynur/.emacs.d/docs/Emacs-use_daemon.md -->
-
 # 如何运行 Emacs 作为后台服务进程?
 
 (仅考虑 GUI.)
@@ -56,10 +54,6 @@ Emacs 提供了 daemon-client 模型, 简而言之就像 Steam 那样: 在后台
 ```lisp
 (setq file-name-coding-system 'chinese-gb18030)
 ```
-
-___
-
-Copyright &copy; 2023 [谢骐](https://github.com/shynur) \<<one.last.kiss@outlook.com>\>.  All rights reserved.
 
 <!-- Local Variables: -->
 <!-- coding: utf-8-unix -->

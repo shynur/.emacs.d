@@ -1,4 +1,4 @@
-### ~shynur/.emacs.d/clang-format.yaml --- Shynur’s _clang-format
+## 供 Emacs 调用 ‘clang-format’ 时参考.
 
 ---
 AlignAfterOpenBracket: Align

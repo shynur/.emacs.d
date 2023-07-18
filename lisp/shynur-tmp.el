@@ -1,7 +1,5 @@
-;;; ~shynur/.emacs.d/lisp/shynur-tmp.el  -*- lexical-binding: t; -*-
+;;; -*- lexical-binding: t; -*-
 
-;;; Code:
-
 (custom-set-variables
  '(post-gc-hook `(,@post-gc-hook
                   ,(lambda ()
@@ -92,7 +90,6 @@
  '(print-circle t
                 nil ()
                 "打印成#N=(#N#)而非(#level)")
- '(print-gensym t)
  '(print-integers-as-characters nil)
  '(eval-expression-print-maximum-character most-positive-fixnum
                                            nil (simple)
@@ -132,15 +129,12 @@
  '(highlight-nonselected-windows t
                                  nil ()
                                  "除了当前选中的window,还highlight非选中的window的active-region")
- '(transient-history-file (shynur/pathname-~/.emacs.d/.shynur/
-                           "transient-history-file.el")
-                          nil (transient))
- '(transient-levels-file (shynur/pathname-~/.emacs.d/.shynur/
-                          "transient-levels-file.el")
-                         nil (transient))
- '(transient-values-file (shynur/pathname-~/.emacs.d/.shynur/
-                          "transient-values-file.el")
-                         nil (transient))
+ `(,(shynur--intern&bind-tmp)(shynur/init-data/ 'transient-history-file ".el")
+   nil (transient))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'transient-levels-file ".el")
+   nil (transient))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'transient-values-file ".el")
+   nil (transient))
  '(case-replace t
                 nil (replace)
                 "文本替换时,大小写敏感")
@@ -192,11 +186,6 @@
  '(calendar-week-start-day 1
                            nil (calendar)
                            "以星期一作为一周的开始")
- '(auth-sources (mapcar (lambda (pathname)
-                          (apply #'shynur/pathname-~/.emacs.d/.shynur/
-                                 (remove "~" (file-name-split pathname)))) auth-sources)
-                nil (auth-source)
-                "remote access认证信息(包含明文密码)的存储位置")
  '(coding-system-for-write 'utf-8-unix
                            nil ()
                            "该customization中的NEW被Emacs设置为t")
@@ -206,8 +195,6 @@
  '(completion-cycle-threshold nil
                               nil (minibuffer)
                               "minibuffer补全时,按TAB会轮换候选词")
- '(indent-guide-global-mode t
-                            nil (indent-guide))
  '(indent-guide-recursive t
                           nil (indent-guide))
  '(indent-guide-char "\N{BOX DRAWINGS LIGHT VERTICAL}"
@@ -241,10 +228,9 @@
  '(custom-enabled-themes '(modus-vivendi)
                          nil (custom)
                          "深色背景")
- '(custom-file (shynur/pathname-~/.emacs.d/.shynur/
-                "custom-file.el")
-               nil (cus-edit)
-               "修改Emacs导出customization的位置,以防Emacs搅乱这个文件的‘custom-set-variables’形式和‘custom-set-faces’形式")
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'custom-file ".el")
+   nil (cus-edit)
+   "修改Emacs导出customization的位置,以防Emacs搅乱这个文件的‘custom-set-variables’形式和‘custom-set-faces’形式")
  '(display-time-day-and-date t
                              nil (time)
                              "使‘display-time-mode’显示日期")
@@ -302,25 +288,20 @@
                          nil (delsel)
                          "选中文本后输入字符,会先删除刚刚选择的文本,再插入输入的字符")
  '(enable-recursive-minibuffers t)
- '(eshell-directory-name (shynur/pathname-~/.emacs.d/.shynur/
-                          "eshell-directory-name/")
-                         nil (esh-mode))
- '(eshell-history-file-name (shynur/pathname-~/.emacs.d/.shynur/
-                             "eshell-history-file-name.txt")
-                            nil (em-hist))
- '(eshell-last-dir-ring-file-name (shynur/pathname-~/.emacs.d/.shynur/
-                                   "eshell-last-dir-ring-file-name.txt")
-                                  nil (em-dirs))
- '(eww-bookmarks-directory (shynur/pathname-~/.emacs.d/.shynur/
-                            "eww-bookmarks-directory/")
-                           nil (eww))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'eshell-directory-name "/")
+   nil (esh-mode))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'eshell-history-file-name ".txt")
+   nil (em-hist))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'eshell-last-dir-ring-file-name ".txt")
+   nil (em-dirs))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'eww-bookmarks-directory "/")
+   nil (eww))
  '(extended-command-suggest-shorter t
                                     nil (simple)
                                     "通过不完整的函数名调用command时,在echo area中提示这个command的全名")
- '(savehist-file (shynur/pathname-~/.emacs.d/.shynur/
-                  "savehist-file.el")
-                 nil (savehist)
-                 "必须在打开‘savehist-mode’之前设置此变量,否则‘savehist-mode’将找不到该文件")
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'savehist-file ".el")
+   nil (savehist)
+   "必须在打开‘savehist-mode’之前设置此变量,否则‘savehist-mode’将找不到该文件")
  '(savehist-mode t
                  nil (savehist)
                  "保存minibuffer的历史记录")
@@ -523,9 +504,8 @@
  '(inhibit-startup-echo-area-message user-login-name
                                      nil ()
                                      "只有将该变量设置为自己在OS中的username,才能屏蔽startup时echo area的“For information about GNU Emacs and the GNU system, type C-h C-a.”")
- '(save-place-file (shynur/pathname-~/.emacs.d/.shynur/
-                    "save-place-file.el")
-                   nil (saveplace))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'save-place-file ".el")
+   nil (saveplace))
  '(save-place-mode t
                    nil (saveplace)
                    "在session之间保存访问文件时的浏览位置")
@@ -550,10 +530,7 @@
  '(suggest-key-bindings most-positive-fixnum
                         nil (simple)
                         "_1_通过函数名调用command时,在minibuffer中提示这个command可能绑定的快捷键;_2_决定‘extended-command-suggest-shorter’的显示持续时间;_3_将前面这两个提示信息持续显示5秒;_4_使command候选词列表中,各函数名的后面显示该函数绑定的快捷键")
- '(temporary-file-directory (let ((temporary-file-directory (shynur/pathname-~/.emacs.d/.shynur/
-                                                             "temporary-file-directory/")))
-                              (make-directory temporary-file-directory t)
-                              temporary-file-directory))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'temporary-file-directory "/"))
  '(text-quoting-style nil
                       nil ()
                       "渲染成对的单引号时,尽可能使用‘curve’这种样式,退而求此次地可以使用`grave'这种样式")
@@ -598,12 +575,10 @@
  '(uniquify-strip-common-suffix t
                                 nil (uniquify)
                                 "当‘uniquify-buffer-name-style’的设置涉及补全文件路径时,保留显示路径名之间相同的部分")
- '(url-cache-directory (shynur/pathname-~/.emacs.d/.shynur/
-                        "url-cache-directory/")
-                       nil (url-cache))
- '(url-cookie-file (shynur/pathname-~/.emacs.d/.shynur/
-                    "url-cookie-file")
-                   nil (url-cookie))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'url-cache-directory "/")
+   nil (url-cache))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'url-cookie-file "")
+   nil (url-cookie))
  '(user-full-name "谢骐")
  '(user-mail-address "one.last.kiss@outlook.com"
                      nil ()
@@ -792,9 +767,8 @@
  '(debug-on-quit nil
                  nil ()
                  "按下“C-g”时是否要进入debugger")
- '(bookmark-default-file (shynur/pathname-~/.emacs.d/.shynur/
-                          "bookmark-default-file.el")
-                         nil (bookmark))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'bookmark-default-file ".el")
+   nil (bookmark))
  '(bookmark-save-flag 1
                       nil (bookmark)
                       "每次保存bookmark时都会写进文件")
@@ -832,14 +806,12 @@
                                nil (simple)
                                "置t的话,轮流跳转到‘mark-ring’中指定的位置时,只有第一次需要加‘C-u’前缀,后续全部只需要‘C-SPC’即可")
  '(mark-even-if-inactive nil)
- '(server-auth-dir (shynur/pathname-~/.emacs.d/.shynur/
-                    "server-auth-dir/")
-                   nil (server))
- '(server-socket-dir (shynur/pathname-~/.emacs.d/.shynur/
-                      "server-socket-dir/")
-                     nil (server))
- '(server-name "server-name.txt"
-               nil (server))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'server-auth-dir "/")
+   nil (server))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'server-socket-dir "/")
+   nil (server))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'server-name ".txt")
+   nil (server))
  '(register-preview-delay 0
                           nil (register)
                           "调用读写register的命令时,预览已赋值的register,0延迟")
@@ -858,11 +830,7 @@
  '(text-scale-mode-step text-scale-mode-step
                         nil (face-remap)
                         "放缩字体大小时的倍率")
- '(after-init-hook `(,@after-init-hook
-                     ,(lambda ()
-                        (setq user-init-file (shynur/pathname-~/.emacs.d/.shynur/
-                                              "user-init-file.el")))))
- '(emacs-startup-hook `(,@emacs-startup-hook
+ '(emacs-startup-hook `(,@(bound-and-true-p emacs-startup-hook)
                         ,(lambda ()
                            (other-window 1)
                            (delete-other-windows))
@@ -1317,8 +1285,7 @@
  '(auto-save-timeout 30
                      nil ()
                      "经过如此之多的秒数的idleness之后auto-save,还可能执行一次GC.(这是一条heuristic的建议,Emacs可以不遵循,e.g.,编辑大文件)")
- '(auto-save-list-file-prefix (shynur/pathname-~/.emacs.d/.shynur/
-                               "auto-save-list/"))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'auto-save-list-file-prefix "/"))
  '(auto-save-no-message nil)
  '(delete-auto-save-files t
                           nil ()
@@ -1341,24 +1308,20 @@
  '(tramp-mode t
               nil (tramp)
               "若置nil,直接关闭remote-filename识别")
- '(tramp-persistency-file-name (shynur/pathname-~/.emacs.d/.shynur/
-                                "tramp-persistency-file-name.el")
-                               nil (tramp-cache))
- '(tramp-auto-save-directory (shynur/pathname-~/.emacs.d/.shynur/
-                              "tramp-auto-save-directory/")
-                             nil (tramp))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'tramp-persistency-file-name ".el")
+   nil (tramp-cache))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'tramp-auto-save-directory "/")
+   nil (tramp))
  '(recentf-mode t
                 nil (recentf))
- '(recentf-save-file (shynur/pathname-~/.emacs.d/.shynur/
-                      "recentf-save-file.el")
-                     nil (recentf))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'recentf-save-file ".el")
+   nil (recentf))
  '(recentf-max-saved-items most-positive-fixnum
                            nil (recentf))
  '(recentf-max-menu-items 30
                           nil (recentf))
- '(filesets-menu-cache-file (shynur/pathname-~/.emacs.d/.shynur/
-                             "filesets-menu-cache-file.el")
-                            nil (filesets))
+ `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'filesets-menu-cache-file ".el")
+   nil (filesets))
  '(debugger-stack-frame-as-list nil
                                 nil ()
                                 "debugger以C风格显示函数调用栈,而不是Lisp风格")
@@ -1463,6 +1426,12 @@
                              nil (compile))
  '(compilation-always-kill nil
                            nil (compile)))
+
+;;; Feature: ‘project’
+;; 记住有哪些已知项目.
+(shynur/init-data/ 'project-list-file ".el")
+;; “C-x p p”选中项目后, 立刻执行指定的 command.
+(setq project-switch-commands #'project-find-file)
 
 (letrec ((shynur--custom-set-faces (lambda ()
                                      "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘custom-set-faces’,其余(以及后续)的client都能生效"
@@ -1793,8 +1762,6 @@
                        (text-properties-at same-as-where)))
 
 (provide 'shynur-tmp)
-
-;;; End of Code
 
 ;; Local Variables:
 ;; coding: utf-8-unix

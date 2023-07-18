@@ -1,10 +1,11 @@
-;;; ~shynur/.emacs.d/.dir-locals.el
+;; 能放到该文件的配置都放到该文件, file local variable 要尽可能少.
+;; Emacs 启动时会读取本文件, 将结果加到 ‘safe-local-variable-values’ 中, 当启用这些配置时, _无需确认_.
 
-((auto-mode-alist . (;; 有些设置是多余的,但出于教学/参考的目的,保留下来
+((auto-mode-alist . (;; 有些设置是多余的, 但出于 教学/参考 的目的, 保留下来.
                      ("~\\'" . (ignore t))
                      ("#[[:alnum:]]*\\'" . (ignore t))
 
-                     ;; (bug#64415)
+                     ;; (Bug#64415)
                      ("/[^/-][^/]*\\.el\\'" . emacs-lisp-mode)
                      ("/\\.dir-locals\\(?:-2\\)?\\.el\\'" . lisp-data-mode)
 
@@ -37,16 +38,6 @@
          (eval . (when (when-let ((buffer-file-name (buffer-file-name)))
                          (string-match-p "\\`LICENSE\\(?:\\.[[:alpha:]]+\\)?\\'" (file-name-nondirectory buffer-file-name)))
                    (setq-local buffer-read-only t)))
-
-         (eval . (when (eq system-type 'windows-nt)  ; GNU/Linux上可以用‘compile’命令调用“make clean”
-                   (local-set-key (kbd "C-c C") (lambda ()
-                                                  "参考“GNUmakefile”中的“clean”项,进行适当的清理"
-                                                  (interactive)
-                                                  (mapc (lambda (relative-filename)
-                                                          (delete-file (file-name-concat user-emacs-directory
-                                                                                         relative-filename)))
-                                                        ["README.html~"
-                                                         "docs/Emacs-regexp.html" "docs/Emacs-regexp.html~" "docs/Emacs-regexp.tex" "docs/Emacs-regexp.tex~" "docs/Emacs-regexp.pdf"  "docs/Emacs-use_daemon.html" "docs/Emacs-use_daemon.html~" "docs/Emacs-use_daemon.pdf"])))))
 
          (eval . (let ((case-fold-search t))
                    (highlight-phrase "~?\\(?:shynur\\|谢骐\\)[^[:blank:][:space:][:cntrl:]()`'\"]*"

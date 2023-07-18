@@ -1,8 +1,4 @@
-# ~shynur/.emacs.d/docs/Emacs-regexp.org
-
 #+title: ELisp 中的正则表达式 (regexp)
-#+author: 谢骐 (shynur)
-#+email: one.last.kiss@outlook.com
 
 * Syntax
 
@@ -405,8 +401,7 @@ E.g.,
 - 尽量使用 shy group 而不是 capturing group.
 - ~rx~ 会优化一些 [[‘​=\|=​’][or-pattern]], 并且默认使用 shy group.
 
------
-Copyright \copy 2023 [[https://github.com/shynur][谢骐]] <[[mailto:one.last.kiss@outlook.com][one.last.kiss@outlook.com]]>.  All rights reserved.
+# 为 footnote 添加分割线.
 -----
 
 # Local Variables:

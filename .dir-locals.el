@@ -79,7 +79,8 @@
 
                          (mode . indent-tabs)))
 
- ("lisp/" . ((nil . ((no-byte-compile . t)
+ ("lisp/" . ((nil . (;; 编写用于 解释执行 的代码更加轻松.
+                     (no-byte-compile . t)
                      (no-native-compile . t))))))
 
 ;; Local Variables:

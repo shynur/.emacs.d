@@ -8,9 +8,9 @@
 !/GNUmakefile
 !/LICENSE.txt
 !/README.org
-!/clang-format.yaml
 !/docs/
 !/early-init.el
+!/etc/
 !/init.el
 !/lisp/
 
@@ -24,6 +24,10 @@
 !/docs/Emacs-regexp.org
 !/docs/Emacs-use_daemon.md
 !/docs/MS_Windows-keyboard_remap.txt
+
+#outline: ./etc/
+/etc/*
+!/etc/clang-format.yaml
 
 #outline: ./lisp/
 /lisp/*

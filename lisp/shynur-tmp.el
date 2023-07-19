@@ -1565,6 +1565,9 @@
 (keymap-global-unset "C-x 5 .")  ; ‘xref-find-definitions-other-frame’
 (keymap-global-unset "C-x C-d")  ; ‘list-directory’
 (keymap-global-unset "C-x C-z")  ; ‘suspend-frame’
+(keymap-global-unset "C-M-c")    ; ‘exit-recursive-edit’
+(keymap-global-unset "C-]")      ; ‘abort-recursive-edit’
+(keymap-global-unset "C-x X a")  ; ‘abort-recursive-edit’
 
 (progn
   (advice-add 'backward-kill-word :before-while
@@ -1661,7 +1664,7 @@
               (put #'drag-stuff-up    'repeat-map 'shynur/drag-stuff-map)
               (put #'drag-stuff-right 'repeat-map 'shynur/drag-stuff-map)))
         ("f" . ,(lambda ()
-                  "调用“clang-format --Werror --fallback-style=none --ferror-limit=0 --style=file:~/.emacs.d/clang-format.yaml”.
+                  "调用“clang-format --Werror --fallback-style=none --ferror-limit=0 --style=file:~/.emacs.d/etc/clang-format.yaml”.
 在C语系中直接美化代码,否则美化选中区域"
                   (interactive)
                   (let ((clang-format (pcase (system-name)
@@ -1671,7 +1674,7 @@
                                    "--fallback-style=none"
                                    "--ferror-limit=0"
                                    ,(format "--style=file:%s"
-                                            (file-truename "~/.emacs.d/clang-format.yaml"))))
+                                            (file-truename "~/.emacs.d/etc/clang-format.yaml"))))
                         (programming-language (pcase major-mode
                                                 ('c-mode    "c"   )
                                                 ('c++-mode  "cpp" )

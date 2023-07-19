@@ -7,6 +7,7 @@
 !/.gitignore
 !/GNUmakefile
 !/LICENSE.txt
+!/MANIFEST.md
 !/README.org
 !/docs/
 !/early-init.el

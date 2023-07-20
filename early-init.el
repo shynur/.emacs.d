@@ -1,10 +1,10 @@
 ;;; -*- lexical-binding: t; -*-
 
+(setq load-prefer-newer nil)
 (add-to-list 'load-path (file-name-concat user-emacs-directory
                                           "lisp/"))
-(setq load-prefer-newer nil)
 
-(require 'shynur-early-init)
+(require 'shynur-early-init)  ; (find-file-other-window "./lisp/shynur-early-init.el")
 
 ;; Local Variables:
 ;; coding: utf-8-unix

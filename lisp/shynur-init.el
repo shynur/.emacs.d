@@ -17,10 +17,32 @@ TYPE 的可能值为: \"\" 无后缀, \"/\" 目录, \".EXTENSION\" 文件类型.
                                          (cl-incf shynur--tmp-count)))))
     (set interned-symbol nil)
     interned-symbol))
+
+(defun shynur/message-format (format-string)
+  #("在开头加上“Shynur: ”"
+    6 13 (face (shadow italic)))
+  (declare (pure t)
+           (indent 1))
+  (format #("Shynur: %s"
+            0 7 (face (shadow italic)))
+          format-string))
+
+(defmacro shynur/buffer-eval-after-created (buffer-or-name &rest body)
+  (declare (indent 1))
+  (let ((&buffer-or-name (gensym "shynur/buffer-eval-after-created-")))
+    `(progn
+       (setq ,&buffer-or-name ,buffer-or-name)
+       (make-thread (lambda ()
+                      (while (not (get-buffer ,&buffer-or-name))
+                        (thread-yield))
+                      ,@body)))))
+
+(defvar shynur/time-running-minutes (1- (- (random 2)))
+  "启动时立即加 1, 刚好又到了 整分钟 点, 又加 1: IOW, 极端情况下一启动就 增加 2.")
 
 ;; 顺序应当是不重要的.
-(require 'shynur-tmp)
-(require 'shynur-org)
+(require 'shynur-tmp)  ; (find-file-other-window "./shynur-tmp.el")
+(require 'shynur-org)  ; (find-file-other-window "./shynur-org.el")
 
 (provide 'shynur-init)
 

@@ -1444,6 +1444,9 @@
 (setq recentf-max-saved-items nil)
 (setq recentf-max-menu-items 30)
 (recentf-mode)
+
+;;; Feature: ‘hanoi’
+(setq hanoi-use-faces nil)  ; 不要使用彩色动画, 因为看起来很鬼畜.
 
 (letrec ((shynur--custom-set-faces (lambda ()
                                      "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘custom-set-faces’,其余(以及后续)的client都能生效"

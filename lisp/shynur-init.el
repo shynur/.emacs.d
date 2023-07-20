@@ -1,5 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
+(require 'shynur-package)  ; (find-file-other-window "./shynur-package.el")
+
 (defun shynur/init-data/ (option type)
   "确保在“USER-EMACS-DIRECTORY/.data/”下有一个新路径, 其名为 OPTION, 类型为 TYPE; 将该绝对路径赋给 OPTION.
 TYPE 的可能值为: \"\" 无后缀, \"/\" 目录, \".EXTENSION\" 文件类型.

@@ -18,6 +18,8 @@
  |    |
  |    |__ shynur-org.el
  |    |
+ |    |__ shynur-package.el
+ |    |
  |    |__ shynur-tmp.el
  |    |
  |    |__ subdirs.el

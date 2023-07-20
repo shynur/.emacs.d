@@ -25,55 +25,6 @@
                                                                   0 4 (face bold))
                                                                 memory
                                                                 mem-unit)))))))))
- '(package-archive-priorities '(("gnu"    . 0)
-                                ("nongnu" . 0)
-                                ("melpa"  . 0))
-                              1 (package)
-                              "暂时不需要修改,因为根据‘package-menu-hide-low-priority’,默认选取最新的包")
- '(package-menu-hide-low-priority t
-                                  2 (package))
- '(package-archives '(("gnu"    . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/gnu/")
-                      ("nongnu" . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/nongnu/")
-                      ("melpa"  . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/melpa/"))
-                    3 (package)
-                    "[1]其它ELPA中的包会依赖gnu中的包[2]nongnu是官方维护的[3]MELPA滚动升级,收录的包的数量最大[4]stable-melpa依据源码的Tag(Git)升级,数量比MELPA少,因为很多包作者根本不打Tag[5]Org仅仅为了org-plus-contrib这一个包,Org重度用户使用[6]gnu-devel收录GNU中的包的开发中版本,一般不必启用(类似于MELPA与stable-melpa的关系)[7]nongnu-devel收录nongnu中的包的开发中版本,一般不必启用")
- '(package-selected-packages (progn
-                               ;; 摘编自<https://orgmode.org/elpa.html>
-                               (let (message-log-max)
-                                 (ignore-errors
-                                   '(package-refresh-contents)))
-                               (mapc (lambda (package-symbol)
-                                       (unless (package-installed-p package-symbol)
-                                         (package-install package-symbol))
-                                       package-symbol)
-                                     '(ivy
-                                       sly
-                                       dimmer
-                                       swiper
-                                       company
-                                       helpful
-                                       neotree
-                                       transwin
-                                       git-modes
-                                       highlight
-                                       on-screen
-                                       which-key
-                                       yaml-mode
-                                       drag-stuff
-                                       marginalia
-                                       ascii-table
-                                       doom-themes
-                                       use-package
-                                       indent-guide
-                                       rainbow-mode
-                                       all-the-icons
-                                       doom-modeline
-                                       markdown-mode
-                                       page-break-lines
-                                       company-quickhelp
-                                       rainbow-delimiters
-                                       highlight-parentheses)))
-                             4 (package))
  '(print-quoted t
                 nil ()
                 "打印成“'foo”而非“(quote foo)”")

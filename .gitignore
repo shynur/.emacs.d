@@ -35,6 +35,7 @@
 !/lisp/shynur-early-init.el
 !/lisp/shynur-init.el
 !/lisp/shynur-org.el
+!/lisp/shynur-package.el
 !/lisp/shynur-tmp.el
 !/lisp/subdirs.el
 

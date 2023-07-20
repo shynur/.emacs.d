@@ -49,7 +49,10 @@
          (require-final-newline . t)
          (eval . (add-hook 'before-save-hook #'delete-trailing-whitespace))))
 
- (emacs-lisp-mode . ((eval . (imenu-add-menubar-index))))
+ (emacs-lisp-mode . ((eval . (imenu-add-menubar-index))
+
+                     (prettify-symbols-alist . (("lambda" . ?λ)))
+                     (mode . prettify-symbols)))
 
  (markdown-mode . ((eval . (imenu-add-menubar-index))))
 

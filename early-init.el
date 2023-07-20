@@ -1,8 +1,8 @@
 ;;; -*- lexical-binding: t; -*-
 
 (setq load-prefer-newer nil)
-(add-to-list 'load-path (file-name-concat user-emacs-directory
-                                          "lisp/"))
+(push (file-name-concat user-emacs-directory
+                        "lisp/") load-path)
 
 (require 'shynur-early-init)  ; (find-file-other-window "./lisp/shynur-early-init.el")
 

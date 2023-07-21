@@ -33,6 +33,7 @@
 #outline: ./lisp/
 /lisp/*
 !/lisp/shynur-early-init.el
+!/lisp/shynur-elisp.el
 !/lisp/shynur-init.el
 !/lisp/shynur-org.el
 !/lisp/shynur-package.el

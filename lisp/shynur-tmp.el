@@ -25,26 +25,6 @@
                                                                   0 4 (face bold))
                                                                 memory
                                                                 mem-unit)))))))))
- '(print-quoted t
-                nil ()
-                "打印成“'foo”而非“(quote foo)”")
- '(print-escape-newlines t)
- '(print-escape-control-characters nil
-                                   nil ()
-                                   "打印成“^C”而非“\3”,“\n”和“\f”不受影响")
- '(print-length nil
-                nil ()
-                "当打印的列表元素数>该值时,超出部分用省略号表示")
- '(eval-expression-print-length nil)
- '(print-level nil)
- '(eval-expression-print-level nil)
- '(print-circle t
-                nil ()
-                "打印成#N=(#N#)而非(#level)")
- '(print-integers-as-characters nil)
- '(eval-expression-print-maximum-character most-positive-fixnum
-                                           nil (simple)
-                                           "大于此值的整数在打印时不会附带其字符图形")
  '(major-mode 'text-mode)
  '(completion-list-mode-hook `(,@(bound-and-true-p completion-list-mode-hook)
                                ,(lambda ()
@@ -1398,6 +1378,9 @@
 
 ;;; Feature: ‘hanoi’
 (setq hanoi-use-faces nil)  ; 不要使用彩色动画, 因为看起来很鬼畜.
+
+;;; Feature: ‘so-long’
+(global-so-long-mode)
 
 (letrec ((shynur--custom-set-faces (lambda ()
                                      "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘custom-set-faces’,其余(以及后续)的client都能生效"

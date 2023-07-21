@@ -43,8 +43,9 @@ TYPE 的可能值为: \"\" 无后缀, \"/\" 目录, \".EXTENSION\" 文件类型.
   "启动时立即加 1, 刚好又到了 整分钟 点, 又加 1: IOW, 极端情况下一启动就 增加 2.")
 
 ;; 顺序应当是不重要的.
-(require 'shynur-tmp)  ; (find-file-other-window "./shynur-tmp.el")
-(require 'shynur-org)  ; (find-file-other-window "./shynur-org.el")
+(require 'shynur-elisp)  ; (find-file-other-window "./shynur-elisp.el")
+(require 'shynur-tmp)    ; (find-file-other-window "./shynur-tmp.el")
+(require 'shynur-org)    ; (find-file-other-window "./shynur-org.el")
 
 (provide 'shynur-init)
 

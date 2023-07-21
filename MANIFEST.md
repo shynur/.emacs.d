@@ -14,6 +14,8 @@
  |    |
  |    |__ shynur-early-init.el
  |    |
+ |    |__ shynur-elisp.el
+ |    |
  |    |__ shynur-init.el
  |    |
  |    |__ shynur-org.el

@@ -25,6 +25,12 @@
 !/docs/Emacs-regexp.org
 !/docs/Emacs-use_daemon.md
 !/docs/MS_Windows-keyboard_remap.txt
+!/docs/index.html
+!/docs/pages/
+
+#outline:     ./docs/pages/
+/docs/pages/*
+!/docs/pages/index.md
 
 #outline:   ./etc/
 /etc/*

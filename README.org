@@ -22,7 +22,7 @@
 
 ** 字体
 
-- [[Maple Mono SC NF][https://github.com/subframe7536/maple-font]]
+- [[https://github.com/subframe7536/maple-font][Maple Mono SC NF]]
 
 * 键位
 ** 键盘输入
@@ -79,7 +79,8 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 
 * Repo Stats
 
-- [[https://api.codetabs.com/v1/loc/?github=shynur/.emacs.d&branch=main][Languages Statistics]]
+- [[https://api.codetabs.com/v1/loc/?github=shynur/.emacs.d&branch=main&ignored=docs/pages/][Languages Statistics]]
+  # See [[https://codetabs.com/count-loc/count-loc-online.html][Count LOC online]] hosted at [[https://github.com/jolav/codetabs]].
 
 * License
 

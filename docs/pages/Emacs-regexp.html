@@ -1,0 +1,1105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2023-07-24 周一 02:30 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ELisp 中的正则表达式 (regexp)</title>
+<meta name="author" content="谢骐" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">ELisp 中的正则表达式 (regexp)</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org3f7f888">1. Syntax</a>
+<ul>
+<li><a href="#orga8761e7">1.1. Special Characters</a>
+<ul>
+<li><a href="#org1fae506">1.1.1. ‘​<code>.</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="construct">construct</span></span></a></li>
+<li><a href="#orgb841519">1.1.2. ‘​<code>*</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="postfix_operator">postfix_operator</span></span></a></li>
+<li><a href="#orgfd0589d">1.1.3. ‘​<code>+</code>​’, ‘​<code>?</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="postfix_operator">postfix_operator</span></span></a></li>
+<li><a href="#org9103e2c">1.1.4. ‘​<code>*?</code>​’, ‘​<code>+?</code>​’, ‘​<code>??</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="postfix_operator">postfix_operator</span></span></a></li>
+<li><a href="#orga9232fd">1.1.5. ‘​<code>[...]</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="character_alternative">character_alternative</span></span></a></li>
+<li><a href="#orgb1d2405">1.1.6. ‘​<code>^</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="construct">construct</span>&#xa0;<span class="matches_empty_string">matches_empty_string</span></span></a></li>
+<li><a href="#orgeb3d459">1.1.7. ‘​<code>$</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="construct">construct</span>&#xa0;<span class="matches_empty_string">matches_empty_string</span></span></a></li>
+<li><a href="#org4b21883">1.1.8. ‘​<code>\</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="construct">construct</span></span></a></li>
+</ul>
+</li>
+<li><a href="#org6d328b4">1.2. Character Classes</a>
+<ul>
+<li><a href="#orgaa6ab20">1.2.1. ‘​<code>[:ascii:]</code>​’, ‘​<code>[:nonascii:]</code>​’</a></li>
+<li><a href="#org0ac51fc">1.2.2. ‘​<code>[:alnum:]</code>​’</a></li>
+<li><a href="#orgdc418f7">1.2.3. ‘​<code>[:alpha:]</code>​’</a></li>
+<li><a href="#org3d48354">1.2.4. ‘​<code>[:blank:]</code>​’</a></li>
+<li><a href="#org8c5ad1f">1.2.5. ‘​<code>[:cntrl:]</code>​’</a></li>
+<li><a href="#orgb113260">1.2.6. ‘​<code>[:digit:]</code>​’</a></li>
+<li><a href="#orge127233">1.2.7. ‘​<code>[:graph:]</code>​’</a></li>
+<li><a href="#org8f9309e">1.2.8. ‘​<code>[:lower:]</code>​’, ‘​<code>[:upper:]</code>​’</a></li>
+<li><a href="#org7a72b5d">1.2.9. ‘​<code>[:multibyte:]</code>​’, ‘​<code>[:unibyte:]</code>​’</a></li>
+<li><a href="#org4f00da8">1.2.10. ‘​<code>[:print:]</code>​’</a></li>
+<li><a href="#orgbde43e0">1.2.11. ‘​<code>[:punct:]</code>​’</a></li>
+<li><a href="#orgdf3d1d8">1.2.12. ‘​<code>[:space:]</code>​’</a></li>
+<li><a href="#orgac4d3d5">1.2.13. ‘​<code>[:word:]</code>​’</a></li>
+<li><a href="#org2c88999">1.2.14. ‘​<code>[:xdigit:]</code>​’</a></li>
+</ul>
+</li>
+<li><a href="#orgbd79821">1.3. Backslash Constructs</a>
+<ul>
+<li><a href="#orge14c7cc">1.3.1. ‘​<code>\|</code>​’</a></li>
+<li><a href="#org32a09a0">1.3.2. ‘​<code>\{</code>​<i><code>m</code></i>​<code>\}</code>​’</a></li>
+<li><a href="#orgb9af621">1.3.3. ‘​<code>\{</code>​<i><code>m</code></i>​,​<i><code>n</code></i>​<code>\}</code>​’</a></li>
+<li><a href="#org1eb9459">1.3.4. ‘​<code>\(...\)</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="group">group</span></span></a></li>
+<li><a href="#org2f25296">1.3.5. ‘​<code>\(?:...\)</code>​’, ‘​<code>\(?</code>​<i><code>num</code></i>​<code>:...\)</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="group">group</span></span></a></li>
+<li><a href="#orgc300926">1.3.6. ‘​<code>\</code>​<i><code>digit</code></i>​’</a></li>
+<li><a href="#org604d180">1.3.7. ‘​<code>\w</code>​’, ‘​<code>\W</code>​’</a></li>
+<li><a href="#org519697b">1.3.8. ‘​<code>\s</code>​<i><code>code</code></i>​’, ‘​<code>\S</code>​<i><code>code</code></i>​’</a></li>
+<li><a href="#org698e339">1.3.9. ‘​<code>\c</code>​<i><code>c</code></i>​’, ‘​<code>\C</code>​<i><code>c</code></i>​’</a></li>
+<li><a href="#org868ae02">1.3.10. ‘​<code>\`</code>​’, ‘​<code>\'</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="matches_empty_string">matches_empty_string</span></span></a></li>
+<li><a href="#org262cb01">1.3.11. ‘​<code>\=</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="matches_empty_string">matches_empty_string</span></span></a></li>
+<li><a href="#org1d0e6d8">1.3.12. ‘​<code>\b</code>​’, ‘​<code>\B</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="matches_empty_string">matches_empty_string</span></span></a></li>
+<li><a href="#org6ccb0de">1.3.13. ‘​<code>\&lt;</code>​’, ‘​<code>\&gt;</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="matches_empty_string">matches_empty_string</span></span></a></li>
+<li><a href="#org89ee492">1.3.14. ‘​<code>\_&lt;</code>​’, ‘​<code>\_&gt;</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="matches_empty_string">matches_empty_string</span></span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org2762395">2. 一个复杂的例子</a></li>
+<li><a href="#org3a5c963">3. <code>rx</code>: 结构化 regexp 标记法</a>
+<ul>
+<li><a href="#orga85d0af">3.1. Constructs in <code>rx</code></a>
+<ul>
+<li><a href="#org4f43534">3.1.1. Literals</a></li>
+<li><a href="#orgf8b9ace">3.1.2. Sequence and alternative</a></li>
+<li><a href="#org454e95d">3.1.3. Repetition</a></li>
+<li><a href="#orgac4047d">3.1.4. Matching single characters</a></li>
+<li><a href="#org68b55f5">3.1.5. Character class</a></li>
+<li><a href="#org7b7ee0a">3.1.6. Zero-width assertions</a></li>
+<li><a href="#org53d3f47">3.1.7. Capture groups</a></li>
+<li><a href="#org9d75fc0">3.1.8. Dynamic inclusion</a></li>
+</ul>
+</li>
+<li><a href="#orgd6b4c3f">3.2. Functions &amp; macros using <code>rx</code></a>
+<ul>
+<li><a href="#org3db18b2">3.2.1. <code>rx</code> <i><code>&amp;rest</code> <code>rx-form</code></i>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="macro">macro</span></span></a></li>
+<li><a href="#org105529b">3.2.2. <code>rx-to-string</code> <i><code>rx-expr</code> <code>&amp;optional</code> <code>no-group</code></i>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="function">function</span></span></a></li>
+<li><a href="#org6b7e196">3.2.3. <code>pcase</code> <code>expression</code> <code>((rx</code> <i><code>rx-expr</code></i>​<code>...)</code> <code>body-forms...)...</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="macro">macro</span></span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgbe1f652">4. 相关函数</a>
+<ul>
+<li>
+<ul>
+<li><a href="#orga17e237">4.0.1. <code>regexp-quote</code> <i><code>string</code></i>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="function">function</span></span></a></li>
+<li><a href="#org3770317">4.0.2. <code>regexp-opt</code> <i><code>strings</code> <code>&amp;optional</code> <code>paren</code></i>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="function">function</span></span></a></li>
+<li><a href="#org8de844d">4.0.3. <code>regexp-opt-depth</code> <i><code>regexp</code></i>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="function">function</span></span></a></li>
+<li><a href="#org852bfc0">4.0.4. <code>regexp-opt-charset</code> <i><code>chars</code></i>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="function">function</span></span></a></li>
+<li><a href="#org0acf2cf">4.0.5. <code>regexp-unmatchable</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="variable">variable</span></span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgd5881b2">5. Suggestions on Optimization</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org3f7f888" class="outline-2">
+<h2 id="org3f7f888"><span class="section-number-2">1.</span> Syntax</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+字符分为两类.  一类是 <i>ordinary</i> 的; 除此以外皆为 special construct:
+</p>
+<ul class="org-ul">
+<li><a href="#org1fae506">‘​<code>.</code>​’</a>, <a href="#orgb841519">‘​<code>*</code>​’</a>, <a href="#orgfd0589d">‘​<code>+</code>​’</a>, <a href="#orgfd0589d">‘​<code>?</code>​’</a>, <a href="#orga9232fd">‘​<code>[</code>​’</a>, <a href="#orgb1d2405">‘​<code>^</code>​’</a>, <a href="#orgeb3d459">‘​<code>$</code>​’</a>, <a href="#org4b21883">‘​<code>\</code>​’</a>;<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup></li>
+<li><a href="#orga9232fd">‘​<code>]</code>​’</a>, <a href="#orga9232fd">‘​<code>-</code>​’</a>, <a href="#org6d328b4">‘​<code>[:</code>​’</a>&amp;<a href="#org6d328b4">‘​<code>:]</code>​’</a> 有时特殊.</li>
+<li>跟在 <a href="#org4b21883">‘​<code>\</code>​’</a> 后的字符.</li>
+</ul>
+</div>
+
+<div id="outline-container-orga8761e7" class="outline-3">
+<h3 id="orga8761e7"><span class="section-number-3">1.1.</span> Special Characters</h3>
+<div class="outline-text-3" id="text-1-1">
+</div>
+<div id="outline-container-org1fae506" class="outline-4">
+<h4 id="org1fae506"><span class="section-number-4">1.1.1.</span> ‘​<code>.</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="construct">construct</span></span></h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+匹配任何字符, <b>除了</b> newline.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb841519" class="outline-4">
+<h4 id="orgb841519"><span class="section-number-4">1.1.2.</span> ‘​<code>*</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="postfix_operator">postfix_operator</span></span></h4>
+<div class="outline-text-4" id="text-1-1-2">
+<p>
+<i>尽可能多地</i> (0~&infin;) 重复前一个 <i>最小的</i> regexp.
+</p>
+
+<p>
+机制:
+这个 matcher 先尽量多地重复前一个表达式, 当后续 regexp 匹配失败后再回溯.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfd0589d" class="outline-4">
+<h4 id="orgfd0589d"><span class="section-number-4">1.1.3.</span> ‘​<code>+</code>​’, ‘​<code>?</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="postfix_operator">postfix_operator</span></span></h4>
+<div class="outline-text-4" id="text-1-1-3">
+<p>
+类似于 <a href="#orgb841519">‘​<code>*</code>​’</a>, 但
+‘​<code>+</code>​’ <i>至少</i> 匹配一次,
+‘​<code>?</code>​’ <i>至多</i> 匹配一次.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9103e2c" class="outline-4">
+<h4 id="org9103e2c"><span class="section-number-4">1.1.4.</span> ‘​<code>*?</code>​’, ‘​<code>+?</code>​’, ‘​<code>??</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="postfix_operator">postfix_operator</span></span></h4>
+<div class="outline-text-4" id="text-1-1-4">
+<p>
+分别是 <a href="#orgb841519">‘​<code>*</code>​’</a>, <a href="#orgfd0589d">‘​<code>+</code>​’</a>, <a href="#orgfd0589d">‘​<code>?</code>​’</a> 的 <i>non-greedy</i> 变体.
+它们 <i>尽可能少地</i> 重复.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga9232fd" class="outline-4">
+<h4 id="orga9232fd"><span class="section-number-4">1.1.5.</span> ‘​<code>[...]</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="character_alternative">character_alternative</span></span></h4>
+<div class="outline-text-4" id="text-1-1-5">
+<p>
+最简单地用例:
+匹配被方括号包围的字符; ‘​<code>[^...]</code>​’ 匹配没有被包围的字符.
+</p>
+
+<p>
+可以用 ‘​<code>-</code>​’ 构造一个 range, e.g., <code>[a-z.]</code> 匹配 任何小写字母 或 句点.  <br />
+下界比上界大的 range 实际上是空的, 它不代表任何字符.
+因此, <code>[z-a]</code><sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> 总是匹配失败, 而 <code>[^z-a]</code> 总是匹配成功 (甚至包括 newline, 实际上这是 ‘​<code>[^...]</code>​’ 的 feature, 也是 ELisp 与 <code>grep</code> 的不同之处).
+</p>
+
+<p>
+可以用 <a href="#org6d328b4">‘​<code>[:...:]</code>​’</a> 构造一个 class<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>, e.g., <code>[[:lower:][:digit:]]</code> 匹配 任何小写字母 或 任何十进制数字.  <br />
+N.b., class 不应该作为 range 的边界.
+</p>
+
+<p>
+在 ‘​<code>[...]</code>​’ 中, 只有如下字符是 special 的<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>:
+</p>
+<ul class="org-ul">
+<li>‘​<code>]</code>​’ <br />
+为了包含 ‘​<code>]</code>​’ 以匹配这个字符, 将其写在最前端: <code>[]123]</code>.</li>
+<li>‘​<code>^</code>​’ <br />
+仅当它是第一个字符时是 special 的, 此时, 它的后一个字符被看作是整个 ‘​<code>[^...]</code>​’ 的最前端.  <br />
+为了包含它, 将其放在除了最前端以外的任何位置: <code>[12^ab]</code>.</li>
+<li>‘​<code>-</code>​’ <br />
+为了包含它, 将其写在尾端: <code>[123-]</code>.</li>
+</ul>
+<p>
+因此, <code>[]^-]</code> 匹配以上三个字符.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb1d2405" class="outline-4">
+<h4 id="orgb1d2405"><span class="section-number-4">1.1.6.</span> ‘​<code>^</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="construct">construct</span>&#xa0;<span class="matches_empty_string">matches_empty_string</span></span></h4>
+<div class="outline-text-4" id="text-1-1-6">
+<p>
+匹配 string 的 <b>行首</b> (或 buffer<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup> 中可访问部分的起始端).
+</p>
+
+<p>
+为了向后兼容 (historical compatibility), ‘​<code>^</code>​’ 只能用在:
+</p>
+<ul class="org-ul">
+<li>Regexp 的开头.</li>
+<li>接在 <a href="#org1eb9459">‘​<code>\(</code>​’</a> 或 <a href="#org2f25296">‘​<code>\(?:</code>​’</a> 后面.</li>
+<li>接在 <a href="#orge14c7cc">‘​<code>\|</code>​’</a> 后面.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgeb3d459" class="outline-4">
+<h4 id="orgeb3d459"><span class="section-number-4">1.1.7.</span> ‘​<code>$</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="construct">construct</span>&#xa0;<span class="matches_empty_string">matches_empty_string</span></span></h4>
+<div class="outline-text-4" id="text-1-1-7">
+<p>
+类似于 <a href="#orgb1d2405">‘​<code>^</code>​’</a>, 但是是用来匹配 <b>行尾</b>.
+</p>
+
+<p>
+为了向后兼容, 只能用在:
+</p>
+<ul class="org-ul">
+<li>Regexp 的末尾.</li>
+<li>接在 <a href="#org1eb9459">‘​<code>\)</code>​’</a> 后面.</li>
+<li>接在 <a href="#orge14c7cc">‘​<code>\|</code>​’</a> 后面.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4b21883" class="outline-4">
+<h4 id="org4b21883"><span class="section-number-4">1.1.8.</span> ‘​<code>\</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="construct">construct</span></span></h4>
+<div class="outline-text-4" id="text-1-1-8">
+<p>
+有两个功能:
+</p>
+<ul class="org-ul">
+<li>转义 <a href="#orga8761e7">special 字符</a>.</li>
+<li>引入<a href="#orgbd79821">额外的 special constructs</a>.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6d328b4" class="outline-3">
+<h3 id="org6d328b4"><span class="section-number-3">1.2.</span> Character Classes</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Character classes 被用在 <a href="#orga9232fd">‘​<code>[...]</code>​’</a> 中.
+</p>
+</div>
+
+<div id="outline-container-orgaa6ab20" class="outline-4">
+<h4 id="orgaa6ab20"><span class="section-number-4">1.2.1.</span> ‘​<code>[:ascii:]</code>​’, ‘​<code>[:nonascii:]</code>​’</h4>
+<div class="outline-text-4" id="text-1-2-1">
+<p>
+前者匹配任何 ASCII 字符<sup><a id="fnr.6" class="footref" href="#fn.6" role="doc-backlink">6</a></sup>;
+后者相当于 <code>[^[:ascii:]]</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0ac51fc" class="outline-4">
+<h4 id="org0ac51fc"><span class="section-number-4">1.2.2.</span> ‘​<code>[:alnum:]</code>​’</h4>
+<div class="outline-text-4" id="text-1-2-2">
+<p>
+匹配 任何字母 或 十进制数字.
+</p>
+
+<p>
+若 multibyte (多字节) 字符的 Unicode ‘general-category’<sup><a id="fnr.7" class="footref" href="#fn.7" role="doc-backlink">7</a></sup> property (see <a href="https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Character-Properties">Character Properties</a>) 指示该字符是字母 (alphabetic character), 那么也会被匹配.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdc418f7" class="outline-4">
+<h4 id="orgdc418f7"><span class="section-number-4">1.2.3.</span> ‘​<code>[:alpha:]</code>​’</h4>
+<div class="outline-text-4" id="text-1-2-3">
+<p>
+类似于 <a href="#org0ac51fc">‘​<code>[:alnum:]</code>​’</a>, 但只匹配字母.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3d48354" class="outline-4">
+<h4 id="org3d48354"><span class="section-number-4">1.2.4.</span> ‘​<code>[:blank:]</code>​’</h4>
+<div class="outline-text-4" id="text-1-2-4">
+<p>
+匹配水平的空白字符 (horizontal whitespace<sup><a id="fnr.8" class="footref" href="#fn.8" role="doc-backlink">8</a></sup>).
+</p>
+
+<p>
+具体地, 它匹配:
+</p>
+<ul class="org-ul">
+<li>空格, tab.</li>
+<li>那些 其 Unicode ‘general-category’<sup><a id="fnr.7.100" class="footref" href="#fn.7" role="doc-backlink">7</a></sup> property (see <a href="https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Character-Properties">Character Properties</a>) 指示其为 spacing separator 的字符.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org8c5ad1f" class="outline-4">
+<h4 id="org8c5ad1f"><span class="section-number-4">1.2.5.</span> ‘​<code>[:cntrl:]</code>​’</h4>
+<div class="outline-text-4" id="text-1-2-5">
+<p>
+匹配字符 whose code is in the range 0~31.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb113260" class="outline-4">
+<h4 id="orgb113260"><span class="section-number-4">1.2.6.</span> ‘​<code>[:digit:]</code>​’</h4>
+<div class="outline-text-4" id="text-1-2-6">
+<p>
+匹配数字 <code>0</code> 到 <code>9</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge127233" class="outline-4">
+<h4 id="orge127233"><span class="section-number-4">1.2.7.</span> ‘​<code>[:graph:]</code>​’</h4>
+<div class="outline-text-4" id="text-1-2-7">
+<p>
+匹配图形化字符, IOW, everything <b>except</b>:
+</p>
+<ul class="org-ul">
+<li><a href="#orgdf3d1d8">whitespace</a>.</li>
+<li>ASCII and non-ASCII control characters.</li>
+<li>surrogates<sup><a id="fnr.9" class="footref" href="#fn.9" role="doc-backlink">9</a></sup>.</li>
+<li>没有被 Unicode 分配的码点, 正如 Unicode ‘general-category’<sup><a id="fnr.7.100" class="footref" href="#fn.7" role="doc-backlink">7</a></sup> property (see <a href="https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Character-Properties">Character Properties</a>) 所指示的那样.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org8f9309e" class="outline-4">
+<h4 id="org8f9309e"><span class="section-number-4">1.2.8.</span> ‘​<code>[:lower:]</code>​’, ‘​<code>[:upper:]</code>​’</h4>
+<div class="outline-text-4" id="text-1-2-8">
+<p>
+前者匹配小写字母<sup><a id="fnr.10" class="footref" href="#fn.10" role="doc-backlink">10</a></sup>;
+后者匹配大写字母.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7a72b5d" class="outline-4">
+<h4 id="org7a72b5d"><span class="section-number-4">1.2.9.</span> ‘​<code>[:multibyte:]</code>​’, ‘​<code>[:unibyte:]</code>​’</h4>
+<div class="outline-text-4" id="text-1-2-9">
+<p>
+分别匹配 multibyte (多字节) 和 unibyte (单字节) 字符 (see <a href="https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Text-Representations">Text Representations</a>).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4f00da8" class="outline-4">
+<h4 id="org4f00da8"><span class="section-number-4">1.2.10.</span> ‘​<code>[:print:]</code>​’</h4>
+<div class="outline-text-4" id="text-1-2-10">
+<p>
+匹配可打印字符.
+相当于 <code>[</code>​<a href="#orgdf3d1d8"><code>[:space:]</code></a><a href="#orge127233"><code>[:graph:]</code></a>​<code>]</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbde43e0" class="outline-4">
+<h4 id="orgbde43e0"><span class="section-number-4">1.2.11.</span> ‘​<code>[:punct:]</code>​’</h4>
+<div class="outline-text-4" id="text-1-2-11">
+<p>
+匹配标点符号.
+(At present, for multibyte characters, it matches anything that has non-<a href="#org604d180">word syntax</a>.<sup><a id="fnr.5.100" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>)
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdf3d1d8" class="outline-4">
+<h4 id="orgdf3d1d8"><span class="section-number-4">1.2.12.</span> ‘​<code>[:space:]</code>​’</h4>
+<div class="outline-text-4" id="text-1-2-12">
+<p>
+匹配<a href="#org519697b">符合 whitespace syntax 的字符</a> (see <a href="https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Table-of-Syntax-Classes">Table of Syntax Classes</a>).
+IOW, 等价于 <code>\s-</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgac4d3d5" class="outline-4">
+<h4 id="orgac4d3d5"><span class="section-number-4">1.2.13.</span> ‘​<code>[:word:]</code>​’</h4>
+<div class="outline-text-4" id="text-1-2-13">
+<p>
+匹配<a href="#org519697b">符合 word syntax 的字符</a> (see <a href="https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Table-of-Syntax-Classes">Table of Syntax Classes</a>).
+IOW, 等价于 <code>\sw</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2c88999" class="outline-4">
+<h4 id="org2c88999"><span class="section-number-4">1.2.14.</span> ‘​<code>[:xdigit:]</code>​’</h4>
+<div class="outline-text-4" id="text-1-2-14">
+<p>
+匹配 16 进制数字.
+相当于 <code>[</code>​<a href="#orgb113260">[:digit:</a>]​<code>A-Fa-f]</code>.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbd79821" class="outline-3">
+<h3 id="orgbd79821"><span class="section-number-3">1.3.</span> Backslash Constructs</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+大部分情况下, ‘​<code>\</code>​’ 后接的字符将精确匹配该字符自身.
+然而 例外是: 一些特定的序列, 它们以 <a href="#org4b21883">‘​<code>\</code>​’</a> 打头, 有特殊的含义.
+</p>
+</div>
+
+<div id="outline-container-orge14c7cc" class="outline-4">
+<h4 id="orge14c7cc"><span class="section-number-4">1.3.1.</span> ‘​<code>\|</code>​’</h4>
+<div class="outline-text-4" id="text-1-3-1">
+<p>
+逻辑或.
+</p>
+
+<p>
+‘​<code>\|</code>​’ 使用尽可能大的 regexp, e.g., <code>ab\|12</code> 匹配 <span class="underline"><code>ab</code> 或 <code>12</code></span> 而不是 <span class="underline"><code>ab2</code> 或 <code>a12</code></span>.  <br />
+可以用 <a href="#org1eb9459">‘​<code>\(...\)</code>​’</a> 限制 ‘​<code>\|</code>​’ 的作用范围.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org32a09a0" class="outline-4">
+<h4 id="org32a09a0"><span class="section-number-4">1.3.2.</span> ‘​<code>\{</code>​<i><code>m</code></i>​<code>\}</code>​’</h4>
+<div class="outline-text-4" id="text-1-3-2">
+<p>
+类似于 <a href="#orgb841519">‘​<code>*</code>​’</a>, 但 <i>精确</i> 匹配 <i>m</i> 次.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb9af621" class="outline-4">
+<h4 id="orgb9af621"><span class="section-number-4">1.3.3.</span> ‘​<code>\{</code>​<i><code>m</code></i>​,​<i><code>n</code></i>​<code>\}</code>​’</h4>
+<div class="outline-text-4" id="text-1-3-3">
+<p>
+类似于 <a href="#orgb841519">‘​<code>*</code>​’</a>, 但匹配 <i>m</i>​~​<i>n</i> 次.
+</p>
+
+<p>
+<i>m</i> 缺省为 0;
+省略 <i>n</i> 意为 &infin;.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1eb9459" class="outline-4">
+<h4 id="org1eb9459"><span class="section-number-4">1.3.4.</span> ‘​<code>\(...\)</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="group">group</span></span></h4>
+<div class="outline-text-4" id="text-1-3-4">
+<p>
+有三个功能:
+</p>
+<ul class="org-ul">
+<li>限制 <a href="#orge14c7cc">‘​<code>\|</code>​’</a> 的范围.  <br />
+E.g., <code>a\(1\|2\)b</code> 匹配 <span class="underline"><code>a1b</code> 或 <code>a2b</code></span> 而不是 <span class="underline"><code>a1</code> 或 <code>2b</code></span>.</li>
+<li>包裹一个复合的表达式, 以使其作为整体附上 postfix operator.  <br />
+E.g., <code>\(1\|2\)\{2\}</code> 匹配 <span class="underline"><code>11</code> 或 <code>12</code> 或 <code>21</code> 或 <code>22</code></span>.</li>
+<li>标记相应的被匹配的 substring, 为其分配一个编号, 以供将来用 <a href="#orgc300926">‘​<code>\</code>​<i><code>digit</code></i>​’</a> 引用 (reference).</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org2f25296" class="outline-4">
+<h4 id="org2f25296"><span class="section-number-4">1.3.5.</span> ‘​<code>\(?:...\)</code>​’, ‘​<code>\(?</code>​<i><code>num</code></i>​<code>:...\)</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="group">group</span></span></h4>
+<div class="outline-text-4" id="text-1-3-5">
+<p>
+前者被称为 <i>shy group</i>, 又名 <i>non-capturing</i> 或 <i>unnumbered group</i>.  <br />
+类似于 <a href="#org1eb9459">‘​<code>\(...\)</code>​’</a>, 但不标记被匹配的 substring, 因此无法被 <a href="#orgc300926">‘​<code>\</code>​<i><code>digit</code></i>​’</a> 引用 (refer back).
+</p>
+
+<p>
+后者被称为 <i>explicitly numbered group</i>.  <br />
+显式地给被匹配的 substring 分配的一个编号.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc300926" class="outline-4">
+<h4 id="orgc300926"><span class="section-number-4">1.3.6.</span> ‘​<code>\</code>​<i><code>digit</code></i>​’</h4>
+<div class="outline-text-4" id="text-1-3-6">
+</div>
+<ol class="org-ol">
+<li><a id="orgdad246f"></a><i><code>digit</code></i> 是如何分配的?<br />
+<div class="outline-text-5" id="text-1-3-6-1">
+<p>
+Regexp 中的 <a href="#org1eb9459">‘​<code>\(...\)</code>​’</a> 会按出现的顺序 (只看顺序, 所以嵌套的 <a href="#org1eb9459">‘​<code>\(...\)</code>​’</a> 能被识别), 被隐式地分配一个编号 (使用序数词, i.e., 从 1 开始); <br />
+若有必要, <a href="#org2f25296">‘​<code>\(?</code>​<i><code>num</code></i>​<code>:...\)</code>​’</a> 会覆盖已经存在的编号 <i><code>num</code></i>; <br />
+每次被隐式分配的编号, 会比先前已经分配的最大编号大 1.
+</p>
+
+<p>
+如果类似 <a href="#org1eb9459">‘​<code>\(...\)</code>​’</a> 这样的结构被重复了多次 (e.g., <code>\(a\|b\)+</code>), 则仅为最后一次匹配的 substring 分配编号.
+</p>
+
+<p>
+N.b., 编号只分配到个位数, 分完即止.
+当然你可以用 <a href="#org2f25296">‘​<code>\(?</code>​<i><code>num</code></i>​<code>:...\)</code>​’</a> 显式地覆盖.
+</p>
+</div>
+</li>
+
+<li><a id="orge960e94"></a>如何引用先前已经匹配的 substring?<br />
+<div class="outline-text-5" id="text-1-3-6-2">
+<p>
+例如, <code>\(.+\)\1</code> 匹配同一行<sup><a id="fnr.11" class="footref" href="#fn.11" role="doc-backlink">11</a></sup>中前半段与后半段一致的非空 string.
+</p>
+
+<p>
+若 <i><code>digit</code></i> 没有被分配, 则 <code>\</code>​<i><code>digit</code></i> 永不匹配.  <br />
+例如 <code>\(one\(two\)\|three\)\2</code> 永远不会匹配 <code>three</code>, 因为当尝试匹配 <code>three</code> 时, 表达式中已经没有剩余的 <a href="#org1eb9459">‘​<code>\(...\)</code>​’</a> 了, 则代表永不匹配的 <code>\2</code> 会直接导致匹配失败:
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(string-match-p "\\(one\\(two\\)\\|three\\)\\2" "three")
+;; =&gt; nil
+</pre>
+</div>
+<p>
+但该表达式可以匹配 <code>onetwotwo</code>:
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(string-match-p "\\(one\\(two\\)\\|three\\)\\2" "onetwotwo")
+;; =&gt; 0
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org604d180" class="outline-4">
+<h4 id="org604d180"><span class="section-number-4">1.3.7.</span> ‘​<code>\w</code>​’, ‘​<code>\W</code>​’</h4>
+<div class="outline-text-4" id="text-1-3-7">
+<p>
+前者匹配 <a href="#orgac4d3d5">word-constituent (位于单词中的) 字符</a>.
+(The editor syntax table determines which characters these are.  See <a href="https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Syntax-Tables">Syntax Tables</a>.)<sup><a id="fnr.5.100" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>
+</p>
+
+<p>
+后者是前者的补集.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org519697b" class="outline-4">
+<h4 id="org519697b"><span class="section-number-4">1.3.8.</span> ‘​<code>\s</code>​<i><code>code</code></i>​’, ‘​<code>\S</code>​<i><code>code</code></i>​’</h4>
+<div class="outline-text-4" id="text-1-3-8">
+<p>
+前者匹配符合 <i><code>code</code></i> syntax 的字符 (see <a href="https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Table-of-Syntax-Classes">Table of Syntax Classes</a>).<sup><a id="fnr.5.100" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>  <br />
+因此, <i><code>code</code></i> 处填写
+</p>
+<ul class="org-ul">
+<li>‘​<code>w</code>​’ 以匹配 <a href="#org604d180">word constituent</a>.
+等价于 <a href="#orgac4d3d5"><code>:word:</code></a>.</li>
+<li>‘​<code>-</code>​’ (或 一个空格) 以匹配 whitespace.
+等价于 <a href="#orgdf3d1d8"><code>:space:</code></a>.</li>
+<li>‘​<code>(</code>​’ 以匹配 open parenthesis.</li>
+<li>etc.</li>
+</ul>
+
+<p>
+后者是前者的补集.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org698e339" class="outline-4">
+<h4 id="org698e339"><span class="section-number-4">1.3.9.</span> ‘​<code>\c</code>​<i><code>c</code></i>​’, ‘​<code>\C</code>​<i><code>c</code></i>​’</h4>
+<div class="outline-text-4" id="text-1-3-9">
+<p>
+前者匹配 whose category is <i><code>c</code></i> 的字符 (see <a href="https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#Categories">Categories</a>).<sup><a id="fnr.5.100" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>  <br />
+因此, <i><code>c</code></i> 处填写
+</p>
+<ul class="org-ul">
+<li>‘​<code>c</code>​’ 以匹配 汉字.</li>
+<li>‘​<code>g</code>​’ 以匹配 希腊字母.</li>
+<li>etc.</li>
+</ul>
+
+<p>
+后者是前者的补集.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org868ae02" class="outline-4">
+<h4 id="org868ae02"><span class="section-number-4">1.3.10.</span> ‘​<code>\`</code>​’, ‘​<code>\'</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="matches_empty_string">matches_empty_string</span></span></h4>
+<div class="outline-text-4" id="text-1-3-10">
+<p>
+分别匹配 string 或 buffer<sup><a id="fnr.5.100" class="footref" href="#fn.5" role="doc-backlink">5</a></sup> 的 <b>开头</b> 和 <b>结尾</b>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org262cb01" class="outline-4">
+<h4 id="org262cb01"><span class="section-number-4">1.3.11.</span> ‘​<code>\=</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="matches_empty_string">matches_empty_string</span></span></h4>
+<div class="outline-text-4" id="text-1-3-11">
+<p>
+匹配 point.<sup><a id="fnr.5.100" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>
+(This construct is not defined when matching against a string.)
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1d0e6d8" class="outline-4">
+<h4 id="org1d0e6d8"><span class="section-number-4">1.3.12.</span> ‘​<code>\b</code>​’, ‘​<code>\B</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="matches_empty_string">matches_empty_string</span></span></h4>
+<div class="outline-text-4" id="text-1-3-12">
+<p>
+前者匹配 单词的边界处 或 buffer<sup><a id="fnr.5.100" class="footref" href="#fn.5" role="doc-backlink">5</a></sup> 的首尾;  <br />
+后者则相反.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6ccb0de" class="outline-4">
+<h4 id="org6ccb0de"><span class="section-number-4">1.3.13.</span> ‘​<code>\&lt;</code>​’, ‘​<code>\&gt;</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="matches_empty_string">matches_empty_string</span></span></h4>
+<div class="outline-text-4" id="text-1-3-13">
+<p>
+分别匹配 单词 的 起始端 和 结束端.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org89ee492" class="outline-4">
+<h4 id="org89ee492"><span class="section-number-4">1.3.14.</span> ‘​<code>\_&lt;</code>​’, ‘​<code>\_&gt;</code>​’&#xa0;&#xa0;&#xa0;<span class="tag"><span class="matches_empty_string">matches_empty_string</span></span></h4>
+<div class="outline-text-4" id="text-1-3-14">
+<p>
+分别匹配 symbol 的 起始端 和 结束端.
+(A symbol is a sequence of one or more word or symbol-constituent characters.)
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2762395" class="outline-2">
+<h2 id="org2762395"><span class="section-number-2">2.</span> 一个复杂的例子</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+如下是 Emacs 曾经用来匹配 句尾 (可能尾随 whitespace) 的 regexp:
+</p>
+<pre class="example">
+[.?!][]'")}]*\($\| $\|Tab\|  \)[ TabNewline]*
+</pre>
+
+<p>
+其中, 空白处指代空格, <code>Tab</code> 指代 tab 字符 <code>\t</code>, <code>Newline</code> 指代 newline 字符 <code>\n</code>.
+</p>
+
+<p>
+这个例子可以用 <a href="#org3a5c963"><code>rx</code></a> 标记法编写:
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(rx (any ".?!")                    ; [.?!]
+    (zero-or-more (any "]'\")}"))  ; []'")}]*
+    (or line-end                   ; \($
+        (seq " " line-end)         ;    \| $
+        "\t"                       ;        \|Tab
+        "  ")                      ;             \|  \)
+    (zero-or-more (any " \t\n")))  ; [ TabNewline]*
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3a5c963" class="outline-2">
+<h2 id="org3a5c963"><span class="section-number-2">3.</span> <code>rx</code><sup><a id="fnr.5.100" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>: 结构化 regexp 标记法</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+由于 <code>rx</code> 基于 S-表达式<sup><a id="fnr.12" class="footref" href="#fn.12" role="doc-backlink">12</a></sup>, 因此它更易读, 可以 被格式化 和 注释.
+</p>
+
+<p>
+例如以下用于匹配 C 语言 块注释 的 regexp, 可被改写成两种同义的 <code>rx</code> 表达式:
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;; /\*\(?:[^*]\|\*[^/]\)*\*+/
+"/\\*\\(?:[^*]\\|\\*[^/]\\)*\\*+/"
+
+(rx "/*"
+    (zero-or-more (or (not (any "*"))
+                      (seq "*"
+                           (not (any "/")))))
+    (one-or-more "*")
+    "/")
+
+(rx "/*"
+    (* (| (not "*")
+          (: "*"
+             (not "/"))))
+    (+ "*")
+    "/")
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orga85d0af" class="outline-3">
+<h3 id="orga85d0af"><span class="section-number-3">3.1.</span> Constructs in <code>rx</code></h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+(剩下的有空再写吧&#x2026;)
+</p>
+</div>
+
+<div id="outline-container-org4f43534" class="outline-4">
+<h4 id="org4f43534"><span class="section-number-4">3.1.1.</span> Literals</h4>
+</div>
+
+<div id="outline-container-orgf8b9ace" class="outline-4">
+<h4 id="orgf8b9ace"><span class="section-number-4">3.1.2.</span> Sequence and alternative</h4>
+</div>
+
+<div id="outline-container-org454e95d" class="outline-4">
+<h4 id="org454e95d"><span class="section-number-4">3.1.3.</span> Repetition</h4>
+</div>
+
+<div id="outline-container-orgac4047d" class="outline-4">
+<h4 id="orgac4047d"><span class="section-number-4">3.1.4.</span> Matching single characters</h4>
+</div>
+
+<div id="outline-container-org68b55f5" class="outline-4">
+<h4 id="org68b55f5"><span class="section-number-4">3.1.5.</span> Character class</h4>
+</div>
+
+<div id="outline-container-org7b7ee0a" class="outline-4">
+<h4 id="org7b7ee0a"><span class="section-number-4">3.1.6.</span> Zero-width assertions</h4>
+</div>
+
+<div id="outline-container-org53d3f47" class="outline-4">
+<h4 id="org53d3f47"><span class="section-number-4">3.1.7.</span> Capture groups</h4>
+</div>
+
+<div id="outline-container-org9d75fc0" class="outline-4">
+<h4 id="org9d75fc0"><span class="section-number-4">3.1.8.</span> Dynamic inclusion</h4>
+</div>
+</div>
+
+<div id="outline-container-orgd6b4c3f" class="outline-3">
+<h3 id="orgd6b4c3f"><span class="section-number-3">3.2.</span> Functions &amp; macros <sup><a id="fnr.5.100" class="footref" href="#fn.5" role="doc-backlink">5</a></sup> using <code>rx</code></h3>
+<div class="outline-text-3" id="text-3-2">
+</div>
+<div id="outline-container-org3db18b2" class="outline-4">
+<h4 id="org3db18b2"><span class="section-number-4">3.2.1.</span> <code>rx</code> <i><code>&amp;rest</code> <code>rx-form</code></i>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="macro">macro</span></span></h4>
+</div>
+
+<div id="outline-container-org105529b" class="outline-4">
+<h4 id="org105529b"><span class="section-number-4">3.2.2.</span> <code>rx-to-string</code> <i><code>rx-expr</code> <code>&amp;optional</code> <code>no-group</code></i>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="function">function</span></span></h4>
+</div>
+
+<div id="outline-container-org6b7e196" class="outline-4">
+<h4 id="org6b7e196"><span class="section-number-4">3.2.3.</span> <code>pcase</code> <code>expression</code> <code>((rx</code> <i><code>rx-expr</code></i>​<code>...)</code> <code>body-forms...)...</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="macro">macro</span></span></h4>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbe1f652" class="outline-2">
+<h2 id="orgbe1f652"><span class="section-number-2">4.</span> 相关函数<sup><a id="fnr.5.100" class="footref" href="#fn.5" role="doc-backlink">5</a></sup></h2>
+<div class="outline-text-2" id="text-4">
+<p>
+期望被传入 regexp 的函数在接收到 invalid regexp 时, 会 signal 一个 <code>invalid-regexp</code> error.
+</p>
+</div>
+
+<div id="outline-container-orga17e237" class="outline-4">
+<h4 id="orga17e237"><span class="section-number-4">4.0.1.</span> <code>regexp-quote</code> <i><code>string</code></i>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="function">function</span></span></h4>
+<div class="outline-text-4" id="text-4-0-1">
+<p>
+将 literal string 转换成 regexp.
+E.g.,
+</p>
+<pre class="example">
+(regexp-quote ".")  ; =&gt; "\\."
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org3770317" class="outline-4">
+<h4 id="org3770317"><span class="section-number-4">4.0.2.</span> <code>regexp-opt</code> <i><code>strings</code> <code>&amp;optional</code> <code>paren</code></i>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="function">function</span></span></h4>
+<div class="outline-text-4" id="text-4-0-2">
+<p>
+<i><code>strings</code></i> 是由 literal string 为元素组成的 list.
+该函数相当于逻辑或, 但是它希望返回的 regexp 匹配得尽可能长, e.g.,
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(regexp-opt '("23"
+              "1"
+              "123"))
+;; =&gt; "\\(?:1\\(?:23\\)?\\|23\\)"
+;; i.e., \(?:1\(?:23\)?\|23\)
+</pre>
+</div>
+<p>
+虽然按照 <i><code>strings</code></i> 的想法, 遇到 <code>1</code> 就可以结束尝试了, 但根据 <code>regexp-opt</code> 的结果来看, 还会继续尝试下个 substring 是不是 <code>23</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8de844d" class="outline-4">
+<h4 id="org8de844d"><span class="section-number-4">4.0.3.</span> <code>regexp-opt-depth</code> <i><code>regexp</code></i>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="function">function</span></span></h4>
+<div class="outline-text-4" id="text-4-0-3">
+<p>
+returns the total number of grouping constructs (不包括 shy group).
+E.g.,
+</p>
+<pre class="example">
+(regexp-opt-depth "\\(\\(?:\\)\\|\\(\\)\\)")  ; =&gt; 2
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org852bfc0" class="outline-4">
+<h4 id="org852bfc0"><span class="section-number-4">4.0.4.</span> <code>regexp-opt-charset</code> <i><code>chars</code></i>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="function">function</span></span></h4>
+<div class="outline-text-4" id="text-4-0-4">
+<p>
+<i><code>chars</code></i> 是由字符为元素组成的 list.
+该函数以 ‘​<code>[...]</code>​’ 的形式返回取逻辑或的结果, e.g.,
+</p>
+<pre class="example">
+(regexp-opt-charset '(?a ?b ?c ?z ?d))  ; =&gt; "[a-dz]"
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org0acf2cf" class="outline-4">
+<h4 id="org0acf2cf"><span class="section-number-4">4.0.5.</span> <code>regexp-unmatchable</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="variable">variable</span></span></h4>
+<div class="outline-text-4" id="text-4-0-5">
+<p>
+保证匹配失败的值, 通常为 <code>"\\`a\\`"</code>.
+</p>
+
+<p>
+作为对比:
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(string-match-p ""                 "aa")  ; =&gt; 0
+(string-match-p regexp-unmatchable "aa")  ; =&gt; nil
+</pre>
+</div>
+
+<p>
+意义:
+有些 option 设置用来匹配文本, 但是需要它在默认时不匹配任何文本, 可以将此 variable 设为其默认值.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd5881b2" class="outline-2">
+<h2 id="orgd5881b2"><span class="section-number-2">5.</span> Suggestions on Optimization</h2>
+<div class="outline-text-2" id="text-5">
+<ul class="org-ul">
+<li>‘​<code>[ab]</code>​’ 比 ‘​<code>a\|b</code>​’ 更快.</li>
+<li><p>
+降低熵值.
+E.g.,
+</p>
+<pre class="example">
+\(a*b*\)+  &gt;  \(a\|b\)*  &gt;  [ab]*
+</pre></li>
+<li>尽量使用 shy group 而不是 capturing group.</li>
+<li><code>rx</code> 会优化一些 <a href="#orge14c7cc">or-pattern</a>, 并且默认使用 shy group.</li>
+</ul>
+
+<hr />
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">未来不会有新增的 special 字符.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">如果你意在编写一个空的 range, 那么就应该使用这个例子, 因为其它写法容易被误认为是 typo.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">该 feature 由 POSIX 标准指定.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">所以 <a href="#org4b21883">‘​<code>\</code>​’</a> 无法转义下列字符, 因为在这里, 它不是 special 的.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">这是 Emacs Lisp 相关的概念, 只学习 regexp 的话可以忽略.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.6" class="footnum" href="#fnr.6" role="doc-backlink">6</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Character which codes 0~127.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.7" class="footnum" href="#fnr.7" role="doc-backlink">7</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">详见 Unicode 标准.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.8" class="footnum" href="#fnr.8" role="doc-backlink">8</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Defined by Annex C of the Unicode Technical Standard #18.<sup><a id="fnr.7.100" class="footref" href="#fn.7" role="doc-backlink">7</a></sup></p></div></div>
+
+<div class="footdef"><sup><a id="fn.9" class="footnum" href="#fnr.9" role="doc-backlink">9</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">与 UTF-16 有关.<sup><a id="fnr.7.100" class="footref" href="#fn.7" role="doc-backlink">7</a></sup></p></div></div>
+
+<div class="footdef"><sup><a id="fn.10" class="footnum" href="#fnr.10" role="doc-backlink">10</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">As determined by the current case table (see <a href="https://www.gnu.org/software/emacs/manual/html_mono/elisp.html#The-Case-Table">The Case Table</a>).<sup><a id="fnr.5.100" class="footref" href="#fn.5" role="doc-backlink">5</a></sup></p></div></div>
+
+<div class="footdef"><sup><a id="fn.11" class="footnum" href="#fnr.11" role="doc-backlink">11</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara"><a href="#org1fae506">‘​<code>.</code>​’</a> 不匹配 newline.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.12" class="footnum" href="#fnr.12" role="doc-backlink">12</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">前缀式语法树.</p></div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+</div>
+</body>
+</html>

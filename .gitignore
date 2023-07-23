@@ -31,6 +31,7 @@
 #outline:     ./docs/pages/
 /docs/pages/*
 !/docs/pages/index.md
+!/docs/pages/*.html
 
 #outline:   ./etc/
 /etc/*

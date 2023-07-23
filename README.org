@@ -1,71 +1,132 @@
-#+title: Shynur’s Emacs [[https://raw.githubusercontent.com/shynur/misc/main/pictures/emacs/icon.png]]
+#+title: Shynur’s Emacs
 
-* =~shynur/.emacs.d=
+#+BEGIN_COMMENT
+Copyright 2023 谢骐
 
-[[https://raw.githubusercontent.com/shynur/shynur/main/Pictures/Emacs/2023-6-17.png]]
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+#+END_COMMENT
+
+(由于本 Org 文件使用了过多的特性及其组合, 故 GitHub 会在些许地方渲染不佳.
+请在 [[https://shynur.github.io/.emacs.d/docs/README.html]] 获得最佳阅读体验.)
+
+* Overview
+
+#+ATTR_HTML: :alt 如果你看到了这句话, 说明我没高兴上传图片, 或者你的网络环境有问题.
+#+ATTR_HTML: :width 900px
+[[https://raw.githubusercontent.com/shynur/.emacs.d/assets/demos/emacs.png]]
 
 🥰 这是我的 Emacs 个人配置方案, from scratch.
 
 🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/ (22).
 之后将会使用 [[https://github.com/jwiegley/use-package][=use-package=]] 进行彻底的重构.
 
-(由于 GitHub 对 Org 的支持孱弱, 故些许地方渲染效果不佳.
-不过从绝对数量上看, 受 GitHub 支持的 Org 特性已经足够多了; 但是由于 Org 的功能 (及其组合) 实在太多, 从比例上看, 一份正常编写的 Org 文件会有多处难以识别的语法构造.
-)
-
 ** 📖 目录结构
 
-见 [[file:./MANIFEST.md][MANIFEST.md]] (仅含具体的配置文件),
-其中 点划线 之下为执行 ~emacs -u shynur~ 之后会生成的文件.
+见 [[file:./MANIFEST.md][MANIFEST.md]].
+(仅含具体的配置文件.)
+
+** ✨ Demo
+
+#+ATTR_HTML: :alt 如果你看到了这句话, 说明我没高兴上传 GIF, 或者你的网络环境有问题.
+#+ATTR_HTML: :width 400px
+[[https://raw.githubusercontent.com/shynur/.emacs.d/assets/demos/emacs.gif]]
 
 * Prerequisites
 
 ** 字体
 
-- [[Maple Mono SC NF][https://github.com/subframe7536/maple-font]]
++ [[https://github.com/subframe7536/maple-font][Maple Mono SC NF]]:
+  显示 中英文.
++ [[https://www.nerdfonts.com/][Symbols Nerd Fonts Mono]]:
+  显示 各种 小图标.
++ Segoe UI Symbol, Segoe UI Emoji.
+
+** 软件
+
++ [[https://releases.llvm.org][clang-format]]:
+  代码格式化工具.
++ [[https://www.smoothscroll.net][SmoothScroll]]:
+  开启鼠标 像素级 滚动的功能.
+  (也可以选其它的类似的工具; 或者你的鼠标原生支持.)
++ [[https://clangd.llvm.org][clang/clangd]]:
+  Language server.
++ [[https://jmeubank.github.io/tdm-gcc][GCC]]:
+  将 =modules/src/= 下的 C 文件 编译成 动态链接库, 提供给 Emacs 加载.
+  (也可以选其它的 C 编译器.)
+
+** Packages
+
+为了提高编辑本仓库的文件时的舒适度, 建议安装以下 Emacs 插件
+(不然 =.dir-locals.el= 中有些功能无法启用):
+
++ ~git-modes~
++ ~makefile-mode~
++ ~markdown-mode~
++ ~textile-mode~
++ ~yaml-mode~
++ ~yasnippet~
+
+如果已经安装了这些 package, 可能还需要在进入本仓库之前分别 ~require~ 一下.
 
 * 键位
 ** 键盘输入
 
 对调了键盘上的 /圆括号/ (=(= =)=) 与 /方括号/ (=[= =]=), 而 /大括号/ (={= =}=) 与 /数字/ (=9= =0=) 不受任何影响.
-(BTW, 其它软件做得到吗?)
 
 ** 快捷键
 
-- 未换绑任何默认快捷键, 除了那些自带备选方案的 (e.g., 手册中提到 =C-x C-b= 可换绑到 ~bs-show~);
-- 取消了很多不必要的默认快捷键;
-- 定义了自用快捷键:
-  - =C-c <letter>=, where =<letter>= is either lower case or upper.
++ 未换绑任何默认快捷键, 除了那些自带备选方案的 (e.g., 手册中提到 =C-x C-b= 可换绑到 ~bs-show~);
++ 取消了很多不必要的默认快捷键;
++ 定义了自用快捷键:
+  - =C-c= 后接一个 =<letter>= (upper or lower case; =ASCII= or non-=ASCII=).
   - =f5=​\tilde​=f9=.
 
-* Written for
+* 安装须知
+
+** Written for
 
 Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./docs/Emacs-use_daemon.md][如何运行 Emacs 后台服务?]]).
 
-- MS-Windows: =x86_64-w64-mingw32=
++ MS-Windows: =x86_64-w64-mingw32=
 
-考虑到从零开始按照本配置初始化 Emacs 时, 可能会遇到各种意想不到的问题, 所以可以直接[[https://github.com/shynur/misc/tree/main/tmp/shynur-emacs-directory/][从这里找到自己需要的目录的打包文件, 并整个下载下来]], 以替换掉原本的 =~/.emacs.d/= 目录.
+考虑到新手从零开始按照本配置初始化 Emacs 时, 可能会遇到各种意想不到的问题, 所以可以直接[[https://github.com/shynur/.emacs.d/tree/assets/releases/][从这里找到自己需要的目录的打包文件, 并整个下载下来]] (可能会用分卷压缩), 以替换掉原本的 =~/.emacs.d/= 目录.
+
+** Install
+
+见 [[file:./INSTALL.rst][INSTALL.rst]].
+(仅包含 [[Written for]] 中提到的平台, 当然其它平台应该大差不差.)
 
 * TODO 待办
 
-- [ ] 不应该单纯开启 ~global-display-line-numbers-mode~, 而是应该给出一个分类机制, 有需要的 mode 才打开 ~display-line-numbers-mode~.
++ [ ] 不应该单纯开启 ~global-display-line-numbers-mode~, 而是应该给出一个分类机制, 有需要的 mode 才打开 ~display-line-numbers-mode~.
   有的 mode (e.g., ~neotree~, ~calendar~, ~vc-annotate-mode~) 显示行号反而会占用空间.
-- [ ] 将任何 non-selected window 且是 ~prog-mode~ 的 buffer 开启全局彩虹括号.
++ [ ] 将任何 non-selected window 且是 ~prog-mode~ 的 buffer 开启全局彩虹括号.
   ~highlight-parentheses~ 只会高亮光标附近的括号, 其余地方还是一尘不变, 这样不太 fancy.
-- [ ] ~VS Code~ 式 右侧栏代码浏览缩略图.
-- [ ] 类似 VS Code =noctis= 的 主题, =solarized= 也不错.
++ [ ] ~VS Code~ 式 右侧栏代码浏览缩略图.
++ [ ] 类似 VS Code =noctis= 的 主题, =solarized= 也不错.
 
 ** PATCH
 
-- ~dframe-mouse-click-function~: "our".
-- (emacs) =C-x p d=: not root
-- (emacs) 28, 49.1.2: customize-group
-- (emacs) custom-theme-directory
++ ~dframe-mouse-click-function~: "our".
++ (emacs) =C-x p d=: not root
++ (emacs) 28, 49.1.2: customize-group
++ (emacs) custom-theme-directory
++ (emacs) 28, 49.1.7 Custom Themes: ‘(’加空格.
 
 ** BUG
-- company: "clang failed with error 255".
-- hexl-mode: 保存文件时会删除一些字符.
-- =M-x= 时 未显示 ~ignore~.
++ company: "clang failed with error 255".
++ hexl-mode: 保存文件时会删除一些字符.
++ =M-x= 时 未显示 ~ignore~.
 
 ** TODO 新增文件流程 [0/5]
 1. [ ] =New-file-name=
@@ -79,7 +140,8 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 
 * Repo Stats
 
-- [[https://api.codetabs.com/v1/loc/?github=shynur/.emacs.d&branch=main][Languages Statistics]]
+# See [[https://codetabs.com/count-loc/count-loc-online.html][Count LOC online]] hosted at [[https://github.com/jolav/codetabs]].
++ [[https://api.codetabs.com/v1/loc/?github=shynur/.emacs.d&branch=main&ignored=][Languages Statistics]]
 
 * License
 
@@ -87,7 +149,9 @@ See the [[file:./LICENSE.txt][LICENSE.txt]] file for license rights and limitati
 
 -----
 
-Copyright \copy 2023 [[https://github.com/shynur][谢骐]] <[[mailto:one.last.kiss@outlook.com][one.last.kiss@outlook.com]]>.
+Copyright \copy 2023  [[https://github.com/shynur][谢骐]] <[[mailto:one.last.kiss@outlook.com][one.last.kiss@outlook.com]]>.
+I own the copyright to [[https://github.com/shynur/.emacs.d][this entire repository]];
+unless explicitly stated, all files here are included and licensed the same as [[https://github.com/shynur/.emacs.d/blob/main/README.org?plain=1][this file]].
 
 # Local Variables:
 # coding: utf-8-unix

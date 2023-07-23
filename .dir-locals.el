@@ -1,7 +1,9 @@
 ;; 能放到该文件的配置都放到该文件, file local variable 要尽可能少.
-;; Emacs 启动时会读取本文件, 将结果加到 ‘safe-local-variable-values’ 中, 当启用这些配置时, _无需确认_.
+;; 因为 Emacs 启动时会读取本文件, 将结果加到 ‘safe-local-variable-values’ 中, 当启用这些配置时, _无需确认_.
 
 ((auto-mode-alist . (;; 有些设置是多余的, 但出于 教学/参考 的目的, 保留下来.
+
+                     ;; 这些是 auto-save 之类的文件.
                      ("~\\'" . (ignore t))
                      ("#[[:alnum:]]*\\'" . (ignore t))
 
@@ -9,12 +11,15 @@
                      ("/[^/-][^/]*\\.el\\'" . emacs-lisp-mode)
                      ("/\\.dir-locals\\(?:-2\\)?\\.el\\'" . lisp-data-mode)
 
-                     ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'" . markdown-mode)
-                     ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.org\\'" . org-mode)
+                     ;; shynur/TODO: 我tm自己都看不懂了, 有空补一下注释.
+                     ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'"      . markdown-mode)
+                     ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.textile\\'" . textile-mode)
 
                      ("/[^/-][^/]*\\.ya?ml\\'" . yaml-mode)
+                     ("/etc/yas-snippets/[^/-][^/]*\\.yasnippet\\'" . snippet-mode)
                      ("/\\.gitignore\\'" . gitignore-mode)
-                     ("/\\(?:\\(?:\\(?:GNU\\)?m\\)\\|M\\)akefile\\'" . makefile-gmake-mode)))
+                     ("/\\.gitmodules\\'" . gitconfig-mode)
+                     ))
 
  (nil . ((outline-minor-mode-cycle . t)
          (outline-minor-mode-prefix . [nil])
@@ -34,16 +39,19 @@
                               org-mode
                               makefile-gmake-mode))
 
-         ;; This is for LICENSE file which doesn’t have syntax for comments.
-         (eval . (when (when-let ((buffer-file-name (buffer-file-name)))
-                         (string= "LICENSE" (file-name-base buffer-file-name)))
-                   (setq-local buffer-read-only t)))
+         (shynur--read-only-when-filename-match . (lambda (regexp)
+                                                    (when-let ((buffer-file-name (buffer-file-name)))
+                                                      (when (string-match-p regexp (file-name-nondirectory buffer-file-name))
+                                                        (setq-local buffer-read-only t)))))
+         (eval . (funcall shynur--read-only-when-filename-match "LICENSE"))  ; ‘LICENSE’没有注释语法, 只能写在这里了.
+
 
          (eval . (let ((case-fold-search t))
                    (highlight-phrase "~?\\(?:shynur\\|谢骐\\)[^[:blank:][:space:][:cntrl:]()`'\"]*"
                                      'underline)))
 
-         (indent-tabs-mode . nil)
+         (tab-width . 4)
+         (indent-tabs-mode . nil)  ; 为什么不是“(mode . indent-tabs)”?  不知道, manual 中的示例如此.
 
          (delete-trailing-lines . t)
          (require-final-newline . t)
@@ -62,7 +70,7 @@
 
               (org-link-descriptive . nil)))
 
- (gitignore-mode . ((outline-regexp . "^#outline:\\(?1:[[:blank:]]+\\(?:[._[:alpha:]][._[:alnum:]]*/\\)+\\)?")
+ (gitignore-mode . ((outline-regexp . "^#+outline:\\(?1:[[:blank:]]+\\(?:[._[:alnum:]-]+/\\)+\\)?")
                     (outline-heading-end-regexp . "/\n")
                     (outline-level . (lambda ()
                                        (let ((slash-amount 0))
@@ -82,9 +90,26 @@
 
                          (mode . indent-tabs)))
 
- ("lisp/" . ((nil . (;; 编写用于 解释执行 的代码更加轻松.
+ ("etc/" . ((nil . (;; 其下的 Emacs Lisp 文件 几乎 只负责 定义 变量, 完全没必要编译.
+                    ;; 而且该目录也不在‘load-path’里, 所以那些 Emacs Lisp 是_绝对路径_指定的.
+                    (no-byte-compile . t)
+                    (no-native-compile . t)))
+            ("yas-snippets/" . ((auto-mode-alist . (("/etc/yas-snippets/[^/-][^/]*\\.yasnippet\\'" . snippet-mode)))))))
+ ("lisp/" . ((nil . (;; 编写用于 解释执行 的代码更加轻松, 但是会在未来的某一天重构成_可编译的_.
+                     ;; ‘site-lisp/’中则尽量编写可编译的代码.
                      (no-byte-compile . t)
-                     (no-native-compile . t))))))
+                     (no-native-compile . t)))))
+ ("modules/src/" . ((nil . ((eval . (funcall shynur--read-only-when-filename-match "emacs-module"))  ; 这玩意有 GPL 污染, 切割!
+
+                            (tags-file-name . "ETAGS.txt")
+                            (eval . (when (buffer-file-name)  ; 正在访问文件, 而不是‘dired’之类的 buffer.
+                                      (let ((default-directory (file-name-concat user-emacs-directory
+                                                                                 "modules/src/")))
+                                        (when (or (not (file-exists-p tags-file-name))
+                                                  (> (time-to-number-of-days (time-since (file-attribute-modification-time (file-attributes tags-file-name))))
+                                                     1))
+                                          (eshell-command (format "ls *.[ch] | etags --output=%s - "
+                                                                  tags-file-name)))))))))))
 
 ;; Local Variables:
 ;; coding: utf-8-unix

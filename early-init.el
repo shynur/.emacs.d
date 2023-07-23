@@ -1,8 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
-(setq load-prefer-newer nil)
-
-(setq force-load-messages t)
+(setq load-prefer-newer nil
+      force-load-messages t)
 
 (push (file-name-concat user-emacs-directory
                         "lisp/") load-path)

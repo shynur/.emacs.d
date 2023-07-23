@@ -1,0 +1,16 @@
+###. See ["textile":https://textile-lang.com].
+
+基本上是 coding style guideline.
+
+* 谁向这个仓库 contribute?
+- 我.
+* 谁需要铭记标准且一致的 Emacs Lisp 代码风格?
+- 我.
+* 所以最应该遵守该文件的是...?
+- 我.
+
+###.. ////////////////
+// Local Variables:
+// coding: utf-8-unix
+// End:
+//////////////////////

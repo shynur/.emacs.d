@@ -36,12 +36,21 @@
  '(highlight-nonselected-windows t
                                  nil ()
                                  "除了当前选中的window,还highlight非选中的window的active-region")
- `(,(shynur--intern&bind-tmp)(shynur/init-data/ 'transient-history-file ".el")
-   nil (transient))
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'transient-levels-file ".el")
-   nil (transient))
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'transient-values-file ".el")
-   nil (transient))
+ `(,(set 'shynur--tmp 'shynur--tmp) ,(progn
+                                       (shynur/custom-appdata/ transient-history-file el)
+                                       (shynur/custom-appdata/ transient-levels-file el)
+                                       (shynur/custom-appdata/ transient-values-file el)
+                                       (shynur/custom-appdata/ tramp-persistency-file-name el)
+                                       (shynur/custom-appdata/ tramp-auto-save-directory /)
+                                       (shynur/custom-appdata/ filesets-menu-cache-file el)
+                                       (shynur/custom-appdata/ auto-save-list-file-prefix /)
+                                       (shynur/custom-appdata/ bookmark-default-file el)
+                                       (shynur/custom-appdata/ url-cache-directory /)
+                                       (shynur/custom-appdata/ url-cookie-file)
+                                       (shynur/custom-appdata/ temporary-file-directory /)
+                                       (shynur/custom-appdata/ save-place-file el)
+                                       (shynur/custom-appdata/ eww-bookmarks-directory /)
+                                       ))
  '(case-replace t
                 nil (replace)
                 "文本替换时,大小写敏感")
@@ -96,9 +105,7 @@
  '(coding-system-for-write 'utf-8-unix
                            nil ()
                            "该customization中的NEW被Emacs设置为t")
- '(file-name-coding-system (pcase (system-name)
-                             ("ASUS-TX2" 'chinese-gb18030       )
-                             (_          file-name-coding-system)))
+ '(file-name-coding-system shynur/custom-filename-coding)
  '(completion-cycle-threshold nil
                               nil (minibuffer)
                               "minibuffer补全时,按TAB会轮换候选词")
@@ -106,7 +113,7 @@
                           nil (indent-guide))
  '(indent-guide-char "\N{BOX DRAWINGS LIGHT VERTICAL}"
                      nil (indent-guide))
- '(current-language-environment "UTF-8")
+ ;; '(current-language-environment "UTF-8")
  '(kill-ring-max most-positive-fixnum
                  nil (simple))
  '(delete-trailing-lines t
@@ -163,9 +170,6 @@
                             nil (battery))
  '(battery-update-interval battery-update-interval
                            nil (battery))
- '(mode-line-in-non-selected-windows t
-                                     nil ()
-                                     "未被选中的窗口使用‘mode-line-inactive’作为mode-line的face")
  '(eol-mnemonic-dos  "(CRLF)")
  '(eol-mnemonic-mac  "(CR)")
  '(eol-mnemonic-unix "(LF)")
@@ -177,26 +181,9 @@
                          nil (delsel)
                          "选中文本后输入字符,会先删除刚刚选择的文本,再插入输入的字符")
  '(enable-recursive-minibuffers t)
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'eshell-directory-name "/")
-   nil (esh-mode))
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'eshell-history-file-name ".txt")
-   nil (em-hist))
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'eshell-last-dir-ring-file-name ".txt")
-   nil (em-dirs))
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'eww-bookmarks-directory "/")
-   nil (eww))
  '(extended-command-suggest-shorter t
                                     nil (simple)
                                     "通过不完整的函数名调用command时,在echo area中提示这个command的全名")
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'savehist-file ".el")
-   nil (savehist)
-   "必须在打开‘savehist-mode’之前设置此变量,否则‘savehist-mode’将找不到该文件")
- '(savehist-mode t
-                 nil (savehist)
-                 "保存minibuffer的历史记录")
- '(savehist-autosave-interval nil
-                              nil (savehist)
-                              "每多少秒保存一次minibuffer的历史记录")
  '(minibuffer-allow-text-properties t
                                     nil ()
                                     "大部分情况下,保留从‘read-from-minibuffer’获取的文本的属性")
@@ -297,33 +284,10 @@
                    "若快捷键未完整击入,则等待该时长后在echo-area显示已经击入的键")
  '(visible-bell t
                 nil ()
-                "响铃可视化.在Windows上表现为,任务栏图标闪烁")
+                "响铃可视化.在 MS-Windows 上表现为,任务栏图标闪烁")
  '(table-fixed-width-mode nil
                           nil (table)
                           "基于文本的表格自动调节尺寸")
- '(inhibit-startup-screen t
-                          nil ()
-                          "取消原本的 startup screen")
- '(initial-scratch-message #(";;     *
-;;      May the Code be with You!
-;;     .                                 .
-;;                               *
-;;          /\\/|_      __/\\\\
-;;         /    -\\    /-   ~\\  .              \\='
-;;         \\    = Y =T_ =   /
-;;          )==*(\\=`     \\=`) ~ \\
-;;         /     \\     /     \\
-;;         |     |     ) ~   (
-;;        /       \\   /     ~ \\
-;;        \\       /   \\~     ~/
-;; _/\\_/\\_/\\__  _/_/\\_/\\__~__/_/\\_/\\_/\\_/\\_/\\_
-;; |  |  |  | ) ) |  |  | ((  |  |  |  |  |  |
-;; |  |  |  |( (  |  |  |  \\\\ |  |  |  |  |  |
-;; |  |  |  | )_) |  |  |  |))|  |  |  |  |  |
-;; |  |  |  |  |  |  |  |  (/ |  |  |  |  |  |
-;; |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-\n"
-                             0 671 (font-lock-face (:foreground "VioletRed1"))))
  '(insert-default-directory t
                             nil (minibuffer)
                             "‘find-file’时,给出默认目录")
@@ -336,9 +300,6 @@
  '(line-number-mode nil
                     nil (simple)
                     "mode-line不显示行号")
- '(max-mini-window-height 0.3
-                          nil ()
-                          "minubuffer最大高度占比(float)/绝对高度(int)")
  '(message-log-max t
                    nil ()
                    "对于“*Messages*”的最大行数,不做限制")
@@ -369,23 +330,11 @@
                                       "对buffer名字进行补全时,忽略大小写")
  '(read-extended-command-predicate #'command-completion-default-include-p
                                    nil (simple))
- '(read-file-name-completion-ignore-case read-file-name-completion-ignore-case
-                                         nil (minibuffer)
-                                         "对文件路径进行补全时,是否忽略大小写(系统相关的)")
+ '(read-file-name-completion-ignore-case t
+                                         nil (minibuffer))
  '(read-quoted-char-radix 16
                           nil (simple)
                           "“C-q”后接16进制")
- '(resize-mini-windows t
-                       nil ()
-                       "minibuffer可以变宽变窄,由输入的字符串的行数决定")
- '(resize-mini-frames #'fit-frame-to-buffer
-                      nil ()
-                      "trim首尾的空行")
- '(inhibit-startup-echo-area-message user-login-name
-                                     nil ()
-                                     "只有将该变量设置为自己在OS中的username,才能屏蔽startup时echo area的“For information about GNU Emacs and the GNU system, type C-h C-a.”")
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'save-place-file ".el")
-   nil (saveplace))
  '(save-place-mode t
                    nil (saveplace)
                    "在session之间保存访问文件时的浏览位置")
@@ -410,7 +359,6 @@
  '(suggest-key-bindings most-positive-fixnum
                         nil (simple)
                         "_1_通过函数名调用command时,在minibuffer中提示这个command可能绑定的快捷键;_2_决定‘extended-command-suggest-shorter’的显示持续时间;_3_将前面这两个提示信息持续显示5秒;_4_使command候选词列表中,各函数名的后面显示该函数绑定的快捷键")
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'temporary-file-directory "/"))
  '(text-quoting-style nil
                       nil ()
                       "渲染成对的单引号时,尽可能使用‘curve’这种样式,退而求此次地可以使用`grave'这种样式")
@@ -455,99 +403,20 @@
  '(uniquify-strip-common-suffix t
                                 nil (uniquify)
                                 "当‘uniquify-buffer-name-style’的设置涉及补全文件路径时,保留显示路径名之间相同的部分")
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'url-cache-directory "/")
-   nil (url-cache))
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'url-cookie-file "")
-   nil (url-cookie))
- '(user-full-name "谢骐")
- '(user-mail-address "one.last.kiss@outlook.com"
-                     nil ()
-                     "用户的email")
- '(blink-cursor-mode nil
-                     nil (frame))
- '(blink-cursor-delay 0
-                      nil (frame)
-                      "cursor开始闪烁的时间点")
- '(blink-cursor-blinks 0
-                       nil (frame)
-                       "如果打开‘blink-cursor-mode’的话,停止输入后cursor会闪烁一定次数,然后静止")
- '(blink-cursor-alist '((box  . nil)
-                        (bar  . box)
-                        (hbar . bar))
-                      nil ()
-                      "当设置‘cursor-type’时,将会根据此alist设置光标黯淡时的type")
- '(blink-cursor-interval 0.5
-                         nil (frame)
-                         "cursor闪烁的时间间隔")
- '(visible-cursor t
-                  nil ()
-                  "在TUI下,如果有可能的话,使cursor外形或特征更加显著(通常是blinking)")
- '(what-cursor-show-names t
-                          nil (simple)
-                          "使“C-x =”(‘what-cursor-position’)顺便显示字符的Unicode名字")
- '(cursor-type 'box
-               nil ()
-               "GUI下的cursor的静态图标")
- '(cursor-in-non-selected-windows t
-                                  nil ()
-                                  "未选择的window中的cursor显示为静态镂空框")
  '(Info-mode-hook `(,@Info-mode-hook
                     ,(lambda ()
                        "单词之间换行"
                        (visual-line-mode))))
- '(help-mode-hook `(,@help-mode-hook
+ '(help-mode-hook `(,@(bound-and-true-p help-mode-hook)
                     ,(lambda ()
                        "单词之间换行"
                        (visual-line-mode))))
  '(visual-line-fringe-indicators '(nil down-arrow)
                                  nil (simple)
                                  "word-wrap打开时在换行处显示down-arrow")
- '(global-company-mode t
-                       nil (company))
- '(company-idle-delay 0
-                      nil (company))
- '(company-tooltip-offset-display 'lines
-                                  nil (company)
-                                  "原本在候选词界面的右侧是由scroll bar的,现在改成:提示前面和后面分别有多少候选词")
  '(on-screen-delay 0.4
                    nil (on-screen)
                    "on-screen的提示持续时间")
- '(company-minimum-prefix-length 2
-                                 nil (company)
-                                 "当输入2个字符时,company就开始猜测")
- '(company-dabbrev-code-everywhere t
-                                   nil (company)
-                                   "还在comment和string中进行completion")
- '(company-dabbrev-code-other-buffers t
-                                      nil (company)
-                                      "在具有相同major mode的buffer中搜索候选词")
- '(company-dabbrev-code-time-limit 2
-                                   nil (company)
-                                   "在current buffer中搜索代码块中的关键词的时间限制")
- '(company-show-quick-access t
-                             nil (company)
-                             "给候选词编号")
- '(company-tooltip-limit 10
-                         nil (company)
-                         "一次性显示候选词的数量")
- '(company-clang-executable (pcase (system-name)
-                              ("ASUS-TX2" "d:/Progs/LLVM/bin/clang.exe"))
-                            nil (company))
- '(next-screen-context-lines 5
-                             nil ()
-                             "scroll以使window底端的N行呈现到顶端")
- '(w32-mouse-button-tolerance w32-mouse-button-tolerance
-                              nil ()
-                              "如果鼠标的3个案件中有一个失灵了,可以在这么多毫秒内同时按下其余两个键,Emacs会将其识别为失灵的那个键")
- '(w32-swap-mouse-buttons nil
-                          nil ()
-                          "是否交换鼠标的中键和右键")
- '(dimmer-mode t
-               nil (dimmer)
-               "暗淡非聚焦状态的window(似乎可以设置渐变色)")
- '(scroll-error-top-bottom nil
-                           nil (window)
-                           "无法再scroll时停住,而不是继续移动point")
  '(global-highlight-parentheses-mode t
                                      nil (highlight-parentheses)
                                      "给内层括号换种颜色")
@@ -567,38 +436,6 @@
                                     nil (hideshow))
  '(hs-isearch-open t
                    nil (hideshow))
- '(scroll-bar-width 28)
- '(initial-buffer-choice t
-                         nil ()
-                         "启动时转向该buffer(t在这里表示“*scratch*”)")
- '(maximum-scroll-margin 0.5
-                         nil ())
- '(scroll-margin 1
-                 nil ()
-                 "相当于,光标不会到达的边缘地带的宽度(单位是screen line);占window的最大比例为‘maximum-scroll-margin’")
- '(scroll-conservatively most-positive-fixnum
-                         nil ())
- '(scroll-minibuffer-conservatively t
-                                    nil ()
-                                    "对于minibuffer,永远是一行一行地automatically scroll")
- '(ivy-count-format "%d/%d "
-                    nil (ivy))
- '(ivy-height 6
-              nil (ivy)
-              "准确来说是最大高度")
- '(minibuffer-setup-hook `(,@minibuffer-setup-hook
-                           ,(lambda ()
-                              "令ivy的minibuffer拥有自适应高度"
-                              (add-hook 'post-command-hook
-                                        (lambda ()
-                                          (when (progn
-                                                  (require 'ivy)
-                                                  ivy-mode)
-                                            (shrink-window (1+ (progn
-                                                                 (require 'ivy)
-                                                                 ivy-height)))))
-                                        nil
-                                        t))))
  '(calendar-mark-holidays-flag t
                                nil (calendar))
  '(prettify-symbols-alist '(("lambda" . ?λ)
@@ -635,9 +472,7 @@
                                  nil (hilit-chg))
  '(highlight-changes-visibility-initial-state nil
                                               nil (hilit-chg))
- '(python-shell-interpreter (pcase (system-name)
-                              ("ASUS-TX2" "python" )
-                              (_          "python3"))
+ '(python-shell-interpreter shynur/custom-python-path
                             nil (python))
  '(python-shell-interpreter-interactive-arg nil
                                             nil (python))
@@ -647,8 +482,6 @@
  '(debug-on-quit nil
                  nil ()
                  "按下“C-g”时是否要进入debugger")
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'bookmark-default-file ".el")
-   nil (bookmark))
  '(bookmark-save-flag 1
                       nil (bookmark)
                       "每次保存bookmark时都会写进文件")
@@ -703,9 +536,6 @@
                         "放缩字体大小时的倍率")
  '(emacs-startup-hook `(,@(bound-and-true-p emacs-startup-hook)
                         ,(lambda ()
-                           (other-window 1)
-                           (delete-other-windows))
-                        ,(lambda ()
                            "记录击键(bug#62277)"
                            (lossage-size (* 10000 10)))
                         ,(lambda ()
@@ -736,31 +566,7 @@
                               ,(lambda ()
                                  (indent-tabs-mode)))
                             nil (make-mode))
- '(tooltip-delay 0
-                 nil (tooltip))
- '(tooltip-mode t
-                nil (tooltip))
- '(tooltip-short-delay 0
-                       nil (tooltip))
- '(tooltip-hide-delay most-positive-fixnum
-                      nil (tooltip))
- '(tooltip-frame-parameters tooltip-frame-parameters
-                            nil (tooltip))
- '(doom-modeline-mode t
-                      nil (doom-modeline all-the-icons))
- '(doom-modeline-minor-modes t
-                             nil (doom-modeline))
- '(doom-modeline-window-width-limit nil
-                                    nil (doom-modeline)
-                                    "即使当前窗口宽度很小,也尽量显示所有信息")
- '(doom-modeline-bar-width 3
-                           nil (doom-modeline)
-                           "doom-modeline左侧小竖条的宽度(装饰品)")
- '(doom-modeline-height 1
-                        nil (doom-modeline))
- '(inferior-lisp-program (pcase (system-name)
-                           ("ASUS-TX2" "d:/Progs/Steel_Bank_Common_Lisp/sbcl.exe")
-                           (_          inferior-lisp-program                     ))
+ '(inferior-lisp-program shynur/custom-commonlisp-path
                          nil (sly))
  '(save-interprogram-paste-before-kill t
                                        nil (simple)
@@ -777,24 +583,6 @@
  '(x-stretch-cursor t
                     nil ()
                     "在tab字符上拉长显示cursor")
- '(shell-mode-hook `(,@shell-mode-hook
-                     ,(lambda ()
-                        "设置编码"
-                        (pcase (system-name)
-                          ("ASUS-TX2" (set-buffer-process-coding-system 'chinese-gb18030 'chinese-gb18030))))
-                     ,(lambda ()
-                        "设置shell"
-                        (pcase (system-name)
-                          ("ASUS-TX2" (make-thread (lambda ()
-                                                     (let ((attempts 100000))
-                                                       (while (and (natnump attempts)
-                                                                   (length> "Microsoft Windows" (buffer-size)))
-                                                         (thread-yield)
-                                                         (cl-decf attempts)))
-                                                     (when (save-excursion
-                                                             (re-search-backward "Microsoft Windows"))
-                                                       (execute-kbd-macro [?p ?o ?w ?e ?r ?s ?h ?e ?l ?l ?\C-m]))))))))
-                   nil (shell))
  '(global-page-break-lines-mode t
                                 nil (page-break-lines)
                                 "将form-feed字符渲染成别致的下划线")
@@ -821,38 +609,10 @@
  '(adaptive-fill-mode t
                       nil ()
                       "“M-q”时自动选择每行首的填充前缀")
- '(text-mode-hook `(,@text-mode-hook
+ '(text-mode-hook `(,@(bound-and-true-p text-mode-hook)
                     ,(lambda ()
                        (when (eq major-mode 'text-mode)
                          (display-fill-column-indicator-mode)))))
- '(c-mode-common-hook `(,@c-mode-common-hook
-                        ,(lambda ()
-                           (c-set-offset 'case-label '+))
-                        ;; 只保留当前编译环境下,生效的ifdef从句
-                        ,(lambda ()
-                           (hide-ifdef-mode)))
-                      nil (cc-mode))
- '(c-basic-offset 4
-                  nil (cc-mode))
- '(c-default-style '((awk-mode . "awk" )
-                     (other    . "java"))
-                   nil (cc-mode))
- '(c-tab-always-indent t
-                       nil (cc-mode))
- '(c-mode-common-hook `(,@(bound-and-true-p c-mode-common-hook)
-                        ,(lambda ()
-                           "换行不够智能"
-                           (c-toggle-auto-newline -1))
-                        ,(lambda ()
-                           "键入特定字符后,自动缩进当前行"
-                           (c-toggle-electric-state 1)))
-                      nil (cc-mode))
- '(c-initialization-hook `(,@(bound-and-true-p c-initialization-hook)
-                           ,(lambda ()
-                              "写C宏时换行自动加反斜线;写注释时换行相当于“M-j”(‘c-indent-new-comment-line’)"
-                              (define-key c-mode-base-map "\C-m"
-                                #'c-context-line-break)))
-                         nil (cc-mode))
  '(comment-multi-line t
                      nil (newcomment)
                      "“M-j”时,“/* lines */”而不是“/* */ \n /* */”")
@@ -872,6 +632,9 @@
  '(show-paren-when-point-in-periphery nil
                                       nil (paren)
                                       "当光标置于sexp周边的空白区域时")
+ '(what-cursor-show-names t
+                          nil (simple)
+                          "使“C-x =”(‘what-cursor-position’)顺便显示字符的Unicode名字")
  '(electric-pair-mode t
                       nil (elec-pair))
  '(ielm-mode-hook `(,@(bound-and-true-p ielm-mode-hook)
@@ -1047,22 +810,6 @@
  '(temp-buffer-resize-mode t
                            nil (help)
                            "e.g.,使“*Completions*”不会几乎占用整个frame")
- `(safe-local-variable-values ',(let ((shynur--safe-local-variable-values (list)))
-                                  (named-let get-vars ((dir-locals (mapcan (lambda (file-path)
-                                                                             (when (file-exists-p file-path)
-                                                                               (with-temp-buffer
-                                                                                 (insert-file-contents file-path)
-                                                                                 (read (current-buffer))))) ["~/.emacs.d/.dir-locals.el"
-                                                                                                             ])))
-                                    (dolist (mode-vars dir-locals)
-                                      (let ((vars (cdr mode-vars)))
-                                        (if (stringp (car mode-vars))
-                                            (get-vars vars)
-                                          (dolist (var-pair vars)
-                                            (push var-pair shynur--safe-local-variable-values))))))
-                                  (append (bound-and-true-p safe-local-variable-values)
-                                          shynur--safe-local-variable-values))
-                              nil (files))
  '(enable-local-variables t
                           nil (files)
                           "尽量不询问,但提供记忆功能(可能会修改‘custom-file’的文件内容)")
@@ -1147,7 +894,6 @@
  '(auto-save-timeout 30
                      nil ()
                      "经过如此之多的秒数的idleness之后auto-save,还可能执行一次GC.(这是一条heuristic的建议,Emacs可以不遵循,e.g.,编辑大文件)")
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'auto-save-list-file-prefix "/"))
  '(auto-save-no-message nil)
  '(delete-auto-save-files t
                           nil ()
@@ -1170,15 +916,6 @@
  '(tramp-mode t
               nil (tramp)
               "若置nil,直接关闭remote-filename识别")
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'tramp-persistency-file-name ".el")
-   nil (tramp-cache))
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'tramp-auto-save-directory "/")
-   nil (tramp))
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'filesets-menu-cache-file ".el")
-   nil (filesets))
- '(debugger-stack-frame-as-list nil
-                                nil ()
-                                "debugger以C风格显示函数调用栈,而不是Lisp风格")
  '(edebug-all-defs nil
                    nil (edebug)
                    "置t则颠倒[C-M-x]对前缀参数的处理")
@@ -1187,15 +924,9 @@
  '(split-window-keep-point nil
                            nil (window)
                            "Cursor在下半window时,新建window在上半部分;反之则反.简言之,尽可能少地重绘.缺点是,新窗口的point未必与原先一致")
- '(window-resize-pixelwise t)
- '(frame-resize-pixelwise t)
  '(delete-window-choose-selected 'mru
                                  nil (window)
                                  "Delete窗口之后下一个选中的窗口是最近使用过的")
- '(window-min-height 4
-                     nil (window))
- '(window-min-width 1
-                    nil (window))
  '(x-underline-at-descent-line nil)
  '(x-use-underline-position-properties t)
  '(underline-minimum-offset 0
@@ -1239,6 +970,8 @@
  '(mouse-1-click-follows-link 400
                               nil (mouse)
                               "在button/hyperlink上点击,不放开鼠标按键持续一定毫秒数后,将仅设置point而不循入链接")
+ '(double-click-time 400)
+ '(double-click-fuzz 3)
  '(mouse-1-click-in-non-selected-windows t
                                          nil (mouse)
                                          "点击non-selected-window中的button/hyperlink同样会循入链接")
@@ -1253,14 +986,6 @@
                            nil (simple))
  '(register-separator "\n\n"
                       nil (register))
- '(window-divider-default-places 'right-only
-                                 nil (frame))
- '(window-divider-default-right-width 12
-                                      nil (simple)
-                                      "scroll bar的宽度")
- '(window-divider-mode t
-                       nil (frame)
-                       "在window的周围显示拖动条,用来调整window的长和宽.(横向拖动条可以用mode-line代替,所以只需要纵向拖动条,据此设置‘window-divider-default-places’为right-only)(‘window-divider-default-right-width’决定拖动条的宽度)")
  '(dnd-open-file-other-window nil
                               nil (dnd))
  '(mouse-drag-and-drop-region t
@@ -1281,9 +1006,54 @@
  '(compilation-always-kill nil
                            nil (compile)))
 
+;;; Feature: ‘files’
+(with-eval-after-load 'files
+  (setq safe-local-variable-values `(,@safe-local-variable-values
+                                     ,@(let ((shynur--safe-local-variable-values (list)))
+                                         (named-let get-vars ((dir-locals (mapcan (lambda (file-path)
+                                                                                    (when (file-exists-p file-path)
+                                                                                      (with-temp-buffer
+                                                                                        (insert-file-contents file-path)
+                                                                                        (read (current-buffer))))) `[,@(mapcar (lambda (dir-loc)
+                                                                                                                                 "囊括诸如‘~/.emacs.d/’下的‘.dir-locals.el’文件."
+                                                                                                                                 (file-name-concat user-emacs-directory
+                                                                                                                                                   dir-loc)) [".dir-locals.el"
+                                                                                                                                                               ".dir-locals-2.el"])
+                                                                                                                     ])))
+                                           (dolist (mode-vars dir-locals)
+                                             (let ((vars (cdr mode-vars)))
+                                               (if (stringp (car mode-vars))
+                                                   (get-vars vars)
+                                                 (dolist (var-pair vars)
+                                                   (push var-pair shynur--safe-local-variable-values))))))
+                                         shynur--safe-local-variable-values))))
+
+(put 'narrow-to-region 'disabled nil)
+
 ;;; Feature: ‘project’
-(shynur/init-data/ 'project-list-file ".el")
+(shynur/custom-appdata/ project-list-file el)
 (setq project-switch-commands #'project-find-file)  ; “C-x p p”选中项目后, 立刻执行指定的 command.
+
+;;; Feature: ‘nsm’
+(shynur/custom-appdata/ nsm-settings-file data)  ; 记录已知的安全 connection.
+
+;;; Feature: ‘company’
+(setq company-idle-delay 0
+      company-minimum-prefix-length 2)
+(setq company-dabbrev-code-everywhere t)  ; 还在 comment 和 string 中进行 completion.
+(setq company-dabbrev-code-other-buffers t  ; 在具有相同‘major-mode’的 buffer 中搜索候选词.
+      company-dabbrev-code-time-limit 2  ; 在 current buffer 中搜索代码块中的关键词的时间限制.
+      )
+(setq company-show-quick-access t  ; 给候选词编号.
+      company-tooltip-offset-display 'lines  ; 原本在候选词界面的右侧是由 scroll bar, 现改成: 上/下面分别有多少候选词.
+      company-tooltip-limit 10)
+(setq company-clang-executable shynur/custom-clang-path)
+(global-company-mode)
+
+;;; Feature: ‘savehist’
+(shynur/custom-appdata/ savehist-file el)
+(setq savehist-autosave-interval nil)
+(savehist-mode)  ; 保存 minibuffer 的历史记录
 
 ;;; Feature: ‘dired’
 (keymap-global-unset "C-x C-j")    ; ‘dired-jump’
@@ -1298,41 +1068,69 @@
 (keymap-global-unset "C-x 4 m")  ; ‘compose-mail’
 (keymap-global-unset "C-x 5 m")  ; ‘compose-mail’
 
-;;; Feature: ‘nsm’ GNU/Linux
-(setq network-security-level 'low)
-(shynur/init-data/ 'nsm-settings-file ".data")
-
-;;; Feature: ‘server’
-(shynur/init-data/ 'server-auth-dir "/")
-(shynur/init-data/ 'server-socket-dir "/")
-(setq server-name "server-name.txt")  ; Server 的名字, 也被用来命名 server file (见 emacsclient 的命令行参数 “--server-file”).
-(setq server-client-instructions nil)  ; 启动时不要提示 完成编辑 之后要告知 emacsclient 正常/出错 退出.
-
 ;;; Feature: ‘desktop’ [X]
 (setq desktop-restore-eager t)  ; 尽快恢复 buffer, 而不是 idle 时逐步恢复.
 (setq desktop-load-locked-desktop t)  ; Lock 文件 是为了 防止其它 Emacs 实例将其复写, 但我的电脑上只会有一个 Emacs 实例. 所以即使文件是 locked, 也只能是因为上一次 session 中 Emacs 崩溃了.
 (setq desktop-auto-save-timeout nil)  ; Idle 时不自动保存, 毕竟 session 结束时会自动保存.
 (setq desktop-restore-frames nil)
 ;; ‘desktop-files-not-to-save’: 默认不保存 Remote file.
-(setq desktop-path `(,(shynur/init-data/ 'desktop-dirname "/"))
-      desktop-base-file-name "desktop-base-file-name.el"
-      desktop-base-lock-name "desktop-base-lock-name.el")
+(shynur/custom-appdata/ desktop-dirname /)
+(shynur/custom-appdata/ desktop-base-file-name nil nil
+  ;; 基于‘desktop-dirname’.
+  "desktop-base-file-name.el")
+(shynur/custom-appdata/ desktop-base-lock-name nil nil
+  ;; 基于‘desktop-dirname’.
+  "desktop-base-lock-name.el")
 (setq desktop-save t)
 
+;;; Feature: ‘minibuffer’
+(add-hook 'minibuffer-mode-hook
+          (lambda ()
+            (define-key minibuffer-local-completion-map " "
+              #'self-insert-command)
+            (define-key minibuffer-local-completion-map "?"
+              #'self-insert-command)))
+
 ;;; Feature: ‘recentf’
-(shynur/init-data/ 'recentf-save-file ".el")
+(shynur/custom-appdata/ recentf-save-file el)
 (setq recentf-max-saved-items nil)
 (setq recentf-max-menu-items 30)
 (recentf-mode)
 
-;;; Feature: ‘frame’
-(setq frame-background-mode nil)  ; 当前背景色的 亮暗 自动选择应该呈现的 face.
-(with-eval-after-load 'frame
-  (require 'transwin)
-  (push (lambda (frame-to-be-made)
-          (let ((inhibit-message t))
-            (with-selected-frame frame-to-be-made
-              (transwin-ask 80)))) after-make-frame-functions))
+;;; [[package][ivy]]
+(keymap-global-set "C-s"
+                   (lambda ()
+                     (interactive)
+                     (ivy-mode)
+                     (unwind-protect
+                         (swiper)
+                       (ivy-mode -1))))
+(keymap-global-unset "C-r")
+(keymap-global-unset "C-M-r")
+(setq ivy-count-format "%d/%d ")
+(setq ivy-height 6)
+(add-hook 'minibuffer-setup-hook
+          (lambda ()
+            "令 ivy 的 minibuffer 拥有自适应高度."
+            (add-hook 'post-command-hook
+                      (lambda ()
+                        (when (bound-and-true-p ivy-mode)
+                          (shrink-window (1+ ivy-height))))
+                      nil t)))
+
+;;; Feature: ‘ls-lisp’
+;; 排序:
+(setq ls-lisp-use-string-collate nil  ; 不知道为什么, 置 t 就不区分大小写了.
+      ls-lisp-ignore-case nil
+      ls-lisp-dirs-first t
+      ;; 该算法会使 文件名中的字母部分 相同的聚集在一起.
+      ls-lisp-UCA-like-collation t)
+(setq ls-lisp-verbosity '(uid)
+
+      ls-lisp-use-localized-time-format t  ; 使用下面指定的格式, 而非 OS 提供的.
+      ls-lisp-format-time-list '("%m/%d %k:%M"  ; 今年编辑的显示为 “07/01  6:42”.
+                                 "%m/%d %Y"))
+(setq ls-lisp-support-shell-wildcards t)
 
 ;;; Feature: ‘hanoi’
 (setq hanoi-use-faces nil)  ; 不要使用彩色动画, 因为看起来很鬼畜.
@@ -1343,48 +1141,7 @@
 ;;; Feature: ‘cus-edit’
 (setq custom-search-field nil)  ; 感觉不如‘customize-apropos’.
 (setq custom-buffer-done-kill nil)  ; 按“[Exit]”(GUI 下 该图标 位于 tool bar) 并不 kill buffer.
-(shynur/init-data/ 'custom-file ".el")  ; 该文件需要 手动‘load-file’, 所以 直接 设置 即可, 无后顾之忧.
-
-(letrec ((shynur--custom-set-faces (lambda ()
-                                     "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘custom-set-faces’,其余(以及后续)的client都能生效"
-                                     ;; 解决中文字体随机 fallback 的问题, see <https://emacs-china.org/t/topic/25025>.
-                                     (set-fontset-font t '(#x2ff0 . #x9ffc)
-                                                       (font-spec
-                                                        :family "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing"))
-                                     (custom-set-faces
-                                      `(default
-                                         ((t . ( :font "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing"
-                                                 :foundry "outline"))))
-                                      '(cursor
-                                        ((t . (:background "chartreuse")))
-                                        nil
-                                        "该face仅有‘:background’字段有效")
-                                      '(tooltip
-                                        ((t . ( :height     100
-                                                :background "dark slate gray"))))
-                                      '(line-number
-                                        ((t . ( :slant  italic
-                                                :weight light))))
-                                      `(line-number-major-tick
-                                        ((t . ( :foreground ,(face-attribute 'line-number :foreground)
-                                                :background ,(face-attribute 'line-number :background)
-                                                :slant      italic
-                                                :underline  t
-                                                :weight     light)))
-                                        nil
-                                        "指定倍数的行号;除此以外,还有‘line-number-minor-tick’实现相同的功能,但其优先级更低")
-                                      '(line-number-current-line
-                                        ((t . ( :slant  normal
-                                                :weight black))))
-                                      '(window-divider
-                                        ((t . (:foreground "SlateBlue4"))))
-                                      '(indent-guide-face
-                                        ((t . (:foreground "dark sea green"))))
-                                      '(fill-column-indicator
-                                        ((t . ( :background "black"
-                                                :foreground "yellow")))))
-                                     (remove-hook 'server-after-make-frame-hook shynur--custom-set-faces))))
-  (add-hook 'server-after-make-frame-hook shynur--custom-set-faces))
+(shynur/custom-appdata/ custom-file el)  ; 该文件需要 手动‘load-file’, 所以 直接 设置 即可, 无后顾之忧.
 
 (keymap-global-unset "C-h g")
 (keymap-global-unset "C-h h")
@@ -1472,6 +1229,7 @@
 (keymap-global-unset "C-x X a")  ; ‘abort-recursive-edit’
 
 (progn
+  (require 'cc-mode)
   (advice-add 'backward-kill-word :before-while
               (lambda (arg)
                 "前面顶多只有空白字符 或 后面顶多只有空白字符且前面有空白字符 时,删除前方所有空白"
@@ -1487,7 +1245,7 @@
                   t)))
   (advice-add 'kill-word :before-while
               (lambda (arg)
-                "后面顶多只有空白字符 或 前面顶多只有空白字符且后面有空白字符 时,删除后面所有空白"
+                "后面顶多只有空白字符 或 前面顶多只有空白字符且后面有空白字符 时, 删除后面所有空白"
                 (if (and (interactive-p)  ; 只在使用键盘且
                          (= 1 arg)        ; 没有前缀参数时执行
                          (or (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
@@ -1500,52 +1258,44 @@
 (let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
                                                 (concat
                                                  "\\(?:" regexp "\\)"
-                                                 "\\|\\`shynur[^[:alnum:]]")) '(;; 滤除‘prefix--*’(i.e.,不允许两个“-”连续出现)
+                                                 "\\|\\`shynur[^[:alnum:]]")) '(;; 滤除‘prefix--*’(i.e., 不允许两个“-”连续出现).
                                                                                 "\\`-?\\(?:[^-]+\\(?:-[^-]+\\)*-?\\)?\\'"
-                                                                                ;; 滤除‘*-internal’(i.e.,不允许出现“-internal”)
+                                                                                ;; 滤除‘*-internal’(i.e., 不允许出现“-internal”).
                                                                                 "\\(?:\\(?:\\`\\|[^l]\\)\\|\\(?:\\`\\|[^a]\\)l\\|\\(?:\\`\\|[^n]\\)al\\|\\(?:\\`\\|[^r]\\)nal\\|\\(?:\\`\\|[^e]\\)rnal\\|\\(?:\\`\\|[^t]\\)ernal\\|\\(?:\\`\\|[^n]\\)ternal\\|\\(?:\\`\\|[^i]\\)nternal\\|\\(?:\\`\\|[^-]\\)internal\\)\\'")))
-      (functions-for-completion [try-completion
-                                 test-completion
-                                 all-completions]))
+      (completers [try-completion
+                   test-completion
+                   all-completions]))
   (seq-doseq (key ["C-h f"
                    "C-h o"
                    "C-h v"
                    "C-h w"
                    "C-h x"
                    "M-x"])
-    (let ((key-original-function (keymap-global-lookup key)))
-      (global-set-key (kbd key) (lambda ()
-                                  "(bug#64351#20)"
-                                  (interactive)
-                                  (unwind-protect
-                                      (progn
-                                        (let ((completion-regexp-list+shynur--completion-regexp-list `(,@completion-regexp-list
-                                                                                                       ,@shynur--completion-regexp-list)))
-                                          (seq-doseq (funtion-for-completion functions-for-completion)
-                                            (advice-add funtion-for-completion :around
-                                                        (lambda (advised-function &rest arguments)
-                                                          (let ((completion-regexp-list completion-regexp-list+shynur--completion-regexp-list))
-                                                            (apply advised-function
-                                                                   arguments))) '((name . "shynur--let-bind-completion-regexp-list")))))
-                                        (call-interactively key-original-function))
-                                    (seq-doseq (funtion-for-completion functions-for-completion)
-                                      (advice-remove funtion-for-completion "shynur--let-bind-completion-regexp-list"))))))))
-(progn
-  (global-set-key (kbd "C-s") (lambda ()
-                                (interactive)
-                                (require 'ivy)
-                                (ivy-mode)
-                                (unwind-protect
-                                    (progn
-                                      (require 'swiper)
-                                      (swiper))
-                                  (ivy-mode -1))))
-  (global-unset-key (kbd "C-r"))
-  (global-unset-key (kbd "C-M-r")))
-(global-set-key (kbd "C-x C-b") #'bs-show)
-(global-set-key (kbd "<mouse-2>") #'mouse-yank-at-click)
+    (let ((original-command (keymap-global-lookup key)))
+      (keymap-global-set key (lambda ()
+                               (interactive)
+                               (unwind-protect
+                                   (progn
+                                     (let ((shynur--completion-regexp-list+ `(,@completion-regexp-list
+                                                                              ,@shynur--completion-regexp-list)))
+                                       (seq-doseq (completer completers)
+                                         (advice-add completer :around
+                                                     (lambda (advised-function &rest arguments)
+                                                       "Bug#64351#20"
+                                                       (let ((completion-regexp-list shynur--completion-regexp-list+))
+                                                         (apply advised-function
+                                                                arguments))) '((name . "shynur--let-bind-completion-regexp-list")))))
+                                     (call-interactively original-command))
+                                 (seq-doseq (completer completers)
+                                   (advice-remove completer "shynur--let-bind-completion-regexp-list"))))))))
+
+(keymap-global-set "C-x C-b"
+                   #'bs-show)
+(keymap-global-set "<mouse-2>"
+                   #'mouse-yank-at-click)
 (mapc (lambda (postkey-function)
-        (global-set-key (kbd (concat "C-c " (car postkey-function))) (cdr postkey-function)))
+        (keymap-global-set (concat "C-c " (car postkey-function))
+                           (cdr postkey-function)))
       `(("c" . ,#'highlight-changes-visible-mode)
         ,@(prog1 '(("d M-<left>"  . drag-stuff-left)
                    ("d M-<down>"  . drag-stuff-down)
@@ -1554,10 +1304,14 @@
             (defconst shynur/drag-stuff-map
               (let ((shynur/drag-stuff-map (make-sparse-keymap)))
                 (require 'drag-stuff)
-                (define-key shynur/drag-stuff-map (kbd "M-<left>")  #'drag-stuff-left)
-                (define-key shynur/drag-stuff-map (kbd "M-<down>")  #'drag-stuff-down)
-                (define-key shynur/drag-stuff-map (kbd "M-<up>")    #'drag-stuff-up)
-                (define-key shynur/drag-stuff-map (kbd "M-<right>") #'drag-stuff-right)
+                (define-key shynur/drag-stuff-map (kbd "M-<left>")
+                            #'drag-stuff-left)
+                (define-key shynur/drag-stuff-map (kbd "M-<down>")
+                            #'drag-stuff-down)
+                (define-key shynur/drag-stuff-map (kbd "M-<up>")
+                            #'drag-stuff-up)
+                (define-key shynur/drag-stuff-map (kbd "M-<right>")
+                            #'drag-stuff-right)
                 shynur/drag-stuff-map))
             (progn
               (require 'repeat)
@@ -1567,11 +1321,9 @@
               (put #'drag-stuff-right 'repeat-map 'shynur/drag-stuff-map)))
         ("f" . ,(lambda ()
                   "调用“clang-format --Werror --fallback-style=none --ferror-limit=0 --style=file:~/.emacs.d/etc/clang-format.yaml”.
-在C语系中直接美化代码,否则美化选中区域"
+在 C 语系中直接 (整个 buffer 而不仅是 narrowed region) 美化代码, 否则美化选中区域."
                   (interactive)
-                  (let ((clang-format (pcase (system-name)
-                                        ("ASUS-TX2" "d:/Progs/LLVM/bin/clang-format.exe")
-                                        (_          "clang-format"                      )))
+                  (let ((clang-format shynur/custom-clang-format-path)
                         (options `("--Werror"
                                    "--fallback-style=none"
                                    "--ferror-limit=0"
@@ -1585,19 +1337,23 @@
                                                 (_ (unless mark-active
                                                      (user-error (shynur/message-format "无法使用“clang-format”处理当前语言")))))))
                     (if (stringp programming-language)
-                        (without-restriction
-                          (apply #'call-process-region
-                                 1 (point-max) clang-format t t nil
-                                 (format "--assume-filename=a.%s" programming-language)
-                                 (format "--cursor=%d" (1- (point)))
-                                 options)
-                          (beginning-of-buffer)
-                          (goto-char (1+ (string-to-number (prog1 (let ((case-fold-search nil))
-                                                                    (save-match-data
-                                                                      (buffer-substring-no-properties
-                                                                       (re-search-forward "\\`[[:blank:]]*{[[:blank:]]*\"Cursor\":[[:blank:]]*")
-                                                                       (re-search-forward "[[:digit:]]+"))))
-                                                             (delete-line))))))
+                        (shynur/save-cursor-relative-position-in-window
+                          ;; shynur/TODO:
+                          ;;     不确定这边的‘without-restriction’有没有必要,
+                          ;;   以及要不要和‘shynur/save-cursor-relative-position-in-window’互换位置.
+                          (without-restriction
+                            (apply #'call-process-region
+                                   1 (point-max) clang-format t t nil
+                                   (format "--assume-filename=a.%s" programming-language)
+                                   (format "--cursor=%d" (1- (point)))
+                                   options)
+                            (beginning-of-buffer)
+                            (goto-char (1+ (string-to-number (prog1 (let ((case-fold-search nil))
+                                                                      (save-match-data
+                                                                        (buffer-substring-no-properties
+                                                                         (re-search-forward "\\`[[:blank:]]*{[[:blank:]]*\"Cursor\":[[:blank:]]*")
+                                                                         (re-search-forward "[[:digit:]]+"))))
+                                                               (delete-line)))))))
                       (let ((formatted-code (let ((buffer-substring `(,(current-buffer) ,(region-beginning) ,(region-end))))
                                               (with-temp-buffer
                                                 (apply #'insert-buffer-substring-no-properties
@@ -1622,66 +1378,12 @@
         ("z" . ,(lambda ()
                   "更换屏幕时记得修改这些参数"
                   (interactive)
+                  (set-frame-parameter nil 'fullscreen nil)
                   (set-frame-position nil 220 130)
                   (set-frame-size nil 800 600 t)))))
-
-(letrec ((modify-keyboard-translation (lambda ()
-                                        "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘keyboard-translate’,其余(以及后续)的client都能生效"
-                                        (keyboard-translate ?\[ ?\()
-                                        (keyboard-translate ?\] ?\))
-                                        (keyboard-translate ?\( ?\[)
-                                        (keyboard-translate ?\) ?\])
-                                        (remove-hook 'server-after-make-frame-hook modify-keyboard-translation))))
-  (add-hook 'server-after-make-frame-hook modify-keyboard-translation))
-
-;; 当最后一个frame关闭时,存入它的位置和尺寸;当桌面上没有frame时,下一个打开的frame将使用那个被存入的位置和尺寸.
-(let ((shynur--size&position-relayer `(,(cons 'top 0) ,(cons 'left 0)
-                                        ;; ‘fullscreen’放最后,以覆盖‘width’&‘height’的设置.
-                                        ,(cons 'width 0) ,(cons 'height 0) ,(cons 'fullscreen nil)))
-      shynur--size&position-relayer-holding?)
-  (letrec ((shynur--get-size&position (lambda ()
-                                         (when shynur--size&position-relayer-holding?
-                                           (dolist (parameter-value shynur--size&position-relayer)
-                                             (set-frame-parameter nil (car parameter-value) (cdr parameter-value))))
-                                         (remove-hook 'server-after-make-frame-hook shynur--get-size&position)
-                                         (   add-hook 'delete-frame-functions       shynur--put-size&position)))
-           (shynur--put-size&position (lambda (frame-to-be-deleted)
-                                         (when (length= (frames-on-display-list) 1)
-                                           (dolist (parameter-value shynur--size&position-relayer)
-                                             (setcdr parameter-value (frame-parameter frame-to-be-deleted (car parameter-value))))
-                                           (setq shynur--size&position-relayer-holding? t)
-                                           (remove-hook 'delete-frame-functions       shynur--put-size&position)
-                                           ;; 当需要调用该λ表达式时,必然没有除此以外的其它frame了,因此之后新建的frame必然是server弹出的,所以此处无需使用‘after-make-frame-functions’
-                                           (   add-hook 'server-after-make-frame-hook shynur--get-size&position)))))
-    (add-hook 'server-after-make-frame-hook shynur--get-size&position)))
-
-(defun shynur/text-reverse-characters (beginning end)
-  "将选中的区域的所有字符倒序排列"
-  (declare (pure   nil)
-           (indent nil)
-           (interactive-only nil)
-           (side-effect-free nil)
-           (completion (lambda (_symbol current-buffer)
-                         "read-only的缓冲区肯定编辑不了"
-                         (with-current-buffer current-buffer
-                           (not buffer-read-only)))))
-  (interactive "r")
-  (insert (nreverse (delete-and-extract-region beginning end))))
-
-(defun shynur/text-set-region-properties-same-as (beginning end same-as-where)
-  "将选中区域的字符串的property设置得和指定的point所指处的一样"
-  (declare (interactive-only t)
-           (side-effect-free nil)
-           (completion (lambda (_symbol current-buffer)
-                         "read-only的缓冲区肯定改不了字符的property"
-                         (with-current-buffer current-buffer
-                           (not buffer-read-only)))))
-  (interactive "r\nnSet region’s properties same as the character at point: ")
-  (set-text-properties beginning end
-                       (text-properties-at same-as-where)))
 
 (provide 'shynur-tmp)
-
+
 ;; Local Variables:
 ;; coding: utf-8-unix
 ;; End:

@@ -18,6 +18,12 @@
 见 [[file:./MANIFEST.md][MANIFEST.md]] (仅含具体的配置文件),
 其中 点划线 之下为执行 ~emacs -u shynur~ 之后会生成的文件.
 
+* Prerequisites
+
+** 字体
+
+- [[Maple Mono SC NF][https://github.com/subframe7536/maple-font]]
+
 * 键位
 ** 键盘输入
 

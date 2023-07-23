@@ -36,7 +36,7 @@
 
          ;; This is for LICENSE file which doesn’t have syntax for comments.
          (eval . (when (when-let ((buffer-file-name (buffer-file-name)))
-                         (string-match-p "\\`LICENSE\\(?:\\.[[:alpha:]]+\\)?\\'" (file-name-nondirectory buffer-file-name)))
+                         (string= "LICENSE" (file-name-base buffer-file-name)))
                    (setq-local buffer-read-only t)))
 
          (eval . (let ((case-fold-search t))

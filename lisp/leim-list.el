@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 
-;; See the file “leim-list.el” comes with Emacs distribution:
+;; See file “leim-list.el” which comes with Emacs distribution:
 ;;
 ;;   Each entry has the form:
 ;;     (register-input-method

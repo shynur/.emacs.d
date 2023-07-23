@@ -1,4 +1,4 @@
-## 启用 outline mode, 将 cursor 放在 “#outline: ./PATH/” 上按 “TAB” 以折叠目录.
+## 请将 cursor 放在“#outline: ./PATH/”上, 尝试按“TAB”以折叠目录.
 
 #outline: ./
 /*
@@ -15,23 +15,23 @@
 !/init.el
 !/lisp/
 
-#outline: ./.github/
+#outline:   ./.github/
 /.github/*
 !/.github/FUNDING.yaml
 
-#outline: ./docs/
+#outline:   ./docs/
 /docs/*
 !/docs/Emacs-FAQ.txt
 !/docs/Emacs-regexp.org
 !/docs/Emacs-use_daemon.md
 !/docs/MS_Windows-keyboard_remap.txt
 
-#outline: ./etc/
+#outline:   ./etc/
 /etc/*
 !/etc/abbrev_defs.el
 !/etc/clang-format.yaml
 
-#outline: ./lisp/
+#outline:   ./lisp/
 /lisp/*
 !/lisp/leim-list.el
 !/lisp/shynur-abbrev.el
@@ -42,6 +42,11 @@
 !/lisp/shynur-package.el
 !/lisp/shynur-tmp.el
 !/lisp/subdirs.el
+!/lisp/themes/
+
+#outline:     ./lisp/themes/
+/lisp/themes/*
+!/lisp/themes/shynur-themes.el
 
 #outline:
 

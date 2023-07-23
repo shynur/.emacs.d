@@ -153,19 +153,6 @@
  '(display-time-mail-directory nil
                                nil (time)
                                "该目录下的所有非空文件都被当成新送达的邮件")
- '(display-time-hook `(,@display-time-hook
-                       ,(lambda ()
-                          (let ((inhibit-message t))
-                            (transwin-dec)
-                            (transwin-ask 77))))
-                     nil (time)
-                     "‘display-time-mode’每次更新时间时调用(也即,每‘display-time-interval’秒一次)")
- '(after-make-frame-functions `(,@after-make-frame-functions
-                                ,(lambda (frame-to-be-made)
-                                   (let ((inhibit-message t))
-                                     (with-selected-frame frame-to-be-made
-                                       (transwin-ask 77)))))
-                              nil (frame))
  '(display-time-interval 60
                          nil (time)
                          "决定‘display-time-mode’显示时间的更新频率")
@@ -744,13 +731,7 @@
                                          (require 'mouse)) :around
                                          (lambda (mouse-drag-and-drop-region_ &rest arguments)
                                            (let ((mark-even-if-inactive t))
-                                             (apply mouse-drag-and-drop-region_ arguments)))))
-                        ,(lambda ()
-                           (message (shynur/message-format #("启动耗时[%.1f]s"
-                                                             5 9 (face bold)))
-                                    (/ (- (car (time-convert after-init-time 1000))
-                                          (car (time-convert before-init-time 1000)))
-                                       1000.0)))))
+                                             (apply mouse-drag-and-drop-region_ arguments)))))))
  '(makefile-gmake-mode-hook `(,@(bound-and-true-p makefile-gmake-mode-hook)
                               ,(lambda ()
                                  (indent-tabs-mode)))
@@ -1346,6 +1327,12 @@
 
 ;;; Feature: ‘frame’
 (setq frame-background-mode nil)  ; 当前背景色的 亮暗 自动选择应该呈现的 face.
+(with-eval-after-load 'frame
+  (require 'transwin)
+  (push (lambda (frame-to-be-made)
+          (let ((inhibit-message t))
+            (with-selected-frame frame-to-be-made
+              (transwin-ask 80)))) after-make-frame-functions))
 
 ;;; Feature: ‘hanoi’
 (setq hanoi-use-faces nil)  ; 不要使用彩色动画, 因为看起来很鬼畜.
@@ -1360,11 +1347,13 @@
 
 (letrec ((shynur--custom-set-faces (lambda ()
                                      "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘custom-set-faces’,其余(以及后续)的client都能生效"
+                                     ;; 解决中文字体随机 fallback 的问题, see <https://emacs-china.org/t/topic/25025>.
+                                     (set-fontset-font t '(#x2ff0 . #x9ffc)
+                                                       (font-spec
+                                                        :family "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing"))
                                      (custom-set-faces
                                       `(default
-                                         ((t . ( :font ,(pcase (system-name)
-                                                          ("ASUS-TX2" "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing")
-                                                          (_          "Courier New-10"                                              ))
+                                         ((t . ( :font "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing"
                                                  :foundry "outline"))))
                                       '(cursor
                                         ((t . (:background "chartreuse")))

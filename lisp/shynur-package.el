@@ -7,6 +7,10 @@
 ;;   processing the init file but after processing the early init
 ;;   file.
 
+(setq package-quickstart nil  ; 每次启动时 re-computing 而不是 使用 precomputed 的文件.
+      ;; 相当于在 加载“init.el” 前 执行‘package-initialize’.
+      package-enable-at-startup t)
+
 ;; 1. 其它 ELPA 中的包会依赖“gnu”中的包.
 ;; 2. “Melpa”滚动升级, 收录的包的数量最大.
 ;; 3. “Stable-melpa”依据源码的 tag (Git) 升级, 数量比“melpa”少, 因为很多包作者根本不打 tag.
@@ -25,44 +29,44 @@
 
 (setq package-check-signature nil)  ; 暂时不知道检查签名有什么用,先关了再说.
 
-(setq package-selected-packages (progn
-                                  ;; 摘编自 <https://orgmode.org/elpa.html>.
-                                  (let (message-log-max)
-                                    (ignore-errors
-                                      '(package-refresh-contents)))
-                                  (mapcar (lambda (feature)
-                                            (unless (package-installed-p feature)
-                                              (package-install feature))
-                                            feature) '(ivy
-                                                       sly
-                                                       dimmer
-                                                       swiper
-                                                       company
-                                                       helpful
-                                                       neotree
-                                                       transwin
-                                                       git-modes
-                                                       highlight
-                                                       on-screen
-                                                       which-key
-                                                       yaml-mode
-                                                       drag-stuff
-                                                       marginalia
-                                                       ascii-table
-                                                       doom-themes
-                                                       use-package
-                                                       indent-guide
-                                                       rainbow-mode
-                                                       all-the-icons
-                                                       doom-modeline
-                                                       markdown-mode
-                                                       page-break-lines
-                                                       company-quickhelp
-                                                       rainbow-delimiters
-                                                       highlight-parentheses))))
+(setq package-selected-packages '(ivy
+                                  sly
+                                  dimmer
+                                  swiper
+                                  company
+                                  helpful
+                                  neotree
+                                  transwin
+                                  git-modes
+                                  highlight
+                                  on-screen
+                                  which-key
+                                  yaml-mode
+                                  drag-stuff
+                                  marginalia
+                                  ascii-table
+                                  doom-themes
+                                  use-package
+                                  indent-guide
+                                  rainbow-mode
+                                  all-the-icons
+                                  doom-modeline
+                                  markdown-mode
+                                  page-break-lines
+                                  company-quickhelp
+                                  rainbow-delimiters
+                                  highlight-parentheses))
+;; 摘编自 <https://orgmode.org/elpa.html#installation>:
+(ignore-errors  ; 电脑可能断网了.
+  (package-refresh-contents))
+(setq package-load-list '(all))
+(dolist (feature package-selected-packages)
+  (unless (package-installed-p feature)
+    (ignore-errors  ; 电脑可能断网了.
+      (package-install feature))))
 
 (provide 'shynur-package)
-
+
 ;; Local Variables:
 ;; coding: utf-8-unix
 ;; End:

@@ -1,12 +1,16 @@
 ;;; -*- lexical-binding: t; -*-
 
+(dolist (filename '("subdirs.el"
+                    "leim-list.el"
+                    ))
+  (load-file (file-name-concat user-emacs-directory
+                               "lisp/" filename)))
+
 (setq gc-cons-threshold 100000000
       gc-cons-percentage 0.36789)
 
-(setq package-quickstart nil  ; 每次启动时 re-computing 而不是 使用 precomputed 的文件.
-      ;; 相当于在 加载“init.el” 前 执行‘package-initialize’.
-      package-enable-at-startup t)
-
+(require 'shynur-package)  ; (find-file-other-window "./shynur-package.el")
+
 (provide 'shynur-early-init)
 
 ;; Local Variables:

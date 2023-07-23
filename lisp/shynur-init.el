@@ -1,7 +1,5 @@
 ;;; -*- lexical-binding: t; -*-
 
-(require 'shynur-package)  ; (find-file-other-window "./shynur-package.el")
-
 (defun shynur/init-data/ (option type)
   "确保在“USER-EMACS-DIRECTORY/.data/”下有一个新路径, 其名为 OPTION, 类型为 TYPE; 将该绝对路径赋给 OPTION.
 TYPE 的可能值为: \"\" 无后缀, \"/\" 目录, \".EXTENSION\" 文件类型.
@@ -62,12 +60,18 @@ TYPE 的可能值为: \"\" 无后缀, \"/\" 目录, \".EXTENSION\" 文件类型.
                                                      0 4 (face bold))
                                                    memory
                                                    mem-unit))))))) post-gc-hook)
+
+(push (lambda ()
+        (message (shynur/message-format #("启动耗时[%.1f]s"
+                                          5 9 (face bold)))
+                 (time-to-seconds (time-since before-init-time)))) emacs-startup-hook)
 
 ;; 顺序应当是不重要的.
 (require 'shynur-elisp)   ; (find-file-other-window "./shynur-elisp.el")
 (require 'shynur-tmp)     ; (find-file-other-window "./shynur-tmp.el")
 (require 'shynur-org)     ; (find-file-other-window "./shynur-org.el")
 (require 'shynur-abbrev)  ; (find-file-other-window "./shynur-abbrev.el")
+(require 'shynur-themes)  ; (find-file-other-window "./themes/shynur-themes.el")
 
 (provide 'shynur-init)
 

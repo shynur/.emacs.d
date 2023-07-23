@@ -28,10 +28,13 @@
 
 #outline: ./etc/
 /etc/*
+!/etc/abbrev_defs.el
 !/etc/clang-format.yaml
 
 #outline: ./lisp/
 /lisp/*
+!/lisp/leim-list.el
+!/lisp/shynur-abbrev.el
 !/lisp/shynur-early-init.el
 !/lisp/shynur-elisp.el
 !/lisp/shynur-init.el

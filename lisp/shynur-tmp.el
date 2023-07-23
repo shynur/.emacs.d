@@ -1,30 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 
 (custom-set-variables
- '(post-gc-hook `(,@post-gc-hook
-                  ,(lambda ()
-                     (message (shynur/message-format "%s")
-                              (format-spec
-                               #("%n GC (%ss total): %B VM, %mmin runtime"
-                                 7  9 (face bold)
-                                 26 28 (face bold))
-                               `((?n . ,(format #("%d%s"
-                                                  0 2 (face bold))
-                                                gcs-done
-                                                (pcase (mod gcs-done 10)
-                                                  (1 "st")
-                                                  (2 "nd")
-                                                  (3 "rd")
-                                                  (_ "th"))))
-                                 (?m . ,shynur/time-running-minutes)
-                                 (?s . ,(round gc-elapsed))
-                                 (?B . ,(cl-loop for memory = (memory-limit) then (/ memory 1024.0)
-                                                 for mem-unit across "KMGT"
-                                                 when (< memory 1024)
-                                                 return (format #("%.1f%c"
-                                                                  0 4 (face bold))
-                                                                memory
-                                                                mem-unit)))))))))
  '(major-mode 'text-mode)
  '(completion-list-mode-hook `(,@(bound-and-true-p completion-list-mode-hook)
                                ,(lambda ()
@@ -159,9 +135,6 @@
  '(custom-enabled-themes '(modus-vivendi)
                          nil (custom)
                          "深色背景")
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'custom-file ".el")
-   nil (cus-edit)
-   "修改Emacs导出customization的位置,以防Emacs搅乱这个文件的‘custom-set-variables’形式和‘custom-set-faces’形式")
  '(display-time-day-and-date t
                              nil (time)
                              "使‘display-time-mode’显示日期")
@@ -184,9 +157,7 @@
                        ,(lambda ()
                           (let ((inhibit-message t))
                             (transwin-dec)
-                            (transwin-ask 77)))
-                       ,(lambda ()
-                          (cl-incf shynur/time-running-minutes)))
+                            (transwin-ask 77))))
                      nil (time)
                      "‘display-time-mode’每次更新时间时调用(也即,每‘display-time-interval’秒一次)")
  '(after-make-frame-functions `(,@after-make-frame-functions
@@ -740,9 +711,6 @@
  '(scroll-preserve-screen-position nil
                                    nil ()
                                    "若非nil,则scroll时(尤其是鼠标滚轮)保持point在屏幕上的位置,但这样会扯坏region")
- '(frame-background-mode t
-                         nil (frame)
-                         "让Emacs根据当前背景颜色(light/dark)自动选择应该呈现的face属性")
  '(text-scale-mode-step text-scale-mode-step
                         nil (face-remap)
                         "放缩字体大小时的倍率")
@@ -1376,11 +1344,19 @@
 (setq recentf-max-menu-items 30)
 (recentf-mode)
 
+;;; Feature: ‘frame’
+(setq frame-background-mode nil)  ; 当前背景色的 亮暗 自动选择应该呈现的 face.
+
 ;;; Feature: ‘hanoi’
 (setq hanoi-use-faces nil)  ; 不要使用彩色动画, 因为看起来很鬼畜.
 
 ;;; Feature: ‘so-long’
 (global-so-long-mode)
+
+;;; Feature: ‘cus-edit’
+(setq custom-search-field nil)  ; 感觉不如‘customize-apropos’.
+(setq custom-buffer-done-kill nil)  ; 按“[Exit]”(GUI 下 该图标 位于 tool bar) 并不 kill buffer.
+(shynur/init-data/ 'custom-file ".el")  ; 该文件需要 手动‘load-file’, 所以 直接 设置 即可, 无后顾之忧.
 
 (letrec ((shynur--custom-set-faces (lambda ()
                                      "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘custom-set-faces’,其余(以及后续)的client都能生效"

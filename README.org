@@ -52,10 +52,12 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 
 - ~dframe-mouse-click-function~: "our".
 - (emacs) =C-x p d=: not root
+- (emacs) 28, 49.1.2: customize-group
 
 ** BUG
 - company: "clang failed with error 255".
 - hexl-mode: 保存文件时会删除一些字符.
+- =M-x= 时 未显示 ~ignore~.
 
 ** TODO 新增文件流程 [0/5]
 1. [ ] =New-file-name=

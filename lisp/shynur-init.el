@@ -39,16 +39,38 @@ TYPE 的可能值为: \"\" 无后缀, \"/\" 目录, \".EXTENSION\" 文件类型.
                         (thread-yield))
                       ,@body)))))
 
-(defvar shynur/time-running-minutes (1- (- (random 2)))
-  "启动时立即加 1, 刚好又到了 整分钟 点, 又加 1: IOW, 极端情况下一启动就 增加 2.")
+(push (lambda ()
+        (message (shynur/message-format "%s")
+                 (format-spec
+                  #("%n GC (%ss total): %B VM, %mmin runtime"
+                    7  9 (face bold)
+                    26 28 (face bold))
+                  `((?n . ,(format #("%d%s"
+                                     0 2 (face bold))
+                                   gcs-done
+                                   (pcase (mod gcs-done 10)
+                                     (1 "st")
+                                     (2 "nd")
+                                     (3 "rd")
+                                     (_ "th"))))
+                    (?m . ,(floor (time-to-seconds (time-since before-init-time)) 60))
+                    (?s . ,(round gc-elapsed))
+                    (?B . ,(cl-loop for memory = (memory-limit) then (/ memory 1024.0)
+                                    for mem-unit across "KMGT"
+                                    when (< memory 1024)
+                                    return (format #("%.1f%c"
+                                                     0 4 (face bold))
+                                                   memory
+                                                   mem-unit))))))) post-gc-hook)
 
 ;; 顺序应当是不重要的.
-(require 'shynur-elisp)  ; (find-file-other-window "./shynur-elisp.el")
-(require 'shynur-tmp)    ; (find-file-other-window "./shynur-tmp.el")
-(require 'shynur-org)    ; (find-file-other-window "./shynur-org.el")
+(require 'shynur-elisp)   ; (find-file-other-window "./shynur-elisp.el")
+(require 'shynur-tmp)     ; (find-file-other-window "./shynur-tmp.el")
+(require 'shynur-org)     ; (find-file-other-window "./shynur-org.el")
+(require 'shynur-abbrev)  ; (find-file-other-window "./shynur-abbrev.el")
 
 (provide 'shynur-init)
-
+
 ;; Local Variables:
 ;; coding: utf-8-unix
 ;; End:

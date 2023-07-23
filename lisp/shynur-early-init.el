@@ -8,7 +8,7 @@
       package-enable-at-startup t)
 
 (provide 'shynur-early-init)
-
+
 ;; Local Variables:
 ;; coding: utf-8-unix
 ;; End:

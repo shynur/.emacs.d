@@ -14,6 +14,7 @@
 !/etc/
 !/init.el
 !/lisp/
+!/site-lisp/
 
 #outline:   ./.github/
 /.github/*
@@ -40,7 +41,6 @@
 
 #outline:   ./lisp/
 /lisp/*
-!/lisp/leim-list.el
 !/lisp/shynur-abbrev.el
 !/lisp/shynur-early-init.el
 !/lisp/shynur-elisp.el
@@ -48,12 +48,18 @@
 !/lisp/shynur-org.el
 !/lisp/shynur-package.el
 !/lisp/shynur-tmp.el
-!/lisp/subdirs.el
 !/lisp/themes/
 
 #outline:     ./lisp/themes/
 /lisp/themes/*
 !/lisp/themes/shynur-themes.el
+
+#outline:   ./site-lisp/
+/site-lisp/*
+!/site-lisp/default.el
+!/site-lisp/leim-list.el
+!/site-lisp/site-start.el
+!/site-lisp/subdirs.el
 
 #outline:
 

@@ -1,5 +1,5 @@
 ;; 能放到该文件的配置都放到该文件, file local variable 要尽可能少.
-;; Emacs 启动时会读取本文件, 将结果加到 ‘safe-local-variable-values’ 中, 当启用这些配置时, _无需确认_.
+;; 因为 Emacs 启动时会读取本文件, 将结果加到 ‘safe-local-variable-values’ 中, 当启用这些配置时, _无需确认_.
 
 ((auto-mode-alist . (;; 有些设置是多余的, 但出于 教学/参考 的目的, 保留下来.
                      ("~\\'" . (ignore t))
@@ -34,7 +34,7 @@
                               org-mode
                               makefile-gmake-mode))
 
-         ;; This is for LICENSE file which doesn’t have syntax for comments.
+         ;; This is for file “LICENSE.txt” which doesn’t have a syntax for comments.
          (eval . (when (when-let ((buffer-file-name (buffer-file-name)))
                          (string= "LICENSE" (file-name-base buffer-file-name)))
                    (setq-local buffer-read-only t)))
@@ -62,7 +62,7 @@
 
               (org-link-descriptive . nil)))
 
- (gitignore-mode . ((outline-regexp . "^#outline:\\(?1:[[:blank:]]+\\(?:[._[:alpha:]][._[:alnum:]]*/\\)+\\)?")
+ (gitignore-mode . ((outline-regexp . "^#outline:\\(?1:[[:blank:]]+\\(?:[._[:alnum:]-]+/\\)+\\)?")
                     (outline-heading-end-regexp . "/\n")
                     (outline-level . (lambda ()
                                        (let ((slash-amount 0))
@@ -83,6 +83,7 @@
                          (mode . indent-tabs)))
 
  ("lisp/" . ((nil . (;; 编写用于 解释执行 的代码更加轻松.
+                     ;; “site-lisp/”中则尽量编写可编译的代码.
                      (no-byte-compile . t)
                      (no-native-compile . t))))))
 

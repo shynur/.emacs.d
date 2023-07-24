@@ -61,6 +61,7 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 - (emacs) =C-x p d=: not root
 - (emacs) 28, 49.1.2: customize-group
 - (emacs) custom-theme-directory
+- (emacs) 28, 49.1.7 Custom Themes: ‘(’加空格.
 
 ** BUG
 - company: "clang failed with error 255".

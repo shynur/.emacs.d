@@ -1,13 +1,13 @@
 # 依赖图
 
 ```
+site-lisp/subdirs.el
+
+site-lisp/leim-list.el
+
 early-init.el
   |
   |__ lisp/shynur-early-init.el
-        |
-        |__ lisp/subdirs.el
-        |
-        |__ lisp/leim-list.el
         |
         |__ lisp/shynur-package.el
 
@@ -26,8 +26,6 @@ init.el
         |__ lisp/shynur-abbrev.el
         |
         |__ lisp/themes/shynur-themes.el
-              |
-              |__ lisp/themes/shynur--theme.el
 
 site-lisp/default.el
 

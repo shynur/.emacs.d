@@ -5,7 +5,7 @@ SHELL = /bin/sh
 
 .PHONY: clean
 clean:
-	rm --force  *.el[cn] lisp/*.el[cn]
+	rm --force  *.el[cn] {,site-}lisp/*.el[cn]
 	rm --force  README.html*
 	rm --force  docs/*.{html,pdf,tex}*
 

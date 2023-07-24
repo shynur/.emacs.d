@@ -1,10 +1,9 @@
 ;;; -*- lexical-binding: t; -*-
 
-(dolist (filename '("subdirs.el"
-                    "leim-list.el"
-                    ))
-  (load-file (file-name-concat user-emacs-directory
-                               "lisp/" filename)))
+(dolist (subdir '("themes/"
+                  ))
+  (push (file-name-concat user-emacs-directory
+                          "lisp/" subdir) load-path))
 
 (setq gc-cons-threshold 100000000
       gc-cons-percentage 0.36789)

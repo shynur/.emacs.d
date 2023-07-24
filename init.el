@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
 ;; 1. 设置环境变量:
-;;   - EDITOR=bin/emacsclientw                                                 \
+;;   - EDITOR=/bin/emacsclientw                                                 \
 ;;              --server-file=~/.emacs.d/.data/server-auth-dir/server-name.txt \
 ;;              --alternate-editor=""                                          \
 ;;              --create-frame

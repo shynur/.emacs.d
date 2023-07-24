@@ -1,6 +1,6 @@
-#+title: Shynur’s Emacs [[https://raw.githubusercontent.com/shynur/misc/main/pictures/emacs/icon.png]]
+#+title: Shynur’s Emacs
 
-* =~shynur/.emacs.d=
+* Overview
 
 [[https://raw.githubusercontent.com/shynur/shynur/main/Pictures/Emacs/2023-6-17.png]]
 

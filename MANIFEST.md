@@ -26,6 +26,8 @@ init.el
         |__ lisp/shynur-abbrev.el
         |
         |__ lisp/themes/shynur-themes.el
+        |
+        |__ lisp/shynur-server.el
 
 site-lisp/default.el
 

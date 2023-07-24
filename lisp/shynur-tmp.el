@@ -702,9 +702,9 @@
                         nil (face-remap)
                         "放缩字体大小时的倍率")
  '(emacs-startup-hook `(,@(bound-and-true-p emacs-startup-hook)
-                        ,(lambda ()
-                           (other-window 1)
-                           (delete-other-windows))
+                        ;; ,(lambda ()
+                        ;;    (other-window 1)
+                        ;;    (delete-other-windows))
                         ,(lambda ()
                            "记录击键(bug#62277)"
                            (lossage-size (* 10000 10)))
@@ -1302,12 +1302,6 @@
 (setq network-security-level 'low)
 (shynur/init-data/ 'nsm-settings-file ".data")
 
-;;; Feature: ‘server’
-(shynur/init-data/ 'server-auth-dir "/")
-(shynur/init-data/ 'server-socket-dir "/")
-(setq server-name "server-name.txt")  ; Server 的名字, 也被用来命名 server file (见 emacsclient 的命令行参数 “--server-file”).
-(setq server-client-instructions nil)  ; 启动时不要提示 完成编辑 之后要告知 emacsclient 正常/出错 退出.
-
 ;;; Feature: ‘desktop’ [X]
 (setq desktop-restore-eager t)  ; 尽快恢复 buffer, 而不是 idle 时逐步恢复.
 (setq desktop-load-locked-desktop t)  ; Lock 文件 是为了 防止其它 Emacs 实例将其复写, 但我的电脑上只会有一个 Emacs 实例. 所以即使文件是 locked, 也只能是因为上一次 session 中 Emacs 崩溃了.
@@ -1329,10 +1323,11 @@
 (setq frame-background-mode nil)  ; 当前背景色的 亮暗 自动选择应该呈现的 face.
 (with-eval-after-load 'frame
   (require 'transwin)
-  (push (lambda (frame-to-be-made)
-          (let ((inhibit-message t))
-            (with-selected-frame frame-to-be-made
-              (transwin-ask 80)))) after-make-frame-functions))
+  (add-hook 'after-make-frame-functions
+            (lambda (frame-to-be-made)
+              (let ((inhibit-message t))
+                (with-selected-frame frame-to-be-made
+                  (transwin-ask 80))))))
 
 ;;; Feature: ‘hanoi’
 (setq hanoi-use-faces nil)  ; 不要使用彩色动画, 因为看起来很鬼畜.

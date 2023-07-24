@@ -37,34 +37,36 @@ TYPE 的可能值为: \"\" 无后缀, \"/\" 目录, \".EXTENSION\" 文件类型.
                         (thread-yield))
                       ,@body)))))
 
-(push (lambda ()
-        (message (shynur/message-format "%s")
-                 (format-spec
-                  #("%n GC (%ss total): %B VM, %mmin runtime"
-                    7  9 (face bold)
-                    26 28 (face bold))
-                  `((?n . ,(format #("%d%s"
-                                     0 2 (face bold))
-                                   gcs-done
-                                   (pcase (mod gcs-done 10)
-                                     (1 "st")
-                                     (2 "nd")
-                                     (3 "rd")
-                                     (_ "th"))))
-                    (?m . ,(floor (time-to-seconds (time-since before-init-time)) 60))
-                    (?s . ,(round gc-elapsed))
-                    (?B . ,(cl-loop for memory = (memory-limit) then (/ memory 1024.0)
-                                    for mem-unit across "KMGT"
-                                    when (< memory 1024)
-                                    return (format #("%.1f%c"
-                                                     0 4 (face bold))
-                                                   memory
-                                                   mem-unit))))))) post-gc-hook)
+(add-hook 'post-gc-hook
+          (lambda ()
+            (message (shynur/message-format "%s")
+                     (format-spec
+                      #("%n GC (%ss total): %B VM, %mmin runtime"
+                        7  9 (face bold)
+                        26 28 (face bold))
+                      `((?n . ,(format #("%d%s"
+                                         0 2 (face bold))
+                                       gcs-done
+                                       (pcase (mod gcs-done 10)
+                                         (1 "st")
+                                         (2 "nd")
+                                         (3 "rd")
+                                         (_ "th"))))
+                        (?m . ,(floor (time-to-seconds (time-since before-init-time)) 60))
+                        (?s . ,(round gc-elapsed))
+                        (?B . ,(cl-loop for memory = (memory-limit) then (/ memory 1024.0)
+                                        for mem-unit across "KMGT"
+                                        when (< memory 1024)
+                                        return (format #("%.1f%c"
+                                                         0 4 (face bold))
+                                                       memory
+                                                       mem-unit))))))))
 
-(push (lambda ()
-        (message (shynur/message-format #("启动耗时[%.1f]s"
-                                          5 9 (face bold)))
-                 (time-to-seconds (time-since before-init-time)))) emacs-startup-hook)
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message (shynur/message-format #("启动耗时[%.1f]s"
+                                              5 9 (face bold)))
+                     (time-to-seconds (time-since before-init-time)))))
 
 ;; 顺序应当是不重要的.
 (require 'shynur-elisp)   ; (find-file-other-window "./shynur-elisp.el")
@@ -72,6 +74,7 @@ TYPE 的可能值为: \"\" 无后缀, \"/\" 目录, \".EXTENSION\" 文件类型.
 (require 'shynur-org)     ; (find-file-other-window "./shynur-org.el")
 (require 'shynur-abbrev)  ; (find-file-other-window "./shynur-abbrev.el")
 (require 'shynur-themes)  ; (find-file-other-window "./themes/shynur-themes.el")
+(require 'shynur-server)  ; (find-file-other-window "./shynur-server.el")
 
 (provide 'shynur-init)
 

@@ -47,6 +47,7 @@
 !/lisp/shynur-init.el
 !/lisp/shynur-org.el
 !/lisp/shynur-package.el
+!/lisp/shynur-server.el
 !/lisp/shynur-tmp.el
 !/lisp/themes/
 

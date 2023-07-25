@@ -8,9 +8,18 @@
 ;;   file.
 
 (setq package-quickstart nil  ; 每次启动时 re-computing 而不是 使用 precomputed 的文件.
-      ;; 相当于在 加载“init.el” 前 执行‘package-initialize’.
-      package-enable-at-startup t)
 
+      ;; 相当于在 加载“init.el” 前 执行‘package-initialize’.
+      ;; 这其实是 默认行为.
+      package-enable-at-startup t
+
+      package-user-dir (file-name-concat user-emacs-directory
+                                         ".data/" "elpa/"))
+
+;; Feature: ‘nsm’
+;; 设置 mirror 时会询问是否连接, 此时 Emacs 的 GUI 窗口甚至还没弹出来.
+;; 干脆降低安全系数.
+(setq network-security-level 'low)
 ;; 1. 其它 ELPA 中的包会依赖“gnu”中的包.
 ;; 2. “Melpa”滚动升级, 收录的包的数量最大.
 ;; 3. “Stable-melpa”依据源码的 tag (Git) 升级, 数量比“melpa”少, 因为很多包作者根本不打 tag.
@@ -45,7 +54,6 @@
                                   drag-stuff
                                   marginalia
                                   ascii-table
-                                  doom-themes
                                   use-package
                                   indent-guide
                                   rainbow-mode

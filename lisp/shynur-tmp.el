@@ -702,9 +702,6 @@
                         nil (face-remap)
                         "放缩字体大小时的倍率")
  '(emacs-startup-hook `(,@(bound-and-true-p emacs-startup-hook)
-                        ;; ,(lambda ()
-                        ;;    (other-window 1)
-                        ;;    (delete-other-windows))
                         ,(lambda ()
                            "记录击键(bug#62277)"
                            (lossage-size (* 10000 10)))
@@ -1285,6 +1282,9 @@
 (shynur/init-data/ 'project-list-file ".el")
 (setq project-switch-commands #'project-find-file)  ; “C-x p p”选中项目后, 立刻执行指定的 command.
 
+;;; Feature: ‘nsm’
+(shynur/init-data/ 'nsm-settings-file ".data")  ; 记录已知的安全 connection.
+
 ;;; Feature: ‘dired’
 (keymap-global-unset "C-x C-j")    ; ‘dired-jump’
 (keymap-global-unset "C-x 4 C-j")  ; ‘dired-jump-other-window’
@@ -1297,10 +1297,6 @@
 (keymap-global-unset "C-x m")    ; ‘compose-mail’
 (keymap-global-unset "C-x 4 m")  ; ‘compose-mail’
 (keymap-global-unset "C-x 5 m")  ; ‘compose-mail’
-
-;;; Feature: ‘nsm’ GNU/Linux
-(setq network-security-level 'low)
-(shynur/init-data/ 'nsm-settings-file ".data")
 
 ;;; Feature: ‘desktop’ [X]
 (setq desktop-restore-eager t)  ; 尽快恢复 buffer, 而不是 idle 时逐步恢复.
@@ -1342,14 +1338,26 @@
 
 (letrec ((shynur--custom-set-faces (lambda ()
                                      "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘custom-set-faces’,其余(以及后续)的client都能生效"
-                                     ;; 解决中文字体随机 fallback 的问题, see <https://emacs-china.org/t/topic/25025>.
-                                     (set-fontset-font t '(#x2ff0 . #x9ffc)
-                                                       (font-spec
-                                                        :family "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing"))
+                                     ;; 摘编自 Centaur Emacs, 用于解决 字体 问题.
+                                     (let* ((font       "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing")
+                                            (attributes (font-face-attributes font)                                   )
+                                            (family     (plist-get attributes :family)                                ))
+                                       ;; Set default font.
+                                       (apply #'set-face-attribute
+                                              'default nil
+                                              attributes)
+                                       ;; Specify font for all unicode characters.
+                                       (set-fontset-font t 'symbol
+                                                         (font-spec :family "Segoe UI Symbol")
+                                                         nil 'prepend)
+                                       ;; Emoji.
+                                       (set-fontset-font t 'emoji
+                                                         (font-spec :family "Segoe UI Emoji")
+                                                         nil 'prepend)
+                                       ;; Specify font for Chinese characters.
+                                       (set-fontset-font t '(#x4e00 . #x9fff)
+                                                         (font-spec :family family)))
                                      (custom-set-faces
-                                      `(default
-                                         ((t . ( :font "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing"
-                                                 :foundry "outline"))))
                                       '(cursor
                                         ((t . (:background "chartreuse")))
                                         nil

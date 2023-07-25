@@ -43,7 +43,7 @@
                    (highlight-phrase "~?\\(?:shynur\\|谢骐\\)[^[:blank:][:space:][:cntrl:]()`'\"]*"
                                      'underline)))
 
-         (indent-tabs-mode . nil)
+         (indent-tabs-mode . nil)  ; 为什么不是“(mode . indent-tabs)”?  不知道, manual 中的示例如此.
 
          (delete-trailing-lines . t)
          (require-final-newline . t)

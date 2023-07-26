@@ -69,12 +69,16 @@ TYPE 的可能值为: \"\" 无后缀, \"/\" 目录, \".EXTENSION\" 文件类型.
                      (time-to-seconds (time-since before-init-time)))))
 
 ;; 顺序应当是不重要的.
-(require 'shynur-elisp)   ; (find-file-other-window "./shynur-elisp.el")
-(require 'shynur-tmp)     ; (find-file-other-window "./shynur-tmp.el")
-(require 'shynur-org)     ; (find-file-other-window "./shynur-org.el")
-(require 'shynur-abbrev)  ; (find-file-other-window "./shynur-abbrev.el")
-(require 'shynur-themes)  ; (find-file-other-window "./themes/shynur-themes.el")
-(require 'shynur-server)  ; (find-file-other-window "./shynur-server.el")
+(require 'shynur-elisp)    ; (find-file-other-window "./shynur-elisp.el")
+(require 'shynur-tmp)      ; (find-file-other-window "./shynur-tmp.el")
+(require 'shynur-org)      ; (find-file-other-window "./shynur-org.el")
+(require 'shynur-abbrev)   ; (find-file-other-window "./shynur-abbrev.el")
+(require 'shynur-themes)   ; (find-file-other-window "./themes/shynur-themes.el")
+(require 'shynur-server)   ; (find-file-other-window "./shynur-server.el")
+(require 'shynur-cc)       ; (find-file-other-window "./shynur-cc.el")
+(require 'shynur-profile)  ; (find-file-other-window "./shynur-profile.el")
+(require 'shynur-misc)     ; (find-file-other-window "./shynur-misc.el")
+(require 'shynur-lib)      ; (find-file-other-window "./shynur-lib.el")
 
 (provide 'shynur-init)
 

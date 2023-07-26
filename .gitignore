@@ -42,11 +42,15 @@
 #outline:   ./lisp/
 /lisp/*
 !/lisp/shynur-abbrev.el
+!/lisp/shynur-cc.el
 !/lisp/shynur-early-init.el
 !/lisp/shynur-elisp.el
 !/lisp/shynur-init.el
+!/lisp/shynur-lib.el
+!/lisp/shynur-misc.el
 !/lisp/shynur-org.el
 !/lisp/shynur-package.el
+!/lisp/shynur-profile.el
 !/lisp/shynur-server.el
 !/lisp/shynur-tmp.el
 !/lisp/themes/

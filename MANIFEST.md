@@ -28,6 +28,14 @@ init.el
         |__ lisp/themes/shynur-themes.el
         |
         |__ lisp/shynur-server.el
+        |
+        |__ lisp/shynur-cc.el
+        |
+        |__ lisp/shynur-profile.el
+        |
+        |__ lisp/shynur-misc.el
+        |
+        |__ lisp/shynur-lib.el
 
 site-lisp/default.el
 

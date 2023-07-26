@@ -106,7 +106,7 @@
                           nil (indent-guide))
  '(indent-guide-char "\N{BOX DRAWINGS LIGHT VERTICAL}"
                      nil (indent-guide))
- '(current-language-environment "UTF-8")
+ ;; '(current-language-environment "UTF-8")
  '(kill-ring-max most-positive-fixnum
                  nil (simple))
  '(delete-trailing-lines t
@@ -459,10 +459,6 @@
    nil (url-cache))
  `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'url-cookie-file "")
    nil (url-cookie))
- '(user-full-name "谢骐")
- '(user-mail-address "one.last.kiss@outlook.com"
-                     nil ()
-                     "用户的email")
  '(blink-cursor-mode nil
                      nil (frame))
  '(blink-cursor-delay 0
@@ -818,38 +814,10 @@
  '(adaptive-fill-mode t
                       nil ()
                       "“M-q”时自动选择每行首的填充前缀")
- '(text-mode-hook `(,@text-mode-hook
+ '(text-mode-hook `(,@(bound-and-true-p text-mode-hook)
                     ,(lambda ()
                        (when (eq major-mode 'text-mode)
                          (display-fill-column-indicator-mode)))))
- '(c-mode-common-hook `(,@c-mode-common-hook
-                        ,(lambda ()
-                           (c-set-offset 'case-label '+))
-                        ;; 只保留当前编译环境下,生效的ifdef从句
-                        ,(lambda ()
-                           (hide-ifdef-mode)))
-                      nil (cc-mode))
- '(c-basic-offset 4
-                  nil (cc-mode))
- '(c-default-style '((awk-mode . "awk" )
-                     (other    . "java"))
-                   nil (cc-mode))
- '(c-tab-always-indent t
-                       nil (cc-mode))
- '(c-mode-common-hook `(,@(bound-and-true-p c-mode-common-hook)
-                        ,(lambda ()
-                           "换行不够智能"
-                           (c-toggle-auto-newline -1))
-                        ,(lambda ()
-                           "键入特定字符后,自动缩进当前行"
-                           (c-toggle-electric-state 1)))
-                      nil (cc-mode))
- '(c-initialization-hook `(,@(bound-and-true-p c-initialization-hook)
-                           ,(lambda ()
-                              "写C宏时换行自动加反斜线;写注释时换行相当于“M-j”(‘c-indent-new-comment-line’)"
-                              (define-key c-mode-base-map "\C-m"
-                                #'c-context-line-break)))
-                         nil (cc-mode))
  '(comment-multi-line t
                      nil (newcomment)
                      "“M-j”时,“/* lines */”而不是“/* */ \n /* */”")
@@ -1044,22 +1012,6 @@
  '(temp-buffer-resize-mode t
                            nil (help)
                            "e.g.,使“*Completions*”不会几乎占用整个frame")
- `(safe-local-variable-values ',(let ((shynur--safe-local-variable-values (list)))
-                                  (named-let get-vars ((dir-locals (mapcan (lambda (file-path)
-                                                                             (when (file-exists-p file-path)
-                                                                               (with-temp-buffer
-                                                                                 (insert-file-contents file-path)
-                                                                                 (read (current-buffer))))) ["~/.emacs.d/.dir-locals.el"
-                                                                                                             ])))
-                                    (dolist (mode-vars dir-locals)
-                                      (let ((vars (cdr mode-vars)))
-                                        (if (stringp (car mode-vars))
-                                            (get-vars vars)
-                                          (dolist (var-pair vars)
-                                            (push var-pair shynur--safe-local-variable-values))))))
-                                  (append (bound-and-true-p safe-local-variable-values)
-                                          shynur--safe-local-variable-values))
-                              nil (files))
  '(enable-local-variables t
                           nil (files)
                           "尽量不询问,但提供记忆功能(可能会修改‘custom-file’的文件内容)")
@@ -1386,8 +1338,10 @@
                                       '(fill-column-indicator
                                         ((t . ( :background "black"
                                                 :foreground "yellow")))))
-                                     (remove-hook 'server-after-make-frame-hook shynur--custom-set-faces))))
-  (add-hook 'server-after-make-frame-hook shynur--custom-set-faces))
+                                     (remove-hook 'server-after-make-frame-hook
+                                                  shynur--custom-set-faces))))
+  (add-hook 'server-after-make-frame-hook
+            shynur--custom-set-faces))
 
 (keymap-global-unset "C-h g")
 (keymap-global-unset "C-h h")
@@ -1536,12 +1490,9 @@
 (progn
   (global-set-key (kbd "C-s") (lambda ()
                                 (interactive)
-                                (require 'ivy)
                                 (ivy-mode)
                                 (unwind-protect
-                                    (progn
-                                      (require 'swiper)
-                                      (swiper))
+                                    (swiper)
                                   (ivy-mode -1))))
   (global-unset-key (kbd "C-r"))
   (global-unset-key (kbd "C-M-r")))
@@ -1634,8 +1585,10 @@
                                         (keyboard-translate ?\] ?\))
                                         (keyboard-translate ?\( ?\[)
                                         (keyboard-translate ?\) ?\])
-                                        (remove-hook 'server-after-make-frame-hook modify-keyboard-translation))))
-  (add-hook 'server-after-make-frame-hook modify-keyboard-translation))
+                                        (remove-hook 'server-after-make-frame-hook
+                                                     modify-keyboard-translation))))
+  (add-hook 'server-after-make-frame-hook
+            modify-keyboard-translation))
 
 ;; 当最后一个frame关闭时,存入它的位置和尺寸;当桌面上没有frame时,下一个打开的frame将使用那个被存入的位置和尺寸.
 (let ((shynur--size&position-relayer `(,(cons 'top 0) ,(cons 'left 0)
@@ -1646,45 +1599,25 @@
                                          (when shynur--size&position-relayer-holding?
                                            (dolist (parameter-value shynur--size&position-relayer)
                                              (set-frame-parameter nil (car parameter-value) (cdr parameter-value))))
-                                         (remove-hook 'server-after-make-frame-hook shynur--get-size&position)
-                                         (   add-hook 'delete-frame-functions       shynur--put-size&position)))
+                                         (remove-hook 'server-after-make-frame-hook
+                                                      shynur--get-size&position)
+                                         (add-hook 'delete-frame-functions
+                                                   shynur--put-size&position)))
            (shynur--put-size&position (lambda (frame-to-be-deleted)
                                          (when (length= (frames-on-display-list) 1)
                                            (dolist (parameter-value shynur--size&position-relayer)
                                              (setcdr parameter-value (frame-parameter frame-to-be-deleted (car parameter-value))))
                                            (setq shynur--size&position-relayer-holding? t)
-                                           (remove-hook 'delete-frame-functions       shynur--put-size&position)
+                                           (remove-hook 'delete-frame-functions
+                                                        shynur--put-size&position)
                                            ;; 当需要调用该λ表达式时,必然没有除此以外的其它frame了,因此之后新建的frame必然是server弹出的,所以此处无需使用‘after-make-frame-functions’
-                                           (   add-hook 'server-after-make-frame-hook shynur--get-size&position)))))
-    (add-hook 'server-after-make-frame-hook shynur--get-size&position)))
-
-(defun shynur/text-reverse-characters (beginning end)
-  "将选中的区域的所有字符倒序排列"
-  (declare (pure   nil)
-           (indent nil)
-           (interactive-only nil)
-           (side-effect-free nil)
-           (completion (lambda (_symbol current-buffer)
-                         "read-only的缓冲区肯定编辑不了"
-                         (with-current-buffer current-buffer
-                           (not buffer-read-only)))))
-  (interactive "r")
-  (insert (nreverse (delete-and-extract-region beginning end))))
-
-(defun shynur/text-set-region-properties-same-as (beginning end same-as-where)
-  "将选中区域的字符串的property设置得和指定的point所指处的一样"
-  (declare (interactive-only t)
-           (side-effect-free nil)
-           (completion (lambda (_symbol current-buffer)
-                         "read-only的缓冲区肯定改不了字符的property"
-                         (with-current-buffer current-buffer
-                           (not buffer-read-only)))))
-  (interactive "r\nnSet region’s properties same as the character at point: ")
-  (set-text-properties beginning end
-                       (text-properties-at same-as-where)))
+                                           (add-hook 'server-after-make-frame-hook
+                                                     shynur--get-size&position)))))
+    (add-hook 'server-after-make-frame-hook
+              shynur--get-size&position)))
 
 (provide 'shynur-tmp)
-
+
 ;; Local Variables:
 ;; coding: utf-8-unix
 ;; End:

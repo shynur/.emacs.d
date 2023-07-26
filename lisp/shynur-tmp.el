@@ -301,29 +301,6 @@
  '(table-fixed-width-mode nil
                           nil (table)
                           "基于文本的表格自动调节尺寸")
- '(inhibit-startup-screen t
-                          nil ()
-                          "取消原本的 startup screen")
- '(initial-scratch-message #(";;     *
-;;      May the Code be with You!
-;;     .                                 .
-;;                               *
-;;          /\\/|_      __/\\\\
-;;         /    -\\    /-   ~\\  .              \\='
-;;         \\    = Y =T_ =   /
-;;          )==*(\\=`     \\=`) ~ \\
-;;         /     \\     /     \\
-;;         |     |     ) ~   (
-;;        /       \\   /     ~ \\
-;;        \\       /   \\~     ~/
-;; _/\\_/\\_/\\__  _/_/\\_/\\__~__/_/\\_/\\_/\\_/\\_/\\_
-;; |  |  |  | ) ) |  |  | ((  |  |  |  |  |  |
-;; |  |  |  |( (  |  |  |  \\\\ |  |  |  |  |  |
-;; |  |  |  | )_) |  |  |  |))|  |  |  |  |  |
-;; |  |  |  |  |  |  |  |  (/ |  |  |  |  |  |
-;; |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-\n"
-                             0 671 (font-lock-face (:foreground "VioletRed1"))))
  '(insert-default-directory t
                             nil (minibuffer)
                             "‘find-file’时,给出默认目录")
@@ -381,9 +358,6 @@
  '(resize-mini-frames #'fit-frame-to-buffer
                       nil ()
                       "trim首尾的空行")
- '(inhibit-startup-echo-area-message user-login-name
-                                     nil ()
-                                     "只有将该变量设置为自己在OS中的username,才能屏蔽startup时echo area的“For information about GNU Emacs and the GNU system, type C-h C-a.”")
  `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'save-place-file ".el")
    nil (saveplace))
  '(save-place-mode t
@@ -564,9 +538,6 @@
  '(hs-isearch-open t
                    nil (hideshow))
  '(scroll-bar-width 28)
- '(initial-buffer-choice t
-                         nil ()
-                         "启动时转向该buffer(t在这里表示“*scratch*”)")
  '(maximum-scroll-margin 0.5
                          nil ())
  '(scroll-margin 1
@@ -1260,6 +1231,9 @@
 (shynur/init-data/ 'project-list-file ".el")
 (setq project-switch-commands #'project-find-file)  ; “C-x p p”选中项目后, 立刻执行指定的 command.
 
+;;; Feature: ‘pixel-scroll’
+(pixel-scroll-precision-mode)
+
 ;;; Feature: ‘nsm’
 (shynur/init-data/ 'nsm-settings-file ".data")  ; 记录已知的安全 connection.
 
@@ -1336,7 +1310,7 @@
                                        (set-fontset-font t 'symbol
                                                          (font-spec :family "Segoe UI Symbol")
                                                          nil 'prepend)
-                                       ;; Emoji.
+                                       ;; Emoji 🥰.
                                        (set-fontset-font t 'emoji
                                                          (font-spec :family "Segoe UI Emoji")
                                                          nil 'prepend)
@@ -1463,7 +1437,7 @@
 (keymap-global-unset "C-x X a")  ; ‘abort-recursive-edit’
 
 (progn
-  (require 'cc-cmds)
+  (require 'cc-mode)
   (advice-add 'backward-kill-word :before-while
               (lambda (arg)
                 "前面顶多只有空白字符 或 后面顶多只有空白字符且前面有空白字符 时,删除前方所有空白"

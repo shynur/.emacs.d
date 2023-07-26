@@ -51,6 +51,7 @@
 !/lisp/shynur-package.el
 !/lisp/shynur-profile.el
 !/lisp/shynur-server.el
+!/lisp/shynur-startup.el
 !/lisp/shynur-tmp.el
 !/lisp/themes/
 

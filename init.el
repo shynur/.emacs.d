@@ -2,8 +2,8 @@
 
 ;; 1. 设置环境变量:
 ;;   - EDITOR=/bin/emacsclientw                                                 \
-;;              --server-file=~/.emacs.d/.data/server-auth-dir/server-name.txt \
-;;              --alternate-editor=""                                          \
+;;              --server-file=~/.emacs.d/.data/server-auth-dir/server-name.txt  \
+;;              --alternate-editor=""                                           \
 ;;              --create-frame
 ;;   - VISUAL=$EDITOR 可选的.
 ;;   - TEXEDIT=$EDITOR 可选的, 使 TeX 使用 Emacs.

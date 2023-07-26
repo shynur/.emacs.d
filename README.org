@@ -22,9 +22,18 @@
 
 ** 字体
 
-- [[https://github.com/subframe7536/maple-font][Maple Mono SC NF]]
-- [[https://www.nerdfonts.com/][Symbols Nerd Fonts Mono]]
+- [[https://github.com/subframe7536/maple-font][Maple Mono SC NF]]:
+  显示 中英文.
+- [[https://www.nerdfonts.com/][Symbols Nerd Fonts Mono]]:
+  显示 各种 小图标.
 - Segoe UI Symbol, Segoe UI Emoji.
+
+** 软件
+
+- [[https://releases.llvm.org/][clang-format]]:
+  代码格式化工具.
+- [[https://www.smoothscroll.net/][SmoothScroll]]:
+  开启鼠标 像素级 滚动的功能.
 
 * 键位
 ** 键盘输入

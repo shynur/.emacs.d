@@ -47,7 +47,6 @@
 !/lisp/shynur-elisp.el
 !/lisp/shynur-init.el
 !/lisp/shynur-lib.el
-!/lisp/shynur-misc.el
 !/lisp/shynur-org.el
 !/lisp/shynur-package.el
 !/lisp/shynur-profile.el

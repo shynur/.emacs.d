@@ -33,8 +33,6 @@ init.el
         |
         |__ lisp/shynur-profile.el
         |
-        |__ lisp/shynur-misc.el
-        |
         |__ lisp/shynur-lib.el
 
 site-lisp/default.el

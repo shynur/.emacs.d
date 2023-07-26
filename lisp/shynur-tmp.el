@@ -1188,6 +1188,8 @@
  '(mouse-1-click-follows-link 400
                               nil (mouse)
                               "在button/hyperlink上点击,不放开鼠标按键持续一定毫秒数后,将仅设置point而不循入链接")
+ '(double-click-time 400)
+ '(double-click-fuzz 3)
  '(mouse-1-click-in-non-selected-windows t
                                          nil (mouse)
                                          "点击non-selected-window中的button/hyperlink同样会循入链接")
@@ -1230,6 +1232,30 @@
  '(compilation-always-kill nil
                            nil (compile)))
 
+;;; Feature: ‘files’
+(with-eval-after-load 'files
+  (setq safe-local-variable-values `(,@safe-local-variable-values
+                                     ,@(let ((shynur--safe-local-variable-values (list)))
+                                         (named-let get-vars ((dir-locals (mapcan (lambda (file-path)
+                                                                                    (when (file-exists-p file-path)
+                                                                                      (with-temp-buffer
+                                                                                        (insert-file-contents file-path)
+                                                                                        (read (current-buffer))))) `[,@(mapcar (lambda (_dir-loc)
+                                                                                                                                 "囊括诸如‘~/.emacs.d/’下的‘.dir-locals.el’文件."
+                                                                                                                                 (file-name-concat user-emacs-directory
+                                                                                                                                                   _dir-loc)) [".dir-locals.el"
+                                                                                                                                                               ".dir-locals-2.el"])
+                                                                                                                     ])))
+                                           (dolist (mode-vars dir-locals)
+                                             (let ((vars (cdr mode-vars)))
+                                               (if (stringp (car mode-vars))
+                                                   (get-vars vars)
+                                                 (dolist (var-pair vars)
+                                                   (push var-pair shynur--safe-local-variable-values))))))
+                                         shynur--safe-local-variable-values))))
+
+(put 'narrow-to-region 'disabled nil)
+
 ;;; Feature: ‘project’
 (shynur/init-data/ 'project-list-file ".el")
 (setq project-switch-commands #'project-find-file)  ; “C-x p p”选中项目后, 立刻执行指定的 command.
@@ -1260,6 +1286,14 @@
       desktop-base-file-name "desktop-base-file-name.el"
       desktop-base-lock-name "desktop-base-lock-name.el")
 (setq desktop-save t)
+
+;;; Feature: ‘minibuffer’
+(add-hook 'minibuffer-mode-hook
+          (lambda ()
+            (define-key minibuffer-local-completion-map " "
+              #'self-insert-command)
+            (define-key minibuffer-local-completion-map "?"
+              #'self-insert-command)))
 
 ;;; Feature: ‘recentf’
 (shynur/init-data/ 'recentf-save-file ".el")
@@ -1429,6 +1463,7 @@
 (keymap-global-unset "C-x X a")  ; ‘abort-recursive-edit’
 
 (progn
+  (require 'cc-cmds)
   (advice-add 'backward-kill-word :before-while
               (lambda (arg)
                 "前面顶多只有空白字符 或 后面顶多只有空白字符且前面有空白字符 时,删除前方所有空白"
@@ -1444,7 +1479,7 @@
                   t)))
   (advice-add 'kill-word :before-while
               (lambda (arg)
-                "后面顶多只有空白字符 或 前面顶多只有空白字符且后面有空白字符 时,删除后面所有空白"
+                "后面顶多只有空白字符 或 前面顶多只有空白字符且后面有空白字符 时, 删除后面所有空白"
                 (if (and (interactive-p)  ; 只在使用键盘且
                          (= 1 arg)        ; 没有前缀参数时执行
                          (or (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
@@ -1457,36 +1492,36 @@
 (let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
                                                 (concat
                                                  "\\(?:" regexp "\\)"
-                                                 "\\|\\`shynur[^[:alnum:]]")) '(;; 滤除‘prefix--*’(i.e.,不允许两个“-”连续出现)
+                                                 "\\|\\`shynur[^[:alnum:]]")) '(;; 滤除‘prefix--*’(i.e., 不允许两个“-”连续出现).
                                                                                 "\\`-?\\(?:[^-]+\\(?:-[^-]+\\)*-?\\)?\\'"
-                                                                                ;; 滤除‘*-internal’(i.e.,不允许出现“-internal”)
+                                                                                ;; 滤除‘*-internal’(i.e., 不允许出现“-internal”).
                                                                                 "\\(?:\\(?:\\`\\|[^l]\\)\\|\\(?:\\`\\|[^a]\\)l\\|\\(?:\\`\\|[^n]\\)al\\|\\(?:\\`\\|[^r]\\)nal\\|\\(?:\\`\\|[^e]\\)rnal\\|\\(?:\\`\\|[^t]\\)ernal\\|\\(?:\\`\\|[^n]\\)ternal\\|\\(?:\\`\\|[^i]\\)nternal\\|\\(?:\\`\\|[^-]\\)internal\\)\\'")))
-      (functions-for-completion [try-completion
-                                 test-completion
-                                 all-completions]))
+      (completers [try-completion
+                   test-completion
+                   all-completions]))
   (seq-doseq (key ["C-h f"
                    "C-h o"
                    "C-h v"
                    "C-h w"
                    "C-h x"
                    "M-x"])
-    (let ((key-original-function (keymap-global-lookup key)))
-      (global-set-key (kbd key) (lambda ()
-                                  "(bug#64351#20)"
-                                  (interactive)
-                                  (unwind-protect
-                                      (progn
-                                        (let ((completion-regexp-list+shynur--completion-regexp-list `(,@completion-regexp-list
-                                                                                                       ,@shynur--completion-regexp-list)))
-                                          (seq-doseq (funtion-for-completion functions-for-completion)
-                                            (advice-add funtion-for-completion :around
-                                                        (lambda (advised-function &rest arguments)
-                                                          (let ((completion-regexp-list completion-regexp-list+shynur--completion-regexp-list))
-                                                            (apply advised-function
-                                                                   arguments))) '((name . "shynur--let-bind-completion-regexp-list")))))
-                                        (call-interactively key-original-function))
-                                    (seq-doseq (funtion-for-completion functions-for-completion)
-                                      (advice-remove funtion-for-completion "shynur--let-bind-completion-regexp-list"))))))))
+    (let ((original-command (keymap-global-lookup key)))
+      (keymap-global-set key (lambda ()
+                               (interactive)
+                               (unwind-protect
+                                   (progn
+                                     (let ((shynur--completion-regexp-list+ `(,@completion-regexp-list
+                                                                              ,@shynur--completion-regexp-list)))
+                                       (seq-doseq (completer completers)
+                                         (advice-add completer :around
+                                                     (lambda (advised-function &rest arguments)
+                                                       "Bug#64351#20"
+                                                       (let ((completion-regexp-list shynur--completion-regexp-list+))
+                                                         (apply advised-function
+                                                                arguments))) '((name . "shynur--let-bind-completion-regexp-list")))))
+                                     (call-interactively original-command))
+                                 (seq-doseq (completer completers)
+                                   (advice-remove completer "shynur--let-bind-completion-regexp-list"))))))))
 (progn
   (global-set-key (kbd "C-s") (lambda ()
                                 (interactive)

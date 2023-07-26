@@ -77,7 +77,6 @@ TYPE 的可能值为: \"\" 无后缀, \"/\" 目录, \".EXTENSION\" 文件类型.
 (require 'shynur-server)   ; (find-file-other-window "./shynur-server.el")
 (require 'shynur-cc)       ; (find-file-other-window "./shynur-cc.el")
 (require 'shynur-profile)  ; (find-file-other-window "./shynur-profile.el")
-(require 'shynur-misc)     ; (find-file-other-window "./shynur-misc.el")
 (require 'shynur-lib)      ; (find-file-other-window "./shynur-lib.el")
 
 (provide 'shynur-init)

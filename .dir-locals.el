@@ -83,7 +83,7 @@
                          (mode . indent-tabs)))
 
  ("lisp/" . ((nil . (;; 编写用于 解释执行 的代码更加轻松.
-                     ;; “site-lisp/”中则尽量编写可编译的代码.
+                     ;; ‘site-lisp/’中则尽量编写可编译的代码.
                      (no-byte-compile . t)
                      (no-native-compile . t))))))
 

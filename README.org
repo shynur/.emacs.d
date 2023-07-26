@@ -82,8 +82,9 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 
 * Repo Stats
 
+# See [[https://codetabs.com/count-loc/count-loc-online.html][Count LOC online]] hosted at [[https://github.com/jolav/codetabs]].
 - [[https://api.codetabs.com/v1/loc/?github=shynur/.emacs.d&branch=main&ignored=docs/pages/][Languages Statistics]]
-  # See [[https://codetabs.com/count-loc/count-loc-online.html][Count LOC online]] hosted at [[https://github.com/jolav/codetabs]].
+  (排除 =docs/pages/= 目录)
 
 * License
 

@@ -19,6 +19,9 @@
 
 (setq print-integers-as-characters nil  ; 打印 字符常量 的方式: “115 (#o163, ...)” instea of “?s (#o163, ...)”.
       eval-expression-print-maximum-character most-positive-fixnum)  ; 打印 字符常量 时 括号内: “(#o163, #x73)” instead of “(#o163, #x73, ?s)”.
+
+;; Debugger 以 C 风格 显示 函数调用, 而不是 Lisp 风格.
+(setq debugger-stack-frame-as-list nil)
 
 ;;; Feature: ‘emacs-lisp’
 

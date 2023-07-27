@@ -18,14 +18,14 @@
 ;;   hooks provided by the Emacs startup, such as ‘window-setup-hook’
 ;;   or ‘tty-setup-hook’.
 
-(dolist (subdir '("themes/"
+(dolist (subdir '("lisp/themes/"
+                  "modules/"
                   ))
   (push (file-name-concat user-emacs-directory
-                          "lisp/" subdir) load-path))
+                          subdir) load-path))
 
 (setq gc-cons-threshold 100000000
       gc-cons-percentage 0.36789)
-
 
 (require 'shynur-package)  ; (find-file-other-window "./shynur-package.el")
 

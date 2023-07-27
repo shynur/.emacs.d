@@ -999,9 +999,6 @@
    nil (tramp))
  `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'filesets-menu-cache-file ".el")
    nil (filesets))
- '(debugger-stack-frame-as-list nil
-                                nil ()
-                                "debugger以C风格显示函数调用栈,而不是Lisp风格")
  '(edebug-all-defs nil
                    nil (edebug)
                    "置t则颠倒[C-M-x]对前缀参数的处理")

@@ -14,12 +14,13 @@
 !/etc/
 !/init.el
 !/lisp/
+!/modules/
 !/scripts/
 !/site-lisp/
 
 #outline:   ./.github/
 /.github/*
-!/.github/FUNDING.yaml
+!/.github/*.yaml
 
 #outline:   ./docs/
 /docs/*
@@ -42,28 +43,27 @@
 
 #outline:   ./lisp/
 /lisp/*
-!/lisp/shynur-abbrev.el
-!/lisp/shynur-cc.el
-!/lisp/shynur-early-init.el
-!/lisp/shynur-elisp.el
-!/lisp/shynur-init.el
-!/lisp/shynur-lib.el
-!/lisp/shynur-org.el
-!/lisp/shynur-package.el
-!/lisp/shynur-profile.el
-!/lisp/shynur-server.el
-!/lisp/shynur-startup.el
-!/lisp/shynur-tmp.el
-!/lisp/shynur-ui.el
+!/lisp/shynur-*.el
 !/lisp/themes/
 
 #outline:     ./lisp/themes/
 /lisp/themes/*
 !/lisp/themes/shynur-themes.el
+!/lisp/themes/shynur-*-theme.el
+
+#outline:   ./modules/
+/modules/*
+!/modules/src/
+
+#outline:     ./modules/src/
+/modules/src/*
+!/modules/src/*.c
+!/modules/src/*.h
+/modules/src/*emacs-module.*  # 一定要忽略它!  直接把它放最后.
 
 #outline:   ./scripts/
 /scripts/*
-!/scripts/el.el
+!/scripts/*.el
 
 #outline:   ./site-lisp/
 /site-lisp/*

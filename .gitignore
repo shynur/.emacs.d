@@ -59,7 +59,8 @@
 /modules/src/*
 !/modules/src/*.c
 !/modules/src/*.h
-/modules/src/*emacs-module*  # 一定要忽略它!  直接把它放最后.
+# 一定要忽略它!  直接把它放最后.
+/modules/src/*emacs-module*
 
 #outline:   ./scripts/
 /scripts/*

@@ -34,13 +34,13 @@
                               org-mode
                               makefile-gmake-mode))
 
-         ;; This is for file “LICENSE.txt” which doesn’t have a syntax for comments.
          (eval . (when (when-let ((buffer-file-name (buffer-file-name)))
                          (cl-some (lambda (file-read-only)
                                     (string= file-read-only
                                              (file-name-base buffer-file-name)))
-                                  ["LICENSE"
-                                   "emacs-module"]))
+                                  ["LICENSE"  ; ‘LICENSE’没有注释语法, 只能写在这里了.
+                                   "emacs-module"  ; 这玩意有 GPL 污染, 切割!
+                                   ]))
                    (setq-local buffer-read-only t)))
 
 

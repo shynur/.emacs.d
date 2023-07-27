@@ -173,7 +173,7 @@
       ;; ‘scroll-margin’的上界.
       maximum-scroll-margin 0.5)
 
-(setq scroll-bar-width 28)
+(setq-default scroll-bar-width 28)
 
 (setq scroll-conservatively most-positive-fixnum
       ;; Minibuffer 永远 一行一行地 automatically scroll.

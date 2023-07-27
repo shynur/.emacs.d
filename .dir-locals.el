@@ -36,8 +36,13 @@
 
          ;; This is for file “LICENSE.txt” which doesn’t have a syntax for comments.
          (eval . (when (when-let ((buffer-file-name (buffer-file-name)))
-                         (string= "LICENSE" (file-name-base buffer-file-name)))
+                         (cl-some (lambda (file-read-only)
+                                    (string= file-read-only
+                                             (file-name-base buffer-file-name)))
+                                  ["LICENSE"
+                                   "emacs-module"]))
                    (setq-local buffer-read-only t)))
+
 
          (eval . (let ((case-fold-search t))
                    (highlight-phrase "~?\\(?:shynur\\|谢骐\\)[^[:blank:][:space:][:cntrl:]()`'\"]*"

@@ -85,7 +85,10 @@
  ("lisp/" . ((nil . (;; 编写用于 解释执行 的代码更加轻松.
                      ;; ‘site-lisp/’中则尽量编写可编译的代码.
                      (no-byte-compile . t)
-                     (no-native-compile . t))))))
+                     (no-native-compile . t)))))
+ ("scripts/" . ((nil . (;; 没有必要编译 脚本, 也_不应该_这么做, 因为需要识别‘*.el’的 shebang 注释.
+                        (no-byte-compile . t)
+                        (no-native-compile . t))))))
 
 ;; Local Variables:
 ;; coding: utf-8-unix

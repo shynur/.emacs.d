@@ -14,6 +14,7 @@
 !/etc/
 !/init.el
 !/lisp/
+!/scripts/
 !/site-lisp/
 
 #outline:   ./.github/
@@ -53,11 +54,16 @@
 !/lisp/shynur-server.el
 !/lisp/shynur-startup.el
 !/lisp/shynur-tmp.el
+!/lisp/shynur-ui.el
 !/lisp/themes/
 
 #outline:     ./lisp/themes/
 /lisp/themes/*
 !/lisp/themes/shynur-themes.el
+
+#outline:   ./scripts/
+/scripts/*
+!/scripts/el.el
 
 #outline:   ./site-lisp/
 /site-lisp/*

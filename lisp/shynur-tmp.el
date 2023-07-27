@@ -163,9 +163,6 @@
                             nil (battery))
  '(battery-update-interval battery-update-interval
                            nil (battery))
- '(mode-line-in-non-selected-windows t
-                                     nil ()
-                                     "未被选中的窗口使用‘mode-line-inactive’作为mode-line的face")
  '(eol-mnemonic-dos  "(CRLF)")
  '(eol-mnemonic-mac  "(CR)")
  '(eol-mnemonic-unix "(LF)")
@@ -297,7 +294,7 @@
                    "若快捷键未完整击入,则等待该时长后在echo-area显示已经击入的键")
  '(visible-bell t
                 nil ()
-                "响铃可视化.在Windows上表现为,任务栏图标闪烁")
+                "响铃可视化.在 MS-Windows 上表现为,任务栏图标闪烁")
  '(table-fixed-width-mode nil
                           nil (table)
                           "基于文本的表格自动调节尺寸")
@@ -313,9 +310,6 @@
  '(line-number-mode nil
                     nil (simple)
                     "mode-line不显示行号")
- '(max-mini-window-height 0.3
-                          nil ()
-                          "minubuffer最大高度占比(float)/绝对高度(int)")
  '(message-log-max t
                    nil ()
                    "对于“*Messages*”的最大行数,不做限制")
@@ -352,12 +346,6 @@
  '(read-quoted-char-radix 16
                           nil (simple)
                           "“C-q”后接16进制")
- '(resize-mini-windows t
-                       nil ()
-                       "minibuffer可以变宽变窄,由输入的字符串的行数决定")
- '(resize-mini-frames #'fit-frame-to-buffer
-                      nil ()
-                      "trim首尾的空行")
  `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'save-place-file ".el")
    nil (saveplace))
  '(save-place-mode t
@@ -433,39 +421,11 @@
    nil (url-cache))
  `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'url-cookie-file "")
    nil (url-cookie))
- '(blink-cursor-mode nil
-                     nil (frame))
- '(blink-cursor-delay 0
-                      nil (frame)
-                      "cursor开始闪烁的时间点")
- '(blink-cursor-blinks 0
-                       nil (frame)
-                       "如果打开‘blink-cursor-mode’的话,停止输入后cursor会闪烁一定次数,然后静止")
- '(blink-cursor-alist '((box  . nil)
-                        (bar  . box)
-                        (hbar . bar))
-                      nil ()
-                      "当设置‘cursor-type’时,将会根据此alist设置光标黯淡时的type")
- '(blink-cursor-interval 0.5
-                         nil (frame)
-                         "cursor闪烁的时间间隔")
- '(visible-cursor t
-                  nil ()
-                  "在TUI下,如果有可能的话,使cursor外形或特征更加显著(通常是blinking)")
- '(what-cursor-show-names t
-                          nil (simple)
-                          "使“C-x =”(‘what-cursor-position’)顺便显示字符的Unicode名字")
- '(cursor-type 'box
-               nil ()
-               "GUI下的cursor的静态图标")
- '(cursor-in-non-selected-windows t
-                                  nil ()
-                                  "未选择的window中的cursor显示为静态镂空框")
  '(Info-mode-hook `(,@Info-mode-hook
                     ,(lambda ()
                        "单词之间换行"
                        (visual-line-mode))))
- '(help-mode-hook `(,@help-mode-hook
+ '(help-mode-hook `(,@(bound-and-true-p help-mode-hook)
                     ,(lambda ()
                        "单词之间换行"
                        (visual-line-mode))))
@@ -503,21 +463,12 @@
  '(company-clang-executable (pcase (system-name)
                               ("ASUS-TX2" "d:/Progs/LLVM/bin/clang.exe"))
                             nil (company))
- '(next-screen-context-lines 5
-                             nil ()
-                             "scroll以使window底端的N行呈现到顶端")
  '(w32-mouse-button-tolerance w32-mouse-button-tolerance
                               nil ()
                               "如果鼠标的3个案件中有一个失灵了,可以在这么多毫秒内同时按下其余两个键,Emacs会将其识别为失灵的那个键")
  '(w32-swap-mouse-buttons nil
                           nil ()
                           "是否交换鼠标的中键和右键")
- '(dimmer-mode t
-               nil (dimmer)
-               "暗淡非聚焦状态的window(似乎可以设置渐变色)")
- '(scroll-error-top-bottom nil
-                           nil (window)
-                           "无法再scroll时停住,而不是继续移动point")
  '(global-highlight-parentheses-mode t
                                      nil (highlight-parentheses)
                                      "给内层括号换种颜色")
@@ -537,35 +488,6 @@
                                     nil (hideshow))
  '(hs-isearch-open t
                    nil (hideshow))
- '(scroll-bar-width 28)
- '(maximum-scroll-margin 0.5
-                         nil ())
- '(scroll-margin 1
-                 nil ()
-                 "相当于,光标不会到达的边缘地带的宽度(单位是screen line);占window的最大比例为‘maximum-scroll-margin’")
- '(scroll-conservatively most-positive-fixnum
-                         nil ())
- '(scroll-minibuffer-conservatively t
-                                    nil ()
-                                    "对于minibuffer,永远是一行一行地automatically scroll")
- '(ivy-count-format "%d/%d "
-                    nil (ivy))
- '(ivy-height 6
-              nil (ivy)
-              "准确来说是最大高度")
- '(minibuffer-setup-hook `(,@minibuffer-setup-hook
-                           ,(lambda ()
-                              "令ivy的minibuffer拥有自适应高度"
-                              (add-hook 'post-command-hook
-                                        (lambda ()
-                                          (when (progn
-                                                  (require 'ivy)
-                                                  ivy-mode)
-                                            (shrink-window (1+ (progn
-                                                                 (require 'ivy)
-                                                                 ivy-height)))))
-                                        nil
-                                        t))))
  '(calendar-mark-holidays-flag t
                                nil (calendar))
  '(prettify-symbols-alist '(("lambda" . ?λ)
@@ -700,28 +622,6 @@
                               ,(lambda ()
                                  (indent-tabs-mode)))
                             nil (make-mode))
- '(tooltip-delay 0
-                 nil (tooltip))
- '(tooltip-mode t
-                nil (tooltip))
- '(tooltip-short-delay 0
-                       nil (tooltip))
- '(tooltip-hide-delay most-positive-fixnum
-                      nil (tooltip))
- '(tooltip-frame-parameters tooltip-frame-parameters
-                            nil (tooltip))
- '(doom-modeline-mode t
-                      nil (doom-modeline all-the-icons))
- '(doom-modeline-minor-modes t
-                             nil (doom-modeline))
- '(doom-modeline-window-width-limit nil
-                                    nil (doom-modeline)
-                                    "即使当前窗口宽度很小,也尽量显示所有信息")
- '(doom-modeline-bar-width 3
-                           nil (doom-modeline)
-                           "doom-modeline左侧小竖条的宽度(装饰品)")
- '(doom-modeline-height 1
-                        nil (doom-modeline))
  '(inferior-lisp-program (pcase (system-name)
                            ("ASUS-TX2" "d:/Progs/Steel_Bank_Common_Lisp/sbcl.exe")
                            (_          inferior-lisp-program                     ))
@@ -808,6 +708,9 @@
  '(show-paren-when-point-in-periphery nil
                                       nil (paren)
                                       "当光标置于sexp周边的空白区域时")
+ '(what-cursor-show-names t
+                          nil (simple)
+                          "使“C-x =”(‘what-cursor-position’)顺便显示字符的Unicode名字")
  '(electric-pair-mode t
                       nil (elec-pair))
  '(ielm-mode-hook `(,@(bound-and-true-p ielm-mode-hook)
@@ -1107,15 +1010,9 @@
  '(split-window-keep-point nil
                            nil (window)
                            "Cursor在下半window时,新建window在上半部分;反之则反.简言之,尽可能少地重绘.缺点是,新窗口的point未必与原先一致")
- '(window-resize-pixelwise t)
- '(frame-resize-pixelwise t)
  '(delete-window-choose-selected 'mru
                                  nil (window)
                                  "Delete窗口之后下一个选中的窗口是最近使用过的")
- '(window-min-height 4
-                     nil (window))
- '(window-min-width 1
-                    nil (window))
  '(x-underline-at-descent-line nil)
  '(x-use-underline-position-properties t)
  '(underline-minimum-offset 0
@@ -1175,14 +1072,6 @@
                            nil (simple))
  '(register-separator "\n\n"
                       nil (register))
- '(window-divider-default-places 'right-only
-                                 nil (frame))
- '(window-divider-default-right-width 12
-                                      nil (simple)
-                                      "scroll bar的宽度")
- '(window-divider-mode t
-                       nil (frame)
-                       "在window的周围显示拖动条,用来调整window的长和宽.(横向拖动条可以用mode-line代替,所以只需要纵向拖动条,据此设置‘window-divider-default-places’为right-only)(‘window-divider-default-right-width’决定拖动条的宽度)")
  '(dnd-open-file-other-window nil
                               nil (dnd))
  '(mouse-drag-and-drop-region t
@@ -1231,9 +1120,6 @@
 (shynur/init-data/ 'project-list-file ".el")
 (setq project-switch-commands #'project-find-file)  ; “C-x p p”选中项目后, 立刻执行指定的 command.
 
-;;; Feature: ‘pixel-scroll’
-(pixel-scroll-precision-mode)
-
 ;;; Feature: ‘nsm’
 (shynur/init-data/ 'nsm-settings-file ".data")  ; 记录已知的安全 connection.
 
@@ -1275,15 +1161,26 @@
 (setq recentf-max-menu-items 30)
 (recentf-mode)
 
-;;; Feature: ‘frame’
-(setq frame-background-mode nil)  ; 当前背景色的 亮暗 自动选择应该呈现的 face.
-(with-eval-after-load 'frame
-  (require 'transwin)
-  (add-hook 'after-make-frame-functions
-            (lambda (frame-to-be-made)
-              (let ((inhibit-message t))
-                (with-selected-frame frame-to-be-made
-                  (transwin-ask 80))))))
+;;; [[package][ivy]]
+(keymap-global-set "C-s"
+                   (lambda ()
+                     (interactive)
+                     (ivy-mode)
+                     (unwind-protect
+                         (swiper)
+                       (ivy-mode -1))))
+(keymap-global-unset "C-r")
+(keymap-global-unset "C-M-r")
+(setq ivy-count-format "%d/%d ")
+(setq ivy-height 6)
+(add-hook 'minibuffer-setup-hook
+          (lambda ()
+            "令 ivy 的 minibuffer 拥有自适应高度."
+            (add-hook 'post-command-hook
+                      (lambda ()
+                        (when (bound-and-true-p ivy-mode)
+                          (shrink-window (1+ ivy-height))))
+                      nil t)))
 
 ;;; Feature: ‘hanoi’
 (setq hanoi-use-faces nil)  ; 不要使用彩色动画, 因为看起来很鬼畜.
@@ -1295,61 +1192,6 @@
 (setq custom-search-field nil)  ; 感觉不如‘customize-apropos’.
 (setq custom-buffer-done-kill nil)  ; 按“[Exit]”(GUI 下 该图标 位于 tool bar) 并不 kill buffer.
 (shynur/init-data/ 'custom-file ".el")  ; 该文件需要 手动‘load-file’, 所以 直接 设置 即可, 无后顾之忧.
-
-(letrec ((shynur--custom-set-faces (lambda ()
-                                     "daemon-client运行在同一个机器上,只需要在一个client进程中执行‘custom-set-faces’,其余(以及后续)的client都能生效"
-                                     ;; 摘编自 Centaur Emacs, 用于解决 字体 问题.
-                                     (let* ((font       "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing")
-                                            (attributes (font-face-attributes font)                                   )
-                                            (family     (plist-get attributes :family)                                ))
-                                       ;; Set default font.
-                                       (apply #'set-face-attribute
-                                              'default nil
-                                              attributes)
-                                       ;; Specify font for all unicode characters.
-                                       (set-fontset-font t 'symbol
-                                                         (font-spec :family "Segoe UI Symbol")
-                                                         nil 'prepend)
-                                       ;; Emoji 🥰.
-                                       (set-fontset-font t 'emoji
-                                                         (font-spec :family "Segoe UI Emoji")
-                                                         nil 'prepend)
-                                       ;; Specify font for Chinese characters.
-                                       (set-fontset-font t '(#x4e00 . #x9fff)
-                                                         (font-spec :family family)))
-                                     (custom-set-faces
-                                      '(cursor
-                                        ((t . (:background "chartreuse")))
-                                        nil
-                                        "该face仅有‘:background’字段有效")
-                                      '(tooltip
-                                        ((t . ( :height     100
-                                                :background "dark slate gray"))))
-                                      '(line-number
-                                        ((t . ( :slant  italic
-                                                :weight light))))
-                                      `(line-number-major-tick
-                                        ((t . ( :foreground ,(face-attribute 'line-number :foreground)
-                                                :background ,(face-attribute 'line-number :background)
-                                                :slant      italic
-                                                :underline  t
-                                                :weight     light)))
-                                        nil
-                                        "指定倍数的行号;除此以外,还有‘line-number-minor-tick’实现相同的功能,但其优先级更低")
-                                      '(line-number-current-line
-                                        ((t . ( :slant  normal
-                                                :weight black))))
-                                      '(window-divider
-                                        ((t . (:foreground "SlateBlue4"))))
-                                      '(indent-guide-face
-                                        ((t . (:foreground "dark sea green"))))
-                                      '(fill-column-indicator
-                                        ((t . ( :background "black"
-                                                :foreground "yellow")))))
-                                     (remove-hook 'server-after-make-frame-hook
-                                                  shynur--custom-set-faces))))
-  (add-hook 'server-after-make-frame-hook
-            shynur--custom-set-faces))
 
 (keymap-global-unset "C-h g")
 (keymap-global-unset "C-h h")
@@ -1496,15 +1338,7 @@
                                      (call-interactively original-command))
                                  (seq-doseq (completer completers)
                                    (advice-remove completer "shynur--let-bind-completion-regexp-list"))))))))
-(progn
-  (global-set-key (kbd "C-s") (lambda ()
-                                (interactive)
-                                (ivy-mode)
-                                (unwind-protect
-                                    (swiper)
-                                  (ivy-mode -1))))
-  (global-unset-key (kbd "C-r"))
-  (global-unset-key (kbd "C-M-r")))
+
 (global-set-key (kbd "C-x C-b") #'bs-show)
 (global-set-key (kbd "<mouse-2>") #'mouse-yank-at-click)
 (mapc (lambda (postkey-function)
@@ -1585,6 +1419,7 @@
         ("z" . ,(lambda ()
                   "更换屏幕时记得修改这些参数"
                   (interactive)
+                  (set-frame-parameter nil 'fullscreen nil)
                   (set-frame-position nil 220 130)
                   (set-frame-size nil 800 600 t)))))
 
@@ -1598,32 +1433,6 @@
                                                      modify-keyboard-translation))))
   (add-hook 'server-after-make-frame-hook
             modify-keyboard-translation))
-
-;; 当最后一个frame关闭时,存入它的位置和尺寸;当桌面上没有frame时,下一个打开的frame将使用那个被存入的位置和尺寸.
-(let ((shynur--size&position-relayer `(,(cons 'top 0) ,(cons 'left 0)
-                                        ;; ‘fullscreen’放最后,以覆盖‘width’&‘height’的设置.
-                                        ,(cons 'width 0) ,(cons 'height 0) ,(cons 'fullscreen nil)))
-      shynur--size&position-relayer-holding?)
-  (letrec ((shynur--get-size&position (lambda ()
-                                         (when shynur--size&position-relayer-holding?
-                                           (dolist (parameter-value shynur--size&position-relayer)
-                                             (set-frame-parameter nil (car parameter-value) (cdr parameter-value))))
-                                         (remove-hook 'server-after-make-frame-hook
-                                                      shynur--get-size&position)
-                                         (add-hook 'delete-frame-functions
-                                                   shynur--put-size&position)))
-           (shynur--put-size&position (lambda (frame-to-be-deleted)
-                                         (when (length= (frames-on-display-list) 1)
-                                           (dolist (parameter-value shynur--size&position-relayer)
-                                             (setcdr parameter-value (frame-parameter frame-to-be-deleted (car parameter-value))))
-                                           (setq shynur--size&position-relayer-holding? t)
-                                           (remove-hook 'delete-frame-functions
-                                                        shynur--put-size&position)
-                                           ;; 当需要调用该λ表达式时,必然没有除此以外的其它frame了,因此之后新建的frame必然是server弹出的,所以此处无需使用‘after-make-frame-functions’
-                                           (add-hook 'server-after-make-frame-hook
-                                                     shynur--get-size&position)))))
-    (add-hook 'server-after-make-frame-hook
-              shynur--get-size&position)))
 
 (provide 'shynur-tmp)
 

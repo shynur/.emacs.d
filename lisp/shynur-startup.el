@@ -31,6 +31,11 @@
 ;; 只有设为自己在 OS 中的 username, 才能屏蔽启动时 echo area 的“For information about GNU Emacs and the GNU system, type C-h C-a.”
 (setq inhibit-startup-echo-area-message user-login-name)
 
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message (shynur/message-format #("启动耗时 %.1fs"
+                                              5 9 (face bold)))
+                     (time-to-seconds (time-since before-init-time)))))
 
 (provide 'shynur-startup)
 

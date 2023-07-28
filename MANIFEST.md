@@ -17,6 +17,8 @@ init.el
   |
   |__ lisp/shynur-init.el
         |
+        |__ etc/shynur-custom.el
+        |
         |__ lisp/shynur-elisp.el
         |
         |__ lisp/shynur-tmp.el

@@ -9,8 +9,10 @@
                      ("/[^/-][^/]*\\.el\\'" . emacs-lisp-mode)
                      ("/\\.dir-locals\\(?:-2\\)?\\.el\\'" . lisp-data-mode)
 
-                     ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'" . markdown-mode)
-                     ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.org\\'" . org-mode)
+                     ;; TODO#1: 我tm自己都看不懂了, 有空补一下注释.
+                     ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'"      . markdown-mode)
+                     ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.org\\'"     . org-mode)
+                     ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.textile\\'" . textile-mode)
 
                      ("/[^/-][^/]*\\.ya?ml\\'" . yaml-mode)
                      ("/\\.gitignore\\'" . gitignore-mode)
@@ -84,13 +86,14 @@
 
                          (mode . indent-tabs)))
 
+ ("etc/" . ((nil . (;; 其下的 Emacs Lisp 文件 几乎 只负责 定义 变量, 完全没必要编译.
+                    ;; 而且该目录也不在‘load-path’里, 所以那些 Emacs Lisp 是绝对路径指定的.
+                    (no-byte-compile . t)
+                    (no-native-compile . t)))))
  ("lisp/" . ((nil . (;; 编写用于 解释执行 的代码更加轻松.
                      ;; ‘site-lisp/’中则尽量编写可编译的代码.
                      (no-byte-compile . t)
                      (no-native-compile . t)))))
- ("scripts/" . ((nil . (;; 没有必要编译 脚本, 也_不应该_这么做, 因为需要识别‘*.el’的 shebang 注释.
-                        (no-byte-compile . t)
-                        (no-native-compile . t)))))
  ("modules/src/" . ((nil . ((eval . (funcall shynur--read-only-when-filename-match "emacs-module"))  ; 这玩意有 GPL 污染, 切割!
 
                             (tags-file-name . "TAGS.txt")

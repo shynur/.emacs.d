@@ -54,6 +54,7 @@
                                   drag-stuff
                                   marginalia
                                   ascii-table
+                                  textile-mode
                                   indent-guide
                                   rainbow-mode
                                   all-the-icons

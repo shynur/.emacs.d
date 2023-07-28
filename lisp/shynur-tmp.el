@@ -96,9 +96,7 @@
  '(coding-system-for-write 'utf-8-unix
                            nil ()
                            "该customization中的NEW被Emacs设置为t")
- '(file-name-coding-system (pcase (system-name)
-                             ("ASUS-TX2" 'chinese-gb18030       )
-                             (_          file-name-coding-system)))
+ '(file-name-coding-system shynur/custom-filename-coding)
  '(completion-cycle-threshold nil
                               nil (minibuffer)
                               "minibuffer补全时,按TAB会轮换候选词")
@@ -460,8 +458,7 @@
  '(company-tooltip-limit 10
                          nil (company)
                          "一次性显示候选词的数量")
- '(company-clang-executable (pcase (system-name)
-                              ("ASUS-TX2" "d:/Progs/LLVM/bin/clang.exe"))
+ '(company-clang-executable shynur/custom-clang-path
                             nil (company))
  '(w32-mouse-button-tolerance w32-mouse-button-tolerance
                               nil ()
@@ -524,9 +521,7 @@
                                  nil (hilit-chg))
  '(highlight-changes-visibility-initial-state nil
                                               nil (hilit-chg))
- '(python-shell-interpreter (pcase (system-name)
-                              ("ASUS-TX2" "python" )
-                              (_          "python3"))
+ '(python-shell-interpreter shynur/custom-python-path
                             nil (python))
  '(python-shell-interpreter-interactive-arg nil
                                             nil (python))
@@ -622,9 +617,7 @@
                               ,(lambda ()
                                  (indent-tabs-mode)))
                             nil (make-mode))
- '(inferior-lisp-program (pcase (system-name)
-                           ("ASUS-TX2" "d:/Progs/Steel_Bank_Common_Lisp/sbcl.exe")
-                           (_          inferior-lisp-program                     ))
+ '(inferior-lisp-program shynur/custom-commonlisp-path
                          nil (sly))
  '(save-interprogram-paste-before-kill t
                                        nil (simple)
@@ -641,23 +634,24 @@
  '(x-stretch-cursor t
                     nil ()
                     "在tab字符上拉长显示cursor")
- '(shell-mode-hook `(,@shell-mode-hook
+ '(shell-mode-hook `(,@(bound-and-true-p shell-mode-hook)
                      ,(lambda ()
                         "设置编码"
-                        (pcase (system-name)
-                          ("ASUS-TX2" (set-buffer-process-coding-system 'chinese-gb18030 'chinese-gb18030))))
+                        (set-buffer-process-coding-system shynur/custom-shell-coding
+                                                          shynur/custom-shell-coding))
                      ,(lambda ()
                         "设置shell"
-                        (pcase (system-name)
-                          ("ASUS-TX2" (make-thread (lambda ()
-                                                     (let ((attempts 100000))
-                                                       (while (and (natnump attempts)
-                                                                   (length> "Microsoft Windows" (buffer-size)))
-                                                         (thread-yield)
-                                                         (cl-decf attempts)))
-                                                     (when (save-excursion
-                                                             (re-search-backward "Microsoft Windows"))
-                                                       (execute-kbd-macro [?p ?o ?w ?e ?r ?s ?h ?e ?l ?l ?\C-m]))))))))
+                        (when (or (string= shynur/custom-os "MS-Windows 10")
+                                  (string= shynur/custom-os "MS-Windows 11"))
+                          (make-thread (lambda ()
+                                         (let ((attempts 100000))
+                                           (while (and (natnump attempts)
+                                                       (length> "Microsoft Windows" (buffer-size)))
+                                             (thread-yield)
+                                             (cl-decf attempts)))
+                                         (when (save-excursion
+                                                 (re-search-backward "Microsoft Windows"))
+                                           (execute-kbd-macro [?p ?o ?w ?e ?r ?s ?h ?e ?l ?l ?\C-m])))))))
                    nil (shell))
  '(global-page-break-lines-mode t
                                 nil (page-break-lines)
@@ -1363,9 +1357,7 @@
                   "调用“clang-format --Werror --fallback-style=none --ferror-limit=0 --style=file:~/.emacs.d/etc/clang-format.yaml”.
 在C语系中直接美化代码,否则美化选中区域"
                   (interactive)
-                  (let ((clang-format (pcase (system-name)
-                                        ("ASUS-TX2" "d:/Progs/LLVM/bin/clang-format.exe")
-                                        (_          "clang-format"                      )))
+                  (let ((clang-format shynur/custom-clang-format-path)
                         (options `("--Werror"
                                    "--fallback-style=none"
                                    "--ferror-limit=0"

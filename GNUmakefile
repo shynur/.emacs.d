@@ -5,10 +5,10 @@ SHELL = /bin/sh
 
 .PHONY: clean
 clean:
-	rm --force  *.el[cn] {,site-}lisp/*.el[cn]
-	rm --force  README.html*
-	rm --force  docs/*.{html,pdf,tex}*
-	rm --force  modules/*.{so,dll}
+	rm --force  {.,etc,{,site-}lisp,scripts}/**/*.el[cn]
+	rm --force  *.{html,pdf,tex}*
+	rm --force  docs/pages/*
+	rm --force  modules/*.{so,dylib,dll}
 
 # Local Variables:
 # coding: utf-8-unix

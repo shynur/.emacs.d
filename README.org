@@ -21,18 +21,31 @@
 
 ** 字体
 
-- [[https://github.com/subframe7536/maple-font][Maple Mono SC NF]]:
++ [[https://github.com/subframe7536/maple-font][Maple Mono SC NF]]:
   显示 中英文.
-- [[https://www.nerdfonts.com/][Symbols Nerd Fonts Mono]]:
++ [[https://www.nerdfonts.com/][Symbols Nerd Fonts Mono]]:
   显示 各种 小图标.
-- Segoe UI Symbol, Segoe UI Emoji.
++ Segoe UI Symbol, Segoe UI Emoji.
 
 ** 软件
 
-- [[https://releases.llvm.org/][clang-format]]:
++ [[https://releases.llvm.org][clang-format]]:
   代码格式化工具.
-- [[https://www.smoothscroll.net/][SmoothScroll]]:
++ [[https://www.smoothscroll.net][SmoothScroll]]:
   开启鼠标 像素级 滚动的功能.
++ [[https://clangd.llvm.org][clang/clangd]]:
+  Language server.
+
+** Packages
+
+为了提高编辑本仓库文件时的舒适度, 建议安装以下 Emacs 插件
+(不然 =.dir-locals.el= 中有些功能无法启用):
+
++ ~git-modes~
++ ~makefile-mode~
++ ~markdown-mode~
++ ~textile-mode~
++ ~yaml-mode~
 
 * 键位
 ** 键盘输入
@@ -41,9 +54,9 @@
 
 ** 快捷键
 
-- 未换绑任何默认快捷键, 除了那些自带备选方案的 (e.g., 手册中提到 =C-x C-b= 可换绑到 ~bs-show~);
-- 取消了很多不必要的默认快捷键;
-- 定义了自用快捷键:
++ 未换绑任何默认快捷键, 除了那些自带备选方案的 (e.g., 手册中提到 =C-x C-b= 可换绑到 ~bs-show~);
++ 取消了很多不必要的默认快捷键;
++ 定义了自用快捷键:
   - =C-c <letter>=, where =<letter>= is either lower case or upper.
   - =f5=​\tilde​=f9=.
 
@@ -51,31 +64,31 @@
 
 Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./docs/Emacs-use_daemon.md][如何运行 Emacs 后台服务?]]).
 
-- MS-Windows: =x86_64-w64-mingw32=
++ MS-Windows: =x86_64-w64-mingw32=
 
 考虑到从零开始按照本配置初始化 Emacs 时, 可能会遇到各种意想不到的问题, 所以可以直接[[https://github.com/shynur/misc/tree/main/tmp/shynur-emacs-directory/][从这里找到自己需要的目录的打包文件, 并整个下载下来]], 以替换掉原本的 =~/.emacs.d/= 目录.
 
 * TODO 待办
 
-- [ ] 不应该单纯开启 ~global-display-line-numbers-mode~, 而是应该给出一个分类机制, 有需要的 mode 才打开 ~display-line-numbers-mode~.
++ [ ] 不应该单纯开启 ~global-display-line-numbers-mode~, 而是应该给出一个分类机制, 有需要的 mode 才打开 ~display-line-numbers-mode~.
   有的 mode (e.g., ~neotree~, ~calendar~, ~vc-annotate-mode~) 显示行号反而会占用空间.
-- [ ] 将任何 non-selected window 且是 ~prog-mode~ 的 buffer 开启全局彩虹括号.
++ [ ] 将任何 non-selected window 且是 ~prog-mode~ 的 buffer 开启全局彩虹括号.
   ~highlight-parentheses~ 只会高亮光标附近的括号, 其余地方还是一尘不变, 这样不太 fancy.
-- [ ] ~VS Code~ 式 右侧栏代码浏览缩略图.
-- [ ] 类似 VS Code =noctis= 的 主题, =solarized= 也不错.
++ [ ] ~VS Code~ 式 右侧栏代码浏览缩略图.
++ [ ] 类似 VS Code =noctis= 的 主题, =solarized= 也不错.
 
 ** PATCH
 
-- ~dframe-mouse-click-function~: "our".
-- (emacs) =C-x p d=: not root
-- (emacs) 28, 49.1.2: customize-group
-- (emacs) custom-theme-directory
-- (emacs) 28, 49.1.7 Custom Themes: ‘(’加空格.
++ ~dframe-mouse-click-function~: "our".
++ (emacs) =C-x p d=: not root
++ (emacs) 28, 49.1.2: customize-group
++ (emacs) custom-theme-directory
++ (emacs) 28, 49.1.7 Custom Themes: ‘(’加空格.
 
 ** BUG
-- company: "clang failed with error 255".
-- hexl-mode: 保存文件时会删除一些字符.
-- =M-x= 时 未显示 ~ignore~.
++ company: "clang failed with error 255".
++ hexl-mode: 保存文件时会删除一些字符.
++ =M-x= 时 未显示 ~ignore~.
 
 ** TODO 新增文件流程 [0/5]
 1. [ ] =New-file-name=
@@ -90,7 +103,7 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 * Repo Stats
 
 # See [[https://codetabs.com/count-loc/count-loc-online.html][Count LOC online]] hosted at [[https://github.com/jolav/codetabs]].
-- [[https://api.codetabs.com/v1/loc/?github=shynur/.emacs.d&branch=main&ignored=docs/pages/][Languages Statistics]]
++ [[https://api.codetabs.com/v1/loc/?github=shynur/.emacs.d&branch=main&ignored=docs/pages/][Languages Statistics]]
   (排除 =docs/pages/= 目录)
 
 * License

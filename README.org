@@ -9,9 +9,8 @@
 🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/ (22).
 之后将会使用 [[https://github.com/jwiegley/use-package][=use-package=]] 进行彻底的重构.
 
-(由于 GitHub 对 Org 的支持孱弱, 故些许地方渲染效果不佳.
-不过从绝对数量上看, 受 GitHub 支持的 Org 特性已经足够多了; 但是由于 Org 的功能 (及其组合) 实在太多, 从比例上看, 一份正常编写的 Org 文件会有多处难以识别的语法构造.
-)
+(由于 GitHub 对 Org 的支持较弱, 故些许地方渲染效果不佳.
+不过从绝对数量上看, 受 GitHub 支持的 Org 特性已经足够多了; 但是由于 Org 的功能 (及其组合) 实在太多, 从比例上看, 一份正常编写的 Org 文件会有多处难以识别的语法构造.)
 
 ** 📖 目录结构
 
@@ -33,8 +32,12 @@
   代码格式化工具.
 + [[https://www.smoothscroll.net][SmoothScroll]]:
   开启鼠标 像素级 滚动的功能.
+  (也可以选其它的类似的工具; 或者你的鼠标原生支持.)
 + [[https://clangd.llvm.org][clang/clangd]]:
   Language server.
++ [[https://jmeubank.github.io/tdm-gcc][GCC]]:
+  将 =modules/src/= 下的 C 文件 编译成 动态链接库, 提供给 Emacs 加载.
+  (也可以选其它的 C 编译器.)
 
 ** Packages
 
@@ -58,7 +61,7 @@
 + 未换绑任何默认快捷键, 除了那些自带备选方案的 (e.g., 手册中提到 =C-x C-b= 可换绑到 ~bs-show~);
 + 取消了很多不必要的默认快捷键;
 + 定义了自用快捷键:
-  - =C-c <letter>=, where =<letter>= is either lower case or upper.
+  - =C-c= 后接一个 =<letter>= (upper or lower case; =ASCII= or non-=ASCII=).
   - =f5=​\tilde​=f9=.
 
 * Written for

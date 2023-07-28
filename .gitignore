@@ -47,10 +47,9 @@
 
 ###outline:   ./etc/yas-snippets/
 /etc/yas-snippets/*
-!/etc/yas-snippets/**/?*.yasnippet
-# !/etc/yas-snippets/*/
-# /etc/yas-snippets/*/*
-# !/etc/yas-snippets/*/?*.yasnippet
+!/etc/yas-snippets/*/
+/etc/yas-snippets/*/*
+!/etc/yas-snippets/*/?*.yasnippet
 
 ##outline:  ./lisp/
 /lisp/*

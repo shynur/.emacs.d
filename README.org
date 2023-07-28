@@ -46,6 +46,7 @@
 + ~markdown-mode~
 + ~textile-mode~
 + ~yaml-mode~
++ ~yasnippet~
 
 * 键位
 ** 键盘输入

@@ -15,6 +15,7 @@
                      ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.textile\\'" . textile-mode)
 
                      ("/[^/-][^/]*\\.ya?ml\\'" . yaml-mode)
+                     ("/[^/-][^/]*\\.yasnippet\\'" . snippet-mode)
                      ("/\\.gitignore\\'" . gitignore-mode)
                      ("/\\(?:\\(?:\\(?:GNU\\)?m\\)\\|M\\)akefile\\'" . makefile-gmake-mode)))
 

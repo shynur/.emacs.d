@@ -43,6 +43,14 @@
 !/etc/abbrev_defs.el
 !/etc/clang-format.yaml
 !/etc/shynur-custom.el
+!/etc/yas-snippets/
+
+###outline:   ./etc/yas-snippets/
+/etc/yas-snippets/*
+!/etc/yas-snippets/**/?*.yasnippet
+# !/etc/yas-snippets/*/
+# /etc/yas-snippets/*/*
+# !/etc/yas-snippets/*/?*.yasnippet
 
 ##outline:  ./lisp/
 /lisp/*

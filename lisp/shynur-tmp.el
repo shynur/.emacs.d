@@ -1097,10 +1097,10 @@
                                                                                     (when (file-exists-p file-path)
                                                                                       (with-temp-buffer
                                                                                         (insert-file-contents file-path)
-                                                                                        (read (current-buffer))))) `[,@(mapcar (lambda (_dir-loc)
+                                                                                        (read (current-buffer))))) `[,@(mapcar (lambda (dir-loc)
                                                                                                                                  "囊括诸如‘~/.emacs.d/’下的‘.dir-locals.el’文件."
                                                                                                                                  (file-name-concat user-emacs-directory
-                                                                                                                                                   _dir-loc)) [".dir-locals.el"
+                                                                                                                                                   dir-loc)) [".dir-locals.el"
                                                                                                                                                                ".dir-locals-2.el"])
                                                                                                                      ])))
                                            (dolist (mode-vars dir-locals)

@@ -34,14 +34,11 @@
                               org-mode
                               makefile-gmake-mode))
 
-         (eval . (when (when-let ((buffer-file-name (buffer-file-name)))
-                         (cl-some (lambda (file-read-only)
-                                    (string= file-read-only
-                                             (file-name-base buffer-file-name)))
-                                  ["LICENSE"  ; ‘LICENSE’没有注释语法, 只能写在这里了.
-                                   "emacs-module"  ; 这玩意有 GPL 污染, 切割!
-                                   ]))
-                   (setq-local buffer-read-only t)))
+         (shynur--read-only-when-filename-match . (lambda (regexp)
+                                                    (when-let ((buffer-file-name (buffer-file-name)))
+                                                      (when (string-match-p regexp (file-name-nondirectory buffer-file-name))
+                                                        (setq-local buffer-read-only t)))))
+         (eval . (funcall shynur--read-only-when-filename-match "LICENSE"))  ; ‘LICENSE’没有注释语法, 只能写在这里了.
 
 
          (eval . (let ((case-fold-search t))
@@ -67,7 +64,7 @@
 
               (org-link-descriptive . nil)))
 
- (gitignore-mode . ((outline-regexp . "^#outline:\\(?1:[[:blank:]]+\\(?:[._[:alnum:]-]+/\\)+\\)?")
+ (gitignore-mode . ((outline-regexp . "^#+outline:\\(?1:[[:blank:]]+\\(?:[._[:alnum:]-]+/\\)+\\)?")
                     (outline-heading-end-regexp . "/\n")
                     (outline-level . (lambda ()
                                        (let ((slash-amount 0))
@@ -93,7 +90,18 @@
                      (no-native-compile . t)))))
  ("scripts/" . ((nil . (;; 没有必要编译 脚本, 也_不应该_这么做, 因为需要识别‘*.el’的 shebang 注释.
                         (no-byte-compile . t)
-                        (no-native-compile . t))))))
+                        (no-native-compile . t)))))
+ ("modules/src/" . ((nil . ((eval . (funcall shynur--read-only-when-filename-match "emacs-module"))  ; 这玩意有 GPL 污染, 切割!
+
+                            (tags-file-name . "TAGS.txt")
+                            (eval . (when (buffer-file-name)  ; 正在访问文件, 而不是‘dired’之类的 buffer.
+                                      (let ((default-directory (file-name-concat user-emacs-directory
+                                                                                 "modules/src/")))
+                                        (when (or (not (file-exists-p tags-file-name))
+                                                  (> (time-to-number-of-days (time-since (file-attribute-modification-time (file-attributes tags-file-name))))
+                                                     1))
+                                          (eshell-command (format "ls *.[ch] | etags --output=%s - "
+                                                                  tags-file-name)))))))))))
 
 ;; Local Variables:
 ;; coding: utf-8-unix

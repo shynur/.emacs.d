@@ -1,4 +1,5 @@
-## 请将 cursor 放在“#outline: ./PATH/”上, 尝试按“TAB”以折叠目录.
+# 请将 cursor 放在“#outline: ./Path/”上, 尝试按“TAB”以折叠目录.
+# (但是首先, 你得安装‘gitignore-mode’.)
 
 #outline: ./
 /*
@@ -18,11 +19,11 @@
 !/scripts/
 !/site-lisp/
 
-#outline:   ./.github/
+##outline:  ./.github/
 /.github/*
 !/.github/*.yaml
 
-#outline:   ./docs/
+##outline:  ./docs/
 /docs/*
 !/docs/Emacs-FAQ.txt
 !/docs/Emacs-regexp.org
@@ -31,42 +32,42 @@
 !/docs/index.html
 !/docs/pages/
 
-#outline:     ./docs/pages/
+###outline:   ./docs/pages/
 /docs/pages/*
 !/docs/pages/index.md
 !/docs/pages/*.html
 
-#outline:   ./etc/
+##outline:  ./etc/
 /etc/*
 !/etc/abbrev_defs.el
 !/etc/clang-format.yaml
 
-#outline:   ./lisp/
+##outline:  ./lisp/
 /lisp/*
 !/lisp/shynur-*.el
 !/lisp/themes/
 
-#outline:     ./lisp/themes/
+###outline:   ./lisp/themes/
 /lisp/themes/*
 !/lisp/themes/shynur-themes.el
 !/lisp/themes/shynur-*-theme.el
 
-#outline:   ./modules/
+##outline:  ./modules/
 /modules/*
 !/modules/src/
 
-#outline:     ./modules/src/
+###outline:   ./modules/src/
 /modules/src/*
-!/modules/src/*.c
+!/modules/src/shynur-*.c
 !/modules/src/*.h
-# 一定要忽略它!  直接把它放最后.
+# 文件‘emacs-module.h’基于 GPL, 一定要排除它, 切割!
 /modules/src/*emacs-module*
 
-#outline:   ./scripts/
+##outline:  ./scripts/
 /scripts/*
 !/scripts/*.el
 
-#outline:   ./site-lisp/
+##outline:  ./site-lisp/
 /site-lisp/*
 !/site-lisp/default.el
 !/site-lisp/leim-list.el

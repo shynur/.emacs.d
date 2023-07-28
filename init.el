@@ -8,11 +8,12 @@
 ;;   - VISUAL=$EDITOR 可选的.
 ;;   - TEXEDIT=$EDITOR 可选的, 使 TeX 使用 Emacs.
 ;;
-;; 2. 推荐的命令行参数 (for daemon):
+;; 2. 推荐的命令行参数 (not for client):
+;;   -L ~/.emacs.d/site-lisp/  # 单独管理‘PREFIXDIR/share/emacs/site-lisp/’有点麻烦,
+;;                             # 所以将其放到‘user-emacs-directory’中, 因此需要另外
+;;                             # 添加到‘load-path’(而且必须从命令行参数中添加).
 ;;   --debug-init
-;;   -L ~/site-lisp/  # 单独管理‘PREFIXDIR/share/emacs/site-lisp/’有点麻烦,
-;;                    # 所以将其放到‘user-emacs-directory’中, 因此需要另外
-;;                    # 添加到‘load-path’(而且必须从命令行参数中添加).
+;;   --module-assertions       # 检查 module 的健壮性.  (高耗时.)
 
 (require 'shynur-init)  ; (find-file-other-window "./lisp/shynur-init.el")
 

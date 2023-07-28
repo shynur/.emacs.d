@@ -64,7 +64,7 @@ TYPE 的可能值为: \"\" 无后缀, \"/\" 目录, \".EXTENSION\" 文件类型.
 
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (message (shynur/message-format #("启动耗时[%.1f]s"
+            (message (shynur/message-format #("启动耗时 %.1fs"
                                               5 9 (face bold)))
                      (time-to-seconds (time-since before-init-time)))))
 

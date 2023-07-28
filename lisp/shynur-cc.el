@@ -1,6 +1,10 @@
 ;;; -*- lexical-binding: t; -*-
 
 (with-eval-after-load 'cc-mode
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              "使用 行注释 注释掉 region."
+              (c-toggle-comment-style -1)))
 
   ;; 只保留 当前编译环境下 生效的 ifdef 从句.
   (add-hook 'c-mode-common-hook

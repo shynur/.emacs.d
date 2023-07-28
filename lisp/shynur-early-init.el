@@ -27,6 +27,7 @@
 (setq gc-cons-threshold 100000000
       gc-cons-percentage 0.36789)
 
+(startup-redirect-eln-cache ".data/eln-cache")
 (require 'shynur-package)  ; (find-file-other-window "./shynur-package.el")
 
 (provide 'shynur-early-init)

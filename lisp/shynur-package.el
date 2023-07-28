@@ -54,24 +54,24 @@
                                   drag-stuff
                                   marginalia
                                   ascii-table
-                                  use-package
                                   indent-guide
                                   rainbow-mode
                                   all-the-icons
                                   doom-modeline
                                   markdown-mode
+                                  org-superstar
                                   page-break-lines
                                   company-quickhelp
                                   rainbow-delimiters
-                                  highlight-parentheses))
+                                  highlight-parentheses  ; 动态彩虹括号.
+                                  )
+      package-load-list '(all))
 ;; 摘编自 <https://orgmode.org/elpa.html#installation>:
 (ignore-errors  ; 电脑可能断网了.
-  (package-refresh-contents))
-(setq package-load-list '(all))
-(dolist (feature package-selected-packages)
-  (unless (package-installed-p feature)
-    (ignore-errors  ; 电脑可能断网了.
-      (package-install feature))))
+  (package-upgrade-all :no-query)        ; 该函数能顺便‘package-refresh-contents’.
+  (package-install-selected-packages t)
+  ;; (package-autoremove)
+  )
 
 (provide 'shynur-package)
 

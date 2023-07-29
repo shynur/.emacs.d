@@ -1,5 +1,8 @@
 #+title: Shynur’s Emacs
 
+(由于本 Org 文件使用了过多的特性及其组合, 故 GitHub 会在些许地方渲染不佳.
+请在 [[https://shynur.github.io/.emacs.d/pages/README.html]] 获得最佳阅读体验!)
+
 * Overview
 
 #+ATTR_HTML: :alt 如果你看到了这句话, 说明我没高兴上传 图片, 或者你的网络环境有问题.
@@ -9,8 +12,6 @@
 
 🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/ (22).
 之后将会使用 [[https://github.com/jwiegley/use-package][=use-package=]] 进行彻底的重构.
-
-(由于本 Org 文件使用了过多的特性及其组合, 故 GitHub 会在些许地方渲染不佳.)
 
 ** 📖 目录结构
 

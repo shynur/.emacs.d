@@ -31,6 +31,22 @@ Out of the box (Optional)
 但是会小概率出现不兼容现象, 并且我不会及时更新它.
 
 
+Configure
+---------
+
+Customize
+^^^^^^^^^
+
+编辑 ``etc/shynur-custom.el`` 文件进行本地化配置.
+(这应当不需要 Emacs Lisp 知识.)
+
+Requisites
+^^^^^^^^^^
+
+`README.org <./README.org#prerequisites>`_ 中列出了依赖项目,
+其中, 字体 是必须的.
+
+
 Compile
 -------
 
@@ -73,20 +89,8 @@ Byte-compile Emacs Lisp files
 编译后会在 ``modules/`` 下生成动态链接库, 例如 ``modules/shynur-hello.dll`` (其中的模块函数演示了一个简单的柯里化概念, 可以编译下来玩玩).
 
 
-Requisites
-----------
-
-`README.org <./README.org#prerequisites>`_ 中列出了依赖项目,
-其中, 字体 是必须的.
-
-
 Test
 ----
-
-Customize
-^^^^^^^^^
-
-编辑 ``etc/shynur-custom.el`` 文件进行本地化配置.
 
 Start process
 ^^^^^^^^^^^^^

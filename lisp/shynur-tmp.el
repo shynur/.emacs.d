@@ -172,12 +172,6 @@
                          nil (delsel)
                          "选中文本后输入字符,会先删除刚刚选择的文本,再插入输入的字符")
  '(enable-recursive-minibuffers t)
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'eshell-directory-name "/")
-   nil (esh-mode))
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'eshell-history-file-name ".txt")
-   nil (em-hist))
- `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'eshell-last-dir-ring-file-name ".txt")
-   nil (em-dirs))
  `(,(shynur--intern&bind-tmp) (shynur/init-data/ 'eww-bookmarks-directory "/")
    nil (eww))
  '(extended-command-suggest-shorter t
@@ -430,36 +424,9 @@
  '(visual-line-fringe-indicators '(nil down-arrow)
                                  nil (simple)
                                  "word-wrap打开时在换行处显示down-arrow")
- '(global-company-mode t
-                       nil (company))
- '(company-idle-delay 0
-                      nil (company))
- '(company-tooltip-offset-display 'lines
-                                  nil (company)
-                                  "原本在候选词界面的右侧是由scroll bar的,现在改成:提示前面和后面分别有多少候选词")
  '(on-screen-delay 0.4
                    nil (on-screen)
                    "on-screen的提示持续时间")
- '(company-minimum-prefix-length 2
-                                 nil (company)
-                                 "当输入2个字符时,company就开始猜测")
- '(company-dabbrev-code-everywhere t
-                                   nil (company)
-                                   "还在comment和string中进行completion")
- '(company-dabbrev-code-other-buffers t
-                                      nil (company)
-                                      "在具有相同major mode的buffer中搜索候选词")
- '(company-dabbrev-code-time-limit 2
-                                   nil (company)
-                                   "在current buffer中搜索代码块中的关键词的时间限制")
- '(company-show-quick-access t
-                             nil (company)
-                             "给候选词编号")
- '(company-tooltip-limit 10
-                         nil (company)
-                         "一次性显示候选词的数量")
- '(company-clang-executable shynur/custom-clang-path
-                            nil (company))
  '(w32-mouse-button-tolerance w32-mouse-button-tolerance
                               nil ()
                               "如果鼠标的3个案件中有一个失灵了,可以在这么多毫秒内同时按下其余两个键,Emacs会将其识别为失灵的那个键")
@@ -634,25 +601,6 @@
  '(x-stretch-cursor t
                     nil ()
                     "在tab字符上拉长显示cursor")
- '(shell-mode-hook `(,@(bound-and-true-p shell-mode-hook)
-                     ,(lambda ()
-                        "设置编码"
-                        (set-buffer-process-coding-system shynur/custom-shell-coding
-                                                          shynur/custom-shell-coding))
-                     ,(lambda ()
-                        "设置shell"
-                        (when (or (string= shynur/custom-os "MS-Windows 10")
-                                  (string= shynur/custom-os "MS-Windows 11"))
-                          (make-thread (lambda ()
-                                         (let ((attempts 100000))
-                                           (while (and (natnump attempts)
-                                                       (length> "Microsoft Windows" (buffer-size)))
-                                             (thread-yield)
-                                             (cl-decf attempts)))
-                                         (when (save-excursion
-                                                 (re-search-backward "Microsoft Windows"))
-                                           (execute-kbd-macro [?p ?o ?w ?e ?r ?s ?h ?e ?l ?l ?\C-m])))))))
-                   nil (shell))
  '(global-page-break-lines-mode t
                                 nil (page-break-lines)
                                 "将form-feed字符渲染成别致的下划线")
@@ -1114,6 +1062,19 @@
 ;;; Feature: ‘nsm’
 (shynur/init-data/ 'nsm-settings-file ".data")  ; 记录已知的安全 connection.
 
+;;; Feature: ‘company’
+(setq company-idle-delay 0
+      company-minimum-prefix-length 2)
+(setq company-dabbrev-code-everywhere t)  ; 还在 comment 和 string 中进行 completion.
+(setq company-dabbrev-code-other-buffers t  ; 在具有相同‘major-mode’的 buffer 中搜索候选词.
+      company-dabbrev-code-time-limit 2  ; 在 current buffer 中搜索代码块中的关键词的时间限制.
+      )
+(setq company-show-quick-access t  ; 给候选词编号.
+      company-tooltip-offset-display 'lines  ; 原本在候选词界面的右侧是由 scroll bar, 现改成: 上/下面分别有多少候选词.
+      company-tooltip-limit 10)
+(setq company-clang-executable shynur/custom-clang-path)
+(global-company-mode)
+
 ;;; Feature: ‘dired’
 (keymap-global-unset "C-x C-j")    ; ‘dired-jump’
 (keymap-global-unset "C-x 4 C-j")  ; ‘dired-jump-other-window’
@@ -1330,10 +1291,13 @@
                                  (seq-doseq (completer completers)
                                    (advice-remove completer "shynur--let-bind-completion-regexp-list"))))))))
 
-(global-set-key (kbd "C-x C-b") #'bs-show)
-(global-set-key (kbd "<mouse-2>") #'mouse-yank-at-click)
+(keymap-global-set "C-x C-b"
+                   #'bs-show)
+(keymap-global-set "<mouse-2>"
+                   #'mouse-yank-at-click)
 (mapc (lambda (postkey-function)
-        (global-set-key (kbd (concat "C-c " (car postkey-function))) (cdr postkey-function)))
+        (keymap-global-set (concat "C-c " (car postkey-function))
+                           (cdr postkey-function)))
       `(("c" . ,#'highlight-changes-visible-mode)
         ,@(prog1 '(("d M-<left>"  . drag-stuff-left)
                    ("d M-<down>"  . drag-stuff-down)
@@ -1342,10 +1306,14 @@
             (defconst shynur/drag-stuff-map
               (let ((shynur/drag-stuff-map (make-sparse-keymap)))
                 (require 'drag-stuff)
-                (define-key shynur/drag-stuff-map (kbd "M-<left>")  #'drag-stuff-left)
-                (define-key shynur/drag-stuff-map (kbd "M-<down>")  #'drag-stuff-down)
-                (define-key shynur/drag-stuff-map (kbd "M-<up>")    #'drag-stuff-up)
-                (define-key shynur/drag-stuff-map (kbd "M-<right>") #'drag-stuff-right)
+                (define-key shynur/drag-stuff-map (kbd "M-<left>")
+                            #'drag-stuff-left)
+                (define-key shynur/drag-stuff-map (kbd "M-<down>")
+                            #'drag-stuff-down)
+                (define-key shynur/drag-stuff-map (kbd "M-<up>")
+                            #'drag-stuff-up)
+                (define-key shynur/drag-stuff-map (kbd "M-<right>")
+                            #'drag-stuff-right)
                 shynur/drag-stuff-map))
             (progn
               (require 'repeat)
@@ -1355,7 +1323,7 @@
               (put #'drag-stuff-right 'repeat-map 'shynur/drag-stuff-map)))
         ("f" . ,(lambda ()
                   "调用“clang-format --Werror --fallback-style=none --ferror-limit=0 --style=file:~/.emacs.d/etc/clang-format.yaml”.
-在C语系中直接美化代码,否则美化选中区域"
+在 C 语系中直接 (整个 buffer 而不仅是 narrowed region) 美化代码, 否则美化选中区域."
                   (interactive)
                   (let ((clang-format shynur/custom-clang-format-path)
                         (options `("--Werror"
@@ -1371,19 +1339,23 @@
                                                 (_ (unless mark-active
                                                      (user-error (shynur/message-format "无法使用“clang-format”处理当前语言")))))))
                     (if (stringp programming-language)
-                        (without-restriction
-                          (apply #'call-process-region
-                                 1 (point-max) clang-format t t nil
-                                 (format "--assume-filename=a.%s" programming-language)
-                                 (format "--cursor=%d" (1- (point)))
-                                 options)
-                          (beginning-of-buffer)
-                          (goto-char (1+ (string-to-number (prog1 (let ((case-fold-search nil))
-                                                                    (save-match-data
-                                                                      (buffer-substring-no-properties
-                                                                       (re-search-forward "\\`[[:blank:]]*{[[:blank:]]*\"Cursor\":[[:blank:]]*")
-                                                                       (re-search-forward "[[:digit:]]+"))))
-                                                             (delete-line))))))
+                        (shynur/save-cursor-relative-position-in-window
+                          ;; shynur/TODO:
+                          ;;     不确定这边的‘without-restriction’有没有必要,
+                          ;;   以及要不要和‘shynur/save-cursor-relative-position-in-window’互换位置.
+                          (without-restriction
+                            (apply #'call-process-region
+                                   1 (point-max) clang-format t t nil
+                                   (format "--assume-filename=a.%s" programming-language)
+                                   (format "--cursor=%d" (1- (point)))
+                                   options)
+                            (beginning-of-buffer)
+                            (goto-char (1+ (string-to-number (prog1 (let ((case-fold-search nil))
+                                                                      (save-match-data
+                                                                        (buffer-substring-no-properties
+                                                                         (re-search-forward "\\`[[:blank:]]*{[[:blank:]]*\"Cursor\":[[:blank:]]*")
+                                                                         (re-search-forward "[[:digit:]]+"))))
+                                                               (delete-line)))))))
                       (let ((formatted-code (let ((buffer-substring `(,(current-buffer) ,(region-beginning) ,(region-end))))
                                               (with-temp-buffer
                                                 (apply #'insert-buffer-substring-no-properties

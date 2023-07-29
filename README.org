@@ -14,7 +14,8 @@
 
 ** 📖 目录结构
 
-见 [[file:./MANIFEST.md][MANIFEST.md]] (仅含具体的配置文件).
+见 [[file:./MANIFEST.md][MANIFEST.md]].
+(仅含具体的配置文件.)
 
 * Prerequisites
 
@@ -51,6 +52,8 @@
 + ~yaml-mode~
 + ~yasnippet~
 
+安装完之后, 可能还需要分别 ~require~ 一下.
+
 * 键位
 ** 键盘输入
 
@@ -64,13 +67,20 @@
   - =C-c= 后接一个 =<letter>= (upper or lower case; =ASCII= or non-=ASCII=).
   - =f5=​\tilde​=f9=.
 
-* Written for
+* 安装须知
+
+** Written for
 
 Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./docs/Emacs-use_daemon.md][如何运行 Emacs 后台服务?]]).
 
 + MS-Windows: =x86_64-w64-mingw32=
 
 考虑到从零开始按照本配置初始化 Emacs 时, 可能会遇到各种意想不到的问题, 所以可以直接[[https://github.com/shynur/misc/tree/main/tmp/shynur-emacs-directory/][从这里找到自己需要的目录的打包文件, 并整个下载下来]], 以替换掉原本的 =~/.emacs.d/= 目录.
+
+** Install
+
+见 [[file:./INSTALL.rst][INSTALL.rst]].
+(仅包含 [[Written for]] 中提到的平台, 当然其它平台应该大差不差.)
 
 * TODO 待办
 

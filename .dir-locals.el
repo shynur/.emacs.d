@@ -11,13 +11,11 @@
 
                      ;; TODO#1: 我tm自己都看不懂了, 有空补一下注释.
                      ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'"      . markdown-mode)
-                     ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.org\\'"     . org-mode)
                      ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.textile\\'" . textile-mode)
 
                      ("/[^/-][^/]*\\.ya?ml\\'" . yaml-mode)
-                     ("/etc/yas-snippets/[^/-][^/]*\\.yasnippet\\'" . snippet-mode)
-                     ("/\\.gitignore\\'" . gitignore-mode)
-                     ("/\\(?:\\(?:\\(?:GNU\\)?m\\)\\|M\\)akefile\\'" . makefile-gmake-mode)))
+                     ;("/etc/yas-snippets/[^/-][^/]*\\.yasnippet\\'" . snippet-mode)
+                     ("/\\.gitignore\\'" . gitignore-mode)))
 
  (nil . ((outline-minor-mode-cycle . t)
          (outline-minor-mode-prefix . [nil])
@@ -90,7 +88,8 @@
  ("etc/" . ((nil . (;; 其下的 Emacs Lisp 文件 几乎 只负责 定义 变量, 完全没必要编译.
                     ;; 而且该目录也不在‘load-path’里, 所以那些 Emacs Lisp 是绝对路径指定的.
                     (no-byte-compile . t)
-                    (no-native-compile . t)))))
+                    (no-native-compile . t)))
+            ("yas-snippets/" . ((auto-mode-alist . (("/etc/yas-snippets/[^/-][^/]*\\.yasnippet\\'" . snippet-mode)))))))
  ("lisp/" . ((nil . (;; 编写用于 解释执行 的代码更加轻松.
                      ;; ‘site-lisp/’中则尽量编写可编译的代码.
                      (no-byte-compile . t)

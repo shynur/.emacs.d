@@ -41,6 +41,24 @@ TYPE 的可能值为: \"\" 无后缀, \"/\" 目录, \".EXTENSION\" 文件类型.
                         (thread-yield))
                       ,@body)))))
 
+(defmacro shynur/save-cursor-relative-position-in-window (&rest body)
+  "保持 cursor 在当前 window 中的相对位置.
+像‘progn’一样执行 BODY."
+  (declare (indent 0))
+  (let ((&shynur--distance-from-window-top-to-point (gensym "shynur/")))
+    `(let ((,&shynur--distance-from-window-top-to-point (- (line-number-at-pos nil t)
+                                                           (save-excursion
+                                                             (move-to-window-line 0)
+                                                             (line-number-at-pos nil t)))))
+       (prog1 (with-selected-window (selected-window)
+                ,@body)
+         (redisplay)
+         (scroll-up-line (- (- (line-number-at-pos nil t)
+                               (save-excursion
+                                 (move-to-window-line 0)
+                                 (line-number-at-pos nil t)))
+                            ,&shynur--distance-from-window-top-to-point))))))
+
 (add-hook 'post-gc-hook
           (lambda ()
             (message (shynur/message-format "%s")
@@ -74,6 +92,7 @@ TYPE 的可能值为: \"\" 无后缀, \"/\" 目录, \".EXTENSION\" 文件类型.
 (require 'shynur-themes)   ; (find-file-other-window "./themes/shynur-themes.el")
 (require 'shynur-server)   ; (find-file-other-window "./shynur-server.el")
 (require 'shynur-cc)       ; (find-file-other-window "./shynur-cc.el")
+(require 'shynur-sh)       ; (find-file-other-window "./shynur-sh.el")
 (require 'shynur-yas)      ; (find-file-other-window "./shynur-yas.el")
 (require 'shynur-profile)  ; (find-file-other-window "./shynur-profile.el")
 (require 'shynur-startup)  ; (find-file-other-window "./shynur-startup.el")

@@ -7,6 +7,7 @@
 !/.github/
 !/.gitignore
 !/GNUmakefile
+!/INSTALL.rst
 !/LICENSE.txt
 !/MANIFEST.md
 !/README.org

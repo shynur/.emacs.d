@@ -1,0 +1,10 @@
+[submodule "site-lisp/copilot.el"]
+    path = site-lisp/copilot.el
+    url = git@github.com:zerolfx/copilot.el.git
+[submodule "site-lisp/lsp-bridge"]
+    path = site-lisp/lsp-bridge
+    url = git@github.com:manateelazycat/lsp-bridge.git
+
+# Local Variables:
+# coding: utf-8-unix
+# End:

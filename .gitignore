@@ -37,7 +37,7 @@
 ###outline:   ./docs/pages/
 /docs/pages/*
 !/docs/pages/index.md
-!/docs/pages/?*.html
+!/docs/pages/[A-Za-z]*.html
 
 ##outline:  ./etc/
 /etc/*

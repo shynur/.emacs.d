@@ -205,87 +205,6 @@ mark .md-meta { color: rgb(0, 0, 0); }
 mjx-container { break-inside: avoid; }
 
 
-.CodeMirror { height: auto; }
-.CodeMirror.cm-s-inner { background: inherit; }
-.CodeMirror-scroll { overflow: auto hidden; z-index: 3; }
-.CodeMirror-gutter-filler, .CodeMirror-scrollbar-filler { background-color: rgb(255, 255, 255); }
-.CodeMirror-gutters { border-right: 1px solid rgb(221, 221, 221); background: inherit; white-space: nowrap; }
-.CodeMirror-linenumber { padding: 0px 3px 0px 5px; text-align: right; color: rgb(153, 153, 153); }
-.cm-s-inner .cm-keyword { color: rgb(119, 0, 136); }
-.cm-s-inner .cm-atom, .cm-s-inner.cm-atom { color: rgb(34, 17, 153); }
-.cm-s-inner .cm-number { color: rgb(17, 102, 68); }
-.cm-s-inner .cm-def { color: rgb(0, 0, 255); }
-.cm-s-inner .cm-variable { color: rgb(0, 0, 0); }
-.cm-s-inner .cm-variable-2 { color: rgb(0, 85, 170); }
-.cm-s-inner .cm-variable-3 { color: rgb(0, 136, 85); }
-.cm-s-inner .cm-string { color: rgb(170, 17, 17); }
-.cm-s-inner .cm-property { color: rgb(0, 0, 0); }
-.cm-s-inner .cm-operator { color: rgb(152, 26, 26); }
-.cm-s-inner .cm-comment, .cm-s-inner.cm-comment { color: rgb(170, 85, 0); }
-.cm-s-inner .cm-string-2 { color: rgb(255, 85, 0); }
-.cm-s-inner .cm-meta { color: rgb(85, 85, 85); }
-.cm-s-inner .cm-qualifier { color: rgb(85, 85, 85); }
-.cm-s-inner .cm-builtin { color: rgb(51, 0, 170); }
-.cm-s-inner .cm-bracket { color: rgb(153, 153, 119); }
-.cm-s-inner .cm-tag { color: rgb(17, 119, 0); }
-.cm-s-inner .cm-attribute { color: rgb(0, 0, 204); }
-.cm-s-inner .cm-header, .cm-s-inner.cm-header { color: rgb(0, 0, 255); }
-.cm-s-inner .cm-quote, .cm-s-inner.cm-quote { color: rgb(0, 153, 0); }
-.cm-s-inner .cm-hr, .cm-s-inner.cm-hr { color: rgb(153, 153, 153); }
-.cm-s-inner .cm-link, .cm-s-inner.cm-link { color: rgb(0, 0, 204); }
-.cm-negative { color: rgb(221, 68, 68); }
-.cm-positive { color: rgb(34, 153, 34); }
-.cm-header, .cm-strong { font-weight: 700; }
-.cm-del { text-decoration: line-through; }
-.cm-em { font-style: italic; }
-.cm-link { text-decoration: underline; }
-.cm-error { color: red; }
-.cm-invalidchar { color: red; }
-.cm-constant { color: rgb(38, 139, 210); }
-.cm-defined { color: rgb(181, 137, 0); }
-div.CodeMirror span.CodeMirror-matchingbracket { color: rgb(0, 255, 0); }
-div.CodeMirror span.CodeMirror-nonmatchingbracket { color: rgb(255, 34, 34); }
-.cm-s-inner .CodeMirror-activeline-background { background: inherit; }
-.CodeMirror { position: relative; overflow: hidden; }
-.CodeMirror-scroll { height: 100%; outline: 0px; position: relative; box-sizing: content-box; background: inherit; }
-.CodeMirror-sizer { position: relative; }
-.CodeMirror-gutter-filler, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-vscrollbar { position: absolute; z-index: 6; display: none; outline: 0px; }
-.CodeMirror-vscrollbar { right: 0px; top: 0px; overflow: hidden; }
-.CodeMirror-hscrollbar { bottom: 0px; left: 0px; overflow: auto hidden; }
-.CodeMirror-scrollbar-filler { right: 0px; bottom: 0px; }
-.CodeMirror-gutter-filler { left: 0px; bottom: 0px; }
-.CodeMirror-gutters { position: absolute; left: 0px; top: 0px; padding-bottom: 10px; z-index: 3; overflow-y: hidden; }
-.CodeMirror-gutter { white-space: normal; height: 100%; box-sizing: content-box; padding-bottom: 30px; margin-bottom: -32px; display: inline-block; }
-.CodeMirror-gutter-wrapper { position: absolute; z-index: 4; background: 0px 0px !important; border: none !important; }
-.CodeMirror-gutter-background { position: absolute; top: 0px; bottom: 0px; z-index: 4; }
-.CodeMirror-gutter-elt { position: absolute; cursor: default; z-index: 4; }
-.CodeMirror-lines { cursor: text; }
-.CodeMirror pre { border-radius: 0px; border-width: 0px; background: 0px 0px; font-family: inherit; font-size: inherit; margin: 0px; white-space: pre; overflow-wrap: normal; color: inherit; z-index: 2; position: relative; overflow: visible; }
-.CodeMirror-wrap pre { overflow-wrap: break-word; white-space: pre-wrap; word-break: normal; }
-.CodeMirror-code pre { border-right: 30px solid transparent; width: fit-content; }
-.CodeMirror-wrap .CodeMirror-code pre { border-right: none; width: auto; }
-.CodeMirror-linebackground { position: absolute; inset: 0px; z-index: 0; }
-.CodeMirror-linewidget { position: relative; z-index: 2; overflow: auto; }
-.CodeMirror-wrap .CodeMirror-scroll { overflow-x: hidden; }
-.CodeMirror-measure { position: absolute; width: 100%; height: 0px; overflow: hidden; visibility: hidden; }
-.CodeMirror-measure pre { position: static; }
-.CodeMirror div.CodeMirror-cursor { position: absolute; visibility: hidden; border-right: none; width: 0px; }
-.CodeMirror div.CodeMirror-cursor { visibility: hidden; }
-.CodeMirror-focused div.CodeMirror-cursor { visibility: inherit; }
-.cm-searching { background: rgba(255, 255, 0, 0.4); }
-span.cm-underlined { text-decoration: underline; }
-span.cm-strikethrough { text-decoration: line-through; }
-.cm-tw-syntaxerror { color: rgb(255, 255, 255); background-color: rgb(153, 0, 0); }
-.cm-tw-deleted { text-decoration: line-through; }
-.cm-tw-header5 { font-weight: 700; }
-.cm-tw-listitem:first-child { padding-left: 10px; }
-.cm-tw-box { border-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-color: inherit; border-top-width: 0px !important; }
-.cm-tw-underline { text-decoration: underline; }
-@media print {
-  .CodeMirror div.CodeMirror-cursor { visibility: hidden; }
-}
-
-
 :root {
   --mermaid-theme: night;
 }
@@ -1467,16 +1386,11 @@ footer.ty-footer {
   }
 
 
-</style><title>Emacs-use_daemon</title>
+</style><title>index</title>
 </head>
-<body class='typora-export os-windows typora-export-show-outline typora-export-collapse-outline'><div class='typora-export-content'>
-<div class="typora-export-sidebar"><div class="outline-content"><li class="outline-item-wrapper outline-h1 outline-item-open"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#如何运行-emacs-作为后台服务进程">如何运行 Emacs 作为后台服务进程?</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#ms-windows">MS-Windows</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#配置-emacs">配置 <code>.emacs</code></a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#创建-daemon">创建 daemon</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h4 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#开机自启">开机自启</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#正常启动">正常启动</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#打开-client">打开 client</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h4 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#直接打开">直接打开</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#编辑文件">编辑文件</a></div><ul class="outline-children"></ul></li></ul></li></ul></li></ul></li></div></div><div id='write'  class=''><h1 id='如何运行-emacs-作为后台服务进程'><span>如何运行 Emacs 作为后台服务进程?</span></h1><p><span>(仅考虑 GUI.)</span></p><p><span>Emacs 提供了 daemon-client 模型, 简而言之就像 Steam 那样: 在后台启动一个服务 (Steam 还会在 MS-Windows 的系统托盘中显示自身图标), 每次打开新窗口都是后台的那个进程弹出的.</span>
-<span>好处显而易见, 开机启动一次, 之后就不需要重复启动了.</span></p><h2 id='ms-windows'><span>MS-Windows</span></h2><p><span>以 Emacs 版本 28.2 为例, </span><code>emacs-28.2/bin/runemacs.exe --daemon</code><span> 与 </span><code>emacs-28.2/bin/emacsclientw.exe</code><span> 配合使用.</span>
-<span>假设目录 </span><code>emacs-28.2/</code><span> 位于 </span><code>c:/Users/shynur/bin/</code><span>.</span></p><h3 id='配置-emacs'><span>配置 </span><code>.emacs</code></h3><pre class="md-fences md-end-block md-fences-with-lineno ty-contain-cm modeLoaded" spellcheck="false" lang="lisp"><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang="lisp"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 11px; left: 31px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 27px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: -27px; width: 27px;"></div><div class="CodeMirror-gutter-wrapper CodeMirror-activeline-gutter" style="left: -27px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt CodeMirror-linenumber-show" style="left: 0px; width: 18px;">1</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-bracket">(</span><span class="cm-keyword">setq</span> <span class="cm-variable">server-auth-dir</span> <span class="cm-string">"c:/Users/shynur/emacs-server-auth-dir/"</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -27px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt CodeMirror-linenumber-show" style="left: 0px; width: 18px;">2</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;<span class="cm-variable">server-name</span> &nbsp; &nbsp; <span class="cm-string">"server-name.txt"</span><span class="cm-bracket">)</span></span></pre></div></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 52px;"></div><div class="CodeMirror-gutters" style="height: 52px;"><div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 26px;"></div></div></div></div></pre><p><span>以上述配置为例.</span></p><h3 id='创建-daemon'><span>创建 daemon</span></h3><h4 id='开机自启'><span>开机自启</span></h4><p><span>按 </span><kbd><span>Win-R</span></kbd><span>, 输入 </span><code>shell:startup</code><span> 后回车, 进入了一个目录.</span>
-<span>(用户在此处放置的文件将在登入时自动运行.)</span></p><p><span>在该目录中创建一个指向 </span><code>c:/Users/shynur/bin/emacs-28.2/bin/runemacs.exe</code><span> 的</span><em><span>快捷方式</span></em><span>, 右键选择</span><em><span>属性</span></em><span>, 编辑</span><em><span>目标</span></em><span>, 使之成为 </span><code>c:/Users/shynur/bin/emacs-28.2/bin/runemacs.exe --daemon</code><span>.</span></p><h4 id='正常启动'><span>正常启动</span></h4><p><span>如果你和我在下面提到的配置一致, 那么 client 会在 server 没有运行时自动打开 server, 并自动尝试再次连接至 server.</span></p><h3 id='打开-client'><span>打开 client</span></h3><h4 id='直接打开'><span>直接打开</span></h4><p><span>(例如, 在桌面上双击</span><em><span>记事本</span></em><span>就属于直接打开, 而不编辑文件.)</span></p><p><span>在桌面上创建指向 </span><code>c:/Users/shynur/bin/emacs-28.2/bin/emacsclientw.exe</code><span> 的</span><em><span>快捷方式</span></em><span>, 右键选择</span><em><span>属性</span></em><span>, 编辑</span><em><span>目标</span></em><span>, 使之成为 </span><code>c:/Users/shynur/bin/emacs-28.2/bin/emacsclientw.exe --server-file=c:/Users/shynur/emacs-server-auth-dir/server-name.txt --alternate-editor=&quot;&quot; --create-frame</code><span>.</span></p><h4 id='编辑文件'><span>编辑文件</span></h4><p><span>任选一个文件, </span><em><span>打开方式</span></em><span>选择 </span><code>c:/Users/shynur/bin/emacs-28.2/bin/emacsclientw.exe</code><span>.</span>
-<span>打开之后 (即使失败了) 直接退出.</span></p><p><span>此时 MS-Windows 应该已经在</span><em><span>注册表</span></em><span>中自动建立了 </span><code>计算机\HKEY_CLASSES_ROOT\Applications\emacsclientw.exe\shell\open\command</code><span> 这个目录.</span>
-<span>进入该目录, 看到 </span><code>(默认)</code><span> 这一项, 右键选择</span><em><span>修改</span></em><span>, 修改为 </span><code>C:\Users\shynur\bin\emacs-28.2\bin\emacsclientw.exe --server-file=c:/Users/shynur/emacs-server-auth-dir/server-name.txt --alternate-editor=&quot;&quot; --create-frame -- &quot;%1&quot;</code><span>.</span>
-<span>这里 </span><code>&quot;%1&quot;</code><span> 表示</span><em><span>右键选择使用 </span><code>emacsclientw.exe</code><span> 打开</span></em><span>时要编辑的文件的名字.</span></p><p><span>由于中国大陆政府的规定, 所有在售的商业操作系统 (自然包括 MS-Windows) 必须默认使用 Chinese-GB18030 编码, 所以为了使 </span><code>emacsclientw.exe</code><span> 正确处理 </span><code>&quot;%1&quot;</code><span>, 需要在 </span><code>.emacs</code><span> 中添加:</span></p><pre class="md-fences md-end-block md-fences-with-lineno ty-contain-cm modeLoaded" spellcheck="false" lang="lisp"><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang="lisp"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 11px; left: 31px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 27px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre><div class="CodeMirror-linenumber CodeMirror-gutter-elt"><div>1</div></div></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: -27px; width: 27px;"></div><div class="CodeMirror-gutter-wrapper CodeMirror-activeline-gutter" style="left: -27px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt CodeMirror-linenumber-show" style="left: 0px; width: 18px;">1</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-bracket">(</span><span class="cm-keyword">setq</span> <span class="cm-variable">file-name-coding-system</span> '<span class="cm-variable">chinese-gb18030</span><span class="cm-bracket">)</span></span></pre></div></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 26px;"></div><div class="CodeMirror-gutters" style="height: 26px;"><div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 26px;"></div></div></div></div></pre><!-- Local Variables: -->
+<body class='typora-export os-windows'><div class='typora-export-content'>
+<div id='write'  class=''><blockquote><p><span>下列所有的页面文件中, URL 的引用可能是不正确的!</span>
+<span>(具体地说, 这些文件都基于自身在</span><a href='https://github.com/shynur/.emacs.d'><span>仓库</span></a><span>中的位置, 以相对路径的形式提供 URL.)</span></p></blockquote><p><a href='../Emacs-FAQ.txt'><span>常见问题</span></a></p><p><a href='../MS_Windows-keyboard_remap.txt'><span>修改键盘映射</span></a></p><p><a href='./CONTRIBUTING.html'><span>编码指南</span></a></p><p><a href='./Emacs-regexp.html'><span>学习正则表达式</span></a></p><p><a href='./Emacs-use_daemon.html'><span>使用 Emacs 服务器</span></a></p><p><a href='./INSTALL.html'><span>如何安装?</span></a></p><p><a href='./MANIFEST.html'><span>文件清单</span></a></p><p><a href='./README.html'><span>请读我</span></a></p><!-- Local Variables: -->
 <!-- coding: utf-8-unix -->
 <!-- End: --></div></div>
 

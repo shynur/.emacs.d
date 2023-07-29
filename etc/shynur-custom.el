@@ -6,6 +6,8 @@
 
 (defvar shynur/c-commonlisp-path "d:/Progs/Steel_Bank_Common_Lisp/sbcl.exe")
 
+(defvar shynur/c-email "one.last.kiss@outlook.com")
+
 (defvar shynur/c-filename-coding 'chinese-gb18030)
 
 (defvar shynur/c-os "MS-Windows 11")
@@ -14,6 +16,7 @@
 
 (defvar shynur/c-shell-coding 'chinese-gb18030)
 
+(defvar shynur/c-truename "谢骐")
 
 (provide 'shynur/custom)
 

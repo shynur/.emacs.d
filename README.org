@@ -2,20 +2,25 @@
 
 * Overview
 
-[[https://raw.githubusercontent.com/shynur/shynur/main/Pictures/Emacs/2023-6-17.png]]
+#+ATTR_HTML: :alt 如果你看到了这句话, 说明我没高兴上传 图片, 或者你的网络环境有问题.
+[[https://raw.githubusercontent.com/shynur/shynur/main/Pictures/Emacs/latest.png]]
 
 🥰 这是我的 Emacs 个人配置方案, from scratch.
 
 🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/ (22).
 之后将会使用 [[https://github.com/jwiegley/use-package][=use-package=]] 进行彻底的重构.
 
-(由于 GitHub 对 Org 的支持较弱, 故些许地方渲染效果不佳.
-不过从绝对数量上看, 受 GitHub 支持的 Org 特性已经足够多了; 但是由于 Org 的功能 (及其组合) 实在太多, 从比例上看, 一份正常编写的 Org 文件会有多处难以识别的语法构造.)
+(由于本 Org 文件使用了过多的特性及其组合, 故 GitHub 会在些许地方渲染不佳.)
 
 ** 📖 目录结构
 
 见 [[file:./MANIFEST.md][MANIFEST.md]].
 (仅含具体的配置文件.)
+
+** ✨ Demo
+
+#+ATTR_HTML: :alt 如果你看到了这句话, 说明我没高兴上传 GIF, 或者你的网络环境有问题.
+[[https://raw.githubusercontent.com/shynur/shynur/main/Pictures/Emacs/lastest.png]]
 
 * Prerequisites
 
@@ -42,7 +47,7 @@
 
 ** Packages
 
-为了提高编辑本仓库文件时的舒适度, 建议安装以下 Emacs 插件
+为了提高编辑本仓库的文件时的舒适度, 建议安装以下 Emacs 插件
 (不然 =.dir-locals.el= 中有些功能无法启用):
 
 + ~git-modes~

@@ -49,6 +49,7 @@ Fetch Packages
 
 从各类 ELPA 网站上获取 Emacs packages, 请确保你有正常的网络环境.
 
+.. 可能更好的做法是使用 ``--kill`` 命令行参数, 但目前还不清楚它的实际含义.
 执行如下命令 (你的 Emacs 或许安装在其它位置)::
 
     PS C:\Users\shynur> ./bin/emacs-29.1/bin/runemacs.exe
@@ -65,15 +66,27 @@ Byte-compile Emacs Lisp files
 
 有些配置文件也可以编译 (反正我懒得编译), see `.dir-locals.el <./.dir-locals.el>`_.
 
-动态链接库 (Perhaps Required)
-:::::::::::::::::::::::::::::
+动态链接库 (perhaps Required at some point in the future)
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 在 ``.emacs.d/modules/src/`` 下有名如 ``shynur-*.c`` 的 C 文件, 参见 `modules/src/shynur-hello.c <./modules/src/shynur-hello.c>`_ 中提示的编译指令.
 编译后会在 ``modules/`` 下生成动态链接库, 例如 ``modules/shynur-hello.dll`` (其中的模块函数演示了一个简单的柯里化概念, 可以编译下来玩玩).
 
 
+Requisites
+----------
+
+`README.md <./README.md#prerequisites>`_ 中列出了依赖项目,
+其中, 字体 是必须的.
+
+
 Test
 ----
+
+Customize
+^^^^^^^^^
+
+编辑 ``etc/shynur-custom.el`` 文件进行本地化配置.
 
 Start process
 ^^^^^^^^^^^^^

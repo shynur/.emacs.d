@@ -1,0 +1,162 @@
+<h1 id="overview">Overview</h1>
+<p><img
+src="https://raw.githubusercontent.com/shynur/shynur/main/Pictures/Emacs/latest.png"
+alt="如果你看到了这句话, 说明我没高兴上传 图片, 或者你的网络环境有问题." /></p>
+<p>🥰 这是我的 Emacs 个人配置方案, from scratch.</p>
+<p>🔬 当前正在阅读 <em><a
+href="https://gnu.org/s/emacs/manual/html_node/elisp">GNU Emacs Lisp
+Reference Manual</a></em> (22). 之后将会使用 <a
+href="https://github.com/jwiegley/use-package"><code
+class="verbatim">use-package</code></a> 进行彻底的重构.</p>
+<p>(由于本 Org 文件使用了过多的特性及其组合, 故 GitHub
+会在些许地方渲染不佳.)</p>
+<h2 id="目录结构">📖 目录结构</h2>
+<p>见 <a href="./MANIFEST.md">MANIFEST.md</a>. (仅含具体的配置文件.)</p>
+<h2 id="demo">✨ Demo</h2>
+<p><img
+src="https://raw.githubusercontent.com/shynur/shynur/main/Pictures/Emacs/lastest.png"
+alt="如果你看到了这句话, 说明我没高兴上传 GIF, 或者你的网络环境有问题." /></p>
+<h1 id="prerequisites">Prerequisites</h1>
+<h2 id="字体">字体</h2>
+<ul>
+<li><a href="https://github.com/subframe7536/maple-font">Maple Mono SC
+NF</a>: 显示 中英文.</li>
+<li><a href="https://www.nerdfonts.com/">Symbols Nerd Fonts Mono</a>:
+显示 各种 小图标.</li>
+<li>Segoe UI Symbol, Segoe UI Emoji.</li>
+</ul>
+<h2 id="软件">软件</h2>
+<ul>
+<li><a href="https://releases.llvm.org">clang-format</a>:
+代码格式化工具.</li>
+<li><a href="https://www.smoothscroll.net">SmoothScroll</a>: 开启鼠标
+像素级 滚动的功能. (也可以选其它的类似的工具;
+或者你的鼠标原生支持.)</li>
+<li><a href="https://clangd.llvm.org">clang/clangd</a>: Language
+server.</li>
+<li><a href="https://jmeubank.github.io/tdm-gcc">GCC</a>: 将 <code
+class="verbatim">modules/src/</code> 下的 C 文件 编译成 动态链接库,
+提供给 Emacs 加载. (也可以选其它的 C 编译器.)</li>
+</ul>
+<h2 id="packages">Packages</h2>
+<p>为了提高编辑本仓库的文件时的舒适度, 建议安装以下 Emacs 插件 (不然
+<code class="verbatim">.dir-locals.el</code> 中有些功能无法启用):</p>
+<ul>
+<li><code>git-modes</code></li>
+<li><code>makefile-mode</code></li>
+<li><code>markdown-mode</code></li>
+<li><code>textile-mode</code></li>
+<li><code>yaml-mode</code></li>
+<li><code>yasnippet</code></li>
+</ul>
+<p>安装完之后, 可能还需要分别 <code>require</code> 一下.</p>
+<h1 id="键位">键位</h1>
+<h2 id="键盘输入">键盘输入</h2>
+<p>对调了键盘上的 <em>圆括号</em> (<code class="verbatim">(</code> <code
+class="verbatim">)</code>) 与 <em>方括号</em> (<code
+class="verbatim">[</code> <code class="verbatim">]</code>), 而
+<em>大括号</em> (<code class="verbatim">{</code> <code
+class="verbatim">}</code>) 与 <em>数字</em> (<code
+class="verbatim">9</code> <code class="verbatim">0</code>)
+不受任何影响.</p>
+<h2 id="快捷键">快捷键</h2>
+<ul>
+<li>未换绑任何默认快捷键, 除了那些自带备选方案的 (e.g., 手册中提到 <code
+class="verbatim">C-x C-b</code> 可换绑到 <code>bs-show</code>);</li>
+<li>取消了很多不必要的默认快捷键;</li>
+<li>定义了自用快捷键:
+<ul>
+<li><code class="verbatim">C-c</code> 后接一个 <code
+class="verbatim">&lt;letter&gt;</code> (upper or lower case; <code
+class="verbatim">ASCII</code> or non-<code
+class="verbatim">ASCII</code>).</li>
+<li><code class="verbatim">f5</code>​˜​<code
+class="verbatim">f9</code>.</li>
+</ul></li>
+</ul>
+<h1 id="安装须知">安装须知</h1>
+<h2 id="written-for">Written for</h2>
+<p>Latest release, using <strong>GUI</strong>, run as
+<strong>daemon-clients</strong> on same machine (<a
+href="./docs/Emacs-use_daemon.md">如何运行 Emacs 后台服务?</a>).</p>
+<ul>
+<li>MS-Windows: <code class="verbatim">x86_64-w64-mingw32</code></li>
+</ul>
+<p>考虑到从零开始按照本配置初始化 Emacs 时,
+可能会遇到各种意想不到的问题, 所以可以直接<a
+href="https://github.com/shynur/misc/tree/main/tmp/shynur-emacs-directory/">从这里找到自己需要的目录的打包文件,
+并整个下载下来</a>, 以替换掉原本的 <code
+class="verbatim">~/.emacs.d/</code> 目录.</p>
+<h2 id="install">Install</h2>
+<p>见 <a href="./INSTALL.rst">INSTALL.rst</a>. (仅包含 <span
+class="spurious-link" target="Written for"><em>Written for</em></span>
+中提到的平台, 当然其它平台应该大差不差.)</p>
+<h1 id="待办"><span class="todo TODO">TODO</span> 待办</h1>
+<ul class="task-list">
+<li><label><input type="checkbox" />不应该单纯开启
+<code>global-display-line-numbers-mode</code>, 而是应该给出一个分类机制,
+有需要的 mode 才打开 <code>display-line-numbers-mode</code>. 有的 mode
+(e.g., <code>neotree</code>, <code>calendar</code>,
+<code>vc-annotate-mode</code>) 显示行号反而会占用空间.</label></li>
+<li><label><input type="checkbox" />将任何 non-selected window 且是
+<code>prog-mode</code> 的 buffer 开启全局彩虹括号.
+<code>highlight-parentheses</code> 只会高亮光标附近的括号,
+其余地方还是一尘不变, 这样不太 fancy.</label></li>
+<li><label><input type="checkbox" /><code>VS Code</code> 式
+右侧栏代码浏览缩略图.</label></li>
+<li><label><input type="checkbox" />类似 VS Code <code
+class="verbatim">noctis</code> 的 主题, <code
+class="verbatim">solarized</code> 也不错.</label></li>
+</ul>
+<h2 id="patch">PATCH</h2>
+<ul>
+<li><code>dframe-mouse-click-function</code>: "our".</li>
+<li>(emacs) <code class="verbatim">C-x p d</code>: not root</li>
+<li>(emacs) 28, 49.1.2: customize-group</li>
+<li>(emacs) custom-theme-directory</li>
+<li>(emacs) 28, 49.1.7 Custom Themes: ‘(’加空格.</li>
+</ul>
+<h2 id="bug">BUG</h2>
+<ul>
+<li>company: "clang failed with error 255".</li>
+<li>hexl-mode: 保存文件时会删除一些字符.</li>
+<li><code class="verbatim">M-x</code> 时 未显示
+<code>ignore</code>.</li>
+</ul>
+<h2 id="新增文件流程-05"><span class="todo TODO">TODO</span>
+新增文件流程 [0/5]</h2>
+<ol>
+<li><label><input type="checkbox" /><code
+class="verbatim">New-file-name</code></label>
+<ol>
+<li><label><input type="checkbox" />若为 ELisp 文件, 须在 prop-line 指定
+<code>lexical-binding</code>.</label></li>
+<li><label><input type="checkbox" />在 文件末页指定 coding 为
+utf-8-unix.</label></li>
+</ol></li>
+<li><label><input type="checkbox" /><a href="./.dir-locals.el"><code
+class="verbatim">.dir-locals.el</code></a></label>
+<ol>
+<li><label><input type="checkbox" />若为新目录,
+要创建新的关联键值对.</label></li>
+</ol></li>
+<li><label><input type="checkbox" /><a href="./.gitignore"><code
+class="verbatim">.gitignore</code></a></label></li>
+<li><label><input type="checkbox" /><a href="./MANIFEST.md">📖
+目录结构</a></label></li>
+<li><label><input type="checkbox" /><a href="./GNUmakefile"><code
+class="verbatim">GNUmakefile</code></a></label></li>
+</ol>
+<h1 id="repo-stats">Repo Stats</h1>
+<ul>
+<li><a
+href="https://api.codetabs.com/v1/loc/?github=shynur/.emacs.d&amp;branch=main&amp;ignored=docs/pages/">Languages
+Statistics</a> (排除 <code class="verbatim">docs/pages/</code>
+目录)</li>
+</ul>
+<h1 id="license">License</h1>
+<p>See the <a href="./LICENSE.txt">LICENSE.txt</a> file for license
+rights and limitations (Apache-2.0).</p>
+<hr />
+<p>Copyright <a href="https://github.com/shynur">谢骐</a> &lt;<a
+href="mailto:one.last.kiss@outlook.com">one.last.kiss@outlook.com</a>&gt;.</p>

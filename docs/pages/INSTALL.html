@@ -1,5 +1,6 @@
 <h1 id="installation-guide">Installation Guide</h1>
-<p>假设你的机器上有 名为 <em>shynur</em> 的用户.</p>
+<p>假设你的机器上有 名为 <em>shynur</em> 的用户, 他将 Emacs 安装在
+<code>c:/Users/shynur/bin/</code> 目录下.</p>
 <div class="contents">
 
 </div>
@@ -19,6 +20,12 @@ Emacs Finds Your Init File</a>), 确保能看到
 <p>也可以直接下载我本地编译好的配置, 见 <a
 href="./README.org">README.org</a>. 但是会小概率出现不兼容现象,
 并且我不会及时更新它.</p>
+<h3 id="place-site-wide-libraries">Place site-wide libraries</h3>
+<p>将 <code>site-lisp/</code> 下的所有文件及子目录移动到
+<code>c:/Users/shynur/bin/emacs-VERSION/share/emacs/site-lisp/</code>
+(在 GNU-like 系统上, 是像 <code>/usr/local/share/emacs/site-lisp/</code>
+的目录).</p>
+<p>如果有重复文件, 请自行判断是否要‘替换’或‘跳过’, 总之不影响结果.</p>
 <h2 id="configure">Configure</h2>
 <h3 id="customize">Customize</h3>
 <p>编辑 <code>etc/shynur-custom.el</code> 文件进行本地化配置.
@@ -36,8 +43,8 @@ do I put my init file?</a>):</p>
 <code>C:/Users/shynur/</code>.</p>
 <h3 id="fetch-packages">Fetch Packages</h3>
 <p>从各类 ELPA 网站上获取 Emacs packages, 请确保你有正常的网络环境.</p>
-<p>执行如下命令 (你的 Emacs 或许安装在其它位置):</p>
-<pre><code>PS C:\Users\shynur&gt; ./bin/emacs-29.1/bin/runemacs.exe</code></pre>
+<p>执行如下命令:</p>
+<pre><code>PS C:\Users\shynur&gt; ./bin/emacs-VERSION/bin/runemacs.exe</code></pre>
 <p>等到 Emacs 空闲下来 (自己判断) 后, <strong>关闭</strong> 窗口.</p>
 <p>此时, 应该能看到类似 <code>.data/elpa/</code> 的路径,
 该目录下是编译好的 package.</p>
@@ -59,7 +66,7 @@ href="./modules/src/shynur-hello.c">modules/src/shynur-hello.c</a>
 <h2 id="test">Test</h2>
 <h3 id="start-process">Start process</h3>
 <p>执行如下命令:</p>
-<pre><code>PS C:\Users\shynur&gt; ./bin/emacs-29.1/bin/emacsclientw.exe --server-file=c:/Users/shynur/.emacs.d/.data/server-auth-dir/server-name.txt --alternate-editor=&quot;&quot; --create-frame</code></pre>
+<pre><code>PS C:\Users\shynur&gt; ./bin/emacs-VERSION/bin/emacsclientw.exe --server-file=c:/Users/shynur/.emacs.d/.data/server-auth-dir/server-name.txt --alternate-editor=&quot;&quot; --create-frame</code></pre>
 <p>此时 Emacs 首先在后台创建了一个 daemon (see <a
 href="./docs/Emacs-use_daemon.md">如何运行 Emacs 作为后台服务进程?</a>),
 然后 (耐心点) 会弹出一个窗口, 默认会打开 <code>init.el</code> 文件.</p>

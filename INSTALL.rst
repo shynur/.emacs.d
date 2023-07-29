@@ -27,7 +27,7 @@ From repository
 Out of the box (Optional)
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-也可以直接下载我本地编译好的配置, 见 `README.md <./README.md>`_.
+也可以直接下载我本地编译好的配置, 见 `README.org <./README.org>`_.
 但是会小概率出现不兼容现象, 并且我不会及时更新它.
 
 
@@ -76,7 +76,7 @@ Byte-compile Emacs Lisp files
 Requisites
 ----------
 
-`README.md <./README.md#prerequisites>`_ 中列出了依赖项目,
+`README.org <./README.org#prerequisites>`_ 中列出了依赖项目,
 其中, 字体 是必须的.
 
 

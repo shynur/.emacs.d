@@ -1,5 +1,6 @@
 #! /usr/bin/make -f
 
+
 # [[https://www.gnu.org/prep/standards/html_node/Makefile-Basics.html#Makefile-Basics][Every Makefile should contain this line:]]
 SHELL = /bin/sh
 
@@ -20,7 +21,7 @@ docs:
 	yes | cp --remove-destination --target-directory=docs/pages/          docs/Emacs-FAQ.txt
 	pandoc --from=org      --to=html -o docs/pages/Emacs-regexp.html	  docs/Emacs-regexp.org
 	pandoc --from=markdown --to=html -o docs/pages/Emacs-use_daemon.html  docs/Emacs-use_daemon.md
-	pandoc --from=markdown --to=html -o docs/pages/index.html			  docs/pages/index.md
+
 
 # Local Variables:
 # coding: utf-8-unix

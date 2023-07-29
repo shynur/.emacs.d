@@ -3,8 +3,7 @@
 Installation Guide
 ==================
 
-假设你的机器上有 名为 *shynur* 的用户.
-
+假设你的机器上有 名为 *shynur* 的用户, 他将 Emacs 安装在 ``c:/Users/shynur/bin/`` 目录下.
 
 .. contents::
 
@@ -29,6 +28,14 @@ Out of the box (Optional)
 
 也可以直接下载我本地编译好的配置, 见 `README.org <./README.org>`_.
 但是会小概率出现不兼容现象, 并且我不会及时更新它.
+
+Place site-wide libraries
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+将 ``site-lisp/`` 下的所有文件及子目录移动到 ``c:/Users/shynur/bin/emacs-VERSION/share/emacs/site-lisp/``
+(在 GNU-like 系统上, 是像 ``/usr/local/share/emacs/site-lisp/`` 的目录).
+
+如果有重复文件, 请自行判断是否要‘替换’或‘跳过’, 总之不影响结果.
 
 
 Configure
@@ -66,9 +73,9 @@ Fetch Packages
 从各类 ELPA 网站上获取 Emacs packages, 请确保你有正常的网络环境.
 
 .. 可能更好的做法是使用 ``--kill`` 命令行参数, 但目前还不清楚它的实际含义.
-执行如下命令 (你的 Emacs 或许安装在其它位置)::
+执行如下命令::
 
-    PS C:\Users\shynur> ./bin/emacs-29.1/bin/runemacs.exe
+    PS C:\Users\shynur> ./bin/emacs-VERSION/bin/runemacs.exe
 
 等到 Emacs 空闲下来 (自己判断) 后, **关闭** 窗口.
 
@@ -97,7 +104,7 @@ Start process
 
 执行如下命令::
 
-    PS C:\Users\shynur> ./bin/emacs-29.1/bin/emacsclientw.exe --server-file=c:/Users/shynur/.emacs.d/.data/server-auth-dir/server-name.txt --alternate-editor="" --create-frame
+    PS C:\Users\shynur> ./bin/emacs-VERSION/bin/emacsclientw.exe --server-file=c:/Users/shynur/.emacs.d/.data/server-auth-dir/server-name.txt --alternate-editor="" --create-frame
 
 此时 Emacs 首先在后台创建了一个 daemon (see `如何运行 Emacs 作为后台服务进程? <./docs/Emacs-use_daemon.md>`_),
 然后 (耐心点) 会弹出一个窗口, 默认会打开 ``init.el`` 文件.

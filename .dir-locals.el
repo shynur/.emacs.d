@@ -55,7 +55,13 @@
 
          (delete-trailing-lines . t)
          (require-final-newline . t)
-         (eval . (add-hook 'before-save-hook #'delete-trailing-whitespace))))
+         (eval . (prog1 (add-hook 'before-save-hook 'shynur/run-functions-before-save:~/.emacs.d/*)
+                   (fset 'shynur/run-functions-before-save:~/.emacs.d/*
+                         (lambda ()
+                           (when (file-in-directory-p default-directory user-emacs-directory)
+                             (funcall #'delete-trailing-whitespace)
+                             (save-excursion
+                               (add-file-local-variable 'coding 'utf-8-unix)))))))))
 
  (emacs-lisp-mode . ((eval . (imenu-add-menubar-index))
 

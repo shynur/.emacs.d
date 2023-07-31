@@ -1,0 +1,22 @@
+Q_1: 打开 Emacs 时, 如何设置 默认目录?
+
+A_1: 如果你使用 MS-Windows, 并且在 GUI 下使用 快捷方式 打开 Emacs, 那么就将
+     快捷方式 的“属性”中的“起始位置”设置为你想要的 默认目录.
+     这相当于 working directory.
+
+Q_2: 在 MS-Windows 上双击‘emacs.exe’以期待运行 GUI 的 Emacs, 却总是会弹出
+     命令行提示符窗口 (command prompt window)?
+
+A_2: 这是‘emacs.exe’的正常行为, 方便运行 TUI.
+     如果想要运行 GUI, 应该执行‘runemacs.exe’, 它是对‘emacs.exe’的包装.
+
+     注意, 确保你的快捷方式 (包括 任务栏 快捷方式) 真的指向了‘runemacs.exe’而
+     不是‘emacs.exe’.
+     (虽然我更推荐你使用‘emacsclientw.exe’, 参见
+      <~shynur/.emacs.d/docs/Emacs-use_daemon.md>.)
+
+     参考: <https://git.savannah.gnu.org/cgit/emacs.git/tree/nt/README.W32?h=emacs-29#n90>.
+
+;; Local Variables:
+;; coding: utf-8-unix
+;; End:

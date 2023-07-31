@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2023-07-31 周一 00:24 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Shynur’s Emacs</title>
+<meta name="author" content="谢骐" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Shynur’s Emacs</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org0c6aa65">1. Overview</a>
+<ul>
+<li><a href="#org8f062b5">1.1. 📖 目录结构</a></li>
+<li><a href="#orgb336612">1.2. ✨ Demo</a></li>
+</ul>
+</li>
+<li><a href="#org4532984">2. Prerequisites</a>
+<ul>
+<li><a href="#orgaf02dce">2.1. 字体</a></li>
+<li><a href="#orgacd6774">2.2. 软件</a></li>
+<li><a href="#orga50b8f0">2.3. Packages</a></li>
+</ul>
+</li>
+<li><a href="#org71e5812">3. 键位</a>
+<ul>
+<li><a href="#orgeb73514">3.1. 键盘输入</a></li>
+<li><a href="#org30fe277">3.2. 快捷键</a></li>
+</ul>
+</li>
+<li><a href="#orge6009f2">4. 安装须知</a>
+<ul>
+<li><a href="#org9563b2b">4.1. Written for</a></li>
+<li><a href="#org81f39ef">4.2. Install</a></li>
+</ul>
+</li>
+<li><a href="#orge17eaf0">5. <span class="todo TODO">TODO</span> 待办</a>
+<ul>
+<li><a href="#org85bcf10">5.1. PATCH</a></li>
+<li><a href="#orgd779c48">5.2. BUG</a></li>
+<li><a href="#orgf76dc6b">5.3. <span class="todo TODO">TODO</span> 新增文件流程 <code>[0/5]</code></a></li>
+</ul>
+</li>
+<li><a href="#orgd76bee7">6. Repo Stats</a></li>
+<li><a href="#orgb651a2c">7. License</a></li>
+</ul>
+</div>
+</div>
+<p>
+(由于本 Org 文件使用了过多的特性及其组合, 故 GitHub 会在些许地方渲染不佳.
+请在 <a href="https://shynur.github.io/.emacs.d/pages/README.html">https://shynur.github.io/.emacs.d/pages/README.html</a> 获得最佳阅读体验!)
+</p>
+
+<div id="outline-container-org0c6aa65" class="outline-2">
+<h2 id="org0c6aa65"><span class="section-number-2">1.</span> Overview</h2>
+<div class="outline-text-2" id="text-1">
+
+<div id="org314769f" class="figure">
+<p><img src="https://raw.githubusercontent.com/shynur/shynur/main/Pictures/Emacs/latest.png" alt="如果你看到了这句话, 说明我没高兴上传 图片, 或者你的网络环境有问题." width="900px" />
+</p>
+</div>
+
+<p>
+🥰 这是我的 Emacs 个人配置方案, from scratch.
+</p>
+
+<p>
+🔬 当前正在阅读 <i><a href="https://gnu.org/s/emacs/manual/html_node/elisp">GNU Emacs Lisp Reference Manual</a></i> (22).
+之后将会使用 <a href="https://github.com/jwiegley/use-package"><code>use-package</code></a> 进行彻底的重构.
+</p>
+</div>
+
+<div id="outline-container-org8f062b5" class="outline-3">
+<h3 id="org8f062b5"><span class="section-number-3">1.1.</span> 📖 目录结构</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+见 <a href="./MANIFEST.md">MANIFEST.md</a>.
+(仅含具体的配置文件.)
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb336612" class="outline-3">
+<h3 id="orgb336612"><span class="section-number-3">1.2.</span> ✨ Demo</h3>
+<div class="outline-text-3" id="text-1-2">
+
+<div id="orgfe748f2" class="figure">
+<p><img src="https://raw.githubusercontent.com/shynur/shynur/main/Pictures/Emacs/latest.gif" alt="如果你看到了这句话, 说明我没高兴上传 GIF, 或者你的网络环境有问题." width="400px" />
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4532984" class="outline-2">
+<h2 id="org4532984"><span class="section-number-2">2.</span> Prerequisites</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-orgaf02dce" class="outline-3">
+<h3 id="orgaf02dce"><span class="section-number-3">2.1.</span> 字体</h3>
+<div class="outline-text-3" id="text-2-1">
+<ul class="org-ul">
+<li><a href="https://github.com/subframe7536/maple-font">Maple Mono SC NF</a>:
+显示 中英文.</li>
+<li><a href="https://www.nerdfonts.com/">Symbols Nerd Fonts Mono</a>:
+显示 各种 小图标.</li>
+<li>Segoe UI Symbol, Segoe UI Emoji.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgacd6774" class="outline-3">
+<h3 id="orgacd6774"><span class="section-number-3">2.2.</span> 软件</h3>
+<div class="outline-text-3" id="text-2-2">
+<ul class="org-ul">
+<li><a href="https://releases.llvm.org">clang-format</a>:
+代码格式化工具.</li>
+<li><a href="https://www.smoothscroll.net">SmoothScroll</a>:
+开启鼠标 像素级 滚动的功能.
+(也可以选其它的类似的工具; 或者你的鼠标原生支持.)</li>
+<li><a href="https://clangd.llvm.org">clang/clangd</a>:
+Language server.</li>
+<li><a href="https://jmeubank.github.io/tdm-gcc">GCC</a>:
+将 <code>modules/src/</code> 下的 C 文件 编译成 动态链接库, 提供给 Emacs 加载.
+(也可以选其它的 C 编译器.)</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orga50b8f0" class="outline-3">
+<h3 id="orga50b8f0"><span class="section-number-3">2.3.</span> Packages</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+为了提高编辑本仓库的文件时的舒适度, 建议安装以下 Emacs 插件
+(不然 <code>.dir-locals.el</code> 中有些功能无法启用):
+</p>
+
+<ul class="org-ul">
+<li><code>git-modes</code></li>
+<li><code>makefile-mode</code></li>
+<li><code>markdown-mode</code></li>
+<li><code>textile-mode</code></li>
+<li><code>yaml-mode</code></li>
+<li><code>yasnippet</code></li>
+</ul>
+
+<p>
+如果已经安装了这些 package, 可能还需要在进入本仓库之前分别 <code>require</code> 一下.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org71e5812" class="outline-2">
+<h2 id="org71e5812"><span class="section-number-2">3.</span> 键位</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-orgeb73514" class="outline-3">
+<h3 id="orgeb73514"><span class="section-number-3">3.1.</span> 键盘输入</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+对调了键盘上的 <i>圆括号</i> (<code>(</code> <code>)</code>) 与 <i>方括号</i> (<code>[</code> <code>]</code>), 而 <i>大括号</i> (<code>{</code> <code>}</code>) 与 <i>数字</i> (<code>9</code> <code>0</code>) 不受任何影响.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org30fe277" class="outline-3">
+<h3 id="org30fe277"><span class="section-number-3">3.2.</span> 快捷键</h3>
+<div class="outline-text-3" id="text-3-2">
+<ul class="org-ul">
+<li>未换绑任何默认快捷键, 除了那些自带备选方案的 (e.g., 手册中提到 <code>C-x C-b</code> 可换绑到 <code>bs-show</code>);</li>
+<li>取消了很多不必要的默认快捷键;</li>
+<li>定义了自用快捷键:
+<ul class="org-ul">
+<li><code>C-c</code> 后接一个 <code>&lt;letter&gt;</code> (upper or lower case; <code>ASCII</code> or non-<code>ASCII</code>).</li>
+<li><code>f5</code>​~​<code>f9</code>.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge6009f2" class="outline-2">
+<h2 id="orge6009f2"><span class="section-number-2">4.</span> 安装须知</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-org9563b2b" class="outline-3">
+<h3 id="org9563b2b"><span class="section-number-3">4.1.</span> Written for</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+Latest release, using <b>GUI</b>, run as <b>daemon-clients</b> on same machine (<a href="./docs/Emacs-use_daemon.md">如何运行 Emacs 后台服务?</a>).
+</p>
+
+<ul class="org-ul">
+<li>MS-Windows: <code>x86_64-w64-mingw32</code></li>
+</ul>
+
+<p>
+考虑到新手从零开始按照本配置初始化 Emacs 时, 可能会遇到各种意想不到的问题, 所以可以直接<a href="https://github.com/shynur/misc/tree/main/tmp/shynur-emacs-directory/">从这里找到自己需要的目录的打包文件, 并整个下载下来</a> (可能会用分卷压缩), 以替换掉原本的 <code>~/.emacs.d/</code> 目录.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org81f39ef" class="outline-3">
+<h3 id="org81f39ef"><span class="section-number-3">4.2.</span> Install</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+见 <a href="./INSTALL.rst">INSTALL.rst</a>.
+(仅包含 <a href="#org9563b2b">4.1</a> 中提到的平台, 当然其它平台应该大差不差.)
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge17eaf0" class="outline-2">
+<h2 id="orge17eaf0"><span class="section-number-2">5.</span> <span class="todo TODO">TODO</span> 待办</h2>
+<div class="outline-text-2" id="text-5">
+<ul class="org-ul">
+<li class="off"><code>[&#xa0;]</code> 不应该单纯开启 <code>global-display-line-numbers-mode</code>, 而是应该给出一个分类机制, 有需要的 mode 才打开 <code>display-line-numbers-mode</code>.
+有的 mode (e.g., <code>neotree</code>, <code>calendar</code>, <code>vc-annotate-mode</code>) 显示行号反而会占用空间.</li>
+<li class="off"><code>[&#xa0;]</code> 将任何 non-selected window 且是 <code>prog-mode</code> 的 buffer 开启全局彩虹括号.
+<code>highlight-parentheses</code> 只会高亮光标附近的括号, 其余地方还是一尘不变, 这样不太 fancy.</li>
+<li class="off"><code>[&#xa0;]</code> <code>VS Code</code> 式 右侧栏代码浏览缩略图.</li>
+<li class="off"><code>[&#xa0;]</code> 类似 VS Code <code>noctis</code> 的 主题, <code>solarized</code> 也不错.</li>
+</ul>
+</div>
+
+<div id="outline-container-org85bcf10" class="outline-3">
+<h3 id="org85bcf10"><span class="section-number-3">5.1.</span> PATCH</h3>
+<div class="outline-text-3" id="text-5-1">
+<ul class="org-ul">
+<li><code>dframe-mouse-click-function</code>: "our".</li>
+<li>(emacs) <code>C-x p d</code>: not root</li>
+<li>(emacs) 28, 49.1.2: customize-group</li>
+<li>(emacs) custom-theme-directory</li>
+<li>(emacs) 28, 49.1.7 Custom Themes: ‘(’加空格.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgd779c48" class="outline-3">
+<h3 id="orgd779c48"><span class="section-number-3">5.2.</span> BUG</h3>
+<div class="outline-text-3" id="text-5-2">
+<ul class="org-ul">
+<li>company: "clang failed with error 255".</li>
+<li>hexl-mode: 保存文件时会删除一些字符.</li>
+<li><code>M-x</code> 时 未显示 <code>ignore</code>.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgf76dc6b" class="outline-3">
+<h3 id="orgf76dc6b"><span class="section-number-3">5.3.</span> <span class="todo TODO">TODO</span> 新增文件流程 <code>[0/5]</code></h3>
+<div class="outline-text-3" id="text-5-3">
+<ol class="org-ol">
+<li class="off"><code>[&#xa0;]</code> <code>New-file-name</code>
+<ol class="org-ol">
+<li class="off"><code>[&#xa0;]</code> 若为 ELisp 文件, 须在 prop-line 指定 <code>lexical-binding</code>.</li>
+<li class="off"><code>[&#xa0;]</code> 在 文件末页指定 coding 为 utf-8-unix.</li>
+</ol></li>
+<li class="off"><code>[&#xa0;]</code> <a href="./.dir-locals.el"><code>.dir-locals.el</code></a>
+<ol class="org-ol">
+<li class="off"><code>[&#xa0;]</code> 若为新目录, 要创建新的关联键值对.</li>
+</ol></li>
+<li class="off"><code>[&#xa0;]</code> <a href="./.gitignore"><code>.gitignore</code></a></li>
+<li class="off"><code>[&#xa0;]</code> <a href="./MANIFEST.md">📖 目录结构</a></li>
+<li class="off"><code>[&#xa0;]</code> <a href="./GNUmakefile"><code>GNUmakefile</code></a></li>
+</ol>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd76bee7" class="outline-2">
+<h2 id="orgd76bee7"><span class="section-number-2">6.</span> Repo Stats</h2>
+<div class="outline-text-2" id="text-6">
+<ul class="org-ul">
+<li><a href="https://api.codetabs.com/v1/loc/?github=shynur/.emacs.d&amp;branch=main&amp;ignored=docs/pages/">Languages Statistics</a>
+(排除 <code>docs/pages/</code> 目录)</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgb651a2c" class="outline-2">
+<h2 id="orgb651a2c"><span class="section-number-2">7.</span> License</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+See the <a href="./LICENSE.txt">LICENSE.txt</a> file for license rights and limitations (Apache-2.0).
+</p>
+
+<hr />
+
+<p>
+Copyright &copy; 2023  <a href="https://github.com/shynur">谢骐</a> &lt;<a href="mailto:one.last.kiss@outlook.com">one.last.kiss@outlook.com</a>&gt;.
+I own the copyright to <a href="https://github.com/shynur/.emacs.d">this entire repository</a>;
+unless explicitly stated, all files here are included and licensed the same as <a href="./README.html">this file</a>.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: 谢骐</p>
+<p class="date">Created: 2023-07-31 周一 00:24</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

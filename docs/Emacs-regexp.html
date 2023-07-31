@@ -1,0 +1,618 @@
+<h1 id="syntax">Syntax</h1>
+<p>字符分为两类. 一类是 <em>ordinary</em> 的; 除此以外皆为 special
+construct:</p>
+<ul>
+<li><span class="spurious-link" target="‘​=.=​’"><em>‘​<code
+class="verbatim">.</code>​’</em></span>, <span class="spurious-link"
+target="‘​=*=​’"><em>‘​<code class="verbatim">*</code>​’</em></span>, <span
+class="spurious-link" target="‘​=+=​’, ‘​=?=​’"><em>‘​<code
+class="verbatim">+</code>​’</em></span>, <span class="spurious-link"
+target="‘​=+=​’, ‘​=?=​’"><em>‘​<code class="verbatim">?</code>​’</em></span>,
+[[‘​<code class="verbatim">\[...\]</code>​’][‘​<code
+class="verbatim">[</code>​’]], <span class="spurious-link"
+target="‘​=^=​’"><em>‘​<code class="verbatim">^</code>​’</em></span>, <span
+class="spurious-link" target="‘​=$=​’"><em>‘​<code
+class="verbatim">$</code>​’</em></span>, <span class="spurious-link"
+target="‘​=\=​’"><em>‘​<code class="verbatim">\</code>​’</em></span>;<a
+href="#fn1" class="footnote-ref" id="fnref1"
+role="doc-noteref"><sup>1</sup></a></li>
+<li>[[‘​<code class="verbatim">\[...\]</code>​’][‘​<code
+class="verbatim">]</code>​’]], [[‘​<code
+class="verbatim">\[...\]</code>​’][‘​<code class="verbatim">-</code>​’]],
+<span class="spurious-link" target="Character Classes"><em>‘​<code
+class="verbatim">[:</code>​’</em></span>&amp;[[Character Classes][‘​<code
+class="verbatim">:]</code>​’]] 有时特殊.</li>
+<li>跟在 <span class="spurious-link" target="‘​=\=​’"><em>‘​<code
+class="verbatim">\</code>​’</em></span> 后的字符.</li>
+</ul>
+<h2 id="special-characters">Special Characters</h2>
+<h3 id="section">‘​<code class="verbatim">.</code>​’ <span class="tag"
+data-tag-name="construct"><span
+class="smallcaps">construct</span></span></h3>
+<p>匹配任何字符, <strong>除了</strong> newline.</p>
+<h3 id="section-1">‘​<code class="verbatim">*</code>​’ <span class="tag"
+data-tag-name="postfix_operator"><span
+class="smallcaps">postfix_operator</span></span></h3>
+<p><em>尽可能多地</em> (0˜∞) 重复前一个 <em>最小的</em> regexp.</p>
+<p>机制: 这个 matcher 先尽量多地重复前一个表达式, 当后续 regexp
+匹配失败后再回溯.</p>
+<h3 id="section-2">‘​<code class="verbatim">+</code>​’, ‘​<code
+class="verbatim">?</code>​’ <span class="tag"
+data-tag-name="postfix_operator"><span
+class="smallcaps">postfix_operator</span></span></h3>
+<p>类似于 <span class="spurious-link" target="‘​=*=​’"><em>‘​<code
+class="verbatim">*</code>​’</em></span>, 但 ‘​<code
+class="verbatim">+</code>​’ <em>至少</em> 匹配一次, ‘​<code
+class="verbatim">?</code>​’ <em>至多</em> 匹配一次.</p>
+<h3 id="section-3">‘​<code class="verbatim">*?</code>​’, ‘​<code
+class="verbatim">+?</code>​’, ‘​<code class="verbatim">??</code>​’ <span
+class="tag" data-tag-name="postfix_operator"><span
+class="smallcaps">postfix_operator</span></span></h3>
+<p>分别是 <span class="spurious-link" target="‘​=*=​’"><em>‘​<code
+class="verbatim">*</code>​’</em></span>, <span class="spurious-link"
+target="‘​=+=​’, ‘​=?=​’"><em>‘​<code class="verbatim">+</code>​’</em></span>,
+<span class="spurious-link" target="‘​=+=​’, ‘​=?=​’"><em>‘​<code
+class="verbatim">?</code>​’</em></span> 的 <em>non-greedy</em> 变体. 它们
+<em>尽可能少地</em> 重复.</p>
+<h3 id="section-4">‘​<code class="verbatim">[...]</code>​’ <span
+class="tag" data-tag-name="character_alternative"><span
+class="smallcaps">character_alternative</span></span></h3>
+<p>最简单地用例: 匹配被方括号包围的字符; ‘​<code
+class="verbatim">[^...]</code>​’ 匹配没有被包围的字符.</p>
+<p>可以用 ‘​<code class="verbatim">-</code>​’ 构造一个 range, e.g., <code
+class="verbatim">[a-z.]</code> 匹配 任何小写字母 或 句点.<br />
+下界比上界大的 range 实际上是空的, 它不代表任何字符. 因此, <code
+class="verbatim">[z-a]</code><a href="#fn2" class="footnote-ref"
+id="fnref2" role="doc-noteref"><sup>2</sup></a> 总是匹配失败, 而 <code
+class="verbatim">[^z-a]</code> 总是匹配成功 (甚至包括 newline,
+实际上这是 ‘​<code class="verbatim">[^...]</code>​’ 的 feature, 也是 ELisp
+与 <code>grep</code> 的不同之处).</p>
+<p>可以用 [[Character Classes][‘​<code class="verbatim">[:...:]</code>​’]]
+构造一个 class<a href="#fn3" class="footnote-ref" id="fnref3"
+role="doc-noteref"><sup>3</sup></a>, e.g., <code
+class="verbatim">[[:lower:][:digit:]]</code> 匹配 任何小写字母 或
+任何十进制数字.<br />
+N.b., class 不应该作为 range 的边界.</p>
+<p>在 ‘​<code class="verbatim">[...]</code>​’ 中, 只有如下字符是 special
+的<a href="#fn4" class="footnote-ref" id="fnref4"
+role="doc-noteref"><sup>4</sup></a>:</p>
+<ul>
+<li>‘​<code class="verbatim">]</code>​’<br />
+为了包含 ‘​<code class="verbatim">]</code>​’ 以匹配这个字符,
+将其写在最前端: <code class="verbatim">[]123]</code>.</li>
+<li>‘​<code class="verbatim">^</code>​’<br />
+仅当它是第一个字符时是 special 的, 此时, 它的后一个字符被看作是整个
+‘​<code class="verbatim">[^...]</code>​’ 的最前端.<br />
+为了包含它, 将其放在除了最前端以外的任何位置: <code
+class="verbatim">[12^ab]</code>.</li>
+<li>‘​<code class="verbatim">-</code>​’<br />
+为了包含它, 将其写在尾端: <code class="verbatim">[123-]</code>.</li>
+</ul>
+<p>因此, <code class="verbatim">[]^-]</code> 匹配以上三个字符.</p>
+<h3 id="section-5">‘​<code class="verbatim">^</code>​’ <span class="tag"
+data-tag-name="construct"><span
+class="smallcaps">construct</span></span> <span class="tag"
+data-tag-name="matches_empty_string"><span
+class="smallcaps">matches_empty_string</span></span></h3>
+<p>匹配 string 的 <strong>行首</strong> (或 buffer<a href="#fn5"
+class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>
+中可访问部分的起始端).</p>
+<p>为了向后兼容 (historical compatibility), ‘​<code
+class="verbatim">^</code>​’ 只能用在:</p>
+<ul>
+<li>Regexp 的开头.</li>
+<li>接在 <span class="spurious-link" target="‘​=\(...\)=​’"><em>‘​<code
+class="verbatim">\(</code>​’</em></span> 或 <span class="spurious-link"
+target="‘​=\(?:...\)=​’, ‘​=\(?=​/=num=/​=:...\)=​’"><em>‘​<code
+class="verbatim">\(?:</code>​’</em></span> 后面.</li>
+<li>接在 <span class="spurious-link" target="‘​=\|=​’"><em>‘​<code
+class="verbatim">\|</code>​’</em></span> 后面.</li>
+</ul>
+<h3 id="section-6">‘​<code class="verbatim">$</code>​’ <span class="tag"
+data-tag-name="construct"><span
+class="smallcaps">construct</span></span> <span class="tag"
+data-tag-name="matches_empty_string"><span
+class="smallcaps">matches_empty_string</span></span></h3>
+<p>类似于 <span class="spurious-link" target="‘​=^=​’"><em>‘​<code
+class="verbatim">^</code>​’</em></span>, 但是是用来匹配
+<strong>行尾</strong>.</p>
+<p>为了向后兼容, 只能用在:</p>
+<ul>
+<li>Regexp 的末尾.</li>
+<li>接在 <span class="spurious-link" target="‘​=\(...\)=​’"><em>‘​<code
+class="verbatim">\)</code>​’</em></span> 后面.</li>
+<li>接在 <span class="spurious-link" target="‘​=\|=​’"><em>‘​<code
+class="verbatim">\|</code>​’</em></span> 后面.</li>
+</ul>
+<h3 id="section-7">‘​<code class="verbatim">\</code>​’ <span class="tag"
+data-tag-name="construct"><span
+class="smallcaps">construct</span></span></h3>
+<p>有两个功能:</p>
+<ul>
+<li>转义 <span class="spurious-link"
+target="Special Characters"><em>special 字符</em></span>.</li>
+<li>引入<span class="spurious-link"
+target="Backslash Constructs"><em>额外的 special
+constructs</em></span>.</li>
+</ul>
+<h2 id="character-classes">Character Classes</h2>
+<p>Character classes 被用在 [[‘​<code
+class="verbatim">\[...\]</code>​’][‘​<code
+class="verbatim">[...]</code>​’]] 中.</p>
+<h3 id="ascii-nonascii">‘​<code class="verbatim">[:ascii:]</code>​’,
+‘​<code class="verbatim">[:nonascii:]</code>​’</h3>
+<p>前者匹配任何 ASCII 字符<a href="#fn6" class="footnote-ref"
+id="fnref6" role="doc-noteref"><sup>6</sup></a>; 后者相当于 <code
+class="verbatim">[^[:ascii:]]</code>.</p>
+<h3 id="alnum">‘​<code class="verbatim">[:alnum:]</code>​’</h3>
+<p>匹配 任何字母 或 十进制数字.</p>
+<p>若 multibyte (多字节) 字符的 Unicode ‘general-category’<a href="#fn7"
+class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>
+property (see <a href="info:elisp#Character Properties">Character
+Properties</a>) 指示该字符是字母 (alphabetic character),
+那么也会被匹配.</p>
+<h3 id="alpha">‘​<code class="verbatim">[:alpha:]</code>​’</h3>
+<p>类似于 [[‘​<code class="verbatim">\[:alnum:\]</code>​’][‘​<code
+class="verbatim">[:alnum:]</code>​’]], 但只匹配字母.</p>
+<h3 id="blank">‘​<code class="verbatim">[:blank:]</code>​’</h3>
+<p>匹配水平的空白字符 (horizontal whitespace<a href="#fn8"
+class="footnote-ref" id="fnref8"
+role="doc-noteref"><sup>8</sup></a>).</p>
+<p>具体地, 它匹配:</p>
+<ul>
+<li>空格, tab.</li>
+<li>那些 其 Unicode ‘general-category’<a href="#fn9"
+class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>
+property (see <a href="info:elisp#Character Properties">Character
+Properties</a>) 指示其为 spacing separator 的字符.</li>
+</ul>
+<h3 id="cntrl">‘​<code class="verbatim">[:cntrl:]</code>​’</h3>
+<p>匹配字符 whose code is in the range 0~31.</p>
+<h3 id="digit">‘​<code class="verbatim">[:digit:]</code>​’</h3>
+<p>匹配数字 <code class="verbatim">0</code> 到 <code
+class="verbatim">9</code>.</p>
+<h3 id="graph">‘​<code class="verbatim">[:graph:]</code>​’</h3>
+<p>匹配图形化字符, IOW, everything <strong>except</strong>:</p>
+<ul>
+<li>[[‘​<code class="verbatim">\[:space:\]</code>​’][whitespace]].</li>
+<li>ASCII and non-ASCII control characters.</li>
+<li>surrogates<a href="#fn10" class="footnote-ref" id="fnref10"
+role="doc-noteref"><sup>10</sup></a>.</li>
+<li>没有被 Unicode 分配的码点, 正如 Unicode ‘general-category’<a
+href="#fn11" class="footnote-ref" id="fnref11"
+role="doc-noteref"><sup>11</sup></a> property (see <a
+href="info:elisp#Character Properties">Character Properties</a>)
+所指示的那样.</li>
+</ul>
+<h3 id="lower-upper">‘​<code class="verbatim">[:lower:]</code>​’, ‘​<code
+class="verbatim">[:upper:]</code>​’</h3>
+<p>前者匹配小写字母[fn:Case-Table:As determined by the current case
+table (see <a href="info:elisp#The Case Table">The Case Table</a>).<a
+href="#fn12" class="footnote-ref" id="fnref12"
+role="doc-noteref"><sup>12</sup></a>]; 后者匹配大写字母.</p>
+<h3 id="multibyte-unibyte">‘​<code
+class="verbatim">[:multibyte:]</code>​’, ‘​<code
+class="verbatim">[:unibyte:]</code>​’</h3>
+<p>分别匹配 multibyte (多字节) 和 unibyte (单字节) 字符 (see <a
+href="info:elisp#Text Representations">Text Representations</a>).</p>
+<h3 id="print">‘​<code class="verbatim">[:print:]</code>​’</h3>
+<p>匹配可打印字符. 相当于 <code class="verbatim">[</code>​[[‘​<code
+class="verbatim">\[:space:\]</code>​’][=[:space:]=]][[‘​<code
+class="verbatim">\[:graph:\]</code>​’][=[:graph:]=]]​<code
+class="verbatim">]</code>.</p>
+<h3 id="punct">‘​<code class="verbatim">[:punct:]</code>​’</h3>
+<p>匹配标点符号. (At present, for multibyte characters, it matches
+anything that has non-<span class="spurious-link"
+target="‘​=\w=​’, ‘​=\W=​’"><em>word syntax</em></span>.<a href="#fn13"
+class="footnote-ref" id="fnref13"
+role="doc-noteref"><sup>13</sup></a>)</p>
+<h3 id="space">‘​<code class="verbatim">[:space:]</code>​’</h3>
+<p>匹配<span class="spurious-link"
+target="‘​=\s=​/=code=/​’, ‘​=\S=​/=code=/​’"><em>符合 whitespace syntax
+的字符</em></span> (see <a
+href="info:elisp#Table of Syntax Classes">Table of Syntax Classes</a>).
+IOW, 等价于 <code class="verbatim">\s-</code>.</p>
+<h3 id="word">‘​<code class="verbatim">[:word:]</code>​’</h3>
+<p>匹配<span class="spurious-link"
+target="‘​=\s=​/=code=/​’, ‘​=\S=​/=code=/​’"><em>符合 word syntax
+的字符</em></span> (see <a
+href="info:elisp#Table of Syntax Classes">Table of Syntax Classes</a>).
+IOW, 等价于 <code class="verbatim">\sw</code>.</p>
+<h3 id="xdigit">‘​<code class="verbatim">[:xdigit:]</code>​’</h3>
+<p>匹配 16 进制数字. 相当于 <code class="verbatim">[</code>​[[‘​<code
+class="verbatim">\[:digit:\]</code>​’]<a href=":digit:">:digit:</a>]​<code
+class="verbatim">A-Fa-f]</code>.</p>
+<h2 id="backslash-constructs">Backslash Constructs</h2>
+<p>大部分情况下, ‘​<code class="verbatim">\</code>​’
+后接的字符将精确匹配该字符自身. 然而 例外是: 一些特定的序列, 它们以
+<span class="spurious-link" target="‘​=\=​’"><em>‘​<code
+class="verbatim">\</code>​’</em></span> 打头, 有特殊的含义.</p>
+<h3 id="section-8">‘​<code class="verbatim">\|</code>​’</h3>
+<p>逻辑或.</p>
+<p>‘​<code class="verbatim">\|</code>​’ 使用尽可能大的 regexp, e.g., <code
+class="verbatim">ab\|12</code> 匹配 <u><code class="verbatim">ab</code>
+或 <code class="verbatim">12</code></u> 而不是 <u><code
+class="verbatim">ab2</code> 或 <code
+class="verbatim">a12</code></u>.<br />
+可以用 <span class="spurious-link" target="‘​=\(...\)=​’"><em>‘​<code
+class="verbatim">\(...\)</code>​’</em></span> 限制 ‘​<code
+class="verbatim">\|</code>​’ 的作用范围.</p>
+<h3 id="m">‘​<code class="verbatim">\{</code>​<em><code
+class="verbatim">m</code></em>​<code class="verbatim">\}</code>​’</h3>
+<p>类似于 <span class="spurious-link" target="‘​=*=​’"><em>‘​<code
+class="verbatim">*</code>​’</em></span>, 但 <em>精确</em> 匹配 <em>m</em>
+次.</p>
+<h3 id="mn">‘​<code class="verbatim">\{</code>​<em><code
+class="verbatim">m</code></em>​,​<em><code
+class="verbatim">n</code></em>​<code class="verbatim">\}</code>​’</h3>
+<p>类似于 <span class="spurious-link" target="‘​=*=​’"><em>‘​<code
+class="verbatim">*</code>​’</em></span>, 但匹配 <em>m</em>​~​<em>n</em>
+次.</p>
+<p><em>m</em> 缺省为 0; 省略 <em>n</em> 意为 ∞.</p>
+<h3 id="section-9">‘​<code class="verbatim">\(...\)</code>​’ <span
+class="tag" data-tag-name="group"><span
+class="smallcaps">group</span></span></h3>
+<p>有三个功能:</p>
+<ul>
+<li>限制 <span class="spurious-link" target="‘​=\|=​’"><em>‘​<code
+class="verbatim">\|</code>​’</em></span> 的范围.<br />
+E.g., <code class="verbatim">a\(1\|2\)b</code> 匹配 <u><code
+class="verbatim">a1b</code> 或 <code class="verbatim">a2b</code></u>
+而不是 <u><code class="verbatim">a1</code> 或 <code
+class="verbatim">2b</code></u>.</li>
+<li>包裹一个复合的表达式, 以使其作为整体附上 postfix operator.<br />
+E.g., <code class="verbatim">\(1\|2\)\{2\}</code> 匹配 <u><code
+class="verbatim">11</code> 或 <code class="verbatim">12</code> 或 <code
+class="verbatim">21</code> 或 <code class="verbatim">22</code></u>.</li>
+<li>标记相应的被匹配的 substring, 为其分配一个编号, 以供将来用 <span
+class="spurious-link" target="‘​=\=​/=digit=/​’"><em>‘​<code
+class="verbatim">\</code>​<em><code
+class="verbatim">digit</code></em>​’</em></span> 引用 (reference).</li>
+</ul>
+<h3 id="num...">‘​<code class="verbatim">\(?:...\)</code>​’, ‘​<code
+class="verbatim">\(?</code>​<em><code
+class="verbatim">num</code></em>​<code class="verbatim">:...\)</code>​’
+<span class="tag" data-tag-name="group"><span
+class="smallcaps">group</span></span></h3>
+<p>前者被称为 <em>shy group</em>, 又名 <em>non-capturing</em> 或
+<em>unnumbered group</em>.<br />
+类似于 <span class="spurious-link" target="‘​=\(...\)=​’"><em>‘​<code
+class="verbatim">\(...\)</code>​’</em></span>, 但不标记被匹配的
+substring, 因此无法被 <span class="spurious-link"
+target="‘​=\=​/=digit=/​’"><em>‘​<code class="verbatim">\</code>​<em><code
+class="verbatim">digit</code></em>​’</em></span> 引用 (refer back).</p>
+<p>后者被称为 <em>explicitly numbered group</em>.<br />
+显式地给被匹配的 substring 分配的一个编号.</p>
+<h3 id="digit-1">‘​<code class="verbatim">\</code>​<em><code
+class="verbatim">digit</code></em>​’</h3>
+<ol>
+<li><p><em><code class="verbatim">digit</code></em> 是如何分配的?</p>
+<p>Regexp 中的 <span class="spurious-link"
+target="‘​=\(...\)=​’"><em>‘​<code
+class="verbatim">\(...\)</code>​’</em></span> 会按出现的顺序 (只看顺序,
+所以嵌套的 <span class="spurious-link" target="‘​=\(...\)=​’"><em>‘​<code
+class="verbatim">\(...\)</code>​’</em></span> 能被识别),
+被隐式地分配一个编号 (使用序数词, i.e., 从 1 开始);<br />
+若有必要, <span class="spurious-link"
+target="‘​=\(?:...\)=​’, ‘​=\(?=​/=num=/​=:...\)=​’"><em>‘​<code
+class="verbatim">\(?</code>​<em><code
+class="verbatim">num</code></em>​<code
+class="verbatim">:...\)</code>​’</em></span> 会覆盖已经存在的编号
+<em><code class="verbatim">num</code></em>;<br />
+每次被隐式分配的编号, 会比先前已经分配的最大编号大 1.</p>
+<p>如果类似 <span class="spurious-link" target="‘​=\(...\)=​’"><em>‘​<code
+class="verbatim">\(...\)</code>​’</em></span> 这样的结构被重复了多次
+(e.g., <code class="verbatim">\(a\|b\)+</code>), 则仅为最后一次匹配的
+substring 分配编号.</p>
+<p>N.b., 编号只分配到个位数, 分完即止. 当然你可以用 <span
+class="spurious-link"
+target="‘​=\(?:...\)=​’, ‘​=\(?=​/=num=/​=:...\)=​’"><em>‘​<code
+class="verbatim">\(?</code>​<em><code
+class="verbatim">num</code></em>​<code
+class="verbatim">:...\)</code>​’</em></span> 显式地覆盖.</p></li>
+<li><p>如何引用先前已经匹配的 substring?</p>
+<p>例如, <code class="verbatim">\(.+\)\1</code> 匹配同一行<a
+href="#fn14" class="footnote-ref" id="fnref14"
+role="doc-noteref"><sup>14</sup></a>中前半段与后半段一致的非空
+string.</p>
+<p>若 <em><code class="verbatim">digit</code></em> 没有被分配, 则 <code
+class="verbatim">\</code>​<em><code class="verbatim">digit</code></em>
+永不匹配.<br />
+例如 <code class="verbatim">\(one\(two\)\|three\)\2</code> 永远不会匹配
+<code class="verbatim">three</code>, 因为当尝试匹配 <code
+class="verbatim">three</code> 时, 表达式中已经没有剩余的 <span
+class="spurious-link" target="‘​=\(...\)=​’"><em>‘​<code
+class="verbatim">\(...\)</code>​’</em></span> 了, 则代表永不匹配的 <code
+class="verbatim">\2</code> 会直接导致匹配失败:</p>
+<div class="sourceCode" id="cb1" data-org-language="emacs-lisp"><pre
+class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>(string-match-p <span class="st">&quot;</span><span class="sc">\\</span><span class="st">(one</span><span class="sc">\\</span><span class="st">(two</span><span class="sc">\\</span><span class="st">)</span><span class="sc">\\</span><span class="st">|three</span><span class="sc">\\</span><span class="st">)</span><span class="sc">\\</span><span class="st">2&quot;</span> <span class="st">&quot;three&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; =&gt; nil</span></span></code></pre></div>
+<p>但该表达式可以匹配 <code class="verbatim">onetwotwo</code>:</p>
+<div class="sourceCode" id="cb2" data-org-language="emacs-lisp"><pre
+class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(string-match-p <span class="st">&quot;</span><span class="sc">\\</span><span class="st">(one</span><span class="sc">\\</span><span class="st">(two</span><span class="sc">\\</span><span class="st">)</span><span class="sc">\\</span><span class="st">|three</span><span class="sc">\\</span><span class="st">)</span><span class="sc">\\</span><span class="st">2&quot;</span> <span class="st">&quot;onetwotwo&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; =&gt; 0</span></span></code></pre></div></li>
+</ol>
+<h3 id="w-w">‘​<code class="verbatim">\w</code>​’, ‘​<code
+class="verbatim">\W</code>​’</h3>
+<p>前者匹配 [[‘​<code
+class="verbatim">\[:word:\]</code>​’][word-constituent (位于单词中的)
+字符]]. (The editor syntax table determines which characters these are.
+See <a href="info:elisp#Syntax Tables">Syntax Tables</a>.)<a
+href="#fn15" class="footnote-ref" id="fnref15"
+role="doc-noteref"><sup>15</sup></a></p>
+<p>后者是前者的补集.</p>
+<h3 id="scode-scode">‘​<code class="verbatim">\s</code>​<em><code
+class="verbatim">code</code></em>​’, ‘​<code
+class="verbatim">\S</code>​<em><code
+class="verbatim">code</code></em>​’</h3>
+<p>前者匹配符合 <em><code class="verbatim">code</code></em> syntax
+的字符 (see <a href="info:elisp#Table of Syntax Classes">Table of Syntax
+Classes</a>).<a href="#fn16" class="footnote-ref" id="fnref16"
+role="doc-noteref"><sup>16</sup></a><br />
+因此, <em><code class="verbatim">code</code></em> 处填写</p>
+<ul>
+<li>‘​<code class="verbatim">w</code>​’ 以匹配 <span class="spurious-link"
+target="‘​=\w=​’, ‘​=\W=​’"><em>word constituent</em></span>. 等价于
+[[‘​<code class="verbatim">\[:word:\]</code>​’][=:word:=]].</li>
+<li>‘​<code class="verbatim">-</code>​’ (或 一个空格) 以匹配 whitespace.
+等价于 [[‘​<code class="verbatim">\[:space:\]</code>​’][=:space:=]].</li>
+<li>‘​<code class="verbatim">(</code>​’ 以匹配 open parenthesis.</li>
+<li>etc.</li>
+</ul>
+<p>后者是前者的补集.</p>
+<h3 id="cc-cc">‘​<code class="verbatim">\c</code>​<em><code
+class="verbatim">c</code></em>​’, ‘​<code
+class="verbatim">\C</code>​<em><code class="verbatim">c</code></em>​’</h3>
+<p>前者匹配 whose category is <em><code class="verbatim">c</code></em>
+的字符 (see <a href="info:elisp#Categories">Categories</a>).<a
+href="#fn17" class="footnote-ref" id="fnref17"
+role="doc-noteref"><sup>17</sup></a><br />
+因此, <em><code class="verbatim">c</code></em> 处填写</p>
+<ul>
+<li>‘​<code class="verbatim">c</code>​’ 以匹配 汉字.</li>
+<li>‘​<code class="verbatim">g</code>​’ 以匹配 希腊字母.</li>
+<li>etc.</li>
+</ul>
+<p>后者是前者的补集.</p>
+<h3 id="section-10">‘​<code class="verbatim">\`</code>​’, ‘​<code
+class="verbatim">\'</code>​’ <span class="tag"
+data-tag-name="matches_empty_string"><span
+class="smallcaps">matches_empty_string</span></span></h3>
+<p>分别匹配 string 或 buffer<a href="#fn18" class="footnote-ref"
+id="fnref18" role="doc-noteref"><sup>18</sup></a> 的
+<strong>开头</strong> 和 <strong>结尾</strong>.</p>
+<h3 id="section-11">‘​<code class="verbatim">\=</code>​’ <span class="tag"
+data-tag-name="matches_empty_string"><span
+class="smallcaps">matches_empty_string</span></span></h3>
+<p>匹配 point.<a href="#fn19" class="footnote-ref" id="fnref19"
+role="doc-noteref"><sup>19</sup></a> (This construct is not defined when
+matching against a string.)</p>
+<h3 id="b-b">‘​<code class="verbatim">\b</code>​’, ‘​<code
+class="verbatim">\B</code>​’ <span class="tag"
+data-tag-name="matches_empty_string"><span
+class="smallcaps">matches_empty_string</span></span></h3>
+<p>前者匹配 单词的边界处 或 buffer<a href="#fn20" class="footnote-ref"
+id="fnref20" role="doc-noteref"><sup>20</sup></a> 的首尾;<br />
+后者则相反.</p>
+<h3 id="section-12">‘​<code class="verbatim">\&lt;</code>​’, ‘​<code
+class="verbatim">\&gt;</code>​’ <span class="tag"
+data-tag-name="matches_empty_string"><span
+class="smallcaps">matches_empty_string</span></span></h3>
+<p>分别匹配 单词 的 起始端 和 结束端.</p>
+<h3 id="section-13">‘​<code class="verbatim">\_&lt;</code>​’, ‘​<code
+class="verbatim">\_&gt;</code>​’ <span class="tag"
+data-tag-name="matches_empty_string"><span
+class="smallcaps">matches_empty_string</span></span></h3>
+<p>分别匹配 symbol 的 起始端 和 结束端. (A symbol is a sequence of one
+or more word or symbol-constituent characters.)</p>
+<h1 id="一个复杂的例子">一个复杂的例子</h1>
+<p>如下是 Emacs 曾经用来匹配 句尾 (可能尾随 whitespace) 的 regexp:</p>
+<pre class="example"><code>[.?!][]&#39;&quot;)}]*\($\| $\|Tab\|  \)[ TabNewline]*
+</code></pre>
+<p>其中, 空白处指代空格, <code class="verbatim">Tab</code> 指代 tab 字符
+<code class="verbatim">\t</code>, <code class="verbatim">Newline</code>
+指代 newline 字符 <code class="verbatim">\n</code>.</p>
+<p>这个例子可以用 [[~rx~<span
+class="math display"><em>f</em><em>n</em> : <em>E</em><em>m</em><em>a</em><em>c</em><em>s</em></span>:
+结构化 regexp 标记法][~rx~]] 标记法编写:</p>
+<div class="sourceCode" id="cb4" data-org-language="emacs-lisp"><pre
+class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>(rx (any <span class="st">&quot;.?!&quot;</span>)                    <span class="co">; [.?!]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    (zero-or-more (any <span class="st">&quot;]&#39;</span><span class="sc">\&quot;</span><span class="st">)}&quot;</span>))  <span class="co">; []&#39;&quot;)}]*</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">or</span> line-end                   <span class="co">; \($</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        (seq <span class="st">&quot; &quot;</span> line-end)         <span class="co">;    \| $</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>                       <span class="co">;        \|Tab</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;  &quot;</span>)                      <span class="co">;             \|  \)</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    (zero-or-more (any <span class="st">&quot; </span><span class="sc">\t\n</span><span class="st">&quot;</span>)))  <span class="co">; [ TabNewline]*</span></span></code></pre></div>
+<h1 id="rx-结构化-regexp-标记法"><code>rx</code><a href="#fn21"
+class="footnote-ref" id="fnref21" role="doc-noteref"><sup>21</sup></a>:
+结构化 regexp 标记法</h1>
+<p>由于 <code>rx</code> 基于 S-表达式<a href="#fn22"
+class="footnote-ref" id="fnref22" role="doc-noteref"><sup>22</sup></a>,
+因此它更易读, 可以 被格式化 和 注释.</p>
+<p>例如以下用于匹配 C 语言 块注释 的 regexp, 可被改写成两种同义的
+<code>rx</code> 表达式:</p>
+<div class="sourceCode" id="cb5" data-org-language="emacs-lisp"><pre
+class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; /\*\(?:[^*]\|\*[^/]\)*\*+/</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;/</span><span class="sc">\\</span><span class="st">*</span><span class="sc">\\</span><span class="st">(?:[^*]</span><span class="sc">\\</span><span class="st">|</span><span class="sc">\\</span><span class="st">*[^/]</span><span class="sc">\\</span><span class="st">)*</span><span class="sc">\\</span><span class="st">*+/&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>(rx <span class="st">&quot;/*&quot;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    (zero-or-more (<span class="kw">or</span> (<span class="kw">not</span> (any <span class="st">&quot;*&quot;</span>))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                      (seq <span class="st">&quot;*&quot;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                           (<span class="kw">not</span> (any <span class="st">&quot;/&quot;</span>)))))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    (one-or-more <span class="st">&quot;*&quot;</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;/&quot;</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>(rx <span class="st">&quot;/*&quot;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    (<span class="op">*</span> (| (<span class="kw">not</span> <span class="st">&quot;*&quot;</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>          (: <span class="st">&quot;*&quot;</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>             (<span class="kw">not</span> <span class="st">&quot;/&quot;</span>))))</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    (<span class="op">+</span> <span class="st">&quot;*&quot;</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;/&quot;</span>)</span></code></pre></div>
+<h2 id="constructs-in-rx">Constructs in <code>rx</code></h2>
+<p>(剩下的有空再写吧…)</p>
+<h3 id="literals">Literals</h3>
+<h3 id="sequence-and-alternative">Sequence and alternative</h3>
+<h3 id="repetition">Repetition</h3>
+<h3 id="matching-single-characters">Matching single characters</h3>
+<h3 id="character-class">Character class</h3>
+<h3 id="zero-width-assertions">Zero-width assertions</h3>
+<h3 id="capture-groups">Capture groups</h3>
+<h3 id="dynamic-inclusion">Dynamic inclusion</h3>
+<h2 id="functions-macros-using-rx">Functions &amp; macros <a
+href="#fn23" class="footnote-ref" id="fnref23"
+role="doc-noteref"><sup>23</sup></a> using <code>rx</code></h2>
+<h3 id="rx-rest-rx-form"><code>rx</code> <em><code>&amp;rest</code>
+<code>rx-form</code></em> <span class="tag" data-tag-name="macro"><span
+class="smallcaps">macro</span></span></h3>
+<h3
+id="rx-to-string-rx-expr-optional-no-group"><code>rx-to-string</code>
+<em><code>rx-expr</code> <code>&amp;optional</code>
+<code>no-group</code></em> <span class="tag"
+data-tag-name="function"><span
+class="smallcaps">function</span></span></h3>
+<h3
+id="pcase-expression-rx-rx-expr...-body-forms......"><code>pcase</code>
+<code>expression</code> <code>((rx</code>
+<em><code>rx-expr</code></em>​<code>...)</code>
+<code>body-forms...)...</code> <span class="tag"
+data-tag-name="macro"><span class="smallcaps">macro</span></span></h3>
+<h1 id="相关函数">相关函数<a href="#fn24" class="footnote-ref"
+id="fnref24" role="doc-noteref"><sup>24</sup></a></h1>
+<p>期望被传入 regexp 的函数在接收到 invalid regexp 时, 会 signal 一个
+<code>invalid-regexp</code> error.</p>
+<h3 id="regexp-quote-string"><code>regexp-quote</code>
+<em><code>string</code></em> <span class="tag"
+data-tag-name="function"><span
+class="smallcaps">function</span></span></h3>
+<p>将 literal string 转换成 regexp. E.g.,</p>
+<pre class="example"><code>(regexp-quote &quot;.&quot;)  ; =&gt; &quot;\\.&quot;
+</code></pre>
+<h3 id="regexp-opt-strings-optional-paren"><code>regexp-opt</code>
+<em><code>strings</code> <code>&amp;optional</code>
+<code>paren</code></em> <span class="tag" data-tag-name="function"><span
+class="smallcaps">function</span></span></h3>
+<p><em><code>strings</code></em> 是由 literal string 为元素组成的 list.
+该函数相当于逻辑或, 但是它希望返回的 regexp 匹配得尽可能长, e.g.,</p>
+<div class="sourceCode" id="cb7" data-org-language="emacs-lisp"><pre
+class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(regexp-opt &#39;(<span class="st">&quot;23&quot;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;1&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;123&quot;</span>))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; =&gt; &quot;\\(?:1\\(?:23\\)?\\|23\\)&quot;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; i.e., \(?:1\(?:23\)?\|23\)</span></span></code></pre></div>
+<p>虽然按照 <em><code>strings</code></em> 的想法, 遇到 <code
+class="verbatim">1</code> 就可以结束尝试了, 但根据
+<code>regexp-opt</code> 的结果来看, 还会继续尝试下个 substring 是不是
+<code class="verbatim">23</code>.</p>
+<h3 id="regexp-opt-depth-regexp"><code>regexp-opt-depth</code>
+<em><code>regexp</code></em> <span class="tag"
+data-tag-name="function"><span
+class="smallcaps">function</span></span></h3>
+<p>returns the total number of grouping constructs (不包括 shy group).
+E.g.,</p>
+<pre class="example"><code>(regexp-opt-depth &quot;\\(\\(?:\\)\\|\\(\\)\\)&quot;)  ; =&gt; 2
+</code></pre>
+<h3 id="regexp-opt-charset-chars"><code>regexp-opt-charset</code>
+<em><code>chars</code></em> <span class="tag"
+data-tag-name="function"><span
+class="smallcaps">function</span></span></h3>
+<p><em><code>chars</code></em> 是由字符为元素组成的 list. 该函数以
+‘​<code class="verbatim">[...]</code>​’ 的形式返回取逻辑或的结果,
+e.g.,</p>
+<pre class="example"><code>(regexp-opt-charset &#39;(?a ?b ?c ?z ?d))  ; =&gt; &quot;[a-dz]&quot;
+</code></pre>
+<h3 id="regexp-unmatchable"><code>regexp-unmatchable</code> <span
+class="tag" data-tag-name="variable"><span
+class="smallcaps">variable</span></span></h3>
+<p>保证匹配失败的值, 通常为 <code>"\\`a\\`"</code>.</p>
+<p>作为对比:</p>
+<div class="sourceCode" id="cb10" data-org-language="emacs-lisp"><pre
+class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>(string-match-p <span class="st">&quot;&quot;</span>                 <span class="st">&quot;aa&quot;</span>)  <span class="co">; =&gt; 0</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>(string-match-p regexp-unmatchable <span class="st">&quot;aa&quot;</span>)  <span class="co">; =&gt; nil</span></span></code></pre></div>
+<p>意义: 有些 option 设置用来匹配文本, 但是需要它在默认时不匹配任何文本,
+可以将此 variable 设为其默认值.</p>
+<h1 id="suggestions-on-optimization">Suggestions on Optimization</h1>
+<ul>
+<li><p>‘​<code class="verbatim">[ab]</code>​’ 比 ‘​<code
+class="verbatim">a\|b</code>​’ 更快.</p></li>
+<li><p>降低熵值. E.g.,</p>
+<pre class="example"><code>\(a*b*\)+  &gt;  \(a\|b\)*  &gt;  [ab]*
+</code></pre></li>
+<li><p>尽量使用 shy group 而不是 capturing group.</p></li>
+<li><p><code>rx</code> 会优化一些 <span class="spurious-link"
+target="‘​=\|=​’"><em>or-pattern</em></span>, 并且默认使用 shy
+group.</p></li>
+</ul>
+<hr />
+<aside id="footnotes" class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>未来不会有新增的 special 字符.<a href="#fnref1"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>如果你意在编写一个空的 range, 那么就应该使用这个例子,
+因为其它写法容易被误认为是 typo.<a href="#fnref2" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>该 feature 由 POSIX 标准指定.<a href="#fnref3"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>所以 <span class="spurious-link"
+target="‘​=\=​’"><em>‘​<code class="verbatim">\</code>​’</em></span>
+无法转义下列字符, 因为在这里, 它不是 special 的.<a href="#fnref4"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>这是 Emacs Lisp 相关的概念, 只学习 regexp
+的话可以忽略.<a href="#fnref5" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Character which codes 0~127.<a href="#fnref6"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>详见 Unicode 标准.<a href="#fnref7"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Defined by Annex C of the Unicode Technical Standard
+#18.<a href="#fn8" class="footnote-ref" id="fnref8"
+role="doc-noteref"><sup>8</sup></a><a href="#fnref8"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>详见 Unicode 标准.<a href="#fnref9"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>与 UTF-16 有关.<a href="#fn10" class="footnote-ref"
+id="fnref10" role="doc-noteref"><sup>10</sup></a><a href="#fnref10"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>详见 Unicode 标准.<a href="#fnref11"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>这是 Emacs Lisp 相关的概念, 只学习 regexp
+的话可以忽略.<a href="#fnref12" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p>这是 Emacs Lisp 相关的概念, 只学习 regexp
+的话可以忽略.<a href="#fnref13" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn14"><p><span class="spurious-link" target="‘​=.=​’"><em>‘​<code
+class="verbatim">.</code>​’</em></span> 不匹配 newline.<a href="#fnref14"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p>这是 Emacs Lisp 相关的概念, 只学习 regexp
+的话可以忽略.<a href="#fnref15" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p>这是 Emacs Lisp 相关的概念, 只学习 regexp
+的话可以忽略.<a href="#fnref16" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn17"><p>这是 Emacs Lisp 相关的概念, 只学习 regexp
+的话可以忽略.<a href="#fnref17" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn18"><p>这是 Emacs Lisp 相关的概念, 只学习 regexp
+的话可以忽略.<a href="#fnref18" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn19"><p>这是 Emacs Lisp 相关的概念, 只学习 regexp
+的话可以忽略.<a href="#fnref19" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn20"><p>这是 Emacs Lisp 相关的概念, 只学习 regexp
+的话可以忽略.<a href="#fnref20" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn21"><p>这是 Emacs Lisp 相关的概念, 只学习 regexp
+的话可以忽略.<a href="#fnref21" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn22"><p>前缀式语法树.<a href="#fnref22" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn23"><p>这是 Emacs Lisp 相关的概念, 只学习 regexp
+的话可以忽略.<a href="#fnref23" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn24"><p>这是 Emacs Lisp 相关的概念, 只学习 regexp
+的话可以忽略.<a href="#fnref24" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside>

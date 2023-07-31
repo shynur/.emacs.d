@@ -139,9 +139,6 @@
                         nil (simple)
                         "‘global-mark-ring’只会在离开某个buffer时,记住那个buffer最后设置的mark,这相当于将buffer作为节点的路径;因此,可以设置为较大的值")
  '(completion-ignored-extensions '())
- '(custom-enabled-themes '(modus-vivendi)
-                         nil (custom)
-                         "深色背景")
  '(display-time-day-and-date t
                              nil (time)
                              "使‘display-time-mode’显示日期")

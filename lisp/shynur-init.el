@@ -80,7 +80,6 @@
 (require 'shynur-tmp)      ; (find-file-other-window "./shynur-tmp.el")
 (require 'shynur-org)      ; (find-file-other-window "./shynur-org.el")
 (require 'shynur-abbrev)   ; (find-file-other-window "./shynur-abbrev.el")
-(require 'shynur-themes)   ; (find-file-other-window "./themes/shynur-themes.el")
 (require 'shynur-server)   ; (find-file-other-window "./shynur-server.el")
 (require 'shynur-cc)       ; (find-file-other-window "./shynur-cc.el")
 (require 'shynur-kbd)      ; (find-file-other-window "./shynur-kbd.el")

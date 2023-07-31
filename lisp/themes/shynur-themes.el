@@ -2,6 +2,8 @@
 
 (setq custom-theme-directory (file-name-concat user-emacs-directory
                                                "lisp/themes/"))
+
+(require-theme 'modus-vivendi-theme)
 
 (provide 'shynur-themes)
 

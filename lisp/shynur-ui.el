@@ -1,6 +1,12 @@
 ;;; -*- lexical-binding: t; -*-
 
-;;; Face:
+;;; Theme:
+
+(require 'shynur-themes)   ; (find-file-other-window "./themes/shynur-themes.el")
+
+(enable-theme 'modus-vivendi)
+
+;;; Face (其实应该放到 theme 中去):
 
 ;; (为什么要用‘letrec’ -- 见 <https://emacs.stackexchange.com/a/77767/39388>.)
 (letrec ((shynur--custom-set-faces

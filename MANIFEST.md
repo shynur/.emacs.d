@@ -27,8 +27,6 @@ init.el
         |
         |__ lisp/shynur-abbrev.el
         |
-        |__ lisp/themes/shynur-themes.el
-        |
         |__ lisp/shynur-server.el
         |
         |__ lisp/shynur-cc.el
@@ -44,6 +42,8 @@ init.el
         |__ lisp/shynur-startup.el
         |
         |__ lisp/shynur-ui.el
+        |     |
+        |     |__ lisp/themes/shynur-themes.el
         |
         |__ lisp/shynur-lib.el
 
@@ -53,7 +53,7 @@ etc/abbrev_defs.el
 ```
 
 位于 `modules/` 下的动态链接库也可加载, 这是可选的.
-(我写了一个 `modules/shynur-hello.dll` 当玩具, 可以在任何时间加载.)
+(另外还写了一个 `modules/shynur-hello.dll` 当玩具, 可以在任何时间加载.)
 
 ___
 

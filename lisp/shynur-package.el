@@ -50,6 +50,7 @@
                                   on-screen
                                   which-key
                                   yaml-mode
+                                  yasnippet
                                   drag-stuff
                                   marginalia
                                   ascii-table

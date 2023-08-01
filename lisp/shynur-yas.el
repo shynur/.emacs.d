@@ -3,6 +3,8 @@
 (setq yas-snippet-dirs `(,(file-name-concat user-emacs-directory
                                             "etc/yas-snippets/")))
 
+(require 'yasnippet)
+(yas-reload-all)
 
 (provide 'shynur-yas)
 

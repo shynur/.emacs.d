@@ -42,9 +42,14 @@
 
 ###outline:   ./etc/yas-snippets/
 /etc/yas-snippets/*
-!/etc/yas-snippets/*/
-/etc/yas-snippets/*/*
-!/etc/yas-snippets/*/?*.yasnippet
+!/etc/yas-snippets/?*-mode/
+
+####outline:    ./etc/yas-snippets/?*-mode/
+/etc/yas-snippets/?*-mode/*
+!/etc/yas-snippets/?*-mode/.yas-skip
+!/etc/yas-snippets/?*-mode/.yas-parents
+!/etc/yas-snippets/?*-mode/.yas-setup.el
+!/etc/yas-snippets/?*-mode/?*.yasnippet
 
 ##outline:  ./lisp/
 /lisp/*

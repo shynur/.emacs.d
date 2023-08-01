@@ -16,7 +16,7 @@
                      ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.textile\\'" . textile-mode)
 
                      ("/[^/-][^/]*\\.ya?ml\\'" . yaml-mode)
-                     ("/etc/yas-snippets/[^/-][^/]*\\.yasnippet\\'" . snippet-mode)
+                     ("/etc/yas-snippets/[^/]+-mode/\\(\\.yas-skip\\|\\.yas-parents\\|[^/]+\\.yasnippet\\)\\'" . snippet-mode)
                      ("/\\.gitignore\\'" . gitignore-mode)
                      ("/\\.gitmodules\\'" . gitconfig-mode)
                      ))

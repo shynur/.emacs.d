@@ -68,10 +68,10 @@
                                   )
       package-load-list '(all))
 ;; 摘编自 <https://orgmode.org/elpa.html#installation>:
-(ignore-errors  ; 电脑可能断网了.
-  (package-upgrade-all :no-query)        ; 该函数能顺便‘package-refresh-contents’.
+(ignore-errors  ; 电脑可能没联网网.
+  (package-upgrade-all)  ; 该函数能顺便‘package-refresh-contents’.
   (package-install-selected-packages t)
-  ;; (package-autoremove)
+  ;; (package-autoremove)  ; 我记得这好像需要手动确认.
   )
 
 (provide 'shynur-package)

@@ -1,14 +1,13 @@
+;;; -*- lexical-binding: t; -*-
+;; 读取本文件时, 似乎本来就默认开启了‘lexical-binding’.
+
 ;; 能放到该文件的配置都放到该文件, file local variable 要尽可能少.
 ;; 因为 Emacs 启动时会读取本文件, 将结果加到 ‘safe-local-variable-values’ 中, 当启用这些配置时, _无需确认_.
 
-((auto-mode-alist . (;; 有些设置是多余的, 但出于 教学/参考 的目的, 保留下来.
-
-                     ;; 这些是 auto-save 之类的文件.
+((auto-mode-alist . (;; 这些是 auto-save 之类的文件.
                      ("~\\'" . (ignore t))
                      ("#[[:alnum:]]*\\'" . (ignore t))
 
-                     ;; (Bug#64415)
-                     ("/[^/-][^/]*\\.el\\'" . emacs-lisp-mode)
                      ("/\\.dir-locals\\(?:-2\\)?\\.el\\'" . lisp-data-mode)
 
                      ;; shynur/TODO: 我tm自己都看不懂了, 有空补一下注释.
@@ -16,7 +15,8 @@
                      ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.textile\\'" . textile-mode)
 
                      ("/[^/-][^/]*\\.ya?ml\\'" . yaml-mode)
-                     ("/etc/yas-snippets/[^/]+-mode/\\(\\.yas-skip\\|\\.yas-parents\\|[^/]+\\.yasnippet\\)\\'" . snippet-mode)
+                     ("/etc/yas-snippets/[^/]+-mode/\\(?:\\.yas-skip\\|\\.yas-parents\\|[^/]+\\.yasnippet\\)\\'" . snippet-mode)
+
                      ("/\\.gitignore\\'" . gitignore-mode)
                      ("/\\.gitmodules\\'" . gitconfig-mode)
                      ))
@@ -27,6 +27,7 @@
          (sentence-end-double-space . t)
 
          (lexical-binding . t)
+         (no-byte-compile . t)
 
          (mode . auto-save)
 
@@ -39,12 +40,10 @@
                               org-mode
                               makefile-gmake-mode))
 
-         (shynur--read-only-when-filename-match . (lambda (regexp)
-                                                    (when-let ((buffer-file-name (buffer-file-name)))
-                                                      (when (string-match-p regexp (file-name-nondirectory buffer-file-name))
-                                                        (setq-local buffer-read-only t)))))
-         (eval . (funcall shynur--read-only-when-filename-match "LICENSE"))  ; ‘LICENSE’没有注释语法, 只能写在这里了.
-
+         (eval . (when-let ((buffer-file-name (buffer-file-name)))
+                   (when (string-match-p "\\`LICENSE\\(?:\\.[^.]+\\)?\\'"  ; ‘LICENSE’没有注释语法, 只能写在这里了.
+                                         (file-name-nondirectory buffer-file-name))
+                     (setq-local buffer-read-only t))))
 
          (eval . (let ((case-fold-search t))
                    (highlight-phrase "~?\\(?:shynur\\|谢骐\\)[^[:blank:][:space:][:cntrl:]()`'\"]*"
@@ -55,13 +54,49 @@
 
          (delete-trailing-lines . t)
          (require-final-newline . t)
-         (eval . (prog1 (add-hook 'before-save-hook 'shynur/run-functions-before-save:~/.emacs.d/*)
-                   (fset 'shynur/run-functions-before-save:~/.emacs.d/*
-                         (lambda ()
-                           (when (file-in-directory-p default-directory user-emacs-directory)
-                             (funcall #'delete-trailing-whitespace)
-                             (save-excursion
-                               (add-file-local-variable 'coding 'utf-8-unix)))))))))
+
+         (eval . (progn
+                   (unless (get 'shynur/before-save-hook:~/.emacs.d/* :shynur/ready?)
+                     (fset 'shynur/before-save-hook:~/.emacs.d/*
+                           (lambda ()
+                             (when (file-in-directory-p default-directory user-emacs-directory)
+                               (run-hook-with-args 'shynur/before-save-hook:~/.emacs.d/*))))
+                     (add-hook 'before-save-hook #'shynur/before-save-hook:~/.emacs.d/*)
+                     (put 'shynur/before-save-hook:~/.emacs.d/*
+                          :shynur/ready? t))
+
+                   (unless (get 'shynur/after-save-hook:~/.emacs.d/* :shynur/ready?)
+                     (fset 'shynur/after-save-hook:~/.emacs.d/*
+                           (lambda ()
+                             (when (file-in-directory-p default-directory user-emacs-directory)
+                               (run-hook-with-args 'shynur/after-save-hook:~/.emacs.d/*))))
+                     (add-hook 'after-save-hook #'shynur/after-save-hook:~/.emacs.d/*)
+                     (put 'shynur/after-save-hook:~/.emacs.d/*
+                          :shynur/ready? t))
+                   ))
+
+         (eval . (unless (get 'shynur/before-save-hook:~/.emacs.d/* :shynur/.emacs.d/)
+                   (seq-doseq (function (vector
+                                         #'delete-trailing-whitespace
+                                         (lambda ()
+                                           (save-excursion
+                                             (add-file-local-variable 'coding 'utf-8-unix)))
+                                         ))
+                     (add-hook 'shynur/before-save-hook:~/.emacs.d/* function))
+                   (put 'shynur/before-save-hook:~/.emacs.d/*
+                        :shynur/.emacs.d/ t)))
+
+         (eval . (unless (get 'shynur/after-save-hook:~/.emacs.d/* :shynur/.emacs.d/)
+                   (seq-doseq (function (vector
+                                         (lambda ()
+                                           (when (eq 'emacs-lisp-mode major-mode)
+                                             (byte-compile-file (buffer-file-name))))
+                                         ))
+                     (add-hook 'shynur/after-save-hook:~/.emacs.d/* function))
+                   (put 'shynur/after-save-hook:~/.emacs.d/*
+                        :shynur/.emacs.d/ t)))
+
+         ))
 
  (emacs-lisp-mode . ((eval . (imenu-add-menubar-index))
 
@@ -96,16 +131,12 @@
 
                          (mode . indent-tabs)))
 
- ("etc/" . ((nil . (;; 其下的 Emacs Lisp 文件 几乎 只负责 定义 变量, 完全没必要编译.
-                    ;; 而且该目录也不在‘load-path’里, 所以那些 Emacs Lisp 是_绝对路径_指定的.
-                    (no-byte-compile . t)
-                    (no-native-compile . t)))
-            ("yas-snippets/" . ((auto-mode-alist . (("/etc/yas-snippets/[^/-][^/]*\\.yasnippet\\'" . snippet-mode)))))))
- ("lisp/" . ((nil . (;; 编写用于 解释执行 的代码更加轻松, 但是会在未来的某一天重构成_可编译的_.
-                     ;; ‘site-lisp/’中则尽量编写可编译的代码.
-                     (no-byte-compile . t)
-                     (no-native-compile . t)))))
- ("modules/src/" . ((nil . ((eval . (funcall shynur--read-only-when-filename-match "emacs-module"))  ; 这玩意有 GPL 污染, 切割!
+ ("etc/" . ((nil . (;; 该目录不在‘load-path’里, 所以其下的那些 Emacs Lisp 文件 是_绝对路径_指定的.
+                    (no-byte-compile . t)))))
+ ("modules/src/" . ((nil . ((eval . (when-let ((buffer-file-name (buffer-file-name)))
+                                      (when (string-match-p "emacs-module"  ; 这玩意有 GPL 污染, 切割!
+                                                            (file-name-nondirectory buffer-file-name))
+                                        (setq-local buffer-read-only t))))
 
                             (tags-file-name . "ETAGS.txt")
                             (eval . (when (buffer-file-name)  ; 正在访问文件, 而不是‘dired’之类的 buffer.

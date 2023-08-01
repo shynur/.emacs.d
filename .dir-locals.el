@@ -90,7 +90,8 @@
                    (seq-doseq (function (vector
                                          (lambda ()
                                            (when (eq 'emacs-lisp-mode major-mode)
-                                             (byte-compile-file (buffer-file-name))))
+                                             (let ((byte-compile-log-warning-function #'ignore))
+                                               (byte-compile-file (buffer-file-name)))))
                                          ))
                      (add-hook 'shynur/after-save-hook:~/.emacs.d/* function))
                    (put 'shynur/after-save-hook:~/.emacs.d/*

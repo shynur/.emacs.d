@@ -23,7 +23,7 @@
                                         font-lock-face #1#)))
 
 (setq inhibit-startup-screen t
-      initial-buffer-choice  user-init-file)
+      initial-buffer-choice  user-emacs-directory)
 
 ;; 启动 Emacs 时 (通过 命令行参数) 一次性访问多个 (>2) 文件时, 不额外显示 Buffer Menu.
 (setq inhibit-startup-buffer-menu t)
@@ -41,4 +41,5 @@
 
 ;; Local Variables:
 ;; coding: utf-8-unix
+;; no-byte-compile: nil
 ;; End:

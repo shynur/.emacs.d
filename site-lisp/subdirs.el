@@ -1,7 +1,13 @@
-;; 未开启 lexical-binding, 原文件如此.
+;;; -*- lexical-binding: t -*-
 
-(if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-    (normal-top-level-add-subdirs-to-load-path))
+;;; Commentary:
+;;
+;; In ‘load-path’, after this directory should come certain of its
+;; subdirectories.  Here we specify them:
+
+(normal-top-level-add-to-load-path '("copilot.el/"
+                                     "lsp-bridge/"
+                                     ))
 
 ;; Local Variables:
 ;; coding: utf-8-unix

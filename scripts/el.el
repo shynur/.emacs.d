@@ -5,10 +5,6 @@
 ;;
 ;; 像从 命令行 启动‘python’一样, 进入 Emacs Lisp 交互环境.
 
-;; shynur/TODO:
-;;      It is inconvenient to type the entire ‘(kill-emacs)’ to
-;;   exit from REPL.  It would be nice to recognize character ‘^C’.
-
 ;;; Code:
 
 (message "Emacs Lisp (v%s, %s) [%s] on %s
@@ -18,6 +14,9 @@ Type \"%s\" to exit."  ; shynur/TODO: Colorize?
                              emacs-build-time)
          system-configuration
          system-type
+         ;; shynur/TODO:
+         ;;      It is inconvenient to type the entire ‘(kill-emacs)’ to
+         ;;   exit from REPL.  It would be nice to recognize character ‘^C’.
          "(kill-emacs)")
 
 (let (;; 一些基本设置, 使其更像 Common Lisp.
@@ -66,5 +65,4 @@ Type \"%s\" to exit."  ; shynur/TODO: Colorize?
 
 ;; Local Variables:
 ;; coding: utf-8-unix
-;; no-byte-compile: nil
 ;; End:

@@ -1,8 +1,12 @@
 ;;; -*- lexical-binding: t; -*-
 ;; 读取本文件时, 似乎本来就默认开启了‘lexical-binding’.
 
+;;; Comments:
+;;
 ;; 能放到该文件的配置都放到该文件, file local variable 要尽可能少.
 ;; 因为 Emacs 启动时会读取本文件, 将结果加到 ‘safe-local-variable-values’ 中, 当启用这些配置时, _无需确认_.
+;;
+;; 可选的优化: 在‘lambda’前加‘byte-compile’, 但是这样看上去比较乱.
 
 ((auto-mode-alist . (;; 这些是 auto-save 之类的文件.
                      ("~\\'" . (ignore t))
@@ -85,24 +89,25 @@
                      (add-hook 'shynur/before-save-hook:~/.emacs.d/* function))
                    (put 'shynur/before-save-hook:~/.emacs.d/*
                         :shynur/.emacs.d/ t)))
-
-         (eval . (unless (get 'shynur/after-save-hook:~/.emacs.d/* :shynur/.emacs.d/)
-                   (seq-doseq (function (vector
-                                         (lambda ()
-                                           (when (eq 'emacs-lisp-mode major-mode)
-                                             (let ((byte-compile-log-warning-function #'ignore))
-                                               (byte-compile-file (buffer-file-name)))))
-                                         ))
-                     (add-hook 'shynur/after-save-hook:~/.emacs.d/* function))
-                   (put 'shynur/after-save-hook:~/.emacs.d/*
-                        :shynur/.emacs.d/ t)))
-
          ))
 
  (emacs-lisp-mode . ((eval . (imenu-add-menubar-index))
 
                      (prettify-symbols-alist . (("lambda" . ?λ)))
-                     (mode . prettify-symbols)))
+                     (mode . prettify-symbols)
+
+                     (eval . (unless (get 'shynur/after-save-hook:~/.emacs.d/* :shynur/.emacs.d/:emacs-lisp)
+                               (seq-doseq (function (vector
+                                                     (lambda ()
+                                                       (when (eq 'emacs-lisp-mode major-mode)
+                                                         (let ((byte-compile-log-warning-function #'ignore))
+                                                           ;; 建议手动‘check-declare-file’一下.
+                                                           (byte-compile-file (buffer-file-name)))))
+                                                     ))
+                                 (add-hook 'shynur/after-save-hook:~/.emacs.d/* function))
+                               (put 'shynur/after-save-hook:~/.emacs.d/*
+                                    :shynur/.emacs.d/:emacs-lisp t)))
+                     ))
 
  (markdown-mode . ((eval . (imenu-add-menubar-index))))
 
@@ -132,7 +137,8 @@
 
                          (mode . indent-tabs)))
 
- ("etc/" . ((nil . (;; 该目录不在‘load-path’里, 所以其下的那些 Emacs Lisp 文件 是_绝对路径_指定的.
+ ("etc/" . ((nil . (;; 该目录不在‘load-path’里, 所以其下的那些 ELisp 文件 是_绝对路径_指定的.
+                    ;; 那些 ELisp library 的 feature 也和文件名不符, 只能显式地用‘load-file’.
                     (no-byte-compile . t)))))
  ("modules/src/" . ((nil . ((eval . (when-let ((buffer-file-name (buffer-file-name)))
                                       (when (string-match-p "emacs-module"  ; 这玩意有 GPL 污染, 切割!

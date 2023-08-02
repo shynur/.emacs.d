@@ -21,7 +21,7 @@
 
 ;; 定义成 macro 主要是因为我懒得写‘quote’和双引号.
 (defmacro shynur/c-appdata/ (base &optional extension seq-type &rest forms)
-  "将“‘shynur/c-appdata/’BASE(.)EXTENSION”赋给 BASE; 确保父目录存在.
+  "将“‘shynur/c-appdata/’BASE+EXTENSION”赋给 BASE; 确保父目录存在.
 EXTENSION 可能的值为:
   1. nil - pure file (也就是说, 处理不了‘*.nil’文件)
   2.   / - 目录
@@ -48,7 +48,7 @@ EXTENSION 可能的值为:
                                                                             (symbol-name ',extension))
                                                                  "")))))
                    (prog1 ,&appdata/*
-                     (make-directory (file-name-directory ,&appdata/*) '#:DWIM))))))))
+                     (make-directory (file-name-directory ,&appdata/*) "DWIM"))))))))
 
 (provide 'shynur/custom)
 

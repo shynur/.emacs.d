@@ -21,11 +21,11 @@ limitations under the License.
 
 * Overview
 
+🥰 这是我的 Emacs 个人配置方案, from scratch.
+
 #+ATTR_HTML: :alt 如果你看到了这句话, 说明我没高兴上传图片, 或者你的网络环境有问题.
 #+ATTR_HTML: :width 900px
 [[https://raw.githubusercontent.com/shynur/.emacs.d/assets/demos/emacs.png]]
-
-🥰 这是我的 Emacs 个人配置方案, from scratch.
 
 🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/ (22).
 之后将会使用 [[https://github.com/jwiegley/use-package][=use-package=]] 进行彻底的重构.
@@ -41,14 +41,14 @@ limitations under the License.
 #+ATTR_HTML: :width 400px
 [[https://raw.githubusercontent.com/shynur/.emacs.d/assets/demos/emacs.gif]]
 
-* Prerequisites
+* Prerequisites                                             :linked:MANIFEST:
 
-** 字体
+** Fonts
 
 + [[https://github.com/subframe7536/maple-font][Maple Mono SC NF]]:
   显示 中英文.
 + [[https://www.nerdfonts.com/][Symbols Nerd Fonts Mono]]:
-  显示 各种 小图标.
+  显示 各种 小图标 (mainly for ~doom-modeline~).
 + Segoe UI Symbol, Segoe UI Emoji.
 
 ** 软件
@@ -64,7 +64,7 @@ limitations under the License.
   将 =modules/src/= 下的 C 文件 编译成 动态链接库, 提供给 Emacs 加载.
   (也可以选其它的 C 编译器.)
 
-** Packages
+** Packages for editing this project
 
 为了提高编辑本仓库的文件时的舒适度, 建议安装以下 Emacs 插件
 (不然 =.dir-locals.el= 中有些功能无法启用):
@@ -93,7 +93,7 @@ limitations under the License.
 
 * 安装须知
 
-** Written for
+** Platforms                                                 :linked:README:
 
 Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./docs/Emacs-use_daemon.md][如何运行 Emacs 后台服务?]]).
 
@@ -104,9 +104,9 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 ** Install
 
 见 [[file:./INSTALL.rst][INSTALL.rst]].
-(仅包含 [[Written for]] 中提到的平台, 当然其它平台应该大差不差.)
+(仅包含 [[Platforms]] 中提到的平台, 当然其它平台应该大差不差.)
 
-* TODO 待办
+* TODO 待办 (for reminding /myself/)
 
 + [ ] 不应该单纯开启 ~global-display-line-numbers-mode~, 而是应该给出一个分类机制, 有需要的 mode 才打开 ~display-line-numbers-mode~.
   有的 mode (e.g., ~neotree~, ~calendar~, ~vc-annotate-mode~) 显示行号反而会占用空间.
@@ -122,9 +122,10 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 + (emacs) 28, 49.1.2: customize-group
 + (emacs) custom-theme-directory
 + (emacs) 28, 49.1.7 Custom Themes: ‘(’加空格.
++ (elisp) 17.5 Evaluation During Compilation: some-new-thing
++ (elisp) hash-notation
 
 ** BUG
-+ company: "clang failed with error 255".
 + hexl-mode: 保存文件时会删除一些字符.
 + =M-x= 时 未显示 ~ignore~.
 
@@ -140,8 +141,8 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 
 * Repo Stats
 
-# See [[https://codetabs.com/count-loc/count-loc-online.html][Count LOC online]] hosted at [[https://github.com/jolav/codetabs]].
 + [[https://api.codetabs.com/v1/loc/?github=shynur/.emacs.d&branch=main&ignored=][Languages Statistics]]
+  # See [[https://codetabs.com/count-loc/count-loc-online.html][Count LOC online]] hosted at [[https://github.com/jolav/codetabs]].
 
 * License
 

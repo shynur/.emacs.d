@@ -6,8 +6,14 @@
 
 (setq print-quoted t) ; 打印成“'foo”而非“(quote foo)”.
 
-(setq print-escape-newlines t               ; 字符串中的 换行 打印成 转义序列“\n”.  注意, 自己写 字符常量 时, 要表示 空格 推荐使用“?\s”.
-      print-escape-control-characters nil)  ; "打印成“^C”而非“\3”, 但“\n”和“\f”仍受‘print-escape-newlines’控制.
+(setq print-escape-newlines t  ; 字符串中的 换行 打印成‘\n’.  注意, 推荐用‘?\s’表示空格的字符常量.
+      ;; "打印成‘^C’而非‘\3’, 但‘\n’和‘\f’仍受‘print-escape-newlines’控制.
+      print-escape-control-characters nil
+      ctl-arrow t
+      ;; 不把 multibyte 打印成‘\xXXXX’.
+      print-escape-multibyte nil
+      ;; 若不启用‘ctl-arrow’, 则‘\x80’而非‘\200’.
+      display-raw-bytes-as-hex t)
 
 (setq print-length nil  ; 当打印的 列表 元素数 > 该值时, 超出部分用省略号表示.
       eval-expression-print-length nil)

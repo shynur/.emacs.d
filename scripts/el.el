@@ -31,6 +31,10 @@ Type \"%s\" to exit."  ; shynur/TODO: Colorize?
       (print-escape-newlines t)
       ;; "打印成“^C”而非“\3”, 但“\n”和“\f”仍受‘print-escape-newlines’控制.
       print-escape-control-characters
+      ;; 不把 multibyte 打印成‘\xXXXX’.
+      print-escape-multibyte
+      (ctl-arrow t)
+      (display-raw-bytes-as-hex t)
 
       ;; 当打印的 列表 元素数 > 该值时, 超出部分用省略号表示.
       print-length

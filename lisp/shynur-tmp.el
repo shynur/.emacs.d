@@ -459,9 +459,6 @@
  '(overline-margin 0
                    nil ()
                    "上划线的高度+宽度")
- '(display-raw-bytes-as-hex t
-                            nil ()
-                            "若不启用‘ctl-arrow’,则“\x80”而非“\200”")
  '(mouse-highlight t
                    nil ()
                    "当鼠标位于clickable位置时,高亮此处的文本")
@@ -533,8 +530,7 @@
                         "放缩字体大小时的倍率")
  '(emacs-startup-hook `(,@(bound-and-true-p emacs-startup-hook)
                         ,(lambda ()
-                           "记录击键(bug#62277)"
-                           (lossage-size (* 10000 10)))
+                           (lossage-size 33554431))
                         ,(lambda ()
                            (prefer-coding-system 'utf-8-unix)
                            (set-coding-system-priority 'utf-8-unix))
@@ -580,18 +576,6 @@
  '(x-stretch-cursor t
                     nil ()
                     "在tab字符上拉长显示cursor")
- '(global-page-break-lines-mode t
-                                nil (page-break-lines)
-                                "将form-feed字符渲染成别致的下划线")
- '(page-break-lines-modes '(text-mode
-                            prog-mode)
-                          nil (page-break-lines))
- '(page-break-lines-lighter page-break-lines-lighter
-                            nil (page-break-lines)
-                            "mode-line上显示的该模式名")
- '(page-break-lines-max-width nil
-                              nil (page-break-lines)
-                              "渲染的下划线将会占用两个screen-line")
  '(which-key-mode t
                   nil (which-key))
  '(font-lock-maximum-decoration t
@@ -632,20 +616,6 @@
  '(what-cursor-show-names t
                           nil (simple)
                           "使“C-x =”(‘what-cursor-position’)顺便显示字符的Unicode名字")
- '(electric-pair-mode t
-                      nil (elec-pair))
- '(ielm-mode-hook `(,@(bound-and-true-p ielm-mode-hook)
-                    ,(lambda ()
-                       (electric-pair-local-mode -1))))
- '(electric-pair-preserve-balance t
-                                  nil (elec-pair)
-                                  "若nil,会出现这种情况“(((()”")
- '(electric-pair-delete-adjacent-pairs t
-                                       nil (elec-pair)
-                                       "当成对的两个paren邻接时,删左paren时,同步地删除右paren")
- '(electric-pair-open-newline-between-pairs t
-                                            nil (elec-pair)
-                                            "“{RET}”=>“{newline newline}”.(可考虑‘electric-layout-mode’作为替代方案:键入左paren自动补充右paren并换两行)")
  '(lisp-data-mode-hook `(,@(bound-and-true-p lisp-data-mode-hook)
                          ,(lambda ()
                             (setq-local electric-pair-open-newline-between-pairs nil))))
@@ -662,9 +632,6 @@
  '(selective-display-ellipses t
                               nil ()
                               "selective-display会在行尾显示“...”表示省略")
- '(ctl-arrow t
-             nil ()
-             "用“^A”表示法(而非“\001”或“\x01”)打印raw-byte(e.g.,“C-q”后接的字符)")
  '(nobreak-char-display t
                         nil ()
                         "将容易与ASCII字符中的几个混淆的Unicode字符使用特殊的face渲染(non-boolean在此基础上加上前缀backslash)")
@@ -1114,6 +1081,14 @@
                         (when (bound-and-true-p ivy-mode)
                           (shrink-window (1+ ivy-height))))
                       nil t)))
+
+;;; melpa:‘page-break-lines’
+(setq page-break-lines-modes '(emacs-lisp-mode
+                               emacs-lisp-compilation-mode
+                               ))
+(setq page-break-lines-lighter " 分页"  ; Mode-line 上显示的该模式名.
+      page-break-lines-max-width nil)
+(global-page-break-lines-mode)
 
 ;;; Feature: ‘ls-lisp’
 ;; 排序:

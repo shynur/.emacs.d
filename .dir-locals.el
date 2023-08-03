@@ -35,6 +35,8 @@
 
          (mode . auto-save)
 
+         (project-vc-merge-submodules . nil)
+
          (imenu-auto-rescan . t)
          (imenu-sort-function . imenu--sort-by-name)
 

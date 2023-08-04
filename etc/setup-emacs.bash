@@ -1,10 +1,10 @@
 #! /usr/bin/env bash
 # 每次登入账户时 source 该文件.  (IOW, 在 Bash 的 profile 文件中 source 该文件.)
+# 你需要手动修改变量: EMACS_INSTALL_PREFIXDIR
 
-# 本文件的正确性还未得到验证!!!
+# 本文件的正确性还未得到验证!!!  毕竟我用的是 MS-Windows ...
 # TODO: systemctl --user enable emacs
 
-# 你需要手动修改这个变量:
 EMACS_INSTALL_PREFIXDIR=/usr/bin/
 
 USER_EMACS_DIRECTORY="`$EMACS_INSTALL_PREFIXDIR/emacs
@@ -28,10 +28,12 @@ export EMACSLOADPATH=$USER_EMACS_DIRECTORY/site-lisp/:
 # 命令行选项‘-L’处理的时间较晚, 并且不会加载‘subdirs.el’,
 # 所以不能准确模拟‘/usr/local/share/emacs/site-lisp/’.
 
-export VISUAL=$EDITOR
-export TEXEDIT=$EDITOR  # TeX 的默认编辑器.
+export VISUAL="$EDITOR"
+export TEXEDIT="$EDITOR"  # TeX 的默认编辑器.
 
-alias emacs=$EDITOR
+alias emacs="$EDITOR"
+alias vi=': ; emacs'
+alias vim=': ; emacs'
 
 # Local Variables:
 # coding: utf-8-unix

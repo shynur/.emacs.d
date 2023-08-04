@@ -20,6 +20,10 @@
             (defvar shynur/c-shell-coding 'chinese-gb18030)
             (defvar shynur/c-truename "谢骐")))
 
+;;; Commentary:
+;;
+;; 本文件应该尽量做最少的工作; 必须可以独立于其它文件存在 (i.e., 可以被‘emacs -Q’正常执行).
+
 ;; 定义成 macro 主要是因为我懒得写‘quote’和双引号.
 (defmacro shynur/c-appdata/ (base &optional extension seq-type &rest forms)
   "将“‘shynur/c-appdata/’BASE+EXTENSION”赋给 BASE; 确保父目录存在.

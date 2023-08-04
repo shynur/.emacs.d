@@ -10,7 +10,6 @@
                                                  (sleep-for 0.4)
                                                  (company-mode -1)
                                                  (electric-indent-local-mode -1)
-                                                 (electric-quote-local-mode -1)
                                                  (page-break-lines-mode -1)
                                                  (indent-guide-mode -1)
                                                  (on-screen-mode -1))))
@@ -66,21 +65,6 @@
  '(debug-on-error nil
                   nil ()
                   "没有对应的handler时进入debugger;debugger直接在error所在的环境中运行,所以很方便;但是有些package没有使用user-error,所以若此变量开启,会时常进入debugger,非常麻烦,所以暂时来说,应该关掉")
- '(electric-quote-mode t
-                       nil (electric))
- '(markdown-mode-hook `(,@markdown-mode-hook
-                        ,(lambda ()
-                           (electric-quote-local-mode -1)))
-                      nil (markdown-mode))
- '(electric-quote-paragraph t
-                            nil (electric))
- '(electric-quote-comment t
-                          nil (electric))
- '(electric-quote-string t
-                         nil (electric))
- '(electric-quote-replace-double nil
-                                 nil (electric)
-                                 "不替换“\"”")
  '(column-number-indicator-zero-based nil
                                       nil ()
                                       "obsolete")
@@ -270,9 +254,6 @@
                     nil ()
                     "制表符尽量用空格代替.(需要特别考虑Makefile)")
  '(tab-always-indent t)
- '(electric-indent-mode t
-                        nil (electric)
-                        "RET后自动缩进")
  '(kill-whole-line nil
                    nil (simple)
                    "“C-k”不删除换行符")
@@ -616,9 +597,6 @@
  '(what-cursor-show-names t
                           nil (simple)
                           "使“C-x =”(‘what-cursor-position’)顺便显示字符的Unicode名字")
- '(lisp-data-mode-hook `(,@(bound-and-true-p lisp-data-mode-hook)
-                         ,(lambda ()
-                            (setq-local electric-pair-open-newline-between-pairs nil))))
  '(display-fill-column-indicator-column t
                                         nil (display-fill-column-indicator)
                                         "默认值参考fill-column")
@@ -1060,6 +1038,14 @@
 (setq recentf-max-saved-items nil)
 (setq recentf-max-menu-items 30)
 (recentf-mode)
+
+;;; Feature: ‘electric’
+(setq electric-quote-paragraph t
+      electric-quote-comment t
+      electric-quote-string t
+      ;; 不替换 双引号.
+      electric-quote-replace-double nil)
+(electric-indent-mode)
 
 ;;; [[package][ivy]]
 (keymap-global-set "C-s"

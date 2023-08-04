@@ -1,16 +1,111 @@
-###. See ["textile":https://textile-lang.com].
+h1=. Community
 
-基本上是 coding style guideline.
+h2=. Issue
 
-* 谁向这个仓库 contribute?
-- 我.
-* 谁需要铭记标准且一致的 Emacs Lisp 代码风格?
-- 我.
-* 所以最应该遵守该文件的是...?
-- 我.
+有任何疑问, 比如:
 
-###.. ////////////////
-// Local Variables:
-// coding: utf-8-unix
-// End:
-//////////////////////
+* 发现了潜在的 bug, 但不知道如何修复
+* 请求新的功能, 但不知道如何改进
+* 任何类型的 建议/吐槽
+* 任何形式的讨论 (discussion).
+* 推荐某份 @.emacs@
+* 这个配置在你的 Emacs 中出现了 _你_ 意想不到的行为
+* 提问, 请求解答 -- 和本配置有关的问题, Emacs 相关问题, Lisp 相关问题 ...
+
+请 *直接提 "issue":https://github.com/shynur/.emacs.d/issues*.
+
+h2=. Pull Request
+
+p=. ~(PR 不需要遵守下文会提到的 ??Coding Style??, 但可以参考.)~
+
+几乎任何 PR 都会被接受.  如果 PR 一直处于 %{color:green;}open% 状态, 说明我在改进 PR.
+提 PR 时, 请勾选 +Allow edits by maintainers+, 否则 将会被 %{color:red;}close%.
+
+注意:
+
+p(. 若 PR 只包含些微的改动, 则可以放在一次 commit 中;
+否则 (即 PR 包含多次 commit 的情况), 每次 commit 前 请积累到一定的行数再 commit, 以减少 commit 次数.
+
+h3<. Copyright
+
+如果你对 _原有文件_ 进行了修改, *请 _不要_ 添加版权声明*.
+你当然拥有对那些修改的版权, 它们会被记录在 "commit 历史":https://github.com/shynur/.emacs.d/commits/main 中, 它们的版权受 "本项目使用的许可证":https://github.com/shynur/.emacs.d/blob/main/LICENSE.txt 保证.
+
+但
+
+h4<. New File
+
+如果你新增了文件, 将
+
+# 默认使用 "本项目使用的许可证":https://github.com/shynur/.emacs.d/blob/main/LICENSE.txt.
+# 否则, 只允许使用 _更宽松的_ 许可证, 并遵照该许可证在新增文件中 *添加相应的声明*.
+
+h2=. Star
+
+如果你也公开了自己的 @.emacs@, *欢迎互相收藏*.
+可以在 "Issues 区":https://github.com/shynur/.emacs.d/issues 请求收藏你的 @.emacs@.
+
+h1=. Coding Style
+
+h2=. Language
+
+h3. Emacs Lisp
+
+h3. C
+
+h2=. Add/Delete File
+
+# 在 文件末页指定 @coding@ 为 @utf-8-unix@
+  (已经设置为保存时自动添加了)
+# 若为 ELisp 文件, 须在 prop-line 指定 @lexical-binding@
+# 更新:
+## "目录结构":../MANIFEST.md 以包含它
+## "gitignore 文件":../.gitignore 以排除它
+## "Makefile":../GNUmakefile
+## "_dir-loc":../.dir-locals.el
+
+h1=. TODO
+
+h2=. Feature
+
+不应该单纯开启 @global-display-line-numbers-mode@, 而是应该给出一个分类机制, 有需要的 mode 才打开 @display-line-numbers-mode@.
+有的 mode (e.g., @neotree@, @calendar@, @vc-annotate-mode@) 显示行号反而会占用空间.
+
+将任何 non-selected window 且是 @prog-mode@ 的 buffer 开启全局彩虹括号.
+当前 buffer 默认开启 @highlight-parentheses@.
+
+@VS Code@ 式 右侧栏代码浏览缩略图.
+
+类似 @VS Code@ @noctis@ 的主题, @solarized@ 也不错.
+
+h2=. Bug
+
+@hexl-mode@: 保存文件时会删除一些字符.
+
+@M-x@ 时 未显示 @ignore@.
+
+h2=. Patch to Be Reported
+
+h3<. Documentation Bug
+
+@dframe-mouse-click-function@: "our".
+
+??emacs?? @C-x p d@: not root
+
+??emacs?? 28, 49.1.2: customize-group
+
+??emacs?? @custom-theme-directory@
+
+??emacs?? 28, 49.1.7 Custom Themes: '(' 加空格.
+
+??elisp?? 17.5 Evaluation During Compilation: some-new-thing
+
+??elisp?? hash-notation, @#[...@
+
+h3<. Code Error
+
+###.. Texitle 格式说明 见 "$":https://textile-lang.com.
+
+Local Variables:
+coding: utf-8-unix
+End:

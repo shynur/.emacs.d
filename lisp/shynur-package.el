@@ -53,6 +53,7 @@
                                   yasnippet
                                   drag-stuff
                                   marginalia
+                                  powershell
                                   ascii-table
                                   textile-mode
                                   indent-guide

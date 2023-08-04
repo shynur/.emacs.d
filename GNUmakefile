@@ -1,15 +1,15 @@
 #! /usr/bin/make -f
 
-
 # [[https://www.gnu.org/prep/standards/html_node/Makefile-Basics.html#Makefile-Basics][Every Makefile should contain this line:]]
 SHELL = /bin/sh
 
 .PHONY: clean docs
 
+# 诸如 auto-save 等文件 不必清理, 它们对备份/恢复很重要.
 clean:
-	rm --force              ./{.,etc,{,site-}lisp,scripts}/**/*.el[cn]
-	rm --force              ./docs/pages/*
-	rm --force              ./modules/*.{so,dylib,dll}
+	rm --force                                         ./**/?*.el[cn]
+	mkdir --parents ./docs/pages/.empty/ ; rm --force  ./docs/pages/*
+	rm --force                                         ./modules/?*.{so,dylib,dll}
 
 docs:
 	mkdir --parents  ./docs/pages/

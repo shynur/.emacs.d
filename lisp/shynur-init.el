@@ -50,30 +50,42 @@
        (prog1 ,last-var
          ,@body))))
 
-(add-hook 'post-gc-hook
-          (lambda ()
-            (message (shynur/message-format "%s")
-                     (format-spec
-                      #("%n GC (%ss total): %B VM, %mmin runtime"
-                        7  9 (face bold)
-                        26 28 (face bold))
-                      `((?n . ,(format #("%d%s"
-                                         0 2 (face bold))
-                                       gcs-done
-                                       (pcase (mod gcs-done 10)
-                                         (1 "st")
-                                         (2 "nd")
-                                         (3 "rd")
-                                         (_ "th"))))
-                        (?m . ,(floor (time-to-seconds (time-since before-init-time)) 60))
-                        (?s . ,(round gc-elapsed))
-                        (?B . ,(cl-loop for memory = (memory-limit) then (/ memory 1024.0)
-                                        for mem-unit across "KMGT"
-                                        when (< memory 1024)
-                                        return (format #("%.1f%c"
-                                                         0 4 (face bold))
-                                                       memory
-                                                       mem-unit))))))))
+(setq frame-title-format `("" default-directory "  "
+                           (:eval (prog1 ',(defvar shynur/frame-title:runtime-info-string)
+                                    ;; 也可以用‘post-gc-hook’来更新.
+                                    (funcall ,(byte-compile (let ((shynur/gcs-done -1))
+                                                              (lambda ()
+                                                                (when (/= shynur/gcs-done gcs-done)
+                                                                  (setq shynur/frame-title:runtime-info-string (format-spec "%N GC (%ts total): %M VM, %hh runtime"
+                                                                                                                            `((?N . ,(format "%d%s"
+                                                                                                                                             gcs-done
+                                                                                                                                             (pcase (mod gcs-done 10)
+                                                                                                                                               (1 "st")
+                                                                                                                                               (2 "nd")
+                                                                                                                                               (3 "rd")
+                                                                                                                                               (_ "th"))))
+                                                                                                                              (?t . ,(round gc-elapsed))
+                                                                                                                              (?M . ,(progn
+                                                                                                                                       (eval-when-compile
+                                                                                                                                         (require 'cl-lib))
+                                                                                                                                       (cl-loop for memory = (memory-limit) then (/ memory 1024.0)
+                                                                                                                                              for mem-unit across "KMGT"
+                                                                                                                                              when (< memory 1024)
+                                                                                                                                              return (format "%.1f%c"
+                                                                                                                                                             memory
+                                                                                                                                                             mem-unit))))
+                                                                                                                              (?h . ,(format "%.1f"
+                                                                                                                                             (/ (time-to-seconds (time-since before-init-time))
+                                                                                                                                                3600.0)))))
+                                                                        shynur/gcs-done gcs-done)))))))))
+      icon-title-format `(:eval (prog1 ',(defvar shynur/frame-icon:window-names)
+                                  (setq shynur/frame-icon:window-names (mapconcat (lambda (buffer)
+                                                                                    (with-current-buffer buffer
+                                                                                      (format "[%s]"
+                                                                                              (buffer-name)))) (delete-dups (mapcar (lambda (window)
+                                                                                                                                      (with-selected-window window
+                                                                                                                                        (current-buffer))) (window-list)))
+                                                                                              " ")))))
 
 ;; 顺序应当是不重要的.
 (require 'shynur-elisp)    ; (find-file-other-window "./shynur-elisp.el")

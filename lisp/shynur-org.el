@@ -15,8 +15,6 @@
 
 (setq org-support-shift-select t)
 
-
-
 (add-hook 'org-mode-hook
           (lambda ()
             "有续行"
@@ -26,4 +24,5 @@
 
 ;; Local Variables:
 ;; coding: utf-8-unix
+;; no-byte-compile: nil
 ;; End:

@@ -1330,7 +1330,6 @@
                             (insert formatted-code)
                           (save-excursion
                             (insert formatted-code))))))))
-        ("g" . ,#'garbage-collect)
         ("h" . ,#'hlt-highlight-region)
         ("s" . ,#'shortdoc-display-group)
         ("z" . ,(lambda ()

@@ -58,7 +58,8 @@ EXTENSION 可能的值为:
 (provide 'shynur/custom)
 
 ;; Local Variables:
+;; coding: utf-8-unix
+;; no-byte-compile: t  ; 该文件按名查找.
 ;; read-symbol-shorthands: (("shynur/c-"  ; 我并没有写过‘shynur-c.el’, 所以不会混淆.
 ;;                           . "shynur/custom-"))
-;; coding: utf-8-unix
 ;; End:

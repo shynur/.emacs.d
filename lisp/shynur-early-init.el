@@ -24,6 +24,7 @@
   (push (file-name-concat user-emacs-directory
                           subdir) load-path))
 
+;; (find-file-other-window "../etc/shynur-custom.el")
 (require 'shynur/custom
          (file-name-concat user-emacs-directory
                            "etc/shynur-custom.el"))
@@ -40,4 +41,5 @@
 
 ;; Local Variables:
 ;; coding: utf-8-unix
+;; no-byte-compile: nil
 ;; End:

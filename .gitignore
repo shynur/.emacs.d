@@ -37,8 +37,8 @@
 /etc/*
 !/etc/abbrev_defs.el
 !/etc/clang-format.yaml
-!/etc/setup-emacs.bash
 !/etc/shynur-custom.el
+!/etc/use-emacs.bash
 !/etc/yas-snippets/
 
 ###outline:   ./etc/yas-snippets/

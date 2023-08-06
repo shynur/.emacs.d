@@ -13,6 +13,7 @@
                      ("#[[:alnum:]]*\\'" . (ignore t))
 
                      ("/\\.dir-locals\\(?:-2\\)?\\.el\\'" . lisp-data-mode)
+                     ("/[^/]+\\.ps1\\'" . powershell-mode)
 
                      ;; shynur/TODO: 我tm自己都看不懂了, 有空补一下注释.
                      ("/[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\(?:\\(?:-[[:alnum:]]\\(?:[[:alnum:]_]*[[:alnum:]]\\)?\\)+\\)?\\.md\\'"      . markdown-mode)

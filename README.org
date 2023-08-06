@@ -72,6 +72,7 @@ limitations under the License.
 + ~git-modes~
 + ~makefile-mode~
 + ~markdown-mode~
++ ~powershell-mode~
 + ~textile-mode~
 + ~yaml-mode~
 + ~yasnippet~

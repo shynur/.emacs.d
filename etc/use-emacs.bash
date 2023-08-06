@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
-# 每次登入账户时 source 该文件.  (IOW, 在 Bash 的 profile 文件中 source 该文件.)
-# 你需要手动修改变量: EMACS_INSTALL_PREFIXDIR
+# 在‘~/.bash_login’中 source 本文件.
+# 假设: 你安装了 Emacs, 并能通过命令‘emacs’直接调用 Emacs.
 
 # Tips:
 #   1. systemctl --user enable emacs

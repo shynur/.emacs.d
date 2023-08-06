@@ -346,15 +346,6 @@
  '(apropos-do-all nil
                   nil (apropos)
                   "有些apropos命令,在提供prefix参数时,会扩大查找范围.如果该变量为t,则即使不提供prefix参数,apropos命令也仍然会扩大查找范围")
- '(on-screen-global-mode t
-                         nil (on-screen)
-                         "在scroll时提示_刚刚的/接下来新增的_visible区域,以防止迷失方向")
- '(on-screen-inverse-flag t
-                          nil (on-screen)
-                          "令‘on-screen-global-mode’提示刚刚的visible区域")
- '(on-screen-highlight-method (nth 1 '(fringe shadow line narrow-line))
-                              nil (on-screen)
-                              "决定‘on-screen-global-mode’如何提示")
  '(fast-but-imprecise-scrolling t
                                 nil ()
                                 "scroll时假定滚过的文本有default face,从而避免fontify它们.当那些滚过的文本的size不一致时,可能导致终点位置有偏差")
@@ -392,9 +383,6 @@
  '(visual-line-fringe-indicators '(nil down-arrow)
                                  nil (simple)
                                  "word-wrap打开时在换行处显示down-arrow")
- '(on-screen-delay 0.4
-                   nil (on-screen)
-                   "on-screen的提示持续时间")
  '(global-highlight-parentheses-mode t
                                      nil (highlight-parentheses)
                                      "给内层括号换种颜色")

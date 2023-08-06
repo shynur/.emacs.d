@@ -184,6 +184,12 @@
 (setq scroll-conservatively most-positive-fixnum
       ;; Minibuffer 永远 一行一行地 automatically scroll.
       scroll-minibuffer-conservatively t)
+
+;; Scroll 时 通过 高亮 即将 滚走/来 的 篇幅 以 提示 滚动方向.
+(setq on-screen-inverse-flag t
+      on-screen-highlight-method 'shadow
+      on-screen-delay 0.4)
+(on-screen-global-mode)
 
 ;;; Tooltip:
 

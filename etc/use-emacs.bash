@@ -6,30 +6,30 @@
 #   1. systemctl --user enable emacs
 
 # 假设: 安装目录 不带空格.
-SHYNUR_EMACS_INSTALL_PREFIXDIR="$(emacs        \
-                                   -Q --batch  \
-                                   --eval "(princ (file-name-directory "\"`type -fPp emacs`\""))")"
+SHYNUR_EMACS_PREFIXDIR_BIN="$(emacs         \
+                                -Q --batch  \
+                                --eval "(princ (file-name-directory "\"`type -fPp emacs`\""))")"
 
-SHYNUR_USER_EMACS_DIRECTORY="`${SHYNUR_EMACS_INSTALL_PREFIXDIR}emacs  \
-                               -Q --batch                             \
-                               --eval '(princ user-emacs-directory)'`"
+SHYNUR_EMACS_CONFIG_DIR="`${SHYNUR_EMACS_PREFIXDIR_BIN}emacs  \
+                            -Q --batch                        \
+                            --eval '(princ user-emacs-directory)'`"
 
-export EDITOR="${SHYNUR_EMACS_INSTALL_PREFIXDIR}emacsclientw                                               \
-                --server-file='`${SHYNUR_EMACS_INSTALL_PREFIXDIR}emacs                                     \
-                                 -Q --batch                                                                \
-                                 --load ${SHYNUR_USER_EMACS_DIRECTORY}etc/shynur-custom.el                 \
-                                 --eval '(princ shynur/custom-appdata/)'`server-auth-dir/server-name.txt'  \
-                --alternate-editor='${SHYNUR_EMACS_INSTALL_PREFIXDIR}emacs                                 \
-                                     --daemon                                                              \
-                                     --debug-init                                                          \
-                                     --module-assertions'                                                  \
-                --create-frame"
+export EDITOR="${SHYNUR_EMACS_PREFIXDIR_BIN}emacsclientw                                                     \
+                 --server-file='`${SHYNUR_EMACS_PREFIXDIR_BIN}emacs                                          \
+                                   -Q --batch                                                                \
+                                   --load ${SHYNUR_EMACS_CONFIG_DIR}etc/shynur-custom.el                     \
+                                   --eval '(princ shynur/custom-appdata/)'`server-auth-dir/server-name.txt'  \
+                 --alternate-editor='${SHYNUR_EMACS_PREFIXDIR_BIN}emacs                                      \
+                                       --daemon                                                              \
+                                       --debug-init                                                          \
+                                       --module-assertions'                                                  \
+                 --create-frame"
 # --module-assertions: 检查 module 的健壮性 (高耗时).
 
 # 如果电脑上只有一个用户, 且希望把‘site-lisp’和个人配置放在一起的话:
-export EMACSLOADPATH="$SHYNUR_USER_EMACS_DIRECTORY"site-lisp/:
+export EMACSLOADPATH="$SHYNUR_EMACS_CONFIG_DIR"site-lisp/:
 # 命令行选项‘-L’处理的时间较晚, 并且不会加载‘subdirs.el’,
-# 所以不能准确模拟‘/usr/local/share/emacs/site-lisp/’.
+# 所以不能准确模拟‘PREFIXDIR/share/emacs/site-lisp/’.
 
 export VISUAL="$EDITOR"
 export TEXEDIT="$EDITOR"  # TeX 的默认编辑器.

@@ -35,7 +35,7 @@ init.el
         |
         |__ lisp/shynur-sh.el
         |
-        |__ lisp/shynur-yas.el
+        |__ lisp/shynur-edit.el
         |
         |__ lisp/shynur-profile.el
         |

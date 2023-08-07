@@ -54,31 +54,31 @@
                            (:eval (prog1 ',(defvar shynur/frame-title:runtime-info-string nil)
                                     ;; 也可以用‘post-gc-hook’来更新.
                                     ,(add-hook 'post-gc-hook
-                                               (byte-compile (let ((shynur/gcs-done -1))
-                                                               (lambda ()
-                                                                 (when (/= shynur/gcs-done gcs-done)
-                                                                   (setq shynur/frame-title:runtime-info-string (format-spec "%N GC (%ts total): %M VM, %hh runtime"
-                                                                                                                             `((?N . ,(format "%d%s"
-                                                                                                                                              gcs-done
-                                                                                                                                              (pcase (mod gcs-done 10)
-                                                                                                                                                (1 "st")
-                                                                                                                                                (2 "nd")
-                                                                                                                                                (3 "rd")
-                                                                                                                                                (_ "th"))))
-                                                                                                                               (?t . ,(round gc-elapsed))
-                                                                                                                               (?M . ,(progn
-                                                                                                                                        (eval-when-compile
-                                                                                                                                          (require 'cl-lib))
-                                                                                                                                        (cl-loop for memory = (memory-limit) then (/ memory 1024.0)
-                                                                                                                                                 for mem-unit across "KMGT"
-                                                                                                                                                 when (< memory 1024)
-                                                                                                                                                 return (format "%.1f%c"
-                                                                                                                                                                memory
-                                                                                                                                                                mem-unit))))
-                                                                                                                               (?h . ,(format "%.1f"
-                                                                                                                                              (/ (time-to-seconds (time-since before-init-time))
-                                                                                                                                                 3600.0)))))
-                                                                         shynur/gcs-done gcs-done)))))))))
+                                               (let ((shynur/gcs-done -1))
+                                                 (lambda ()
+                                                   (when (/= shynur/gcs-done gcs-done)
+                                                     (setq shynur/frame-title:runtime-info-string (format-spec "%N GC (%ts total): %M VM, %hh runtime"
+                                                                                                               `((?N . ,(format "%d%s"
+                                                                                                                                gcs-done
+                                                                                                                                (pcase (mod gcs-done 10)
+                                                                                                                                  (1 "st")
+                                                                                                                                  (2 "nd")
+                                                                                                                                  (3 "rd")
+                                                                                                                                  (_ "th"))))
+                                                                                                                 (?t . ,(round gc-elapsed))
+                                                                                                                 (?M . ,(progn
+                                                                                                                          (eval-when-compile
+                                                                                                                            (require 'cl-lib))
+                                                                                                                          (cl-loop for memory = (memory-limit) then (/ memory 1024.0)
+                                                                                                                                   for mem-unit across "KMGT"
+                                                                                                                                   when (< memory 1024)
+                                                                                                                                   return (format "%.1f%c"
+                                                                                                                                                  memory
+                                                                                                                                                  mem-unit))))
+                                                                                                                 (?h . ,(format "%.1f"
+                                                                                                                                (/ (time-to-seconds (time-since before-init-time))
+                                                                                                                                   3600.0)))))
+                                                           shynur/gcs-done gcs-done))))))))
       icon-title-format `(:eval (prog1 ',(defvar shynur/frame-icon:window-names nil)
                                   (setq shynur/frame-icon:window-names (mapconcat (lambda (buffer)
                                                                                     (with-current-buffer buffer
@@ -97,7 +97,7 @@
 (require 'shynur-cc)       ; (find-file-other-window "./shynur-cc.el")
 (require 'shynur-kbd)      ; (find-file-other-window "./shynur-kbd.el")
 (require 'shynur-sh)       ; (find-file-other-window "./shynur-sh.el")
-(require 'shynur-yas)      ; (find-file-other-window "./shynur-yas.el")
+(require 'shynur-edit)     ; (find-file-other-window "./shynur-edit.el")
 (require 'shynur-profile)  ; (find-file-other-window "./shynur-profile.el")
 (require 'shynur-startup)  ; (find-file-other-window "./shynur-startup.el")
 (require 'shynur-ui)       ; (find-file-other-window "./shynur-ui.el")
@@ -107,4 +107,5 @@
 
 ;; Local Variables:
 ;; coding: utf-8-unix
+;; no-byte-compile: nil
 ;; End:

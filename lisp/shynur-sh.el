@@ -36,7 +36,7 @@
                                  (cl-decf attempts)))
                              (when (save-excursion
                                      (re-search-backward "Microsoft Windows"))
-                               (execute-kbd-macro [?p ?o ?w ?e ?r ?s ?h ?e ?l ?l ?\C-m])))))))
+                               (execute-kbd-macro [?p ?w ?s ?h ?\C-m])))))))
 
 (add-hook 'shell-mode-hook
           (lambda ()

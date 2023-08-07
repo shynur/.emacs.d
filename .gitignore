@@ -40,6 +40,7 @@
 !/etc/emacs-v.ps1
 !/etc/shynur-custom.el
 !/etc/use-emacs.bash
+!/etc/use-emacs.ps1
 !/etc/yas-snippets/
 
 ###outline:   ./etc/yas-snippets/

@@ -20,6 +20,7 @@
 
 (dolist (subdir '("lisp/themes/"
                   "modules/"
+                  "shynur-elpa/"
                   ))
   (push (file-name-concat user-emacs-directory
                           subdir) load-path))

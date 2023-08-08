@@ -118,7 +118,7 @@ See the [[file:./LICENSE.txt][LICENSE.txt]] file for license rights and limitati
 
 -----
 
-Copyright \copy 2023  [[https://github.com/shynur][谢骐]] <[[mailto:one.last.kiss@outlook.com][one.last.kiss@outlook.com]]>.
+Copyright \copy  2023  [[https://github.com/shynur][谢骐]] <[[mailto:one.last.kiss@outlook.com][one.last.kiss@outlook.com]]>.
 I own the copyright to [[https://github.com/shynur/.emacs.d][this entire repository]];
 unless explicitly stated, all files here are included and licensed the same as [[https://github.com/shynur/.emacs.d/blob/main/README.org?plain=1][this file]].
 

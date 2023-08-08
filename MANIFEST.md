@@ -12,6 +12,8 @@ early-init.el
         |__ etc/shynur-custom.el
         |
         |__ lisp/shynur-package.el
+              |
+              |__ shynur-elpa/shynur-elpa.el
 
 site-lisp/site-start.el
 

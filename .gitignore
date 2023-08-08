@@ -18,6 +18,7 @@
 !/lisp/
 !/modules/
 !/scripts/
+!/shynur-elpa/
 !/site-lisp/
 
 ##outline:  ./.github/
@@ -78,6 +79,10 @@
 ##outline:  ./scripts/
 /scripts/*
 !/scripts/el.el
+
+##outline:  ./shynur-elpa/
+/shynur-elpa/*
+!/shynur-elpa/shynur-elpa.el
 
 ##outline:  ./site-lisp/
 /site-lisp/*

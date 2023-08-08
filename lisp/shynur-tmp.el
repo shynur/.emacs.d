@@ -1075,7 +1075,8 @@
 
       ls-lisp-use-localized-time-format t  ; 使用下面指定的格式, 而非 OS 提供的.
       ls-lisp-format-time-list '("%m/%d %k:%M"  ; 今年编辑的显示为 “07/01  6:42”.
-                                 "%m/%d %Y"))
+                                 ;; ‘年份’前面加两个空格, 使右侧和‘分钟’对齐.
+                                 "%m/%d  %Y"))
 (setq ls-lisp-support-shell-wildcards t)
 
 ;;; Feature: ‘hanoi’

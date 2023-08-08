@@ -44,6 +44,10 @@ init.el
         |__ lisp/shynur-ui.el
         |     |
         |     |__ lisp/themes/shynur-themes.el
+        |           |
+        |           |__ lisp/themes/shynur-light-theme.el
+        |           |
+        |           |__ lisp/themes/shynur-dark-theme.el
         |
         |__ lisp/shynur-lib.el
 

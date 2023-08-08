@@ -19,6 +19,10 @@
                                                "lisp/themes/")
       ;; 难不成我还有空去看未知主题的源码, 分析它安全不安全??
       custom-safe-themes t)
+
+;; Shynur’s Themes:
+(require-theme 'shynur-light-theme)  ; (find-file-other-window "./shynur-light-theme.el")
+(require-theme 'shynur-dark-theme)   ; (find-file-other-window "./shynur-dark-theme.el")
 
 (require-theme 'modus-vivendi-theme)
 

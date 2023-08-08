@@ -1,4 +1,4 @@
-#! pwsh
+#! /usr/bin/env pwsh
 
 function shynur-Emacsclientw {
     D:/Progs/emacs/bin/emacsclientw.exe                                      `

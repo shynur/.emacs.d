@@ -10,12 +10,16 @@ Q_2: 在 MS-Windows 上双击‘emacs.exe’以期待运行 GUI 的 Emacs, 却�
 A_2: 这是‘emacs.exe’的正常行为, 方便运行 TUI.
      如果想要运行 GUI, 应该执行‘runemacs.exe’, 它是对‘emacs.exe’的包装.
 
-     注意, 确保你的快捷方式 (包括 任务栏 快捷方式) 真的指向了‘runemacs.exe’而
-     不是‘emacs.exe’.
+     注意, 确保你的快捷方式 (包括 任务栏 快捷方式) 真的指向了‘runemacs.exe’
+     而不是‘emacs.exe’.
      (虽然我更推荐你使用‘emacsclientw.exe’, 参见
       <~shynur/.emacs.d/docs/Emacs-use_daemon.md>.)
 
      参考: <https://git.savannah.gnu.org/cgit/emacs.git/tree/nt/README.W32?h=emacs-29#n90>.
+
+Q_3: 从‘emacsclientw’启动, UI 和 预期 的不一致.
+
+A_3: See <https://emacs.stackexchange.com/a/77767/39388>.
 
 ;; Local Variables:
 ;; coding: utf-8-unix

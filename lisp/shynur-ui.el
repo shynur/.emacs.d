@@ -3,7 +3,6 @@
 ;;; Theme:
 
 (require 'shynur-themes)   ; (find-file-other-window "./themes/shynur-themes.el")
-
 (enable-theme 'modus-vivendi)
 
 ;;; Face (其实应该放到 theme 中去):

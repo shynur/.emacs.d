@@ -1,7 +1,15 @@
 #! /usr/bin/env pwsh
 
 # 请 手动修改 默认参数:
-$DefaultArguments = "-Q"
+$DefaultArguments =                                           `
+  "-Q", "--no-desktop",                                       `
+  "--eval", "(tool-bar-mode -1)",                             `
+  "--eval", "(set-face-attribute 'default nil :height 130)",  `
+  "--background-color", "black",                              `
+  "--cursor-color", "green",                                  `
+  "--foreground-color", "white",                              `
+  "--no-blinking-cursor",                                     `
+  "--vertical-scroll-bars"
 # 以及 下文 提及 的 不同版本的 Emacs 安装路径.
 
 $EmacsPath = $null
@@ -11,19 +19,22 @@ if ($args.count -lt 1) {
 }
 switch ($args[0]) {
     24 {
-        $EmacsPath = 'D:/Progs/emacs-24.5/bin/runemacs.exe'
+        $EmacsPath = 'D:/Progs/emacs-24.4/bin/runemacs.exe'
     }
     25 {
-        $EmacsPath = 'D:/Progs/emacs-25.3_1/bin/runemacs.exe'
+        $EmacsPath = 'D:/Progs/emacs-25.1/bin/runemacs.exe'
     }
     26 {
-        $EmacsPath = 'D:/Progs/emacs-26.3/bin/runemacs.exe'
+        $EmacsPath = 'D:/Progs/emacs-26.1/bin/runemacs.exe'
     }
     27 {
-        $EmacsPath = 'D:/Progs/emacs-27.2/bin/runemacs.exe'
+        $EmacsPath = 'D:/Progs/emacs-27.1/bin/runemacs.exe'
     }
     28 {
-        $EmacsPath = 'D:/Progs/emacs-28.2/bin/runemacs.exe'
+        $EmacsPath = 'D:/Progs/emacs-28.1/bin/runemacs.exe'
+    }
+    29 {
+        $EmacsPath = 'D:/Progs/emacs/bin/runemacs.exe'
     }
     default {
         Write-Output "无法识别的程序编号: $programNumber"
@@ -31,14 +42,7 @@ switch ($args[0]) {
     }
 }
 
-$RemainingArguments = $args[1..$args.count]
-# 如果默认参数不为空, 将它们添加到参数列表的开头.
-if ($DefaultArguments) {
-    $RemainingArguments = $DefaultArguments + $RemainingArguments
-}
-
-# 将剩余的参数传递给程序.
-& $EmacsPath $RemainingArguments
+& $EmacsPath $DefaultArguments $args[1..$args.count]
 
 # Local Variables:
 # coding: utf-8-unix

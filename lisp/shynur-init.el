@@ -50,6 +50,27 @@
        (prog1 ,last-var
          ,@body))))
 
+(defmacro shynur/lambda-signed-as (function &rest body)
+  "暂不支持 autoload 函数."
+  (declare (indent 1))
+  (let ((&shynur/lambda-signed-as:funtion (gensym "shynur/")))
+    `(let* ((,&shynur/lambda-signed-as:funtion ,function)
+            (arglist (help-function-arglist ,&shynur/lambda-signed-as:funtion)))
+       (eval (list
+              'lambda arglist
+              ,(let ((first-form (cl-first body)))
+                 (if (stringp first-form)
+                     first-form
+                   `(documentation ,&shynur/lambda-signed-as:funtion)))
+              (interactive-form ,&shynur/lambda-signed-as:funtion)
+              (apply #'list
+                     'dlet `((shynur/lambda-signed-as:args (list ,@(cl-remove-if (lambda (symbol)
+                                                                                  (pcase symbol
+                                                                                    ('&optional t)
+                                                                                    ('&rest     t))) arglist))))
+                     ',body))
+             lexical-binding))))
+
 (setq frame-title-format `("" default-directory "  "
                            (:eval (prog1 ',(defvar shynur/frame-title:runtime-info-string nil)
                                     ;; 也可以用‘post-gc-hook’来更新.

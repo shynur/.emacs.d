@@ -1,18 +1,22 @@
 ;;; -*- lexical-binding: t; -*-
 
-(letrec ((shynur/kbd-translation-modifier
-          (lambda ()
-            "重新解释键盘扫描码:
+(let ((shynur/kbd-translation-modifier (lambda ()
+                                         "重新解释键盘扫描码:
 ‘[’/‘]’解释为‘(’/‘)’, and vice versa."
-            ;; 需要在 client 进程中执行.
-            (keyboard-translate ?\[ ?\()
-            (keyboard-translate ?\] ?\))
-            (keyboard-translate ?\( ?\[)
-            (keyboard-translate ?\) ?\])
-            (remove-hook 'server-after-make-frame-hook
-                         shynur/kbd-translation-modifier))))
-  (add-hook 'server-after-make-frame-hook
-            shynur/kbd-translation-modifier))
+                                         ;; 若从 daemon 启动, 则需要在 client 进程中执行.
+                                         (keyboard-translate ?\[ ?\()
+                                         (keyboard-translate ?\] ?\))
+                                         (keyboard-translate ?\( ?\[)
+                                         (keyboard-translate ?\) ?\]))))
+  (if (daemonp)
+      (add-hook 'server-after-make-frame-hook
+                ;; (为什么要用‘letrec’ -- 见 <https://emacs.stackexchange.com/a/77767/39388>.)
+                (letrec ((shynur/kbd-translation-modifier--then-remove-itself (lambda ()
+                                                                                (funcall shynur/kbd-translation-modifier)
+                                                                                (remove-hook 'server-after-make-frame-hook
+                                                                                             shynur/kbd-translation-modifier--then-remove-itself))))
+                  shynur/kbd-translation-modifier--then-remove-itself))
+    (funcall shynur/kbd-translation-modifier)))
 
 ;;; MS-Windows:
 

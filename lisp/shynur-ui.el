@@ -7,61 +7,64 @@
 
 ;;; Face (其实应该放到 theme 中去):
 
-;; (为什么要用‘letrec’ -- 见 <https://emacs.stackexchange.com/a/77767/39388>.)
-(letrec ((shynur--custom-set-faces
-          (lambda ()
-            ;; 摘编自 Centaur Emacs, 用于解决 字体 问题.
-            (let* ((font       "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing")
-                   (attributes (font-face-attributes font)                                   )
-                   (family     (plist-get attributes :family)                                ))
-              ;; Default font.
-              (apply #'set-face-attribute
-                     'default nil
-                     attributes)
-              ;; For all Unicode characters.
-              (set-fontset-font t 'symbol
-                                (font-spec :family "Segoe UI Symbol")
-                                nil 'prepend)
-              ;; Emoji 🥰.
-              (set-fontset-font t 'emoji
-                                (font-spec :family "Segoe UI Emoji")
-                                nil 'prepend)
-              ;; For Chinese characters.
-              (set-fontset-font t '(#x4e00 . #x9fff)
-                                (font-spec :family family)))
-            (custom-set-faces
-             '(cursor
-               ((t . (:background "chartreuse")))
-               nil
-               "该face仅有‘:background’字段有效")
-             '(tooltip
-               ((t . ( :height     100
-                       :background "dark slate gray"))))
-             '(line-number
-               ((t . ( :slant  italic
-                       :weight light))))
-             `(line-number-major-tick
-               ((t . ( :foreground ,(face-attribute 'line-number :foreground)
-                       :background ,(face-attribute 'line-number :background)
-                       :slant      italic
-                       :underline  t
-                       :weight     light)))
-               nil
-               "指定倍数的行号;除此以外,还有‘line-number-minor-tick’实现相同的功能,但其优先级更低")
-             '(line-number-current-line
-               ((t . ( :slant  normal
-                       :weight black))))
-             '(window-divider
-               ((t . (:foreground "SlateBlue4"))))
-             '(indent-guide-face
-               ((t . (:foreground "dark sea green"))))
-             '(fill-column-indicator
-               ((t . ( :background "black"
-                       :foreground "yellow")))))
-            (remove-hook 'server-after-make-frame-hook
-                         shynur--custom-set-faces))))
-  (add-hook 'server-after-make-frame-hook
-            shynur--custom-set-faces))
+(let ((shynur--custom-set-faces (lambda ()
+                                  ;; 摘编自 Centaur Emacs, 用于解决 字体 问题.
+                                  (let* ((font       "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing")
+                                         (attributes (font-face-attributes font)                                   )
+                                         (family     (plist-get attributes :family)                                ))
+                                    ;; Default font.
+                                    (apply #'set-face-attribute
+                                           'default nil
+                                           attributes)
+                                    ;; For all Unicode characters.
+                                    (set-fontset-font t 'symbol
+                                                      (font-spec :family "Segoe UI Symbol")
+                                                      nil 'prepend)
+                                    ;; Emoji 🥰.
+                                    (set-fontset-font t 'emoji
+                                                      (font-spec :family "Segoe UI Emoji")
+                                                      nil 'prepend)
+                                    ;; For Chinese characters.
+                                    (set-fontset-font t '(#x4e00 . #x9fff)
+                                                      (font-spec :family family)))
+                                  (custom-set-faces
+                                   '(cursor
+                                     ((t . (:background "chartreuse")))
+                                     nil
+                                     "该face仅有‘:background’字段有效")
+                                   '(tooltip
+                                     ((t . ( :height     100
+                                             :background "dark slate gray"))))
+                                   '(line-number
+                                     ((t . ( :slant  italic
+                                             :weight light))))
+                                   `(line-number-major-tick
+                                     ((t . ( :foreground ,(face-attribute 'line-number :foreground)
+                                             :background ,(face-attribute 'line-number :background)
+                                             :slant      italic
+                                             :underline  t
+                                             :weight     light)))
+                                     nil
+                                     "指定倍数的行号;除此以外,还有‘line-number-minor-tick’实现相同的功能,但其优先级更低")
+                                   '(line-number-current-line
+                                     ((t . ( :slant  normal
+                                             :weight black))))
+                                   '(window-divider
+                                     ((t . (:foreground "SlateBlue4"))))
+                                   '(indent-guide-face
+                                     ((t . (:foreground "dark sea green"))))
+                                   '(fill-column-indicator
+                                     ((t . ( :background "black"
+                                             :foreground "yellow"))))))))
+  (if (daemonp)
+      (add-hook 'server-after-make-frame-hook
+                ;; (为什么要用‘letrec’ -- 见 <https://emacs.stackexchange.com/a/77767/39388>.)
+                (letrec ((shynur--custom-set-faces--then-remove-itself (lambda ()
+                                                                        (funcall shynur--custom-set-faces)
+                                                                        (remove-hook 'server-after-make-frame-hook
+                                                                                     shynur--custom-set-faces--then-remove-itself))))
+                  shynur--custom-set-faces--then-remove-itself))
+    (funcall shynur--custom-set-faces)))
 
 ;;; Frame:
 
@@ -74,6 +77,8 @@
 
 (with-eval-after-load 'frame
   (require 'transwin)
+  (when (not (daemonp))
+    (transwin-ask 80))
   (add-hook 'after-make-frame-functions
             (lambda (frame-to-be-made)
               (let ((inhibit-message t))

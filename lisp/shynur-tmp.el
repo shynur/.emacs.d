@@ -972,8 +972,8 @@
       company-minimum-prefix-length 2)
 (setq company-dabbrev-code-everywhere t)  ; 还在 comment 和 string 中进行 completion.
 (setq company-dabbrev-code-other-buffers t  ; 在具有相同‘major-mode’的 buffer 中搜索候选词.
-      company-dabbrev-code-time-limit 2  ; 在 current buffer 中搜索代码块中的关键词的时间限制.
-      )
+      ;; 在 current buffer 中搜索代码块中的关键词的时间限制.
+      company-dabbrev-code-time-limit 2)
 (setq company-show-quick-access t  ; 给候选词编号.
       company-tooltip-offset-display 'lines  ; 原本在候选词界面的右侧是由 scroll bar, 现改成: 上/下面分别有多少候选词.
       company-tooltip-limit 10)
@@ -1219,22 +1219,23 @@
                    "C-h x"
                    "M-x"])
     (let ((original-command (keymap-global-lookup key)))
-      (keymap-global-set key (lambda ()
-                               (interactive)
-                               (unwind-protect
-                                   (progn
-                                     (let ((shynur--completion-regexp-list+ `(,@completion-regexp-list
-                                                                              ,@shynur--completion-regexp-list)))
-                                       (seq-doseq (completer completers)
-                                         (advice-add completer :around
-                                                     (lambda (advised-function &rest arguments)
-                                                       "Bug#64351#20"
-                                                       (let ((completion-regexp-list shynur--completion-regexp-list+))
-                                                         (apply advised-function
-                                                                arguments))) '((name . "shynur--let-bind-completion-regexp-list")))))
-                                     (call-interactively original-command))
-                                 (seq-doseq (completer completers)
-                                   (advice-remove completer "shynur--let-bind-completion-regexp-list"))))))))
+      (keymap-global-set key
+                         (lambda ()
+                           (interactive)
+                           (unwind-protect
+                               (progn
+                                 (let ((shynur--completion-regexp-list+ `(,@completion-regexp-list
+                                                                          ,@shynur--completion-regexp-list)))
+                                   (seq-doseq (completer completers)
+                                     (advice-add completer :around
+                                                 (lambda (advised-function &rest arguments)
+                                                   "Bug#64351#20"
+                                                   (let ((completion-regexp-list shynur--completion-regexp-list+))
+                                                     (apply advised-function
+                                                            arguments))) '((name . "shynur--let-bind-completion-regexp-list")))))
+                                 (call-interactively original-command))
+                             (seq-doseq (completer completers)
+                               (advice-remove completer "shynur--let-bind-completion-regexp-list"))))))))
 
 (keymap-global-set "C-x C-b"
                    #'bs-show)

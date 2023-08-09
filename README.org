@@ -27,19 +27,13 @@ limitations under the License.
 #+ATTR_HTML: :width 900px
 [[https://raw.githubusercontent.com/shynur/.emacs.d/assets/demos/emacs.png]]
 
-🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/ (22).
+🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/ (22.2.2).
 之后将会使用 [[https://github.com/jwiegley/use-package][=use-package=]] 进行彻底的重构.
 
-** 📖 目录结构
+** Demo
 
-见 [[file:./MANIFEST.md][MANIFEST.md]].
-(仅含具体的配置文件.)
-
-** ✨ Demo
-
-#+ATTR_HTML: :alt 如果你看到了这句话, 说明我没高兴上传 GIF, 或者你的网络环境有问题.
-#+ATTR_HTML: :width 400px
-[[https://raw.githubusercontent.com/shynur/.emacs.d/assets/demos/emacs.gif]]
+非常多的 demo ✨, *请在 [[https://github.com/shynur/.emacs.d/issues/1][issue#1]] 查看*!  \\
+Quite a lot of demos ✨; *please see them in [[https://github.com/shynur/.emacs.d/issues/1][issue#1]]*!
 
 * Prerequisites                                             :linked:MANIFEST:
 
@@ -111,6 +105,11 @@ Latest release, using *GUI*, run as *daemon-clients* on same machine ([[file:./d
 
 + [[https://api.codetabs.com/v1/loc/?github=shynur/.emacs.d&branch=main&ignored=][Languages Statistics]]
   # See [[https://codetabs.com/count-loc/count-loc-online.html][Count LOC online]] hosted at [[https://github.com/jolav/codetabs]].
+
+** 目录结构
+
+见 [[file:./MANIFEST.md][MANIFEST.md]].
+(仅含具体的配置文件.)
 
 * License
 

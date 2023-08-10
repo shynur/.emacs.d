@@ -78,12 +78,12 @@
 (with-eval-after-load 'frame
   (require 'transwin)
   (when (not (daemonp))
-    (transwin-ask 80))
+    (transwin-ask 75))
   (add-hook 'after-make-frame-functions
             (lambda (frame-to-be-made)
               (let ((inhibit-message t))
                 (with-selected-frame frame-to-be-made
-                  (transwin-ask 80))))))
+                  (transwin-ask 75))))))
 
 ;; 当最后一个 frame 关闭时, 存入它的 位置/尺寸;
 ;; 当桌面上没有 frame 时, 下一个打开的 frame 将使用那个被存入的 位置/尺寸.
@@ -113,6 +113,45 @@
 (setq window-divider-default-places      'right-only  ; 横向 divider 可以用 mode line代替.
       window-divider-default-right-width 12)
 (window-divider-mode)
+
+;; Frame Title
+(setq frame-title-format `("" default-directory "  "
+                           (:eval (prog1 ',(defvar shynur/frame-title:runtime-info-string nil)
+                                    ;; 也可以用‘post-gc-hook’来更新.
+                                    ,(add-hook 'post-gc-hook
+                                               (let ((shynur/gcs-done -1))
+                                                 (lambda ()
+                                                   (when (/= shynur/gcs-done gcs-done)
+                                                     (setq shynur/frame-title:runtime-info-string (format-spec "%N GC (%ts total): %M VM, %hh runtime"
+                                                                                                               `((?N . ,(format "%d%s"
+                                                                                                                                gcs-done
+                                                                                                                                (pcase (mod gcs-done 10)
+                                                                                                                                  (1 "st")
+                                                                                                                                  (2 "nd")
+                                                                                                                                  (3 "rd")
+                                                                                                                                  (_ "th"))))
+                                                                                                                 (?t . ,(round gc-elapsed))
+                                                                                                                 (?M . ,(progn
+                                                                                                                          (eval-when-compile
+                                                                                                                            (require 'cl-lib))
+                                                                                                                          (cl-loop for memory = (memory-limit) then (/ memory 1024.0)
+                                                                                                                                   for mem-unit across "KMGT"
+                                                                                                                                   when (< memory 1024)
+                                                                                                                                   return (format "%.1f%c"
+                                                                                                                                                  memory
+                                                                                                                                                  mem-unit))))
+                                                                                                                 (?h . ,(format "%.1f"
+                                                                                                                                (/ (time-to-seconds (time-since before-init-time))
+                                                                                                                                   3600.0)))))
+                                                           shynur/gcs-done gcs-done))))))))
+      icon-title-format `(:eval (prog1 ',(defvar shynur/frame-icon:window-names nil)
+                                  (setq shynur/frame-icon:window-names (mapconcat (lambda (buffer)
+                                                                                    (with-current-buffer buffer
+                                                                                      (format "[%s]"
+                                                                                              (buffer-name)))) (delete-dups (mapcar (lambda (window)
+                                                                                              (with-selected-window window
+                                                                                                (current-buffer))) (window-list)))
+                                                                                              " ")))))
 
 ;;; Window:
 

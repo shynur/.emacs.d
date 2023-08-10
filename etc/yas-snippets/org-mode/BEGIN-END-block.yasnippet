@@ -1,0 +1,19 @@
+# -*- coding: utf-8-unix; -*-
+# key: #+
+# binding: b
+# type: snippet
+# contributor: shynur
+# --
+BEGIN_${1:`(upcase (completing-read "#+BEGIN_"
+                                    '("center"
+                                      "comment"
+                                      "example"
+                                      "export"
+                                      "justifyleft"
+                                      "justifyright"
+                                      "quote"
+                                      "src"
+                                      "verse"
+                                      )))`} $2
+$0
+#+END_$1

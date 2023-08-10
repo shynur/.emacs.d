@@ -11,6 +11,9 @@
 (add-hook 'org-mode-hook
           #'org-superstar-mode)
 
+(add-hook 'org-mode-hook
+          #'yas-minor-mode)
+
 (setq org-link-descriptive nil)  ; 展开link.
 
 (setq org-support-shift-select t)

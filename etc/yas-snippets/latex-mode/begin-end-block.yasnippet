@@ -1,0 +1,23 @@
+# -*- coding: utf-8-unix; -*-
+# key: \begin
+# binding: {
+# type: snippet
+# contributor: shynur
+# --
+{${1:`(completing-read "\\begin{"
+                       '("abstract"
+                         "align"
+                         "center"
+                         "displaymath"
+                         "document"
+                         "enumerate"
+                         "equation"
+                         "equation*"
+                         "figure"
+                         "itemize"
+                         "math"
+                         "table"
+                         "tabular"
+                         ))`}}
+    $0
+\end{$1}

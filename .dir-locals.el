@@ -45,7 +45,7 @@
                      (setq-local buffer-read-only t))))
 
          (eval . (let ((case-fold-search t))
-                   (highlight-phrase "[.:~/]*\\(?:shynur\\|谢骐\\)\\(?:[.:/-]+[[:alnum:].:/*-]*\\)"
+                   (highlight-phrase "[.:~/]*\\(?:shynur\\|谢骐\\)\\(?:[.:/-]+[[:alnum:].:/*-]*\\)?"
                                      'underline)))
 
          (tab-width . 4)
@@ -56,7 +56,10 @@
 
          (before-save-hook . ((lambda ()
                                 (save-excursion
-                                  (add-file-local-variable 'coding 'utf-8-unix)))
+                                  (funcall (if (bound-and-true-p shynur/.emacs.d:add-coding-at-propline?)
+                                               #'add-file-local-variable-prop-line
+                                             #'add-file-local-variable)
+                                           'coding 'utf-8-unix)))
                               delete-trailing-whitespace
                               t))
          ))
@@ -97,6 +100,9 @@
                                 (delete-horizontal-space))))))
 
  (makefile-gmake-mode . ((mode . indent-tabs)))
+
+ ("etc/yas-snippets/" . ((snippet-mode . ((require-final-newline . nil)
+                                          (shynur/.emacs.d:add-coding-at-propline? t)))))
 
  ("modules/src/" . ((nil . ((eval . (when-let ((buffer-file-name (buffer-file-name)))
                                       (when (string-match-p "emacs-module"  ; 这玩意有 GPL 污染, 切割!

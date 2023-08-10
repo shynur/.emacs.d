@@ -27,6 +27,8 @@ init.el
         |
         |__ lisp/shynur-org.el
         |
+        |__ lisp/shynur-tex.el
+        |
         |__ lisp/shynur-abbrev.el
         |
         |__ lisp/shynur-server.el

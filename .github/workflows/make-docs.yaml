@@ -1,0 +1,47 @@
+name: Make Docs
+on:
+  workflow_dispatch:
+
+jobs:
+  Clone_Main:
+    runs-on: &OS
+      ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+          submodules: false
+
+  Build_Docs:
+    runs-on: *OS
+    steps:
+      - name: 安装 pandoc
+        run: sudo apt-get install pandoc
+      - run: make --jobs docs
+
+  Publish_Docs:
+    runs-on: *OS
+    steps:
+      - name: Move Docs
+        run: |
+          mv ./docs/pages /tmp/shynur-emacs-docs
+          rm --recursive ./*
+      - name: Clone 分支/assets
+        uses: actions/checkout@v3
+        with:
+          ref: assets
+          fetch-depth: 1
+      - run: |
+          mkdir --parents ./docs/
+          rm --recursive ./docs
+          mv /tmp/shynur-emacs-docs ./docs
+      - name: Commit 到 (assets)/docs/
+        run: |
+          git config user.name "GitHub Workflow: ${{github.workflow}}"
+          git add ./docs/**
+          git commit -m "${{github.workflow}}"
+          git push origin assets
+
+# Local Variables:
+# coding: utf-8-unix
+# End:

@@ -948,7 +948,8 @@
                                                                                                                                  "囊括诸如‘~/.emacs.d/’下的‘.dir-locals.el’文件."
                                                                                                                                  (file-name-concat user-emacs-directory
                                                                                                                                                    dir-loc)) [".dir-locals.el"
-                                                                                                                                                               ".dir-locals-2.el"])
+                                                                                                                                                              ".dir-locals-2.el"])
+                                                                                                                     "d:/Desktop/CheatSheets/.dir-locals.el"
                                                                                                                      ])))
                                            (dolist (mode-vars dir-locals)
                                              (let ((vars (cdr mode-vars)))

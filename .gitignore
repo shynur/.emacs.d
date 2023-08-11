@@ -25,6 +25,11 @@
 /.github/*
 !/.github/?*.yaml
 !/.github/CONTRIBUTING.textile
+!/.github/workflows/
+
+###outline:   ./.github/workflows/
+/.github/workflows/*
+!/.github/workflows/?*.yaml
 
 ##outline:  ./docs/
 /docs/*

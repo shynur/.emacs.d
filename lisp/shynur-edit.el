@@ -10,7 +10,8 @@
 (keymap-set yas-minor-mode-map "TAB"
             nil)
 (keymap-set yas-minor-mode-map "<tab>"
-            yas-maybe-expand)
+            ;; yas-maybe-expand
+            nil)
 
 ;;; Delimiter
 

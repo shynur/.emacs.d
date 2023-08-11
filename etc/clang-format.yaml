@@ -77,6 +77,8 @@ SpacesInConditionalStatement: false
 SpacesInContainerLiterals: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
+...
+
 ---
 Language: Cpp
 AccessModifierOffset: -2
@@ -115,9 +117,12 @@ SpaceBeforeRangeBasedForLoopColon: true
 SpacesInAngles: Never
 SpacesInCStyleCastParentheses: false
 Standard: Latest
+...
+
 ---
 Language: JavaScript
 JavaScriptWrapImports: true
+...
 
 # Local Variables:
 # coding: utf-8-unix

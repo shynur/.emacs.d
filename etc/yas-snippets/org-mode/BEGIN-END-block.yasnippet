@@ -2,6 +2,8 @@
 # key: #+
 # binding: B
 # type: snippet
+# expand-env: ((yas-indent-line nil))
+# condition: (save-match-data (looking-back "^,*#\\+\\="))
 # contributor: shynur
 # --
 BEGIN_${1:`(upcase (completing-read "#+BEGIN_"
@@ -16,4 +18,12 @@ BEGIN_${1:`(upcase (completing-read "#+BEGIN_"
                                       "verse"
                                       )))`} $2
 $0
-#+END_$1
+${1:$(apply #'buffer-substring-no-properties
+            (save-match-data
+              (let ((\#+BEGIN_XXX (concat "#+BEGIN_"
+                                          yas-text)))
+                `(,(save-excursion
+                     (re-search-backward (concat "^,*"
+                                                 (regexp-quote \#+BEGIN_XXX))))
+                  ,(- (match-end 0)
+                      (length \#+BEGIN_XXX))))))}#+END_$1

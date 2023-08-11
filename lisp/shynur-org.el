@@ -14,6 +14,11 @@
 (add-hook 'org-mode-hook
           #'yas-minor-mode)
 
+(add-hook 'org-mode-hook
+          (lambda ()
+            (when (bound-and-true-p electric-indent-mode)
+              (electric-indent-local-mode -1))))
+
 (setq org-link-descriptive nil)  ; 展开link.
 
 (setq org-support-shift-select t)

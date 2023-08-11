@@ -27,7 +27,7 @@ limitations under the License.
 #+ATTR_HTML: :width 900px
 [[https://raw.githubusercontent.com/shynur/.emacs.d/assets/demos/emacs.png]]
 
-🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/ (22.2.2).
+🔬 当前正在阅读 /[[https://gnu.org/s/emacs/manual/html_node/elisp][GNU Emacs Lisp Reference Manual]]/ (22.2.3).
 之后将会使用 [[https://github.com/jwiegley/use-package][=use-package=]] 进行彻底的重构.
 
 ** Demo

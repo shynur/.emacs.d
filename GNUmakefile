@@ -21,6 +21,7 @@ docs:
 	yes | cp --remove-destination --target-directory=docs/pages/          docs/Emacs-FAQ.txt
 	pandoc --from=org      --to=html -o docs/pages/Emacs-regexp.html	  docs/Emacs-regexp.org
 	pandoc --from=markdown --to=html -o docs/pages/Emacs-use_daemon.html  docs/Emacs-use_daemon.md
+	pandoc --from=org      --to=html -o docs/pages/Org-quickstart.html	  docs/Org-quickstart.org
 
 
 # Local Variables:

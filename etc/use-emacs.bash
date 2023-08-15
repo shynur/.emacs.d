@@ -18,7 +18,7 @@ export EDITOR="${SHYNUR_EMACS_PREFIXDIR_BIN}emacsclientw                        
                  --server-file='`${SHYNUR_EMACS_PREFIXDIR_BIN}emacs                                          \
                                    -Q --batch                                                                \
                                    --load ${SHYNUR_EMACS_CONFIG_DIR}etc/shynur-custom.el                     \
-                                   --eval '(princ shynur/custom-appdata/)'`server-auth-dir/server-name.txt'  \
+                                   --eval '(princ shynur/custom:appdata/)'`server-auth-dir/server-name.txt'  \
                  --alternate-editor='${SHYNUR_EMACS_PREFIXDIR_BIN}emacs                                      \
                                        --daemon                                                              \
                                        --debug-init                                                          \

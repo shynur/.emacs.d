@@ -6,9 +6,9 @@
 
 ;;; Feature: ‘eshell’
 
-(shynur/custom-appdata/ eshell-directory-name /)
-(shynur/custom-appdata/ eshell-history-file-name txt)
-(shynur/custom-appdata/ eshell-last-dir-ring-file-name txt)
+(shynur/custom:appdata/ eshell-directory-name /)
+(shynur/custom:appdata/ eshell-history-file-name txt)
+(shynur/custom:appdata/ eshell-last-dir-ring-file-name txt)
 
 (add-hook 'eshell-mode-hook
           (lambda ()
@@ -20,14 +20,14 @@
 (add-hook 'shell-mode-hook
           (lambda ()
             "设置编解码."
-            (set-buffer-process-coding-system shynur/custom-shell-coding
-                                              shynur/custom-shell-coding)))
+            (set-buffer-process-coding-system shynur/custom:shell-coding
+                                              shynur/custom:shell-coding)))
 
 (add-hook 'shell-mode-hook
           (lambda ()
             "设置 PowerShell."
-            (when (or (string= shynur/custom-os "MS-Windows 10")
-                      (string= shynur/custom-os "MS-Windows 11"))
+            (when (or (string= shynur/custom:os "MS-Windows 10")
+                      (string= shynur/custom:os "MS-Windows 11"))
               (make-thread (lambda ()
                              (let ((attempts 100000))
                                (while (and (natnump attempts)

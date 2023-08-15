@@ -1,0 +1,22 @@
+# -*- coding: utf-8-unix; -*-
+# key: h
+# binding: <return>
+# type: command
+# expand-env: ((yas-indent-line nil))
+# condition: (save-match-data (looking-back "^h\\="))
+# contributor: shynur
+# --
+(delete-backward-char 1)
+
+(let ((shynur--heading (read-string "Heading: ")))
+  (insert shynur--heading "\n")
+  (insert (make-string (string-width shynur--heading)
+                       (read-char-choice-with-read-key "1= 2- 3^ 4: 5* 6+"
+                                                       '(?=
+                                                         ?-
+                                                         ?^
+                                                         ?:
+                                                         ?*
+                                                         ?+)))))
+
+(insert "\n\n")

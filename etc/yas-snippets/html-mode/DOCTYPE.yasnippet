@@ -1,0 +1,12 @@
+# -*- coding: utf-8-unix; -*-
+# key: <!DOC
+# binding: T
+# type: snippet
+# expand-env: ((yas-indent-line nil))
+# condition: (save-match-data (looking-back "\\`<!DOC\\="))
+# contributor: shynur
+# --
+TYPE ${`(completing-read "DTD: "
+                         '("html"))`}>
+
+<html$0

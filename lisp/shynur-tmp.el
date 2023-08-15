@@ -36,19 +36,19 @@
                                  nil ()
                                  "除了当前选中的window,还highlight非选中的window的active-region")
  `(,(set 'shynur--tmp 'shynur--tmp) ,(progn
-                                       (shynur/custom-appdata/ transient-history-file el)
-                                       (shynur/custom-appdata/ transient-levels-file el)
-                                       (shynur/custom-appdata/ transient-values-file el)
-                                       (shynur/custom-appdata/ tramp-persistency-file-name el)
-                                       (shynur/custom-appdata/ tramp-auto-save-directory /)
-                                       (shynur/custom-appdata/ filesets-menu-cache-file el)
-                                       (shynur/custom-appdata/ auto-save-list-file-prefix /)
-                                       (shynur/custom-appdata/ bookmark-default-file el)
-                                       (shynur/custom-appdata/ url-cache-directory /)
-                                       (shynur/custom-appdata/ url-cookie-file)
-                                       (shynur/custom-appdata/ temporary-file-directory /)
-                                       (shynur/custom-appdata/ save-place-file el)
-                                       (shynur/custom-appdata/ eww-bookmarks-directory /)
+                                       (shynur/custom:appdata/ transient-history-file el)
+                                       (shynur/custom:appdata/ transient-levels-file el)
+                                       (shynur/custom:appdata/ transient-values-file el)
+                                       (shynur/custom:appdata/ tramp-persistency-file-name el)
+                                       (shynur/custom:appdata/ tramp-auto-save-directory /)
+                                       (shynur/custom:appdata/ filesets-menu-cache-file el)
+                                       (shynur/custom:appdata/ auto-save-list-file-prefix /)
+                                       (shynur/custom:appdata/ bookmark-default-file el)
+                                       (shynur/custom:appdata/ url-cache-directory /)
+                                       (shynur/custom:appdata/ url-cookie-file)
+                                       (shynur/custom:appdata/ temporary-file-directory /)
+                                       (shynur/custom:appdata/ save-place-file el)
+                                       (shynur/custom:appdata/ eww-bookmarks-directory /)
                                        ))
  '(case-replace t
                 nil (replace)
@@ -89,7 +89,7 @@
  '(coding-system-for-write 'utf-8-unix
                            nil ()
                            "该customization中的NEW被Emacs设置为t")
- '(file-name-coding-system shynur/custom-filename-coding)
+ '(file-name-coding-system shynur/custom:filename-coding)
  '(completion-cycle-threshold nil
                               nil (minibuffer)
                               "minibuffer补全时,按TAB会轮换候选词")
@@ -435,7 +435,7 @@
                                  nil (hilit-chg))
  '(highlight-changes-visibility-initial-state nil
                                               nil (hilit-chg))
- '(python-shell-interpreter shynur/custom-python-path
+ '(python-shell-interpreter shynur/custom:python-path
                             nil (python))
  '(python-shell-interpreter-interactive-arg nil
                                             nil (python))
@@ -528,7 +528,7 @@
                               ,(lambda ()
                                  (indent-tabs-mode)))
                             nil (make-mode))
- '(inferior-lisp-program shynur/custom-commonlisp-path
+ '(inferior-lisp-program shynur/custom:commonlisp-path
                          nil (sly))
  '(save-interprogram-paste-before-kill t
                                        nil (simple)
@@ -962,11 +962,20 @@
 (put 'narrow-to-region 'disabled nil)
 
 ;;; Feature: ‘project’
-(shynur/custom-appdata/ project-list-file el)
+(shynur/custom:appdata/ project-list-file el)
 (setq project-switch-commands #'project-find-file)  ; “C-x p p”选中项目后, 立刻执行指定的 command.
 
+;;; Feature: ‘html’
+(add-hook 'html-mode-hook
+          #'yas-minor-mode)
+(add-hook 'html-mode-hook
+          (lambda ()
+            (when (and (buffer-file-name)
+                       (zerop (buffer-size)))
+              (insert "<!DOC"))))
+
 ;;; Feature: ‘nsm’
-(shynur/custom-appdata/ nsm-settings-file data)  ; 记录已知的安全 connection.
+(shynur/custom:appdata/ nsm-settings-file data)  ; 记录已知的安全 connection.
 
 ;;; Feature: ‘company’
 (setq company-idle-delay 0
@@ -978,11 +987,11 @@
 (setq company-show-quick-access t  ; 给候选词编号.
       company-tooltip-offset-display 'lines  ; 原本在候选词界面的右侧是由 scroll bar, 现改成: 上/下面分别有多少候选词.
       company-tooltip-limit 10)
-(setq company-clang-executable shynur/custom-clang-path)
+(setq company-clang-executable shynur/custom:clang-path)
 (global-company-mode)
 
 ;;; Feature: ‘savehist’
-(shynur/custom-appdata/ savehist-file el)
+(shynur/custom:appdata/ savehist-file el)
 (setq savehist-autosave-interval nil)
 (savehist-mode)  ; 保存 minibuffer 的历史记录
 
@@ -1005,11 +1014,11 @@
 (setq desktop-auto-save-timeout nil)  ; Idle 时不自动保存, 毕竟 session 结束时会自动保存.
 (setq desktop-restore-frames nil)
 ;; ‘desktop-files-not-to-save’: 默认不保存 Remote file.
-(shynur/custom-appdata/ desktop-dirname /)
-(shynur/custom-appdata/ desktop-base-file-name nil nil
+(shynur/custom:appdata/ desktop-dirname /)
+(shynur/custom:appdata/ desktop-base-file-name nil nil
   ;; 基于‘desktop-dirname’.
   "desktop-base-file-name.el")
-(shynur/custom-appdata/ desktop-base-lock-name nil nil
+(shynur/custom:appdata/ desktop-base-lock-name nil nil
   ;; 基于‘desktop-dirname’.
   "desktop-base-lock-name.el")
 (setq desktop-save t)
@@ -1023,7 +1032,7 @@
               #'self-insert-command)))
 
 ;;; Feature: ‘recentf’
-(shynur/custom-appdata/ recentf-save-file el)
+(shynur/custom:appdata/ recentf-save-file el)
 (setq recentf-max-saved-items nil)
 (setq recentf-max-menu-items 30)
 (recentf-mode)
@@ -1089,7 +1098,7 @@
 ;;; Feature: ‘cus-edit’
 (setq custom-search-field nil)  ; 感觉不如‘customize-apropos’.
 (setq custom-buffer-done-kill nil)  ; 按“[Exit]”(GUI 下 该图标 位于 tool bar) 并不 kill buffer.
-(shynur/custom-appdata/ custom-file el)  ; 该文件需要 手动‘load-file’, 所以 直接 设置 即可, 无后顾之忧.
+(shynur/custom:appdata/ custom-file el)  ; 该文件需要 手动‘load-file’, 所以 直接 设置 即可, 无后顾之忧.
 
 (keymap-global-unset "C-h g")
 (keymap-global-unset "C-h h")
@@ -1181,8 +1190,9 @@
   (advice-add 'backward-kill-word :before-while
               (lambda (arg)
                 "前面顶多只有空白字符 或 后面顶多只有空白字符且前面有空白字符 时,删除前方所有空白"
-                (if (and (interactive-p)  ; 只在使用键盘且
-                         (= 1 arg)        ; 没有前缀参数时执行
+                (if (and (called-interactively-p 'interactive)  ; 只在使用键盘且
+                         ;; 没有前缀参数时执行.
+                         (= 1 arg)
                          (or (save-match-data
                                (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=")))
                              (and (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
@@ -1194,8 +1204,9 @@
   (advice-add 'kill-word :before-while
               (lambda (arg)
                 "后面顶多只有空白字符 或 前面顶多只有空白字符且后面有空白字符 时, 删除后面所有空白"
-                (if (and (interactive-p)  ; 只在使用键盘且
-                         (= 1 arg)        ; 没有前缀参数时执行
+                (if (and (called-interactively-p 'interactive)  ; 只在使用键盘且
+                         ;; 没有前缀参数时执行.
+                         (= 1 arg)
                          (or (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
                              (and (save-match-data
                                     (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=")))
@@ -1216,9 +1227,10 @@
   (seq-doseq (key ["C-h f"
                    "C-h o"
                    "C-h v"
-                   "C-h w"
+                   ;; "C-h w"  ; 未生效.
                    "C-h x"
-                   "M-x"])
+                   "M-x"
+                   "M-S-x"])
     (let ((original-command (keymap-global-lookup key)))
       (keymap-global-set key
                          (lambda ()
@@ -1272,7 +1284,7 @@
                   "调用“clang-format --Werror --fallback-style=none --ferror-limit=0 --style=file:~/.emacs.d/etc/clang-format.yaml”.
 在 C 语系中直接 (整个 buffer 而不仅是 narrowed region) 美化代码, 否则美化选中区域."
                   (interactive)
-                  (let ((clang-format shynur/custom-clang-format-path)
+                  (let ((clang-format shynur/custom:clang-format-path)
                         (options `("--Werror"
                                    "--fallback-style=none"
                                    "--ferror-limit=0"

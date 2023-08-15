@@ -104,6 +104,8 @@
  (yaml-mode . ((tab-width . 2)))
 
  ("etc/yas-snippets/" . ((snippet-mode . ((require-final-newline . nil)
+                                          (mode . whitespace-newline)
+
                                           (shynur/.emacs.d:add-coding-at-propline? t)))))
 
  ("modules/src/" . ((nil . ((eval . (when-let ((buffer-file-name (buffer-file-name)))

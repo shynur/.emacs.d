@@ -35,7 +35,7 @@
       ;; 若该值更小, 则服从‘gc-cons-threshold’.
       gc-cons-percentage 0)
 
-(startup-redirect-eln-cache (shynur/custom-appdata/ #:shynur--startup-redirect-eln-cache /))
+(startup-redirect-eln-cache (shynur/custom:appdata/ #:shynur--startup-redirect-eln-cache /))
 (require 'shynur-package)  ; (find-file-other-window "./shynur-package.el")
 
 (provide 'shynur-early-init)

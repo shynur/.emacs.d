@@ -4,29 +4,29 @@
 ;; 这些变量的定义式形如‘def*’.
 
 ;; 建议: 填入指向高性能 SSD 的路径.
-(defvar shynur/c-appdata/ "d:/Documents/Apps/emacs/"
+(defvar shynur/c:appdata/ "d:/Documents/Apps/emacs/"
   "存放杂七杂八的数据的目录 (绝对路径), 不包括配置文件.
 有些数据 (e.g., 最近访问的文件名) 可能包含隐私信息.")
 
 (add-hook 'before-init-hook
           (lambda ()
-            (defvar shynur/c-clang-format-path "d:/Progs/LLVM/bin/clang-format.exe")
-            (defvar shynur/c-clang-path "d:/Progs/LLVM/bin/clang.exe")
-            (defvar shynur/c-commonlisp-path "d:/Progs/Steel_Bank_Common_Lisp/sbcl.exe")
-            (defvar shynur/c-email "one.last.kiss@outlook.com")
-            (defvar shynur/c-filename-coding 'chinese-gb18030)
-            (defvar shynur/c-os "MS-Windows 11")
-            (defvar shynur/c-python-path "python")
-            (defvar shynur/c-shell-coding 'chinese-gb18030)
-            (defvar shynur/c-truename "谢骐")))
+            (defvar shynur/c:clang-format-path "d:/Progs/LLVM/bin/clang-format.exe")
+            (defvar shynur/c:clang-path "d:/Progs/LLVM/bin/clang.exe")
+            (defvar shynur/c:commonlisp-path "d:/Progs/Steel_Bank_Common_Lisp/sbcl.exe")
+            (defvar shynur/c:email "one.last.kiss@outlook.com")
+            (defvar shynur/c:filename-coding 'chinese-gb18030)
+            (defvar shynur/c:os "MS-Windows 11")
+            (defvar shynur/c:python-path "python")
+            (defvar shynur/c:shell-coding 'chinese-gb18030)
+            (defvar shynur/c:truename "谢骐")))
 
 ;;; Commentary:
 ;;
 ;; 本文件应该尽量做最少的工作; 必须可以独立于其它文件存在 (i.e., 可以被‘emacs -Q’正常执行).
 
 ;; 定义成 macro 主要是因为我懒得写‘quote’和双引号.
-(defmacro shynur/c-appdata/ (base &optional extension seq-type &rest forms)
-  "将“‘shynur/c-appdata/’BASE+EXTENSION”赋给 BASE; 确保父目录存在.
+(defmacro shynur/c:appdata/ (base &optional extension seq-type &rest forms)
+  "将“‘shynur/custom:appdata/’BASE+EXTENSION”赋给 BASE; 确保父目录存在.
 EXTENSION 可能的值为:
   1. nil - pure file (也就是说, 处理不了‘*.nil’文件)
   2.   / - 目录
@@ -44,7 +44,7 @@ EXTENSION 可能的值为:
            `(,(or seq-type
                   'identity)
              ,(let ((&appdata/* (gensym "shynur/")))
-                `(let ((,&appdata/* (file-name-concat shynur/c-appdata/
+                `(let ((,&appdata/* (file-name-concat shynur/c:appdata/
                                                       (concat (symbol-name ',base)
                                                               ,(if extension
                                                                    `(concat ,(if (not (eq extension '/))
@@ -60,6 +60,6 @@ EXTENSION 可能的值为:
 ;; Local Variables:
 ;; coding: utf-8-unix
 ;; no-byte-compile: t  ; 该文件按名查找.
-;; read-symbol-shorthands: (("shynur/c-"  ; 我并没有写过‘shynur-c.el’, 所以不会混淆.
-;;                           . "shynur/custom-"))
+;; read-symbol-shorthands: (("shynur/c:"  ; 我并没有写过‘shynur-c.el’, 所以不会混淆.
+;;                           . "shynur/custom:"))
 ;; End:

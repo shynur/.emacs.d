@@ -13,7 +13,7 @@
       ;; 这其实是 默认行为.
       package-enable-at-startup t)
 
-(shynur/custom-appdata/ package-user-dir /)
+(shynur/custom:appdata/ package-user-dir /)
 
 ;; Feature: ‘nsm’
 ;; 设置 mirror 时会询问是否连接, 此时 Emacs 的 GUI 窗口甚至还没弹出来.

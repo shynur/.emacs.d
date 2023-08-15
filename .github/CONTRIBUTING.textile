@@ -82,8 +82,6 @@ h2=. Bug
 
 @hexl-mode@: 保存文件时会删除一些字符.
 
-@M-x@ 时 未显示 @ignore@.
-
 h2=. Patch to Be Reported
 
 h3<. Documentation Bug

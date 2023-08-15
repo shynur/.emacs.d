@@ -1,0 +1,16 @@
+# -*- coding: utf-8-unix; -*-
+# key: <h
+# binding: 1
+# type: snippet
+# expand-env: ((yas-indent-line nil))
+# condition: (save-match-data (looking-back "<h\\="))
+# contributor: shynur
+# --
+${1:`(make-string 1
+                  (read-char-choice-with-read-key "<h{1..6}>"
+                                                  '(?1
+                                                    ?2
+                                                    ?3
+                                                    ?4
+                                                    ?5
+                                                    ?6)))`}>$0</h$1>

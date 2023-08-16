@@ -87,27 +87,54 @@
 
 ;; 当最后一个 frame 关闭时, 存入它的 位置/尺寸;
 ;; 当桌面上没有 frame 时, 下一个打开的 frame 将使用那个被存入的 位置/尺寸.
-(let ((shynur--size&position `(,(cons 'top 0) ,(cons 'left 0)
-                               ,(cons 'width 0) ,(cons 'height 0)
-                               ;; ‘fullscreen’放最后, 以覆盖‘width’&‘height’的设置.
-                               ,(cons 'fullscreen nil)))
-      shynur--size&position-stored?)
-  (letrec ((shynur--size&position-getter (lambda ()
-                                           (when shynur--size&position-stored?
-                                             (dolist (parameter-value shynur--size&position)
-                                               (set-frame-parameter nil (car parameter-value) (cdr parameter-value))))
-                                           (remove-hook 'server-after-make-frame-hook shynur--size&position-getter)
-                                           (   add-hook 'delete-frame-functions       shynur--size&position-setter)))
-           (shynur--size&position-setter (lambda (frame-to-be-deleted)
-                                           (when (length= (frames-on-display-list) 1)
-                                             (dolist (parameter-value shynur--size&position)
-                                               (setcdr parameter-value (frame-parameter frame-to-be-deleted (car parameter-value))))
-                                             (setq shynur--size&position-stored? t)
-                                             (remove-hook 'delete-frame-functions       shynur--size&position-setter)
-                                             ;; 当需要调用该 lambda 表达式时, 必然没有除此以外的其它frame了,
-                                             ;; 因此之后新建的 frame 必然是 server 弹出的, 所以此处无需使用‘after-make-frame-functions’.
-                                             (   add-hook 'server-after-make-frame-hook shynur--size&position-getter)))))
-    (add-hook 'server-after-make-frame-hook shynur--size&position-getter)))
+;; +-----------------------------------------+
+;; |‘stored?’ => nil.  Daemon is initialized.|
+;; |‘getter’ is in ‘server-*-make-*-hook’.   |
+;; +---------------------+-------------------+
+;;                       |
+;;  No frame on desktop. | Let’s _make_ one.
+;;                       V                          Because ‘stored?’ is t, the frame to make will
+;; +------------------------------------------+     use the parameters of the last frame which is deleted
+;; |Run ‘getter’ in ‘server-*-make-*-hook’:   |<-------------------------------------------+
+;; |‘getter’ itself is removed from the hook; |     when Emacs runs ‘server-*-make-*-hook’.|
+;; |‘setter’ is in ‘delete-*-functions’.      |                                            |
+;; +------------------------------------------+                                            |
+;;  Let’s _make_ more frames.                                                              |
+;;  Either ‘getter’ or ‘setter’ won’t run.                                                 |
+;;           |                                                                             |
+;;           | Let’s _delete_ one frame.                          No frame on desktop now. | Let’s _make_ one.
+;;           V                                                                             |
+;; +-------------------------------------+                             +-------------------+-----------------+
+;; |Run ‘setter’ in ‘delete-*-functions’:| Let’s _delete_ the last one |Run ‘setter’ in ‘delete-*-functions’:|
+;; |nothing will happend because the     |---------------------------->|frame parameters will be stored;     |
+;; |frame to be deleted is not the only  |     frame on the desktop.   |now ‘stored?’ => t; ‘setter’ itself  |
+;; |one frame on the desktop.            |                             |is removed from the hook; ‘getter’ is|
+;; ++------------------------------------+                             |in ‘server-*-make-*-hook’            |
+;;  |                                   ^                              +-------------------------------------+
+;;  |Let’s _delete_ frames until there’s|
+;;  +-----------------------------------+
+;;   only one frame left on the desktop.
+(add-hook 'server-after-make-frame-hook
+          (let ((shynur/ui:frame-size&position `(,(cons 'top 0) ,(cons 'left 0) ,(cons 'width 0) ,(cons 'height 0)
+                                                 ;; ‘fullscreen’放最后, 以覆盖‘width’&‘height’.
+                                                 ,(cons 'fullscreen nil)))
+                shynur/ui:frame-size&position-stored?)
+            (letrec ((shynur/ui:frame-size&position-getter (lambda ()
+                                                             (when shynur/ui:frame-size&position-stored?
+                                                               (dolist (parameter-value shynur/ui:frame-size&position)
+                                                                 (set-frame-parameter nil (car parameter-value) (cdr parameter-value))))
+                                                             (remove-hook 'server-after-make-frame-hook shynur/ui:frame-size&position-getter)
+                                                             (   add-hook 'delete-frame-functions       shynur/ui:frame-size&position-setter)))
+                     (shynur/ui:frame-size&position-setter (lambda (frame-to-be-deleted)
+                                                             (when (length= (frames-on-display-list) 1)
+                                                               (dolist (parameter-value shynur/ui:frame-size&position)
+                                                                 (setcdr parameter-value (frame-parameter frame-to-be-deleted (car parameter-value))))
+                                                               (setq shynur/ui:frame-size&position-stored? t)
+                                                               (remove-hook 'delete-frame-functions       shynur/ui:frame-size&position-setter)
+                                                               ;; 当需要调用该 lambda 表达式时, 必然没有除此以外的其它frame了,
+                                                               ;; 因此之后新建的 frame 必然是 server 弹出的, 所以此处无需使用‘after-make-frame-functions’.
+                                                               (   add-hook 'server-after-make-frame-hook shynur/ui:frame-size&position-getter)))))
+              shynur/ui:frame-size&position-getter)))
 
 ;; 必须先设置 window divider 的参数!
 (setq window-divider-default-places      'right-only  ; 横向 divider 可以用 mode line代替.

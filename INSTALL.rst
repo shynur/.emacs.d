@@ -48,7 +48,7 @@ Customize
 编辑 ``etc/shynur-custom.el`` 文件进行本地化配置.
 (这应当不需要 Emacs Lisp 知识.)
 
-(假设你将该文件中的 变量 ``shynur/c-appdata/`` 的值设为 ``~/.emacs.d/.appdata/``.)
+(假设你将该文件中的 变量 ``shynur/c:appdata/`` 的值设为 ``~/.emacs.d/.appdata/``.)
 
 Requisites
 ^^^^^^^^^^

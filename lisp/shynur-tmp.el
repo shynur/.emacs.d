@@ -1190,7 +1190,7 @@
   (advice-add 'backward-kill-word :before-while
               (lambda (arg)
                 "前面顶多只有空白字符 或 后面顶多只有空白字符且前面有空白字符 时,删除前方所有空白"
-                (if (and (called-interactively-p 'interactive)  ; 只在使用键盘且
+                (if (and (called-interactively-p 'any)  ; 只在使用键盘且
                          ;; 没有前缀参数时执行.
                          (= 1 arg)
                          (or (save-match-data
@@ -1204,7 +1204,7 @@
   (advice-add 'kill-word :before-while
               (lambda (arg)
                 "后面顶多只有空白字符 或 前面顶多只有空白字符且后面有空白字符 时, 删除后面所有空白"
-                (if (and (called-interactively-p 'interactive)  ; 只在使用键盘且
+                (if (and (called-interactively-p 'any)  ; 只在使用键盘且
                          ;; 没有前缀参数时执行.
                          (= 1 arg)
                          (or (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))

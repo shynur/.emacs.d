@@ -1,0 +1,11 @@
+# -*- coding: utf-8-unix; -*-
+# key: <ul
+# binding: >
+# type: snippet
+# expand-env: ((yas-indent-line 'auto))
+# condition: (save-match-data (looking-back "<ul\\="))
+# contributor: shynur
+# --
+${1:`(shynur/snippet:html-attr)`}>
+  $0
+</ul>

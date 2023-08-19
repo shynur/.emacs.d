@@ -106,7 +106,7 @@
 ;;           V                                                                             |
 ;; +-------------------------------------+                             +-------------------+-----------------+
 ;; |Run ‘setter’ in ‘delete-*-functions’:| Let’s _delete_ the last one |Run ‘setter’ in ‘delete-*-functions’:|
-;; |nothing will happend because the     |---------------------------->|frame parameters will be stored;     |
+;; |nothing will happend because the     +---------------------------->|frame parameters will be stored;     |
 ;; |frame to be deleted is not the only  |     frame on the desktop.   |now ‘stored?’ => t; ‘setter’ itself  |
 ;; |one frame on the desktop.            |                             |is removed from the hook; ‘getter’ is|
 ;; ++------------------------------------+                             |in ‘server-*-make-*-hook’            |

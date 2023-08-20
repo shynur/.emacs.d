@@ -3,7 +3,10 @@
 Installation Guide
 ==================
 
-假设你的机器上有 名为 *shynur* 的用户, 他将 Emacs 安装在 ``c:/Users/shynur/bin/`` 目录下.
+(请先参阅 `本配置支持的平台 <./README.org#Platforms>`_.)
+
+假设你的机器上有 名为 *shynur* 的用户, 他将 Emacs 安装在 ``c:/Users/shynur/bin/`` 目录下
+(对于 GNU/Linux, 他将 Emacs 等二进制文件放在了 ``PATH`` 中的某处).
 
 
 .. contents::
@@ -54,7 +57,7 @@ Requisites
 ^^^^^^^^^^
 
 `README.org <./README.org#prerequisites>`_ 中列出了依赖项目,
-其中, 字体 是 **必须** 的.
+其中, 字体 是 **必须** 的 (其中部分字体是 OS 自带的).
 
 
 Compile
@@ -106,6 +109,10 @@ Start process
 
     PS C:\Users\shynur> ./bin/emacs-VERSION/bin/emacsclientw.exe --server-file=c:/Users/shynur/.emacs.d/.appdata/server-auth-dir/server-name.txt --alternate-editor="" --create-frame
 
+或 (在 GNU/Linux 上)::
+
+    shynur:~$ emacsclient --server-file=/home/shynur/.emacs.d/.appdata/server-auth-dir/server-name.txt --alternate-editor="" --create-frame
+
 此时 Emacs 首先在后台创建了一个 daemon (see `如何运行 Emacs 作为后台服务进程? <./docs/Emacs-use_daemon.md>`_),
 然后 (耐心点) 会弹出一个窗口, 默认会打开 ``user-emacs-directory/`` 目录.
 
@@ -122,7 +129,7 @@ Create frame
 基本上没有需要清理的中间文件.
 但如果你想从头开始安装的话, 请::
 
-    ~/.emacs.d $ make clean
+    ~/.emacs.d $ make clean  # Makefile 暂时没有写完.
 
 
 ..

@@ -1,7 +1,12 @@
 ;;; -*- lexical-binding: t; -*-
 
+;; MS-Windows 只能用这个, 所以稍微委屈一下 GNU/Linux 啦.
+(setq server-use-tcp t)
+
 ;; MS-Windows 上, server file (见 emacsclient 的命令行参数 “--server-file”) 一般放在该目录下.
-(shynur/custom:appdata/ server-auth-dir /)
+(chmod (shynur/custom:appdata/ server-auth-dir /)
+       ;; Emacs 强制要求的 安全性:
+       #o700 'nofollow)
 
 (shynur/custom:appdata/ server-socket-dir /)
 

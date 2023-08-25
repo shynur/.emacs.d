@@ -900,8 +900,6 @@
  '(mouse-1-click-follows-link 400
                               nil (mouse)
                               "在button/hyperlink上点击,不放开鼠标按键持续一定毫秒数后,将仅设置point而不循入链接")
- '(double-click-time 400)
- '(double-click-fuzz 3)
  '(mouse-1-click-in-non-selected-windows t
                                          nil (mouse)
                                          "点击non-selected-window中的button/hyperlink同样会循入链接")
@@ -966,8 +964,6 @@
 (setq project-switch-commands #'project-find-file)  ; “C-x p p”选中项目后, 立刻执行指定的 command.
 
 ;;; Feature: ‘html’
-(add-hook 'html-mode-hook
-          #'yas-minor-mode)
 (add-hook 'html-mode-hook
           (lambda ()
             (when (and (buffer-file-name)
@@ -1185,35 +1181,6 @@
 (keymap-global-unset "C-]")      ; ‘abort-recursive-edit’
 (keymap-global-unset "C-x X a")  ; ‘abort-recursive-edit’
 
-(progn
-  (require 'cc-mode)
-  (advice-add 'backward-kill-word :before-while
-              (lambda (arg)
-                "前面顶多只有空白字符 或 后面顶多只有空白字符且前面有空白字符 时,删除前方所有空白"
-                (if (and (called-interactively-p 'any)  ; 只在使用键盘且
-                         ;; 没有前缀参数时执行.
-                         (= 1 arg)
-                         (or (save-match-data
-                               (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=")))
-                             (and (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
-                                  (save-match-data
-                                    (looking-back (concat search-whitespace-regexp "\\="))))))
-                    (prog1 nil
-                      (c-hungry-delete))
-                  t)))
-  (advice-add 'kill-word :before-while
-              (lambda (arg)
-                "后面顶多只有空白字符 或 前面顶多只有空白字符且后面有空白字符 时, 删除后面所有空白"
-                (if (and (called-interactively-p 'any)  ; 只在使用键盘且
-                         ;; 没有前缀参数时执行.
-                         (= 1 arg)
-                         (or (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
-                             (and (save-match-data
-                                    (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=")))
-                                  (looking-at-p (concat "\\=" search-whitespace-regexp)))))
-                    (prog1 nil
-                      (c-hungry-delete-forward))
-                  t))))
 (let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
                                                 (concat
                                                  "\\(?:" regexp "\\)"

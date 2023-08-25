@@ -107,11 +107,17 @@ Start process
 
 执行如下命令::
 
-    PS C:\Users\shynur> ./bin/emacs-VERSION/bin/emacsclientw.exe --server-file=c:/Users/shynur/.emacs.d/.appdata/server-auth-dir/server-name.txt --alternate-editor="" --create-frame
+    PS C:\Users\shynur> ./bin/emacs-VERSION/bin/emacsclientw.exe \
+                          --server-file=c:/Users/shynur/.emacs.d/.appdata/server-auth-dir/server-name.txt \
+                          --alternate-editor="" \
+                          --create-frame
 
 或 (在 GNU/Linux 上)::
 
-    shynur:~$ emacsclient --server-file=/home/shynur/.emacs.d/.appdata/server-auth-dir/server-name.txt --alternate-editor="" --create-frame
+    shynur:~$ emacsclient \
+                --server-file=/home/shynur/.emacs.d/.appdata/server-auth-dir/server-name.txt \  # 这边必须是_展开的_绝对路径.
+                --alternate-editor="" \
+                --create-frame
 
 此时 Emacs 首先在后台创建了一个 daemon (see `如何运行 Emacs 作为后台服务进程? <./docs/Emacs-use_daemon.md>`_),
 然后 (耐心点) 会弹出一个窗口, 默认会打开 ``user-emacs-directory/`` 目录.

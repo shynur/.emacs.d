@@ -7,64 +7,66 @@
 
 ;;; Face (其实应该放到 theme 中去):
 
-(let ((shynur--custom-set-faces (lambda ()
-                                  ;; 摘编自 Centaur Emacs, 用于解决 字体 问题.
-                                  (let* ((font       "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing")
-                                         (attributes (font-face-attributes font)                                   )
-                                         (family     (plist-get attributes :family)                                ))
-                                    ;; Default font.
-                                    (apply #'set-face-attribute
-                                           'default nil
-                                           attributes)
-                                    ;; For all Unicode characters.
-                                    (set-fontset-font t 'symbol
-                                                      (font-spec :family "Segoe UI Symbol")
-                                                      nil 'prepend)
-                                    ;; Emoji 🥰.
-                                    (set-fontset-font t 'emoji
-                                                      (font-spec :family "Segoe UI Emoji")
-                                                      nil 'prepend)
-                                    ;; For Chinese characters.
-                                    (set-fontset-font t '(#x4e00 . #x9fff)
-                                                      (font-spec :family family)))
-                                  (custom-set-faces
-                                   '(cursor
-                                     ((t . (:background "chartreuse")))
-                                     nil
-                                     "该face仅有‘:background’字段有效")
-                                   '(tooltip
-                                     ((t . ( :height     100
-                                             :background "dark slate gray"))))
-                                   '(line-number
-                                     ((t . ( :slant  italic
-                                             :weight light))))
-                                   `(line-number-major-tick
-                                     ((t . ( :foreground ,(face-attribute 'line-number :foreground)
-                                             :background ,(face-attribute 'line-number :background)
-                                             :slant      italic
-                                             :underline  t
-                                             :weight     light)))
-                                     nil
-                                     "指定倍数的行号;除此以外,还有‘line-number-minor-tick’实现相同的功能,但其优先级更低")
-                                   '(line-number-current-line
-                                     ((t . ( :slant  normal
-                                             :weight black))))
-                                   '(window-divider
-                                     ((t . (:foreground "SlateBlue4"))))
-                                   '(indent-guide-face
-                                     ((t . (:foreground "dark sea green"))))
-                                   '(fill-column-indicator
-                                     ((t . ( :background "black"
-                                             :foreground "yellow"))))))))
+(let ((shynur/ui:face-setter
+       (lambda ()
+         ;; 摘编自 Centaur Emacs, 用于解决 字体 问题.
+         (let* ((font       "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing")
+                (attributes (font-face-attributes font)                                   )
+                (family     (plist-get attributes :family)                                ))
+           ;; Default font.
+           (apply #'set-face-attribute
+                  'default nil
+                  attributes)
+           ;; For all Unicode characters.
+           (set-fontset-font t 'symbol
+                             (font-spec :family "Segoe UI Symbol")
+                             nil 'prepend)
+           ;; Emoji 🥰.
+           (set-fontset-font t 'emoji
+                             (font-spec :family "Segoe UI Emoji")
+                             nil 'prepend)
+           ;; For Chinese characters.
+           (set-fontset-font t '(#x4e00 . #x9fff)
+                             (font-spec :family family)))
+         (custom-set-faces
+          '(cursor
+            ((t . (:background "chartreuse")))
+            nil
+            "该face仅有‘:background’字段有效")
+          '(tooltip
+            ((t . ( :height     100
+                    :background "dark slate gray"))))
+          '(line-number
+            ((t . ( :slant  italic
+                    :weight light))))
+          `(line-number-major-tick
+            ((t . ( :foreground ,(face-attribute 'line-number :foreground)
+                    :background ,(face-attribute 'line-number :background)
+                    :slant      italic
+                    :underline  t
+                    :weight     light)))
+            nil
+            "指定倍数的行号;除此以外,还有‘line-number-minor-tick’实现相同的功能,但其优先级更低")
+          '(line-number-current-line
+            ((t . ( :slant  normal
+                    :weight black))))
+          '(window-divider
+            ((t . (:foreground "SlateBlue4"))))
+          '(indent-guide-face
+            ((t . (:foreground "dark sea green"))))
+          '(fill-column-indicator
+            ((t . ( :background "black"
+                    :foreground "yellow"))))))))
   (if (daemonp)
       (add-hook 'server-after-make-frame-hook
                 ;; (为什么要用‘letrec’ -- 见 <https://emacs.stackexchange.com/a/77767/39388>.)
-                (letrec ((shynur--custom-set-faces--then-remove-itself (lambda ()
-                                                                        (funcall shynur--custom-set-faces)
-                                                                        (remove-hook 'server-after-make-frame-hook
-                                                                                     shynur--custom-set-faces--then-remove-itself))))
-                  shynur--custom-set-faces--then-remove-itself))
-    (funcall shynur--custom-set-faces)))
+                (letrec ((shynur/ui:face-setter--once
+                          (lambda ()
+                            (funcall shynur/ui:face-setter)
+                            (remove-hook 'server-after-make-frame-hook
+                                         shynur/ui:face-setter--once))))
+                  shynur/ui:face-setter--once))
+    (funcall shynur/ui:face-setter)))
 
 ;;; Frame:
 
@@ -75,15 +77,12 @@
 
 (setq frame-resize-pixelwise t)
 
-(with-eval-after-load 'frame
-  (require 'transwin)
-  (when (not (daemonp))
-    (transwin-ask 75))
-  (add-hook 'after-make-frame-functions
-            (lambda (frame-to-be-made)
-              (let ((inhibit-message t))
-                (with-selected-frame frame-to-be-made
-                  (transwin-ask 75))))))
+;; 透明
+(add-to-list 'default-frame-alist
+             `(,(pcase system-type
+                  ('windows-nt 'alpha)
+                  (_ 'alpha-background))
+               . 75))
 
 ;; 当最后一个 frame 关闭时, 存入它的 位置/尺寸;
 ;; 当桌面上没有 frame 时, 下一个打开的 frame 将使用那个被存入的 位置/尺寸.
@@ -140,45 +139,82 @@
 (setq window-divider-default-places      'right-only  ; 横向 divider 可以用 mode line代替.
       window-divider-default-right-width 12)
 (window-divider-mode)
+
+;;; Frame Title
 
-;; Frame Title
 (setq frame-title-format `("" default-directory "  "
-                           (:eval (prog1 ',(defvar shynur/frame-title:runtime-info-string nil)
+                           (:eval (prog1 ',(defvar shynur/ui:frame-title nil)
                                     ;; 也可以用‘post-gc-hook’来更新.
                                     ,(add-hook 'post-gc-hook
                                                (let ((shynur/gcs-done -1))
                                                  (lambda ()
                                                    (when (/= shynur/gcs-done gcs-done)
-                                                     (setq shynur/frame-title:runtime-info-string (format-spec "%N GC (%ts total): %M VM, %hh runtime"
-                                                                                                               `((?N . ,(format "%d%s"
-                                                                                                                                gcs-done
-                                                                                                                                (pcase (mod gcs-done 10)
-                                                                                                                                  (1 "st")
-                                                                                                                                  (2 "nd")
-                                                                                                                                  (3 "rd")
-                                                                                                                                  (_ "th"))))
-                                                                                                                 (?t . ,(round gc-elapsed))
-                                                                                                                 (?M . ,(progn
-                                                                                                                          (eval-when-compile
-                                                                                                                            (require 'cl-lib))
-                                                                                                                          (cl-loop for memory = (memory-limit) then (/ memory 1024.0)
-                                                                                                                                   for mem-unit across "KMGT"
-                                                                                                                                   when (< memory 1024)
-                                                                                                                                   return (format "%.1f%c"
-                                                                                                                                                  memory
-                                                                                                                                                  mem-unit))))
-                                                                                                                 (?h . ,(format "%.1f"
-                                                                                                                                (/ (time-to-seconds (time-since before-init-time))
-                                                                                                                                   3600.0)))))
+                                                     (setq shynur/ui:frame-title (format-spec "%N GC (%ts total): %M VM, %hh runtime"
+                                                                                              `((?N . ,(format "%d%s"
+                                                                                                               gcs-done
+                                                                                                               (pcase (mod gcs-done 10)
+                                                                                                                 (1 "st")
+                                                                                                                 (2 "nd")
+                                                                                                                 (3 "rd")
+                                                                                                                 (_ "th"))))
+                                                                                                (?t . ,(round gc-elapsed))
+                                                                                                (?M . ,(progn
+                                                                                                         (eval-when-compile
+                                                                                                           (require 'cl-lib))
+                                                                                                         (cl-loop for memory = (memory-limit) then (/ memory 1024.0)
+                                                                                                                  for mem-unit across "KMGT"
+                                                                                                                  when (< memory 1024)
+                                                                                                                  return (format "%.1f%c"
+                                                                                                                                 memory
+                                                                                                                                 mem-unit))))
+                                                                                                (?h . ,(format "%.1f"
+                                                                                                               (/ (time-to-seconds (time-since before-init-time))
+                                                                                                                  3600.0)))))
                                                            shynur/gcs-done gcs-done))))))))
-      icon-title-format `(:eval (prog1 ',(defvar shynur/frame-icon:window-names nil)
-                                  (setq shynur/frame-icon:window-names (mapconcat (lambda (buffer)
-                                                                                    (with-current-buffer buffer
-                                                                                      (format "[%s]"
-                                                                                              (buffer-name)))) (delete-dups (mapcar (lambda (window)
-                                                                                              (with-selected-window window
-                                                                                                (current-buffer))) (window-list)))
-                                                                                              " ")))))
+      icon-title-format `(:eval (prog1 ',(defvar shynur/ui:icon-title nil)
+                                  (setq shynur/ui:icon-title (mapconcat (lambda (buffer)
+                                                                          (with-current-buffer buffer
+                                                                            (format "[%s]"
+                                                                                    (buffer-name)))) (delete-dups (mapcar (lambda (window)
+                                                                                    (with-selected-window window
+                                                                                      (current-buffer))) (window-list)))
+                                                                                    " ")))))
+
+;;; Menu Bar
+
+(keymap-global-unset "<menu-bar> <file> <open-file>")
+(keymap-global-unset "<menu-bar> <file> <kill-buffer>")
+(keymap-global-unset "<menu-bar> <file> <make-tab>")
+(keymap-global-unset "<menu-bar> <file> <close-tab>")
+(keymap-global-unset "<menu-bar> <file> <exit-emacs>")
+(keymap-global-unset "<menu-bar> <file> <delete-this-frame>")
+(keymap-global-unset "<menu-bar> <file> <make-frame>")
+(keymap-global-unset "<menu-bar> <file> <new-window-below>")
+(keymap-global-unset "<menu-bar> <file> <new-window-on-right>")
+(keymap-global-unset "<menu-bar> <file> <one-window>")
+(keymap-global-unset "<menu-bar> <file> <save-buffer>")
+
+(keymap-global-unset "<menu-bar> <edit> <undo>")
+(keymap-global-unset "<menu-bar> <edit> <undo-redo>")
+(keymap-global-unset "<menu-bar> <edit> <cut>")
+(keymap-global-unset "<menu-bar> <edit> <copy>")
+(keymap-global-unset "<menu-bar> <edit> <paste>")
+(keymap-global-unset "<menu-bar> <edit> <mark-whole-buffer>")
+
+(keymap-global-unset "<menu-bar> <options> <cua-mode>")
+(keymap-global-unset "<menu-bar> <options> <save>")
+(keymap-global-unset "<menu-bar> <options> <customize> <customize-saved>")
+
+(keymap-global-unset "<menu-bar> <buffer> <select-named-buffer>")
+
+(keymap-global-unset "<menu-bar> <tools> <gnus>")
+
+(keymap-global-unset "<menu-bar> <help-menu> <emacs-manual>")
+(keymap-global-unset "<menu-bar> <help-menu> <getting-new-versions>")
+(keymap-global-unset "<menu-bar> <help-menu> <describe-copying>")
+(keymap-global-unset "<menu-bar> <help-menu> <describe-no-warranty>")
+(keymap-global-unset "<menu-bar> <help-menu> <about-emacs>")
+(keymap-global-unset "<menu-bar> <help-menu> <about-gnu-project>")
 
 ;;; Window:
 
@@ -215,6 +251,10 @@
 ;; Trim 首尾的空行.
 (setq resize-mini-frames #'fit-frame-to-buffer)
 
+;;; Mouse:
+
+(setq mouse-fine-grained-tracking nil)
+
 ;;; Cursor:
 
 (blink-cursor-mode -1)
@@ -235,9 +275,20 @@
       ;; 但是 是 镂空的.
       cursor-in-non-selected-windows t)
 
+;;; Click:
+
+(setq double-click-fuzz 3  ; 双击时, 两次 button-down 之间 允许 的 位移/像素.
+      double-click-time 400)
+
 ;;; Scroll:
 
 (pixel-scroll-precision-mode)
+(when (and (string= shynur/custom:truename "谢骐")
+           (string= shynur/custom:os "MS-Windows 11"))
+  (run-at-time nil 2000
+               (lambda ()
+                 "重启 ‘SmoothScroll’."
+                 (shell-command "pwsh -File C:/Users/Les1i/.emacs.d/etc/restart-SmoothScroll.ps1"))))
 
 ;; Scroll 以使 window 底端的 N 行呈现到顶端.
 (setq next-screen-context-lines 5)

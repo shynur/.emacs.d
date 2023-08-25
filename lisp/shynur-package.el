@@ -44,7 +44,6 @@
                                   company
                                   helpful
                                   neotree
-                                  transwin
                                   git-modes
                                   highlight
                                   on-screen

@@ -64,6 +64,8 @@
                               t))
          ))
 
+ (prog-mode . ((mode . electric-quote-local)))
+
  (emacs-lisp-mode . ((eval . (imenu-add-menubar-index))
 
                      (prettify-symbols-alist . (("lambda" . ?λ)))

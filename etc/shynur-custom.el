@@ -1,29 +1,30 @@
 ;;; -*- lexical-binding: t; -*-
 
 ;; 你 应当修改 且 只被允许修改 这一页的变量的值 (这些变量的定义式形如
-;;     (defvar shynur/c:* ...)
+;;     (defconst shynur/c:* ...)
 ;; ).
 ;; 如果实在不知道该填什么, 那就 在不改变 数据类型 的前提下 填_空值_:
 ;;   - 字符串: ""
 ;;   - 符号 (e.g., ‘'chinese-gb18030’): nil
 
 ;; 建议: 填入指向高性能 SSD 的路径.
-(defvar shynur/c:appdata/ "d:/Documents/Apps/emacs/"
+(defconst shynur/c:appdata/ "d:/Documents/Apps/emacs/"
   "    存放杂七杂八的数据的目录 (绝对路径), 不包括配置文件.
 可能包含隐私信息 (e.g., 最近访问的文件名).
     你必须拥有对该目录的绝对访问权限 (e.g., ‘chmod’任何文件).")
 
 (add-hook 'before-init-hook
           (lambda ()
-            (defvar shynur/c:clang-format-path "d:/Progs/LLVM/bin/clang-format.exe")
-            (defvar shynur/c:clang-path "d:/Progs/LLVM/bin/clang.exe")
-            (defvar shynur/c:commonlisp-path "d:/Progs/Steel_Bank_Common_Lisp/sbcl.exe")
-            (defvar shynur/c:email "one.last.kiss@outlook.com")
-            (defvar shynur/c:filename-coding 'chinese-gb18030)
-            (defvar shynur/c:os "MS-Windows 11")
-            (defvar shynur/c:python-path "python")
-            (defvar shynur/c:shell-coding 'chinese-gb18030)
-            (defvar shynur/c:truename "谢骐")))
+            "定义一些 从逻辑上讲 不需要 在 loading ‘early-init.el’ 时使用的变量."
+            (defconst shynur/c:clang-format-path "d:/Progs/LLVM/bin/clang-format.exe")
+            (defconst shynur/c:clang-path "d:/Progs/LLVM/bin/clang.exe")
+            (defconst shynur/c:commonlisp-path "d:/Progs/Steel_Bank_Common_Lisp/sbcl.exe")
+            (defconst shynur/c:email "one.last.kiss@outlook.com")
+            (defconst shynur/c:filename-coding 'chinese-gb18030)
+            (defconst shynur/c:os "MS-Windows 11")
+            (defconst shynur/c:python-path "python")
+            (defconst shynur/c:shell-coding 'chinese-gb18030)
+            (defconst shynur/c:truename "谢骐")))
 
 ;;; Commentary:
 ;;

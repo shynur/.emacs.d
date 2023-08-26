@@ -45,7 +45,7 @@
                      (setq-local buffer-read-only t))))
 
          (eval . (let ((case-fold-search t))
-                   (highlight-phrase "[.:~/]*\\(?:shynur\\|谢骐\\)\\(?:[.:/-]+[[:alnum:].:/*-]*\\)?"
+                   (highlight-phrase "[.:~/]*\\(?:shynur\\|谢骐\\)\\(?:[_.:/-]+[[:alnum:]_.:/*-]*\\)?"
                                      'underline)))
 
          (tab-width . 4)

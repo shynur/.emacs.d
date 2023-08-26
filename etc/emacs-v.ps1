@@ -1,20 +1,22 @@
-#! /usr/bin/env pwsh
+#! pwsh
 
-# 请 手动修改 默认参数:
-$DefaultArguments =                                           `
-  "-Q", "--no-desktop",                                       `
-  "--eval", "(tool-bar-mode -1)",                             `
-  "--eval", "(set-face-attribute 'default nil :height 130)",  `
-  "--background-color", "black",                              `
-  "--cursor-color", "green",                                  `
-  "--foreground-color", "white",                              `
-  "--no-blinking-cursor",                                     `
+# 调用 不同版本 的 Emacs, 仅支持以 GUI 的 形式 启动.
+# 请手动修改 下文 提及 的 不同版本的 Emacs 安装路径.
+
+$DefaultArguments =                                          `
+  "-Q", "--no-desktop",                                      `
+  "--eval", "(tool-bar-mode -1)",                            `
+  "--eval", "(set-face-attribute 'default nil :height 130)", `
+  "--background-color", "black",                             `
+  "--cursor-color", "green",                                 `
+  "--foreground-color", "white",                             `
+  "--no-blinking-cursor",                                    `
   "--vertical-scroll-bars"
-# 以及 下文 提及 的 不同版本的 Emacs 安装路径.
+
 
 $EmacsPath = $null
 if ($args.count -lt 1) {
-    Write-Output "请输入至少一个参数!"
+    Write-Output "应当输入至少一个参数.  Usage: emacs-v.ps1 VERSION [options]."
     exit
 }
 switch ($args[0]) {
@@ -37,7 +39,7 @@ switch ($args[0]) {
         $EmacsPath = 'D:/Progs/emacs/bin/runemacs.exe'
     }
     default {
-        Write-Output "无法识别的程序编号: $programNumber"
+        Write-Output "不知道 Emacs-v$programNumber 在哪里"
         exit
     }
 }

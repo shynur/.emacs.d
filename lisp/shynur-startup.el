@@ -33,9 +33,39 @@
 
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (message (shynur/message-format #("启动耗时 %.1fs"
-                                              5 9 (face bold)))
-                     (time-to-seconds (time-since before-init-time)))))
+            (let ((shynur/startup:time (time-to-seconds (time-since before-init-time))))
+              (message #("Shynur: 启动耗时 %.2fs"
+                         13 17 (face bold))
+                       shynur/startup:time)
+              (when (daemonp)
+                ;; 发出通知: Emacs 后台进程启动了.
+                (let ((shynur/startup:balloon-title "Emacs Daemon Launched")
+                      (shynur/startup:balloon-body (format "Emacs 已经在后台启动了
+耗时 %.2f 秒"
+                                                           shynur/startup:time)))
+                  (pcase system-type
+                    ('windows-nt (make-thread (let* ((shynur/startup:balloon-emitting-frame (let (before-make-frame-hook
+                                                                                                  window-system-default-frame-alist initial-frame-alist default-frame-alist
+                                                                                                  after-make-frame-functions server-after-make-frame-hook)
+                                                                                              (make-frame-on-display (symbol-name initial-window-system)
+                                                                                                                     '((visibility . nil)))))
+                                                     (shynur/startup:balloon (with-selected-frame shynur/startup:balloon-emitting-frame
+                                                                               (w32-notification-notify
+                                                                                :level 'info
+                                                                                :title shynur/startup:balloon-title
+                                                                                :body shynur/startup:balloon-body))))
+                                                (lambda ()
+                                                  (sleep-for 0.1)  ; 必须歇一会儿 (bug), 消息气球才会显示由 ‘:level’ 指示的图标.
+                                                  (with-selected-frame shynur/startup:balloon-emitting-frame
+                                                    (w32-notification-close shynur/startup:balloon)
+                                                    (let (delete-frame-functions
+                                                          after-delete-frame-functions)
+                                                      (delete-frame)))))))
+                    (_ (require 'notifications)
+                       (notifications-notify
+                        :title shynur/startup:balloon-title
+                        :body shynur/startup:balloon-body
+                        :transient t))))))))
 
 (provide 'shynur-startup)
 

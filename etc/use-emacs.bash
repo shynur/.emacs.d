@@ -38,8 +38,6 @@ export EDITOR="${SHYNUR_EMACS_PREFIXDIR_BIN}/emacsclient                        
                                    --eval '(princ (file-truename shynur/custom:appdata/))'/`server-auth-dir/server-name.txt' \
                  --alternate-editor=                                                                                         \
                  --create-frame"
-
-
 export VISUAL="$EDITOR"
 export TEXEDIT="$EDITOR"  # TeX 的默认编辑器.
 

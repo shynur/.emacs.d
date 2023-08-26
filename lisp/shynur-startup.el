@@ -16,9 +16,9 @@
 ;; |  |  |  | ) ) |  |  | ((  |  |  |  |  |  |
 ;; |  |  |  |( (  |  |  |  \\\\ |  |  |  |  |  |
 ;; |  |  |  | )_) |  |  |  |))|  |  |  |  |  |
-;; |  |  |  |  |  |  |  |  (/ |  |  |  |  |  |
+;; |  |  |  |  |  |  |  |  (/ |  jgs/shynur  |
 ;; |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-\n"
+\n"  ; originally created by Joan G. Stark
                                 0 671 ( face           #1=(:foreground "VioletRed1")
                                         font-lock-face #1#)))
 
@@ -28,8 +28,9 @@
 ;; 启动 Emacs 时 (通过 命令行参数) 一次性访问多个 (>2) 文件时, 不额外显示 Buffer Menu.
 (setq inhibit-startup-buffer-menu t)
 
-;; 只有设为自己在 OS 中的 username, 才能屏蔽启动时 echo area 的“For information about GNU Emacs and the GNU system, type C-h C-a.”
-(setq inhibit-startup-echo-area-message user-login-name)
+;; 只有设为自己在 OS 中的 username, 才能屏蔽启动时 echo area 的 “For information about GNU Emacs and the GNU system, type C-h C-a.”
+(put 'inhibit-startup-echo-area-message  ; 需要如此 hack.
+     'saved-value (setq inhibit-startup-echo-area-message user-login-name))
 
 (add-hook 'emacs-startup-hook
           (lambda ()

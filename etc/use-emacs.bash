@@ -10,12 +10,12 @@ if [ -n "$1" ]; then
 else
     SHYNUR_EMACS_PREFIXDIR_BIN="$(emacs        \
                                     -Q --batch \
-                                    --eval "(princ (file-name-directory "\"`type -fPp emacs`\""))")"
+                                    --eval "(princ "\"`type -fPp emacs`\"")")"
 fi
 
 SHYNUR_EMACS_CONFIG_DIR="`${SHYNUR_EMACS_PREFIXDIR_BIN}/emacs \
                             -Q --batch                        \
-                            --eval '(princ user-emacs-directory)'`"
+                            --eval '(princ (file-truename (user-emacs-directory))'`"
 
 # 如果电脑上只有一个用户, 且希望把‘site-lisp’和个人配置放在一起的话:
 export EMACSLOADPATH="$SHYNUR_EMACS_CONFIG_DIR"/site-lisp/:
@@ -43,8 +43,8 @@ export TEXEDIT="$EDITOR"  # TeX 的默认编辑器.
 
 # 这些语句放在这里是无效的; 复制粘贴到 ‘~/.bashrc’ 使其生效.
 alias emacs="$EDITOR"
-alias vi='emacs '
 alias vim='emacs '
+alias nvim='emacs '
 
 # Local Variables:
 # coding: utf-8-unix

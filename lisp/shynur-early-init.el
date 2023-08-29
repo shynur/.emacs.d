@@ -18,9 +18,14 @@
 ;;   hooks provided by the Emacs startup, such as ‘window-setup-hook’
 ;;   or ‘tty-setup-hook’.
 
-(dolist (subdir '("lisp/themes/"
-                  "modules/"
+(dolist (subdir '(;; ELisp 文件:
+                  "lisp/themes/"
                   "shynur-elpa/"
+
+                  ;; 动态链接库:
+                  "modules/"
+
+                  "media/images/"  ; for ‘find-image’ to search in ‘image-load-path’.
                   ))
   (push (file-name-concat user-emacs-directory
                           subdir) load-path))

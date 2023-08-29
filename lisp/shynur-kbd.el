@@ -18,6 +18,10 @@
                   shynur/kbd-translation-modifier--then-remove-itself))
     (funcall shynur/kbd-translation-modifier)))
 
+;;; Keyboard Macro
+
+(keymap-global-unset "C-x C-k RET")  ; ‘kmacro-edit-macro’.  该键易与 [C-x k RET] 混淆.
+
 ;;; MS-Windows:
 
 (setq w32-alt-is-meta t

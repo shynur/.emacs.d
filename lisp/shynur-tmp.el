@@ -123,38 +123,6 @@
                         nil (simple)
                         "‘global-mark-ring’只会在离开某个buffer时,记住那个buffer最后设置的mark,这相当于将buffer作为节点的路径;因此,可以设置为较大的值")
  '(completion-ignored-extensions '())
- '(display-time-day-and-date t
-                             nil (time)
-                             "使‘display-time-mode’显示日期")
- '(display-time-24hr-format nil
-                            nil (time)
-                            "关闭24h制")
- '(display-time-default-load-average 0
-                                     nil (time)
-                                     "使‘display-time-mode’显示过去1min的平均CPU荷载")
- '(display-time-use-mail-icon display-time-mail-icon
-                              nil (time)
-                              "GUI下的Mail图标")
- '(display-time-mail-file nil
-                          nil (time)
-                          "是否检查以及如何检查邮箱,采用默认策略(i.e.,系统相关)")
- '(display-time-mail-directory nil
-                               nil (time)
-                               "该目录下的所有非空文件都被当成新送达的邮件")
- '(display-time-interval 60
-                         nil (time)
-                         "决定‘display-time-mode’显示时间的更新频率")
- '(display-time-load-average-threshold 0
-                                       nil (time)
-                                       "使‘display-time-mode’在CPU荷载>=0时,显示CPU荷载")
- '(battery-mode-line-format "[%p%%] "
-                            nil (battery))
- '(battery-update-interval battery-update-interval
-                           nil (battery))
- '(eol-mnemonic-dos  "(CRLF)")
- '(eol-mnemonic-mac  "(CR)")
- '(eol-mnemonic-unix "(LF)")
- '(eol-mnemonic-undecided "(?EOL)")
  '(register-separator ?+
                       nil (register)
                       "用‘append-to-register’将文本并入已经存储了文本的register中时,可以插入分隔符.分隔符存储在该变量所指定的register中.(须在调用‘set-register’前,设置该变量)")
@@ -316,8 +284,6 @@
  '(save-place-mode t
                    nil (saveplace)
                    "在session之间保存访问文件时的浏览位置")
- '(scroll-bar-mode 'right
-                   nil (scroll-bar))
  '(kill-read-only-ok nil
                      nil (simple)
                      "kill只读的文本时,beep且显示error消息")
@@ -332,8 +298,6 @@
  '(size-indication-mode t
                         nil (simple)
                         "mode-line显示buffer大小(k=10^3,M=10^6,...)")
- '(hscroll-margin 5)
- '(hscroll-step 1)
  '(suggest-key-bindings most-positive-fixnum
                         nil (simple)
                         "_1_通过函数名调用command时,在minibuffer中提示这个command可能绑定的快捷键;_2_决定‘extended-command-suggest-shorter’的显示持续时间;_3_将前面这两个提示信息持续显示5秒;_4_使command候选词列表中,各函数名的后面显示该函数绑定的快捷键")
@@ -346,16 +310,6 @@
  '(apropos-do-all nil
                   nil (apropos)
                   "有些apropos命令,在提供prefix参数时,会扩大查找范围.如果该变量为t,则即使不提供prefix参数,apropos命令也仍然会扩大查找范围")
- '(fast-but-imprecise-scrolling t
-                                nil ()
-                                "scroll时假定滚过的文本有default face,从而避免fontify它们.当那些滚过的文本的size不一致时,可能导致终点位置有偏差")
- '(jit-lock-defer-time 0.3
-                       nil (jit-lock)
-                       "scroll之后延迟多久再fontify文本")
- '(redisplay-skip-fontification-on-input t)
- '(recenter-redisplay recenter-redisplay
-                      nil ()
-                      "如果recenter时不redraw整个frame,则可能造成TUI屏幕有少许显示错误.使用默认值即可")
  '(hi-lock-auto-select-face t
                             nil (hi-lock)
                             "每次‘highlight-regexp’自动选择且尽量使用不同的face")
@@ -511,9 +465,6 @@
                              (with-current-buffer "*scratch*"
                                (setq-local prettify-symbols-alist (default-value 'prettify-symbols-alist))
                                (prettify-symbols-mode))))
-                        ,(lambda ()
-                           (display-time-mode)
-                           (display-battery-mode))
                         ,(lambda ()
                            "调节beep的声音种类,而不是音量"
                            (set-message-beep nil))
@@ -903,9 +854,6 @@
  '(mouse-1-click-in-non-selected-windows t
                                          nil (mouse)
                                          "点击non-selected-window中的button/hyperlink同样会循入链接")
- '(scroll-bar-adjust-thumb-portion nil
-                                   nil ()
-                                   "滚动条落至底部(overscrolling)时的行为")
  '(kill-transform-function (lambda (killed-string)
                              "若被复制的文本全部由whitespace组成,则直接返回;否则,trim首尾的whitespace"
                              (if (string-blank-p killed-string)
@@ -922,8 +870,6 @@
                                                       nil (mouse))
  '(mouse-drag-and-drop-region-show-tooltip 100
                                            nil (mouse))
- '(tool-bar-mode t)
- '(tool-bar-style 'both)
  '(use-dialog-box t)
  '(use-file-dialog t)
  '(x-gtk-show-hidden-files t

@@ -1,5 +1,19 @@
 ;;; -*- lexical-binding: t; -*-
 
+;;; Runtime Environment
+
+(keymap-set special-event-map "<sigusr1>"
+            (lambda ()
+              "SIGUSR1 handler"
+              (interactive)
+              (message "Caught signal %S" last-input-event)))
+(keymap-set special-event-map "<sigusr2>"
+            (lambda ()
+              "SIGUSR2 handler"
+              (interactive)
+              (message "Caught signal %S" last-input-event)))
+;; 测试一下: (signal-process (emacs-pid) 'sigusr1)
+
 (defun shynur/message-format (format-string)
   #("在开头加上“Shynur: ”"
     6 13 (face (shadow italic)))

@@ -1,5 +1,5 @@
-# 请将 cursor 放在“#outline: ./Path/”上, 尝试按“TAB”以折叠目录.
-# (但是首先, 你得安装‘gitignore-mode’.)
+# 请将 cursor 放在“#outline: ./Path/”上, 尝试按 <tab> 以折叠目录.
+# (但是得先安装 ‘gitignore-mode’.)
 
 #outline: ./
 /*
@@ -16,6 +16,7 @@
 !/etc/
 !/init.el
 !/lisp/
+!/media/
 !/modules/
 !/scripts/
 !/shynur-elpa/
@@ -71,6 +72,14 @@
 /lisp/themes/*
 !/lisp/themes/shynur-themes.el
 !/lisp/themes/shynur-?*-theme.el
+
+##outline:  ./media/
+/media/*
+!/media/images/
+
+###outline:   ./media/images/
+/media/images/*
+!/media/images/shynur-letter.xpm
 
 ##outline:  ./modules/
 /modules/*

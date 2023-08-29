@@ -73,8 +73,6 @@
 ;; 使 frame 根据 背景色的 亮暗, 让 face 自行选择对应的方案.
 (setq frame-background-mode nil)
 
-(tool-bar-mode -1)
-
 (setq frame-resize-pixelwise t)
 
 ;; 透明
@@ -216,6 +214,12 @@
 (keymap-global-unset "<menu-bar> <help-menu> <about-emacs>")
 (keymap-global-unset "<menu-bar> <help-menu> <about-gnu-project>")
 
+;;; Tool Bar
+
+(setq tool-bar-style 'both)
+
+(tool-bar-mode -1)
+
 ;;; Window:
 
 (setq window-resize-pixelwise t)
@@ -225,6 +229,15 @@
 
 (setq window-min-height 4
       window-min-width  1)
+
+;;; Scroll Bar
+
+(setq scroll-bar-mode 'right)
+
+;; 滚动条落至底部 (overscrolling) 时的行为.
+(setq scroll-bar-adjust-thumb-portion nil)
+
+(setq-default scroll-bar-width 28)
 
 ;;; Mode Line:
 
@@ -240,6 +253,38 @@
 
 ;; Face ‘mode-line-inactive’ for non-selected window’s mode line.
 (setq mode-line-in-non-selected-windows t)
+
+;;; End of Line
+(setq eol-mnemonic-unix " LF "
+      eol-mnemonic-mac  " CR "
+      eol-mnemonic-dos  " CRLF "
+      eol-mnemonic-undecided " ?EOL ")
+
+;;; Display Time Mode
+(require 'time)
+(setq display-time-day-and-date t
+      display-time-24hr-format nil)
+(setq display-time-mail-icon (find-image '(
+                                           (:type xpm :file "shynur-letter.xpm" :ascent center)
+                                           ))
+      ;; 使用由 ‘display-time-mail-icon’ 指定的 icon, 如果确实找到了这样的 icon 的话;
+      ;; 否则 使用 Unicode 图标.
+      display-time-use-mail-icon display-time-mail-icon
+
+      ;; 是否检查以及如何检查邮箱, 采用默认策略 (i.e., 系统决定).
+      display-time-mail-file nil
+      ;; 该目录下的所有非空文件都被当成新送达的邮件.
+      display-time-mail-directory nil)
+(setq display-time-default-load-average 0  ; 显示过去 1min 的平均 CPU 荷载.
+      ;; 当 CPU 荷载 >= 0 时, 显示 CPU 荷载.
+      display-time-load-average-threshold 0)
+(setq display-time-interval 60)
+(display-time-mode)
+
+;;; Display Battery Mode
+(setq battery-mode-line-format "[%p%%] ")
+(setq battery-update-interval 300)  ; 秒钟.
+(display-battery-mode)
 
 ;;; Minibuffer & Echo Area:
 
@@ -282,13 +327,21 @@
 
 ;;; Scroll:
 
+(setq jit-lock-defer-time 0.3  ; Scroll 之后 延迟 fontify.
+      ;; Scroll 时, 假定滚过的文本有 default face, 从而避免 fontify 它们.  当那些滚过的文本的 size 不一致时, 可能导致终点位置有偏差.
+      fast-but-imprecise-scrolling t
+      redisplay-skip-fontification-on-input t
+      ;; TUI 下, recenter 时不 redraw frame, 可能造成屏幕有少许显示错误.  所以 此处仅考虑 TTY.
+      recenter-redisplay 'tty)
+
 (pixel-scroll-precision-mode)
 (when (and (string= shynur/custom:truename "谢骐")
            (string= shynur/custom:os "MS-Windows 11"))
   (run-at-time nil 2000
                (lambda ()
-                 "重启 ‘SmoothScroll’."
-                 (shell-command "pwsh -File C:/Users/Les1i/.emacs.d/etc/restart-SmoothScroll.ps1"))))
+                 (make-thread (lambda ()
+                                "重启 ‘SmoothScroll’."
+                                (shell-command "pwsh -File C:/Users/Les1i/.emacs.d/etc/restart-SmoothScroll.ps1"))))))
 
 ;; Scroll 以使 window 底端的 N 行呈现到顶端.
 (setq next-screen-context-lines 5)
@@ -300,8 +353,6 @@
       ;; ‘scroll-margin’的上界.
       maximum-scroll-margin 0.5)
 
-(setq-default scroll-bar-width 28)
-
 (setq scroll-conservatively most-positive-fixnum
       ;; Minibuffer 永远 一行一行地 automatically scroll.
       scroll-minibuffer-conservatively t)
@@ -311,6 +362,10 @@
       on-screen-highlight-method 'shadow
       on-screen-delay 0.4)
 (on-screen-global-mode)
+
+;;; Horizontal
+(setq hscroll-margin 5
+      hscroll-step 1)
 
 ;;; Tooltip:
 

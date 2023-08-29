@@ -19,6 +19,8 @@
 
                      ("/\\.gitignore\\'" . gitignore-mode)
                      ("/\\.gitmodules\\'" . gitconfig-mode)
+
+                     ("/media/images/shynur-[^/]+\\.xpm\\'" . c-mode)
                      ))
 
  (nil . ((outline-minor-mode-cycle . t)
@@ -40,7 +42,7 @@
          (which-func-modes . t)
 
          (eval . (when-let ((buffer-file-name (buffer-file-name)))
-                   (when (string-match-p "\\`\\(?:LICENSE\\|COPYING\\)\\(?:\\.[^.[blank]]+\\)?\\'"  ; ‘LICENSE’没有注释语法, 只能写在这里了.
+                   (when (string-match-p "\\`\\(?:LICENSE\\|COPYING\\)\\(?:\\.[^.[blank]]+\\)?\\'"  ; ‘LICENSE’ 没有注释语法, 只能写在这里了.
                                          (file-name-nondirectory buffer-file-name))
                      (setq-local buffer-read-only t))))
 
@@ -55,13 +57,33 @@
          (sentence-end-double-space . t)
 
          (before-save-hook . ((lambda ()
+                                "自动加 UTF-8-UNIX 编码的声明."
                                 (save-excursion
                                   (funcall (if (bound-and-true-p shynur/.emacs.d:add-coding-at-propline?)
                                                #'add-file-local-variable-prop-line
                                              #'add-file-local-variable)
                                            'coding 'utf-8-unix)))
                               delete-trailing-whitespace
+                              whitespace-cleanup
+                              (lambda ()  ; 在 ‘whitespace-cleanup’ 之后查看第一行的内容.
+                                "给 XPM 文件 的 第一行 加 声明."
+                                (when-let ((buffer-file-name (buffer-file-name)))
+                                  (when (string-match-p "/media/images/shynur-[^/]+\\.xpm\\'" buffer-file-name)
+                                    (without-restriction
+                                      (save-excursion
+                                        (goto-char 1)
+                                        (when (not (string-match-p "\\`[[:blank:]]*/\\*[[:blank:]]*XPM[[:blank:]]*\\*/[[:blank:]]*\\'" (buffer-substring-no-properties 1 (line-end-position))))
+                                          (insert "/* XPM */\n")))))))
                               t))
+
+         (after-save-hook . ((lambda ()
+                               "自动编译 Emacs Lisp 文件."
+                               (when-let ((buffer-file-name (buffer-file-name)))
+                                 (when (string-match-p "/[^/]+\\.el\\'" buffer-file-name)
+                                   (let ((byte-compile-log-warning-function #'ignore))
+                                     ;; 建议手动‘check-declare-file’一下.
+                                     (byte-compile-file (buffer-file-name))))))
+                             t))
          ))
 
  (prog-mode . ((mode . electric-quote-local)))
@@ -70,13 +92,6 @@
 
                      (prettify-symbols-alist . (("lambda" . ?λ)))
                      (mode . prettify-symbols)
-
-                     (after-save-hook . ((lambda ()
-                                           "自动编译 Emacs Lisp 文件."
-                                           (let ((byte-compile-log-warning-function #'ignore))
-                                             ;; 建议手动‘check-declare-file’一下.
-                                             (byte-compile-file (buffer-file-name))))
-                                         t))
                      ))
 
  (org-mode . ((eval . (keymap-local-set "<f9>"
@@ -109,6 +124,8 @@
                                           (mode . whitespace-newline)
 
                                           (shynur/.emacs.d:add-coding-at-propline? t)))))
+
+ ("media/images/" . ((nil . ((mode . image-minor)))))
 
  ("modules/src/" . ((nil . ((eval . (when-let ((buffer-file-name (buffer-file-name)))
                                       (when (string-match-p "emacs-module"  ; 这玩意有 GPL 污染, 切割!

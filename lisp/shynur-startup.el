@@ -20,7 +20,8 @@
 ;; |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 \n"  ; originally created by Joan G. Stark
                                 0 671 ( face           #1=(:foreground "VioletRed1")
-                                        font-lock-face #1#)))
+                                        font-lock-face #1#))  ; 它会先被 ‘substitute-command-keys’ 处理.
+      initial-major-mode 'lisp-interaction-mode)
 
 (setq inhibit-startup-screen t
       initial-buffer-choice  user-emacs-directory)
@@ -32,7 +33,7 @@
 (put 'inhibit-startup-echo-area-message  ; 需要如此 hack.
      'saved-value (setq inhibit-startup-echo-area-message user-login-name))
 
-(add-hook 'emacs-startup-hook
+(add-hook 'window-setup-hook
           (lambda ()
             (let ((shynur/startup:time (time-to-seconds (time-since before-init-time))))
               (message #("Shynur: 启动耗时 %.2fs"

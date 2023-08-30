@@ -1,26 +1,26 @@
 ;;; -*- lexical-binding: t; -*-
 
-(let ((shynur/kbd-translation-modifier (lambda ()
-                                         "重新解释键盘扫描码:
-‘[’/‘]’解释为‘(’/‘)’, and vice versa."
-                                         ;; 若从 daemon 启动, 则需要在 client 进程中执行.
-                                         (keyboard-translate ?\[ ?\()
-                                         (keyboard-translate ?\] ?\))
-                                         (keyboard-translate ?\( ?\[)
-                                         (keyboard-translate ?\) ?\]))))
-  (if (daemonp)
-      (add-hook 'server-after-make-frame-hook
-                ;; (为什么要用‘letrec’ -- 见 <https://emacs.stackexchange.com/a/77767/39388>.)
-                (letrec ((shynur/kbd-translation-modifier--then-remove-itself (lambda ()
-                                                                                (funcall shynur/kbd-translation-modifier)
-                                                                                (remove-hook 'server-after-make-frame-hook
-                                                                                             shynur/kbd-translation-modifier--then-remove-itself))))
-                  shynur/kbd-translation-modifier--then-remove-itself))
-    (funcall shynur/kbd-translation-modifier)))
+(let* ((shynur/kbd:key-swapped-terminals ())
+       (shynur/kbd:key-swapper (lambda (frame)
+                                 (with-selected-frame frame
+                                   (unless (memq (frame-terminal) shynur/kbd:key-swapped-terminals)
+                                     (keyboard-translate ?\[ ?\()
+                                     (keyboard-translate ?\] ?\))
+                                     (keyboard-translate ?\( ?\[)
+                                     (keyboard-translate ?\) ?\])
+                                     (push (frame-terminal) shynur/kbd:key-swapped-terminals))))))
+  (add-hook 'after-make-frame-functions
+            shynur/kbd:key-swapper)
+  (unless (daemonp)
+    (funcall shynur/kbd:key-swapper (selected-frame))))
 
 ;;; Keyboard Macro
 
-(keymap-global-unset "C-x C-k RET")  ; ‘kmacro-edit-macro’.  该键易与 [C-x k RET] 混淆.
+(keymap-global-unset "C-x C-k RET")  ; ‘kmacro-edit-macro’.  该键易与 \\[C-x k RET] 混淆.
+
+;;; 记录击键
+
+(lossage-size 33554431)
 
 ;;; MS-Windows:
 

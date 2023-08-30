@@ -453,8 +453,6 @@
                         "放缩字体大小时的倍率")
  '(emacs-startup-hook `(,@(bound-and-true-p emacs-startup-hook)
                         ,(lambda ()
-                           (lossage-size 33554431))
-                        ,(lambda ()
                            (prefer-coding-system 'utf-8-unix)
                            (set-coding-system-priority 'utf-8-unix))
                         ,(lambda ()

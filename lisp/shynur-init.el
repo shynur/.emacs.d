@@ -101,6 +101,16 @@
 (require 'shynur-ui)       ; (find-file-other-window "./shynur-ui.el")
 (require 'shynur-lib)      ; (find-file-other-window "./shynur-lib.el")
 
+;;; After Loading Init File
+
+;; default
+(setq inhibit-default-init nil)
+
+;; abbrevs
+;; 上一页中已经设置过了.
+
+
+
 (provide 'shynur-init)
 
 ;; Local Variables:

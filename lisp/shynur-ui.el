@@ -7,66 +7,56 @@
 
 ;;; Face (其实应该放到 theme 中去):
 
-(let ((shynur/ui:face-setter
-       (lambda ()
-         ;; 摘编自 Centaur Emacs, 用于解决 字体 问题.
-         (let* ((font       "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing")
-                (attributes (font-face-attributes font)                                   )
-                (family     (plist-get attributes :family)                                ))
-           ;; Default font.
-           (apply #'set-face-attribute
-                  'default nil
-                  attributes)
-           ;; For all Unicode characters.
-           (set-fontset-font t 'symbol
-                             (font-spec :family "Segoe UI Symbol")
-                             nil 'prepend)
-           ;; Emoji 🥰.
-           (set-fontset-font t 'emoji
-                             (font-spec :family "Segoe UI Emoji")
-                             nil 'prepend)
-           ;; For Chinese characters.
-           (set-fontset-font t '(#x4e00 . #x9fff)
-                             (font-spec :family family)))
-         (custom-set-faces
-          '(cursor
-            ((t . (:background "chartreuse")))
-            nil
-            "该face仅有‘:background’字段有效")
-          '(tooltip
-            ((t . ( :height     100
-                    :background "dark slate gray"))))
-          '(line-number
-            ((t . ( :slant  italic
-                    :weight light))))
-          `(line-number-major-tick
-            ((t . ( :foreground ,(face-attribute 'line-number :foreground)
-                    :background ,(face-attribute 'line-number :background)
-                    :slant      italic
-                    :underline  t
-                    :weight     light)))
-            nil
-            "指定倍数的行号;除此以外,还有‘line-number-minor-tick’实现相同的功能,但其优先级更低")
-          '(line-number-current-line
-            ((t . ( :slant  normal
-                    :weight black))))
-          '(window-divider
-            ((t . (:foreground "SlateBlue4"))))
-          '(indent-guide-face
-            ((t . (:foreground "dark sea green"))))
-          '(fill-column-indicator
-            ((t . ( :background "black"
-                    :foreground "yellow"))))))))
-  (if (daemonp)
-      (add-hook 'server-after-make-frame-hook
-                ;; (为什么要用‘letrec’ -- 见 <https://emacs.stackexchange.com/a/77767/39388>.)
-                (letrec ((shynur/ui:face-setter--once
-                          (lambda ()
-                            (funcall shynur/ui:face-setter)
-                            (remove-hook 'server-after-make-frame-hook
-                                         shynur/ui:face-setter--once))))
-                  shynur/ui:face-setter--once))
-    (funcall shynur/ui:face-setter)))
+(add-hook 'emacs-startup-hook  ; 在调用 ‘frame-notice-user-settings’ 前运行.
+          (lambda ()
+            ;; 摘编自 Centaur Emacs, 用于解决 字体 问题.
+            (let* ((font       "Maple Mono SC NF-12:slant:weight=medium:width=normal:spacing")
+                   (attributes (font-face-attributes font)                                   )
+                   (family     (plist-get attributes :family)                                ))
+              ;; Default font.
+              (apply #'set-face-attribute
+                     'default nil
+                     attributes)
+              ;; For all Unicode characters.
+              (set-fontset-font t 'symbol
+                                (font-spec :family "Segoe UI Symbol")
+                                nil 'prepend)
+              ;; Emoji 🥰.
+              (set-fontset-font t 'emoji
+                                (font-spec :family "Segoe UI Emoji")
+                                nil 'prepend)
+              ;; For Chinese characters.
+              (set-fontset-font t '(#x4e00 . #x9fff)
+                                (font-spec :family family)))
+            (custom-set-faces
+             '(cursor
+               ((t . (:background "chartreuse")))
+               nil
+               "该face仅有‘:background’字段有效")
+             '(tooltip
+               ((t . ( :height     100
+                       :background "dark slate gray"))))
+             '(line-number
+               ((t . ( :slant  italic
+                       :weight light))))
+             `(line-number-major-tick
+               ((t . ( :foreground ,(face-attribute 'line-number :foreground)
+                       :background ,(face-attribute 'line-number :background)
+                       :slant      italic
+                       :underline  t
+                       :weight     light)))
+               nil
+               "指定倍数的行号;除此以外,还有‘line-number-minor-tick’实现相同的功能,但其优先级更低")
+             '(line-number-current-line
+               ((t . ( :slant  normal
+                       :weight black))))
+             '(window-divider
+               ((t . (:foreground "SlateBlue4"))))
+             '(indent-guide-face
+               ((t . (:foreground "dark sea green"))))
+             '(fill-column-indicator
+               ((t . ( :background "black"
+                       :foreground "yellow")))))))
 
 ;;; Frame:
 
@@ -339,9 +329,10 @@
            (string= shynur/custom:os "MS-Windows 11"))
   (run-at-time nil 2000
                (lambda ()
-                 (make-thread (lambda ()
-                                "重启 ‘SmoothScroll’."
-                                (shell-command "pwsh -File C:/Users/Les1i/.emacs.d/etc/restart-SmoothScroll.ps1"))))))
+                 "重启 ‘SmoothScroll’."
+                 (start-process "Restart SmoothScroll" nil
+                                "pwsh"
+                                "-File" "C:/Users/Les1i/.emacs.d/etc/restart-SmoothScroll.ps1"))))
 
 ;; Scroll 以使 window 底端的 N 行呈现到顶端.
 (setq next-screen-context-lines 5)
@@ -369,9 +360,7 @@
 
 ;;; Tooltip:
 
-(with-eval-after-load 'tooltip
-  ;; 暂时没啥好设置的.
-  (setq tooltip-frame-parameters tooltip-frame-parameters))
+;; (setq tooltip-frame-parameters ...) 还没想好要设置什么.
 
 (setq tooltip-delay       0
       tooltip-short-delay 0

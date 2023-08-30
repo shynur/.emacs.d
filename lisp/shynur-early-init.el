@@ -1,5 +1,16 @@
 ;;; -*- lexical-binding: t; -*-
 
+(let ((default-gc-cons-threshold  gc-cons-threshold)
+      (default-gc-cons-percentage gc-cons-percentage))
+  (setq gc-cons-threshold 2147483647  ; 自上次 GC 以来分配超过该 字节数 则立刻执行 GC.
+      ;; 同上, 但是是以 heap 被分配的比例裁定.
+      ;; 若该值更小, 则服从‘gc-cons-threshold’.
+        gc-cons-percentage 1)
+  (add-hook 'window-setup-hook  ; 这个 hook 算是运行得比较晚的了.
+            (lambda ()
+              (setq gc-cons-threshold  default-gc-cons-threshold
+                    gc-cons-percentage default-gc-cons-percentage))))
+
 ;; See (info "(emacs) Early Init File")
 ;;
 ;;      This file is loaded before the package system and GUI is
@@ -34,11 +45,6 @@
 (require 'shynur/custom
          (file-name-concat user-emacs-directory
                            "etc/shynur-custom.el"))
-
-(setq gc-cons-threshold (* 1048576 200)  ; 自上次 GC 以来分配超过该 字节数 则立刻执行 GC.
-      ;; 同上, 但是是以 heap 被分配的比例裁定.
-      ;; 若该值更小, 则服从‘gc-cons-threshold’.
-      gc-cons-percentage 0)
 
 (when (or (eq system-type 'windows-nt)
           (native-comp-available-p))

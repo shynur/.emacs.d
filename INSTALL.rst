@@ -115,7 +115,7 @@ Start process
 或 (在 GNU/Linux 上)::
 
     shynur:~$ emacsclient \
-                --server-file=/home/shynur/.emacs.d/.appdata/server-auth-dir/server-name.txt \  # 这边必须是_展开的_绝对路径.
+                --server-file=/home/shynur/.emacs.d/.appdata/server-auth-dir/server-name.txt \
                 --alternate-editor="" \
                 --create-frame
 

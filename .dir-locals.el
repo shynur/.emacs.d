@@ -51,7 +51,7 @@
                                      'underline)))
 
          (tab-width . 4)
-         (indent-tabs-mode . nil)  ; 为什么不是“(mode . indent-tabs)”?  不知道, manual 中的示例如此.
+         (indent-tabs-mode . nil)  ; 为什么不是 “(mode . indent-tabs)”?  不知道, manual 中的示例如此.
          (delete-trailing-lines . t)
          (require-final-newline . t)
          (sentence-end-double-space . t)
@@ -73,7 +73,7 @@
                                       (save-excursion
                                         (goto-char 1)
                                         (when (not (string-match-p "\\`[[:blank:]]*/\\*[[:blank:]]*XPM[[:blank:]]*\\*/[[:blank:]]*\\'" (buffer-substring-no-properties 1 (line-end-position))))
-                                          (insert "/* XPM */\n")))))))
+                                          (insert "/* XPM */\n" ?\n)))))))
                               t))
 
          (after-save-hook . ((lambda ()
@@ -123,7 +123,7 @@
  ("etc/yas-snippets/" . ((snippet-mode . ((require-final-newline . nil)
                                           (mode . whitespace-newline)
 
-                                          (shynur/.emacs.d:add-coding-at-propline? t)))))
+                                          (shynur/.emacs.d:add-coding-at-propline? . t)))))
 
  ("media/images/" . ((nil . ((mode . image-minor)))))
 

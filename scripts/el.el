@@ -1,4 +1,4 @@
-#! /usr/bin/emacs --script
+#! /usr/bin/emacs -x
 ;;; -*- lexical-binding: t; -*-
 
 ;;; Commentary:

@@ -261,7 +261,6 @@
  '(read-circle t
                nil ()
                "允许(字面上)读取循环结构")
- '(max-lisp-eval-depth max-lisp-eval-depth)
  '(max-specpdl-size max-specpdl-size
                     nil ()
                     "似乎在emacs-29中被废弃了")
@@ -868,11 +867,6 @@
                                                       nil (mouse))
  '(mouse-drag-and-drop-region-show-tooltip 100
                                            nil (mouse))
- '(use-dialog-box t)
- '(use-file-dialog t)
- '(x-gtk-show-hidden-files t
-                           nil ()
-                           "在GTK+的file-chooser-dialog中显示隐藏文件")
  '(compilation-scroll-output 'first-error
                              nil (compile))
  '(compilation-always-kill nil
@@ -1200,7 +1194,7 @@
                                    "--fallback-style=none"
                                    "--ferror-limit=0"
                                    ,(format "--style=file:%s"
-                                            (file-truename "~/.emacs.d/etc/clang-format.yaml"))))
+                                            (expand-file-name "~/.emacs.d/etc/clang-format.yaml"))))
                         (programming-language (pcase major-mode
                                                 ('c-mode    "c"   )
                                                 ('c++-mode  "cpp" )

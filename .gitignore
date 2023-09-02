@@ -1,4 +1,4 @@
-# 请将 cursor 放在“#outline: ./Path/”上, 尝试按 <tab> 以折叠目录.
+# 请将 cursor 放在 “#outline: ./Path/” 上, 尝试按 <tab> 以折叠目录.
 # (但是得先安装 ‘gitignore-mode’.)
 
 #outline: ./
@@ -24,13 +24,13 @@
 
 ##outline:  ./.github/
 /.github/*
-!/.github/?*.yaml
 !/.github/CONTRIBUTING.textile
+!/.github/FUNDING.yaml
 !/.github/workflows/
 
 ###outline:   ./.github/workflows/
 /.github/workflows/*
-!/.github/workflows/?*.yaml
+!/.github/workflows/make-docs.yaml
 
 ##outline:  ./docs/
 /docs/*
@@ -54,14 +54,14 @@
 
 ###outline:   ./etc/yas-snippets/
 /etc/yas-snippets/*
-!/etc/yas-snippets/?*-mode/
+!/etc/yas-snippets/[0-9A-Za-z]*-mode/
 
-####outline:    ./etc/yas-snippets/?*-mode/
-/etc/yas-snippets/?*-mode/*
-!/etc/yas-snippets/?*-mode/.yas-skip
-!/etc/yas-snippets/?*-mode/.yas-parents
-!/etc/yas-snippets/?*-mode/.yas-setup.el
-!/etc/yas-snippets/?*-mode/?*.yasnippet
+####outline:    ./etc/yas-snippets/[0-9A-Za-z]*-mode/
+/etc/yas-snippets/[0-9A-Za-z]*-mode/*
+!/etc/yas-snippets/[0-9A-Za-z]*-mode/.yas-skip
+!/etc/yas-snippets/[0-9A-Za-z]*-mode/.yas-parents
+!/etc/yas-snippets/[0-9A-Za-z]*-mode/.yas-setup.el
+!/etc/yas-snippets/[0-9A-Za-z]*-mode/?*.yasnippet
 
 ##outline:  ./lisp/
 /lisp/*
@@ -88,8 +88,8 @@
 ###outline:   ./modules/src/
 /modules/src/*
 !/modules/src/shynur-?*.c
-!/modules/src/?*.h
-# 文件‘emacs-module.h’基于 GPL, 一定要排除它, 切割!
+!/modules/src/shynur-?*.h
+# 文件 ‘emacs-module.h’ 基于 GPL, 一定要排除它, 切割!
 /modules/src/*emacs-module*
 
 ##outline:  ./scripts/
@@ -106,6 +106,11 @@
 !/site-lisp/leim-list.el
 !/site-lisp/site-start.el
 !/site-lisp/subdirs.el
+!/site-lisp/their-sites/
+
+###outline:   ./site-lisp/their-sites/
+/site-lisp/their-sites/*
+!/site-lisp/their-sites/.nosearch
 
 #outline:
 

@@ -1,11 +1,7 @@
-;;; -*- lexical-binding: t -*-
+;; -*- lexical-binding: nil; -*-
+;; 未开启 词法绑定, 原文件如此.
 
-;;; Commentary:
-;;
-;; In ‘load-path’, after this directory should come certain of its
-;; subdirectories.  Here we specify them:
-
-(normal-top-level-add-to-load-path '())
+(normal-top-level-add-subdirs-to-load-path)
 
 ;; Local Variables:
 ;; coding: utf-8-unix

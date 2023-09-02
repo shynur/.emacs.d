@@ -1,8 +1,8 @@
 [submodule "site-lisp/copilot.el"]
-    path = site-lisp/copilot.el
+    path = shynur-elpa/copilot.el
     url = git@github.com:zerolfx/copilot.el.git
 [submodule "site-lisp/lsp-bridge"]
-    path = site-lisp/lsp-bridge
+    path = shynur-elpa/lsp-bridge
     url = git@github.com:manateelazycat/lsp-bridge.git
 
 # Local Variables:

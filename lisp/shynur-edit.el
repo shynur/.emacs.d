@@ -54,6 +54,57 @@
                       (c-hungry-delete-forward))
                   t))))
 
+;;; Predefined Text
+
+(keymap-global-set "<f9>"
+                   (lambda ()
+                     "插入非常常见的, 在任何时候都应该提供补全的文本."
+                     (interactive)
+                     (insert (let (message-log-max)
+                               (eval-when-compile
+                                 (require 'cl-lib))
+                               (cl-second
+                                (read-multiple-choice
+                                 "插入文本"
+                                 '(
+                                   (?0 "")
+                                   (?1 "")
+                                   (?2 "")
+                                   (?3 "")
+                                   (?4 "")
+                                   (?5 "")
+                                   (?6 "")
+                                   (?7 "")
+                                   (?8 "")
+                                   (?9 "")
+                                   (?a "")
+                                   (?b "")
+                                   (?c "")
+                                   (?d "")
+                                   (?e "")
+                                   (?f "")
+                                   (?g "")
+                                   (?h "")
+                                   (?i "")
+                                   (?j "")
+                                   (?k "")
+                                   (?l "")
+                                   (?m "")
+                                   (?n "")
+                                   (?o "")
+                                   (?p "")
+                                   (?q "")
+                                   (?r "")
+                                   (?s "shynur")
+                                   (?t "")
+                                   (?u "")
+                                   (?v "")
+                                   (?w "")
+                                   (?x "")
+                                   (?y "")
+                                   (?z "")
+                                   )))))))
+
 (provide 'shynur-edit)
 
 ;; Local Variables:

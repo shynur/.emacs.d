@@ -14,6 +14,7 @@
                      ("/[^/[blank]]+\\.md\\'"      . markdown-mode)
                      ("/[^/[blank]]+\\.textile\\'" . textile-mode)
 
+                     ("/\\.nosearch\\'" . text-mode)
                      ("/[^/[blank]]+\\.ya?ml\\'" . yaml-mode)
                      ("/etc/yas-snippets/[^/[blank]]+-mode/\\(?:\\.yas-skip\\|\\.yas-parents\\|[^/[blank]]+\\.yasnippet\\)\\'" . snippet-mode)
 
@@ -133,7 +134,7 @@
                                         (setq-local buffer-read-only t))))
 
                             (tags-file-name . "ETAGS.txt")
-                            (eval . (when (buffer-file-name)  ; 正在访问文件, 而不是‘dired’之类的 buffer.
+                            (eval . (when (buffer-file-name)  ; 正在访问文件, 而不是 ‘Dired’ 之类的 buffer.
                                       (let ((default-directory (file-name-concat user-emacs-directory
                                                                                  "modules/src/")))
                                         (when (or (not (file-exists-p tags-file-name))

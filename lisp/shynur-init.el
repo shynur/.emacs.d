@@ -108,8 +108,6 @@
 
 ;; abbrevs
 ;; 上一页中已经设置过了.
-
-
 
 (provide 'shynur-init)
 

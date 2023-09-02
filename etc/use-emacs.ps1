@@ -9,7 +9,7 @@ $SHYNUR_EMACS_PREFIXDIR_BIN = "$($args[0])/bin/"
 $SHYNUR_EMACS_CONFIG_DIR = &            `
     "$SHYNUR_EMACS_PREFIXDIR_BIN/emacs" `
        '-Q' '--batch'                   `
-       '--eval' '(princ (file-truename user-emacs-directory))'
+       '--eval' '(princ (expand-file-name user-emacs-directory))'
 
 $env:EMACSLOADPATH = "$SHYNUR_EMACS_CONFIG_DIR/site-lisp/$(if ($IsWindows) {';'} else {':'})"
 [System.Environment]::SetEnvironmentVariable(
@@ -22,7 +22,7 @@ $env:EDITOR = "$SHYNUR_EMACS_PREFIXDIR_BIN/emacsclient$(if ($IsWindows) {'w'} el
                    $SHYNUR_EMACS_PREFIXDIR_BIN/emacs                    `
                    -Q --batch                                           `
                    --load $SHYNUR_EMACS_CONFIG_DIR/etc/shynur-custom.el `
-                   --eval '(princ (file-truename shynur/custom:appdata/))'
+                   --eval '(princ (expand-file-name shynur/custom:appdata/))'
                  )/server-auth-dir/server-name.txt                                       `
                  --alternate-editor=                                                     `
                  --create-frame" -replace "`n", " "

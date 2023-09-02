@@ -1,5 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
+;;; Key Translation
+
 (let* ((shynur/kbd:key-swapped-terminals ())
        (shynur/kbd:key-swapper (lambda (frame)
                                  (with-selected-frame frame
@@ -13,12 +15,18 @@
             shynur/kbd:key-swapper)
   (unless (daemonp)
     (funcall shynur/kbd:key-swapper (selected-frame))))
+
+;; E.g., 如果 ‘C-a’ 有定义 且 ‘C-A’ 无, 则 使用 ‘C-a’.
+(setq translate-upper-case-key-bindings t)  ; 最好别改它.
+
+;; 使用 ‘read-from-minibuffer’, 这样依然能在读取过程中调用其它 command.
+(setq read-char-choice-use-read-key nil)
 
 ;;; Keyboard Macro
 
 (keymap-global-unset "C-x C-k RET")  ; ‘kmacro-edit-macro’.  该键易与 \\[C-x k RET] 混淆.
 
-;;; 记录击键
+;;; Keystroke
 
 (lossage-size 33554431)
 

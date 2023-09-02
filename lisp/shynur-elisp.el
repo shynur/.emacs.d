@@ -24,12 +24,25 @@
 (setq print-circle t)  ; 使用“#N=(#N#)”语法 打印 递归结构.
 
 (setq print-integers-as-characters nil  ; 打印 字符常量 的方式: “115 (#o163, ...)” instea of “?s (#o163, ...)”.
-      eval-expression-print-maximum-character most-positive-fixnum)  ; 打印 字符常量 时 括号内: “(#o163, #x73)” instead of “(#o163, #x73, ?s)”.
+      ;; 打印 字符常量 时 括号内: “(#o163, #x73)” instead of “(#o163, #x73, ?s)”.
+      eval-expression-print-maximum-character most-positive-fixnum)
 
 ;; Debugger 以 C 风格 显示 函数调用, 而不是 Lisp 风格.
 (setq debugger-stack-frame-as-list nil)
+
+;; 有关该值的合适范围的讨论 (无果): <https://emacs.stackexchange.com/q/76246/39388>
+(setq max-lisp-eval-depth 800)
 
 ;;; Feature: ‘emacs-lisp’
+
+;;; Compile Elisp
+
+(defun shynur/elisp:compile-dir (dir)
+  (interactive "DCompile ELisp Files Under: ")
+  (dolist (pathname (directory-files-recursively dir
+                                                 "[^/]+\\.el\\'"
+                                                 t))
+    (byte-compile-file pathname)))
 
 (provide 'shynur-elisp)
 

@@ -67,7 +67,8 @@
                        (notifications-notify
                         :title shynur/startup:balloon-title
                         :body shynur/startup:balloon-body
-                        :transient t))))))))
+                        :transient t)))))))
+          100)
 
 (provide 'shynur-startup)
 

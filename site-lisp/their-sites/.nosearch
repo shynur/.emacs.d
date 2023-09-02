@@ -1,0 +1,9 @@
+本文件 确保 当前目录 不会被 `normal-top-level-add-subdirs-to-load-path' 加到 `load-path' 中.
+
+这个文件夹 存储 别人的 工作站 的 site-lisp 配置.  比如 在 团队开发时,
+直接将 项目经理 规定的 site-lisp 整个 拷贝到 当前目录 下 (当然, 改一个
+唯一的名字).
+
+Local Variables:
+coding: utf-8-unix
+End:

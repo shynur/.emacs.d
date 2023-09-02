@@ -130,43 +130,51 @@
 
 ;;; Frame Title
 
-(setq frame-title-format `("" default-directory "  "
-                           (:eval (prog1 ',(defvar shynur/ui:frame-title nil)
-                                    ;; 也可以用‘post-gc-hook’来更新.
-                                    ,(add-hook 'post-gc-hook
-                                               (let ((shynur/gcs-done -1))
-                                                 (lambda ()
-                                                   (when (/= shynur/gcs-done gcs-done)
-                                                     (setq shynur/ui:frame-title (format-spec "%N GC (%ts total): %M VM, %hh runtime"
-                                                                                              `((?N . ,(format "%d%s"
-                                                                                                               gcs-done
-                                                                                                               (pcase (mod gcs-done 10)
-                                                                                                                 (1 "st")
-                                                                                                                 (2 "nd")
-                                                                                                                 (3 "rd")
-                                                                                                                 (_ "th"))))
-                                                                                                (?t . ,(round gc-elapsed))
-                                                                                                (?M . ,(progn
-                                                                                                         (eval-when-compile
-                                                                                                           (require 'cl-lib))
-                                                                                                         (cl-loop for memory = (memory-limit) then (/ memory 1024.0)
-                                                                                                                  for mem-unit across "KMGT"
-                                                                                                                  when (< memory 1024)
-                                                                                                                  return (format "%.1f%c"
-                                                                                                                                 memory
-                                                                                                                                 mem-unit))))
-                                                                                                (?h . ,(format "%.1f"
-                                                                                                               (/ (time-to-seconds (time-since before-init-time))
-                                                                                                                  3600.0)))))
-                                                           shynur/gcs-done gcs-done))))))))
-      icon-title-format `(:eval (prog1 ',(defvar shynur/ui:icon-title nil)
-                                  (setq shynur/ui:icon-title (mapconcat (lambda (buffer)
-                                                                          (with-current-buffer buffer
-                                                                            (format "[%s]"
-                                                                                    (buffer-name)))) (delete-dups (mapcar (lambda (window)
-                                                                                    (with-selected-window window
-                                                                                      (current-buffer))) (window-list)))
-                                                                                    " ")))))
+(setq frame-title-format (prog1 '("" default-directory "  " shynur/ui:frame-title)
+                           (defvar shynur/ui:frame-title "21st GC (4s total): 742.3M VM, 3.5h runtime, 455/546 keys"
+                             "执行 垃圾回收 的 次数 (它们总共花费 4 秒): (截至这一次 垃圾回收 时) 估算 Emacs 虚拟内存的占用, 运行时间/h, number of key-sequences/input-events processed")
+                           (let ((shynur/ui:frame-title-updater (lambda ()
+                                                                  (setq shynur/ui:frame-title (format-spec "%N GC (%ts total): %M VM, %hh runtime, %k keys"
+                                                                                                           `((?N . ,(let ((gcs-done+1 (1+ gcs-done)))  ; 似乎此时 ‘gcs-done’ 还未更新.
+                                                                                                                      (format "%d%s"
+                                                                                                                              gcs-done+1
+                                                                                                                              (pcase (mod gcs-done+1 10)
+                                                                                                                                (1 "st")
+                                                                                                                                (2 "nd")
+                                                                                                                                (3 "rd")
+                                                                                                                                (_ "th")))))
+                                                                                                             (?t . ,(round gc-elapsed))
+                                                                                                             (?M . ,(progn
+                                                                                                                      (eval-when-compile
+                                                                                                                        (require 'cl-lib))
+                                                                                                                      (cl-loop for shynur--memory = (memory-limit) then (/ shynur--memory 1024.0)
+                                                                                                                               for shynur--memory-unit across "KMGT"  ; 可能占用 1 TiB 内存吗?
+                                                                                                                               when (< shynur--memory 1024)
+                                                                                                                               return (format "%.1f%c"
+                                                                                                                                              shynur--memory
+                                                                                                                                              shynur--memory-unit))))
+                                                                                                             (?h . ,(format "%.1f"
+                                                                                                                            (/ (time-to-seconds (time-since before-init-time))
+                                                                                                                               3600.0)))
+                                                                                                             ;; 鼠标滚轮 也属于 key-sequence/input-events,
+                                                                                                             ;; 但在这里它 (特别是开启像素级滚动) 显然不合适 :(
+                                                                                                             (?k . ,(format "%d/%d"
+                                                                                                                            num-input-keys
+                                                                                                                            num-nonmacro-input-events))))))))
+                             (funcall shynur/ui:frame-title-updater)
+                             (add-hook 'post-gc-hook
+                                       shynur/ui:frame-title-updater)))
+      icon-title-format (progn
+                          (defvar shynur/ui:icon-title nil)
+                          `(:eval (prog1 'shynur/ui:icon-title
+                                    (setq shynur/ui:icon-title (mapconcat ,(lambda (buffer)
+                                                                             "以 “[buffer1] [buffer2] ... [buffer3]” 的方式 不重复地 列出 frame 中的 window 显示的 buffer."
+                                                                             (with-current-buffer buffer
+                                                                               (format "[%s]"
+                                                                                       (buffer-name)))) (delete-dups (mapcar (lambda (window)
+                                                                                                                               (with-selected-window window
+                                                                                                                                 (current-buffer))) (window-list)))
+                                                                                       "\s"))))))
 
 ;;; Menu Bar
 
@@ -332,7 +340,8 @@
                  "重启 ‘SmoothScroll’."
                  (start-process "Restart SmoothScroll" nil
                                 "pwsh"
-                                "-File" "C:/Users/Les1i/.emacs.d/etc/restart-SmoothScroll.ps1"))))
+                                "-File" (expand-file-name (file-name-concat user-emacs-directory
+                                                                            "etc/restart-SmoothScroll.ps1"))))))
 
 ;; Scroll 以使 window 底端的 N 行呈现到顶端.
 (setq next-screen-context-lines 5)
@@ -367,6 +376,14 @@
       tooltip-hide-delay  most-positive-fixnum)
 
 (tooltip-mode)
+
+;;; Dialog Box
+
+(setq use-dialog-box t
+      use-file-dialog t)
+
+;; 在 GTK+ 的 file-chooser-dialog 中显示隐藏文件.
+(setq x-gtk-show-hidden-files t)
 
 (provide 'shynur-ui)
 

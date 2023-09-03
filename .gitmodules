@@ -1,9 +1,19 @@
 [submodule "site-lisp/copilot.el"]
     path = shynur-elpa/copilot.el
     url = git@github.com:zerolfx/copilot.el.git
+
+[submodule "shynur-elpa/holo-layer"]
+    path = shynur-elpa/holo-layer
+    url = git@github.com:manateelazycat/holo-layer.git
+
 [submodule "site-lisp/lsp-bridge"]
     path = shynur-elpa/lsp-bridge
     url = git@github.com:manateelazycat/lsp-bridge.git
+
+[submodule "modules/src/pop-select"]
+    path = modules/src/pop-select
+    url = git@github.com:lynnux/pop-select.git
+
 
 # Local Variables:
 # coding: utf-8-unix

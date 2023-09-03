@@ -94,7 +94,8 @@
 
 ##outline:  ./scripts/
 /scripts/*
-!/scripts/el.el
+!/scripts/ielm-cli.el
+!/scripts/make-shynur-emacs.el
 
 ##outline:  ./shynur-elpa/
 /shynur-elpa/*

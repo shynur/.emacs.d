@@ -95,6 +95,7 @@
 (require 'shynur-cc)       ; (find-file-other-window "./shynur-cc.el")
 (require 'shynur-kbd)      ; (find-file-other-window "./shynur-kbd.el")
 (require 'shynur-sh)       ; (find-file-other-window "./shynur-sh.el")
+(require 'shynur-game)     ; (find-file-other-window "./shynur-game.el")
 (require 'shynur-edit)     ; (find-file-other-window "./shynur-edit.el")
 (require 'shynur-profile)  ; (find-file-other-window "./shynur-profile.el")
 (require 'shynur-startup)  ; (find-file-other-window "./shynur-startup.el")

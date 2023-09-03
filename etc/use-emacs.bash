@@ -15,7 +15,7 @@ fi
 
 SHYNUR_EMACS_CONFIG_DIR="`${SHYNUR_EMACS_PREFIXDIR_BIN}/emacs \
                             -Q --batch                        \
-                            --eval '(princ (expand-file-name (user-emacs-directory))'`"
+                            --eval '(princ (expand-file-name user-emacs-directory))'`"
 
 # 如果电脑上只有一个用户, 且希望把‘site-lisp’和个人配置放在一起的话:
 export EMACSLOADPATH="$SHYNUR_EMACS_CONFIG_DIR"/site-lisp/:
@@ -35,7 +35,7 @@ export EDITOR="${SHYNUR_EMACS_PREFIXDIR_BIN}/emacsclient                        
                  --server-file='`${SHYNUR_EMACS_PREFIXDIR_BIN}/emacs                                                            \
                                    -Q --batch                                                                                   \
                                    --load ${SHYNUR_EMACS_CONFIG_DIR}/etc/shynur-custom.el                                       \
-                                   --eval '(princ (expand-file-name shynur/custom:appdata/))'/`server-auth-dir/server-name.txt' \
+                                   --eval '(princ (expand-file-name shynur/custom:appdata/))'`/server-auth-dir/server-name.txt' \
                  --alternate-editor=                                                                                            \
                  --create-frame"
 export VISUAL="$EDITOR"

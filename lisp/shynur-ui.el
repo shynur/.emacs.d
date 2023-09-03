@@ -68,8 +68,8 @@
 ;; 透明
 (add-to-list 'default-frame-alist
              `(,(pcase system-type
-                  ('windows-nt 'alpha)
-                  (_ 'alpha-background))
+                  ("I don’t know how to test whether the platform supports this parameter!" 'alpha-background)
+                  (_ 'alpha))
                . 75))
 
 ;; 当最后一个 frame 关闭时, 存入它的 位置/尺寸;
@@ -128,7 +128,7 @@
       window-divider-default-right-width 12)
 (window-divider-mode)
 
-;;; Frame Title
+;;; Frame Title:
 
 (setq frame-title-format (prog1 '("" default-directory "  " shynur/ui:frame-title)
                            (defvar shynur/ui:frame-title "21st GC (4s total): 742.3M VM, 3.5h runtime, 455/546 keys"
@@ -176,7 +176,7 @@
                                                                                                                                  (current-buffer))) (window-list)))
                                                                                        "\s"))))))
 
-;;; Menu Bar
+;;; Menu Bar:
 
 (keymap-global-unset "<menu-bar> <file> <open-file>")
 (keymap-global-unset "<menu-bar> <file> <kill-buffer>")
@@ -212,7 +212,7 @@
 (keymap-global-unset "<menu-bar> <help-menu> <about-emacs>")
 (keymap-global-unset "<menu-bar> <help-menu> <about-gnu-project>")
 
-;;; Tool Bar
+;;; Tool Bar:
 
 (setq tool-bar-style 'both)
 
@@ -228,7 +228,7 @@
 (setq window-min-height 4
       window-min-width  1)
 
-;;; Scroll Bar
+;;; Scroll Bar:
 
 (setq scroll-bar-mode 'right)
 
@@ -264,6 +264,7 @@
       display-time-24hr-format nil)
 (setq display-time-mail-icon (find-image '(
                                            (:type xpm :file "shynur-letter.xpm" :ascent center)
+                                           (:type pbm :file "letter.pbm" :ascent center)
                                            ))
       ;; 使用由 ‘display-time-mail-icon’ 指定的 icon, 如果确实找到了这样的 icon 的话;
       ;; 否则 使用 Unicode 图标.
@@ -300,12 +301,18 @@
 
 ;;; Cursor:
 
+(setq-default cursor-type 'box
+              ;; 在 non-selected window 中也 展示 cursor,
+              ;; 但是 是 镂空的.
+              cursor-in-non-selected-windows t)
+(setq x-stretch-cursor t)  ; 在 TAB 字符上拉长 cursor.
+
 (blink-cursor-mode -1)
 ;; 以下设置无效, 因为‘blink-cursor-mode’关掉了.
 (setq blink-cursor-delay  0  ; Cursor 静止一段时间之后开始闪烁.
       blink-cursor-blinks 0  ; 闪烁次数
       blink-cursor-interval 0.5
-      ;; 映射: ‘cursor-type’->光标黯淡时的造型.
+      ;; 映射: ‘cursor-type’ -> 光标黯淡时的造型.
       blink-cursor-alist '((box  . nil)
                            (bar  . box)
                            (hbar . bar)))
@@ -313,10 +320,44 @@
 ;; TUI下, 尽可能地 使 cursor 外形或特征 更加显著.
 (setq visible-cursor t)
 
-(setq cursor-type 'box
-      ;; 在 non-selected window 中也 展示 cursor,
-      ;; 但是 是 镂空的.
-      cursor-in-non-selected-windows t)
+;;; 果冻光标
+;; GNU/Linux
+(setq holo-layer-python-command shynur/custom:python-path)
+(setq holo-layer-enable-cursor-animation t
+      holo-layer-cursor-alpha 140
+      holo-layer-cursor-animation-duration 170
+      holo-layer-cursor-animation-interval 30
+      holo-layer-cursor-animation-type "jelly")
+(require 'holo-layer nil t)
+(with-eval-after-load 'holo-layer
+  (when (eq system-type 'gnu/linux)
+    (holo-layer-enable)))
+;; MS-Windows
+(ignore-error 'file-missing
+  (load-library "pop_select"))
+(with-eval-after-load "pop_select"
+  (when (eq system-type 'windows-nt)
+    (add-hook 'post-command-hook
+              (lambda ()
+                (when-let ((shynur/ui:window-coordinate (window-absolute-pixel-position)))
+                  (let ((shynur/ui:cursor-color (color-name-to-rgb
+                                                 (face-background 'cursor))))
+                    (pop-select/beacon-animation
+                     (car shynur/ui:window-coordinate) (cdr shynur/ui:window-coordinate)
+                     (if (eq cursor-type 'bar)
+                         1
+                       (if-let ((glyph (let ((shynur--point (point)))
+                                         (when (< shynur--point (point-max))
+                                           (aref (font-get-glyphs (font-at shynur--point)
+                                                                  shynur--point (1+ shynur--point)) 0)))))
+                           (aref glyph 4)
+                         (window-font-width))) (line-pixel-height)
+                     180 100
+                     (floor (* (cl-first shynur/ui:cursor-color) 255)) (floor (* (cl-second shynur/ui:cursor-color) 255)) (floor (* (cl-third shynur/ui:cursor-color) 255))
+                     ;; 排除 单个 半角 字符 的 距离.
+                     24)))))))
+
+(setq cursor-in-echo-area nil)
 
 ;;; Click:
 
@@ -377,13 +418,18 @@
 
 (tooltip-mode)
 
-;;; Dialog Box
+;;; Dialog Box:
 
 (setq use-dialog-box t
       use-file-dialog t)
 
 ;; 在 GTK+ 的 file-chooser-dialog 中显示隐藏文件.
 (setq x-gtk-show-hidden-files t)
+
+;;; Sound:
+
+(when (fboundp 'set-message-beep)
+  (set-message-beep nil))  ; 调节 beep 的声音种类.
 
 (provide 'shynur-ui)
 

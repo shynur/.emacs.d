@@ -463,9 +463,6 @@
                                (setq-local prettify-symbols-alist (default-value 'prettify-symbols-alist))
                                (prettify-symbols-mode))))
                         ,(lambda ()
-                           "调节beep的声音种类,而不是音量"
-                           (set-message-beep nil))
-                        ,(lambda ()
                            "解决‘mouse-drag-and-drop-region’总是copy的问题(bug#63872)"
                            (advice-add (prog1 'mouse-drag-and-drop-region
                                          (require 'mouse)) :around
@@ -490,9 +487,6 @@
  '(help-at-pt-timer-delay 0
                           nil (help-at-pt)
                           "让‘help-at-pt-display-when-idle’的效果没有延迟")
- '(x-stretch-cursor t
-                    nil ()
-                    "在tab字符上拉长显示cursor")
  '(which-key-mode t
                   nil (which-key))
  '(font-lock-maximum-decoration t
@@ -1022,9 +1016,6 @@
                                  ;; ‘年份’前面加两个空格, 使右侧和‘分钟’对齐.
                                  "%m/%d  %Y"))
 (setq ls-lisp-support-shell-wildcards t)
-
-;;; Feature: ‘hanoi’
-(setq hanoi-use-faces nil)  ; 不要使用彩色动画, 因为看起来很鬼畜.
 
 ;;; Feature: ‘so-long’
 (global-so-long-mode)

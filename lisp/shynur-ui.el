@@ -52,6 +52,9 @@
                        :weight black))))
              '(window-divider
                ((t . (:foreground "SlateBlue4"))))
+             ;; (我把 ‘indent-guide’ 删了.)
+             ;; (setq indent-guide-recursive t
+             ;;       indent-guide-char "\N{BOX DRAWINGS LIGHT VERTICAL}")
              '(indent-guide-face
                ((t . (:foreground "dark sea green"))))
              '(fill-column-indicator
@@ -333,17 +336,26 @@
   (when (eq system-type 'gnu/linux)
     (holo-layer-enable)))
 ;; MS-Windows
-(ignore-error 'file-missing
-  (load-library "pop_select"))
+(when (or (display-graphic-p)
+          (daemonp))
+  (ignore-error 'file-missing
+    (load-library "pop_select")))
 (with-eval-after-load "pop_select"
   (when (eq system-type 'windows-nt)
-    (add-hook 'post-command-hook
-              (lambda ()
-                (when-let ((shynur/ui:window-coordinate (window-absolute-pixel-position)))
-                  (let ((shynur/ui:cursor-color (color-name-to-rgb
-                                                 (face-background 'cursor))))
+    (let ((shynur--cursor-motion-blur-color-R 0)
+          (shynur--cursor-motion-blur-color-G 0)
+          (shynur--cursor-motion-blur-color-B 0)
+          shynur--cursor-motion-blurred?)
+      (add-hook 'window-scroll-functions
+                (lambda (_window _position)
+                  (setq shynur--cursor-motion-blurred? nil)))
+      (add-hook 'post-command-hook
+                (lambda ()
+                  (when-let ((shynur--window-point-coordinate (when (or shynur--cursor-motion-blurred?
+                                                                        (eq this-command 'recenter-top-bottom))
+                                                                (window-absolute-pixel-position))))
                     (pop-select/beacon-animation
-                     (car shynur/ui:window-coordinate) (cdr shynur/ui:window-coordinate)
+                     (car shynur--window-point-coordinate) (cdr shynur--window-point-coordinate)
                      (if (eq cursor-type 'bar)
                          1
                        (if-let ((glyph (let ((shynur--point (point)))
@@ -352,10 +364,31 @@
                                                                   shynur--point (1+ shynur--point)) 0)))))
                            (aref glyph 4)
                          (window-font-width))) (line-pixel-height)
-                     180 100
-                     (floor (* (cl-first shynur/ui:cursor-color) 255)) (floor (* (cl-second shynur/ui:cursor-color) 255)) (floor (* (cl-third shynur/ui:cursor-color) 255))
-                     ;; 排除 单个 半角 字符 的 距离.
-                     24)))))))
+                         ;; 持续时间 & 刷新间隔 (ms):
+                         180 100
+                         shynur--cursor-motion-blur-color-R shynur--cursor-motion-blur-color-G shynur--cursor-motion-blur-color-B
+                         ;; 排除 单个 半角 字符 的 距离:
+                         24))
+                  (setq shynur--cursor-motion-blurred? t)))
+      (add-hook 'after-make-frame-functions
+                (let ((shynur--cursor-motion-blur-color-updater
+                       (lambda (frame)
+                         (let ((shynur--cursor-motion-blur-color-RGB (with-selected-frame frame
+                                                                       (color-name-to-rgb (funcall (if (color-dark-p (color-name-to-rgb (face-background 'default)))
+                                                                                                       #'color-darken-name
+                                                                                                     #'color-lighten-name)
+                                                                                                   (face-background 'cursor) 50)))))
+                           (setq shynur--cursor-motion-blur-color-R (floor (* (cl-first  shynur--cursor-motion-blur-color-RGB) 255.9999999999999))
+                                 shynur--cursor-motion-blur-color-G (floor (* (cl-second shynur--cursor-motion-blur-color-RGB) 255.9999999999999))
+                                 shynur--cursor-motion-blur-color-B (floor (* (cl-third  shynur--cursor-motion-blur-color-RGB) 255.9999999999999)))))))
+                  (unless (daemonp)
+                    (add-hook 'emacs-startup-hook
+                              (lambda ()
+                                "在 face 生效后更新."
+                                (funcall shynur--cursor-motion-blur-color-updater
+                                         (selected-frame)))
+                              90))
+                  shynur--cursor-motion-blur-color-updater)))))
 
 (setq cursor-in-echo-area nil)
 
@@ -399,10 +432,10 @@
       scroll-minibuffer-conservatively t)
 
 ;; Scroll 时 通过 高亮 即将 滚走/来 的 篇幅 以 提示 滚动方向.
+;; (这个包被我删了.)
 (setq on-screen-inverse-flag t
       on-screen-highlight-method 'shadow
       on-screen-delay 0.4)
-(on-screen-global-mode)
 
 ;;; Horizontal
 (setq hscroll-margin 5
@@ -430,6 +463,10 @@
 
 (when (fboundp 'set-message-beep)
   (set-message-beep nil))  ; 调节 beep 的声音种类.
+
+;;; Render:
+
+(setq no-redraw-on-reenter t)
 
 (provide 'shynur-ui)
 

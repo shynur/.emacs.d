@@ -46,7 +46,6 @@
                                   neotree
                                   git-modes
                                   highlight
-                                  on-screen
                                   which-key
                                   yaml-mode
                                   yasnippet
@@ -55,7 +54,6 @@
                                   powershell
                                   ascii-table
                                   textile-mode
-                                  indent-guide
                                   rainbow-mode
                                   all-the-icons
                                   doom-modeline

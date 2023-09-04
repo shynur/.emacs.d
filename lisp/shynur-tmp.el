@@ -10,9 +10,7 @@
                                                  (sleep-for 0.4)
                                                  (company-mode -1)
                                                  (electric-indent-local-mode -1)
-                                                 (page-break-lines-mode -1)
-                                                 (indent-guide-mode -1)
-                                                 (on-screen-mode -1))))
+                                                 (page-break-lines-mode -1))))
                                ,(lambda ()
                                   "1 screen line/一个条目"
                                   (make-thread (lambda ()
@@ -93,11 +91,6 @@
  '(completion-cycle-threshold nil
                               nil (minibuffer)
                               "minibuffer补全时,按TAB会轮换候选词")
- '(indent-guide-recursive t
-                          nil (indent-guide))
- '(indent-guide-char "\N{BOX DRAWINGS LIGHT VERTICAL}"
-                     nil (indent-guide))
- ;; '(current-language-environment "UTF-8")
  '(kill-ring-max most-positive-fixnum
                  nil (simple))
  '(delete-trailing-lines t

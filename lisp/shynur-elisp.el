@@ -32,6 +32,9 @@
 
 ;; 有关该值的合适范围的讨论 (无果): <https://emacs.stackexchange.com/q/76246/39388>
 (setq max-lisp-eval-depth 800)
+
+;; GC 时在 echo area 显示信息, 但不会并入到 “*Messages*” 中.
+(setq garbage-collection-messages t)
 
 ;;; Feature: ‘emacs-lisp’
 

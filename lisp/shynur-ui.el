@@ -221,6 +221,17 @@
 
 (tool-bar-mode -1)
 
+;;; Tab Line
+
+(setq tab-line-close-button-show nil
+      tab-line-new-button-show nil
+      ;; 关闭 tab-line-name 之间默认的空格.
+      tab-line-separator "")
+;; Tab line 就是为了方便使用鼠标而存在的, 直接用鼠标点就行了.
+(setq tab-line-switch-cycling nil)
+
+(global-tab-line-mode)
+
 ;;; Window:
 
 (setq window-resize-pixelwise t)
@@ -230,6 +241,32 @@
 
 (setq window-min-height 4
       window-min-width  1)
+
+(global-hl-line-mode)
+
+;;; Fringe:
+
+(setq fringe-mode '(0 . nil))  ; Right-only.
+
+(setq display-line-numbers-type t  ; 启用绝对行号.
+      ;; 开启 relative/visual 行号时, 当前行仍然显示 absolute 行号.
+      display-line-numbers-current-absolute t)
+(setq display-line-numbers-widen t)  ; 无视 narrowing, 行号从 buffer 的起始点计算.
+(setq display-line-numbers-width nil  ; 动态改变为行号预留的列数.
+      ;; 行号占用的列数可以动态减少.
+      display-line-numbers-grow-only nil)
+
+(setq line-number-display-limit nil  ; 当 buffer 的 size 太大时是否启用行号, 以节约性能.
+      ;; 单行太长也会消耗性能用于计算行号, 因此,
+      ;; 如果当前行附近的行的平均宽度大于该值, 则不计算行号.
+      line-number-display-limit-width most-positive-fixnum)
+;; 每 10 行就用 ‘line-number-major-tick’ 高亮一次行号.
+(setq display-line-numbers-major-tick 10)
+(global-display-line-numbers-mode t)
+
+;; 若开启, buffer 尾行之后的区域的右流苏区域会显示密集的刻度线.
+(setq indicate-empty-lines nil)
+(setq overflow-newline-into-fringe t)
 
 ;;; Scroll Bar:
 
@@ -251,6 +288,10 @@
 ;; 尽可能地窄.
 (setq doom-modeline-height 1)
 (doom-modeline-mode)
+
+(column-number-mode)
+;; 从 1 开始计数.
+(setq mode-line-position-column-format '(" " "C%C" " "))
 
 ;; Face ‘mode-line-inactive’ for non-selected window’s mode line.
 (setq mode-line-in-non-selected-windows t)
@@ -336,59 +377,63 @@
   (when (eq system-type 'gnu/linux)
     (holo-layer-enable)))
 ;; MS-Windows
-(when (or (display-graphic-p)
-          (daemonp))
-  (ignore-error 'file-missing
-    (load-library "pop_select")))
-(with-eval-after-load "pop_select"
-  (when (eq system-type 'windows-nt)
-    (let ((shynur--cursor-motion-blur-color-R 0)
-          (shynur--cursor-motion-blur-color-G 0)
-          (shynur--cursor-motion-blur-color-B 0)
-          shynur--cursor-motion-blurred?)
-      (add-hook 'window-scroll-functions
-                (lambda (_window _position)
-                  (setq shynur--cursor-motion-blurred? nil)))
-      (add-hook 'post-command-hook
-                (lambda ()
-                  (when-let ((shynur--window-point-coordinate (when (or shynur--cursor-motion-blurred?
-                                                                        (eq this-command 'recenter-top-bottom))
-                                                                (window-absolute-pixel-position))))
+(with-eval-after-load 'pop-select
+  (let ((shynur--cursor-animation-color-R 0)
+        (shynur--cursor-animation-color-G 0)
+        (shynur--cursor-animation-color-B 0)
+        shynur--cursor-animation?)
+    (add-hook 'window-scroll-functions
+              (lambda (_window _position)
+                (setq shynur--cursor-animation? nil)))
+    (add-hook 'post-command-hook
+              (lambda ()
+                (when-let ((window-absolute-pixel-position
+                            (when (or shynur--cursor-animation?
+                                      (memq this-command '(recenter-top-bottom
+                                                           )))
+                              (window-absolute-pixel-position))))
+                  (let ((line-pixel-height (line-pixel-height)))
                     (pop-select/beacon-animation
-                     (car shynur--window-point-coordinate) (cdr shynur--window-point-coordinate)
+                     (car window-absolute-pixel-position) (if header-line-format
+                                                              (- (cdr window-absolute-pixel-position)
+                                                                 line-pixel-height)
+                                                            (cdr window-absolute-pixel-position))
                      (if (eq cursor-type 'bar)
                          1
-                       (if-let ((glyph (let ((shynur--point (point)))
-                                         (when (< shynur--point (point-max))
-                                           (aref (font-get-glyphs (font-at shynur--point)
-                                                                  shynur--point (1+ shynur--point)) 0)))))
+                       (if-let ((glyph (let ((point (point)))
+                                         (when (< point (point-max))
+                                           (aref (font-get-glyphs (font-at point)
+                                                                  point (1+ point)) 0)))))
                            (aref glyph 4)
-                         (window-font-width))) (line-pixel-height)
-                         ;; 持续时间 & 刷新间隔 (ms):
-                         180 100
-                         shynur--cursor-motion-blur-color-R shynur--cursor-motion-blur-color-G shynur--cursor-motion-blur-color-B
-                         ;; 排除 单个 半角 字符 的 距离:
-                         24))
-                  (setq shynur--cursor-motion-blurred? t)))
-      (add-hook 'after-make-frame-functions
-                (let ((shynur--cursor-motion-blur-color-updater
-                       (lambda (frame)
-                         (let ((shynur--cursor-motion-blur-color-RGB (with-selected-frame frame
-                                                                       (color-name-to-rgb (funcall (if (color-dark-p (color-name-to-rgb (face-background 'default)))
-                                                                                                       #'color-darken-name
-                                                                                                     #'color-lighten-name)
-                                                                                                   (face-background 'cursor) 50)))))
-                           (setq shynur--cursor-motion-blur-color-R (floor (* (cl-first  shynur--cursor-motion-blur-color-RGB) 255.9999999999999))
-                                 shynur--cursor-motion-blur-color-G (floor (* (cl-second shynur--cursor-motion-blur-color-RGB) 255.9999999999999))
-                                 shynur--cursor-motion-blur-color-B (floor (* (cl-third  shynur--cursor-motion-blur-color-RGB) 255.9999999999999)))))))
-                  (unless (daemonp)
-                    (add-hook 'emacs-startup-hook
-                              (lambda ()
-                                "在 face 生效后更新."
-                                (funcall shynur--cursor-motion-blur-color-updater
-                                         (selected-frame)))
-                              90))
-                  shynur--cursor-motion-blur-color-updater)))))
+                         (window-font-width))) line-pixel-height
+                     180 100
+                     shynur--cursor-animation-color-R shynur--cursor-animation-color-G shynur--cursor-animation-color-B
+                     ;; 排除大约是单个半角字符的距离:
+                     24)))
+                (setq shynur--cursor-animation? t)))
+    (letrec ((shynur--cursor-animation-color-setter
+              (lambda ()
+                (remove-hook 'server-after-make-frame-hook shynur--cursor-animation-color-setter)
+                (let ((shynur--cursor-animation-color-RGB
+                       (cl-mapcar (let* ((ratio 0.5)
+                                         (1-ratio (- 1 ratio)))
+                                    (lambda (cursor-color default-color)
+                                      "按照 ratio:(1-ratio) 的比例混合光标颜色和背景色."
+                                      (floor (* (+ (*   ratio  cursor-color)
+                                                   (* 1-ratio default-color))
+                                                255.9999999999999))))
+                                  (color-name-to-rgb (face-background 'cursor))
+                                  (color-name-to-rgb (face-background 'default)))))
+                  (setq shynur--cursor-animation-color-R (cl-first  shynur--cursor-animation-color-RGB)
+                        shynur--cursor-animation-color-G (cl-second shynur--cursor-animation-color-RGB)
+                        shynur--cursor-animation-color-B (cl-third  shynur--cursor-animation-color-RGB))))))
+      (add-hook 'server-after-make-frame-hook shynur--cursor-animation-color-setter)
+      (unless (daemonp)
+        (add-hook 'emacs-startup-hook shynur--cursor-animation-color-setter 90)))))
+(when (and (eq system-type 'windows-nt)
+           (or (display-graphic-p)
+               (daemonp)))
+  (require 'pop-select "pop_select.dll" t))
 
 (setq cursor-in-echo-area nil)
 

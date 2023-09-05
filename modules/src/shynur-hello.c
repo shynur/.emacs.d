@@ -101,6 +101,6 @@ int emacs_module_init(struct emacs_runtime *runtime) {
 动态链接库的实际后缀 见 ‘module-file-suffix’.
 */
 
-/* Local Variables:    */
-/* coding: utf-8-unix  */
-/* End:                */
+/* Local Variables: */
+/* coding: utf-8-unix */
+/* End: */

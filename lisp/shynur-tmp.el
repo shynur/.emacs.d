@@ -1,7 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 
 (custom-set-variables
- '(major-mode 'text-mode)
  '(completion-list-mode-hook `(,@(bound-and-true-p completion-list-mode-hook)
                                ,(lambda ()
                                   "把没用的minor mode都关了"
@@ -51,21 +50,12 @@
  '(case-replace t
                 nil (replace)
                 "文本替换时,大小写敏感")
- '(garbage-collection-messages t
-                               nil ()
-                               "GC时在echo area显示信息,但不会并入到“*Messages*”中")
  '(completion-styles '(basic partial-completion initials)
                      nil (minibuffer)
                      "minibuffer的补全风格(从‘completion-styles-alist’中选取)")
- '(column-number-mode t
-                      nil (simple)
-                      "mode line 显示列数")
  '(debug-on-error nil
                   nil ()
                   "没有对应的handler时进入debugger;debugger直接在error所在的环境中运行,所以很方便;但是有些package没有使用user-error,所以若此变量开启,会时常进入debugger,非常麻烦,所以暂时来说,应该关掉")
- '(column-number-indicator-zero-based nil
-                                      nil ()
-                                      "obsolete")
  '(completion-auto-help t
                         nil (minibuffer)
                         "一次TAB以显示help列表")
@@ -81,98 +71,7 @@
  '(auto-hscroll-mode 'current-line
                      nil ()
                      "如果允许‘truncate-lines’,则自动触发hscroll时仅作用于当前行")
- '(calendar-week-start-day 1
-                           nil (calendar)
-                           "以星期一作为一周的开始")
- '(coding-system-for-write 'utf-8-unix
-                           nil ()
-                           "该customization中的NEW被Emacs设置为t")
  '(file-name-coding-system shynur/custom:filename-coding)
- '(completion-cycle-threshold nil
-                              nil (minibuffer)
-                              "minibuffer补全时,按TAB会轮换候选词")
- '(kill-ring-max most-positive-fixnum
-                 nil (simple))
- '(delete-trailing-lines t
-                         nil (simple)
-                         "执行‘delete-trailing-whitespace’时,还删除首尾的多余的空行")
- '(show-trailing-whitespace nil
-                            nil ()
-                            "不高亮行尾的whitespace,因为没必要")
- '(change-major-mode-with-file-name t
-                                    nil (files)
-                                    "写入/重命名 文件时,执行‘normal-mode’以使用恰当的major mode")
- '(indicate-empty-lines nil
-                        nil ()
-                        "若开启,buffer尾行之后的区域的右流苏区域会显示密集的刻度线")
- '(transient-mark-mode t
-                       nil ()
-                       "高亮region")
- '(mark-even-if-inactive nil)
- '(mark-ring-max mark-ring-max
-                 nil (simple)
-                 "太大的话就不能轮回访问了")
- '(global-mark-ring-max most-positive-fixnum
-                        nil (simple)
-                        "‘global-mark-ring’只会在离开某个buffer时,记住那个buffer最后设置的mark,这相当于将buffer作为节点的路径;因此,可以设置为较大的值")
- '(completion-ignored-extensions '())
- '(register-separator ?+
-                      nil (register)
-                      "用‘append-to-register’将文本并入已经存储了文本的register中时,可以插入分隔符.分隔符存储在该变量所指定的register中.(须在调用‘set-register’前,设置该变量)")
- '(delete-selection-mode t
-                         nil (delsel)
-                         "选中文本后输入字符,会先删除刚刚选择的文本,再插入输入的字符")
- '(enable-recursive-minibuffers t)
- '(extended-command-suggest-shorter t
-                                    nil (simple)
-                                    "通过不完整的函数名调用command时,在echo area中提示这个command的全名")
- '(minibuffer-allow-text-properties t
-                                    nil ()
-                                    "大部分情况下,保留从‘read-from-minibuffer’获取的文本的属性")
- '(minibuffer-default-prompt-format #(" (default %s)"
-                                      10 12 (face (underline (:foreground "VioletRed1"))))
-                                    nil (minibuffer))
- '(read-minibuffer-restore-windows t
-                                   nil ()
-                                   "从minibuffer获取输入之后,恢复进入minibuffer之前当前frame的window-configurations")
- '(file-name-shadow-mode t
-                         nil (rfn-eshadow)
-                         "‘find-file’时,若输入绝对路径,则调暗默认值的前景")
- '(fringe-mode '(0 . nil)
-               nil (fringe)
-               "right-only")
- '(overflow-newline-into-fringe t
-                                nil (fringe))
- '(global-display-line-numbers-mode t
-                                    nil (display-line-numbers)
-                                    "启用行首行号")
- '(display-line-numbers-type t
-                             nil (display-line-numbers)
-                             "启用绝对行号")
- '(display-line-numbers t
-                        nil (display-line-numbers)
-                        "启用绝对行号")
- '(display-line-numbers-widen t
-                              nil ()
-                              "无视narrowing,行号从buffer的起始点计算")
- '(display-line-numbers-width nil
-                              nil ()
-                              "动态改变为行号预留的列数")
- '(display-line-numbers-grow-only nil
-                                  nil (display-line-numbers)
-                                  "行号占用的列数可以动态减少")
- '(display-line-numbers-current-absolute t
-                                         nil ()
-                                         "开启relative/visual行号时,当前行仍然显示absolute行号")
- '(line-number-display-limit nil
-                             nil ()
-                             "当buffer的size太大时是否启用行号,以节约性能")
- '(line-number-display-limit-width most-positive-fixnum
-                                   nil ()
-                                   "单行太长也会消耗性能用于计算行号,因此,如果当前行附近的行的平均宽度大于该值,则不计算行号")
- '(display-line-numbers-major-tick 10
-                                   nil ()
-                                   "每10行就用‘line-number-major-tick’高亮一次行号")
  '(neo-show-hidden-files t
                          nil (neotree))
  '(neotree-mode-hook `(,@neotree-mode-hook
@@ -180,44 +79,6 @@
                           "关闭neotree的行号"
                           (display-line-numbers-mode -1)))
                      nil (neotree))
- '(global-hl-line-mode t
-                       nil (hl-line))
- '(goto-line-history-local t
-                           nil (simple)
-                           "调用“M-g g”或“M-g M-g”(‘goto-line’)时,每个buffer使用自己的‘goto-line’历史记录,而不是使用全局的")
- '(help-enable-symbol-autoload t
-                               nil (help-fns)
-                               "如果一个autoloaded符号的autoload形式没有提供docstring,那就加载包含它的定义的文件,以查看它是否有docstring")
- '(help-enable-autoload t
-                        nil (help))
- '(help-enable-completion-autoload t
-                                   nil (help-fns))
- '(history-delete-duplicates t
-                             nil ()
-                             "去重minibuffer历史记录列表")
- '(history-length t
-                  nil ()
-                  "使minibuffer历史记录的长度没有上限")
- '(global-tab-line-mode t
-                        nil (tab-line))
- '(tab-line-close-button-show nil
-                              nil (tab-line))
- '(tab-line-new-button-show nil
-                            nil (tab-line))
- '(tab-line-switch-cycling nil
-                           nil (tab-line)
-                           "tab-line就是为了方便使用鼠标而存在的,直接用鼠标点就行了")
- '(tab-line-separator ""
-                      nil (tab-line)
-                      "关闭tab-line-name之间默认的空格")
- '(tab-width 4)
- '(indent-tabs-mode nil
-                    nil ()
-                    "制表符尽量用空格代替.(需要特别考虑Makefile)")
- '(tab-always-indent t)
- '(kill-whole-line nil
-                   nil (simple)
-                   "“C-k”不删除换行符")
  '(echo-keystrokes 0.001
                    nil ()
                    "若快捷键未完整击入,则等待该时长后在echo-area显示已经击入的键")
@@ -260,33 +121,9 @@
  '(shr-offer-extend-specpdl t
                             nil (shr)
                             "HTML可能会有很深的嵌套,因此需要更多的PDL.该变量决定自动增长PDL的大小")
- '(shift-select-mode t
-                     nil (simple)
-                     "按住SHIFT时移动光标,以选中文本")
- '(read-buffer-completion-ignore-case t
-                                      nil ()
-                                      "对buffer名字进行补全时,忽略大小写")
- '(read-extended-command-predicate #'command-completion-default-include-p
-                                   nil (simple))
- '(read-file-name-completion-ignore-case t
-                                         nil (minibuffer))
- '(read-quoted-char-radix 16
-                          nil (simple)
-                          "“C-q”后接16进制")
  '(save-place-mode t
                    nil (saveplace)
                    "在session之间保存访问文件时的浏览位置")
- '(kill-read-only-ok nil
-                     nil (simple)
-                     "kill只读的文本时,beep且显示error消息")
- '(kill-transform-function (lambda (string)
-                             (and (not (string-blank-p string))
-                                  string))
-                           nil (simple)
-                           "将它应用到被kill的文本上,并将其返回值加入到‘kill-ring’中;若返回nil则不加入.(该例选自<https://www.gnu.org/software/emacs/manual/html_node/emacs/Kill-Options.html>)")
- '(kill-do-not-save-duplicates t
-                               nil (simple)
-                               "kill重复的文本时,不将其加入到‘kill-ring’中(具体行为受‘equal-including-properties’影响)")
  '(size-indication-mode t
                         nil (simple)
                         "mode-line显示buffer大小(k=10^3,M=10^6,...)")
@@ -838,14 +675,6 @@
  '(mouse-1-click-in-non-selected-windows t
                                          nil (mouse)
                                          "点击non-selected-window中的button/hyperlink同样会循入链接")
- '(kill-transform-function (lambda (killed-string)
-                             "若被复制的文本全部由whitespace组成,则直接返回;否则,trim首尾的whitespace"
-                             (if (string-blank-p killed-string)
-                                 killed-string
-                               (string-trim killed-string)))
-                           nil (simple))
- '(register-separator "\n\n"
-                      nil (register))
  '(dnd-open-file-other-window nil
                               nil (dnd))
  '(mouse-drag-and-drop-region t

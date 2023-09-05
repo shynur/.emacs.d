@@ -88,6 +88,7 @@
 ;; 顺序应当是不重要的.
 (require 'shynur-elisp)    ; (find-file-other-window "./shynur-elisp.el")
 (require 'shynur-tmp)      ; (find-file-other-window "./shynur-tmp.el")
+(require 'shynur-general)  ; (find-file-other-window "./shynur-general.el")
 (require 'shynur-org)      ; (find-file-other-window "./shynur-org.el")
 (require 'shynur-tex)      ; (find-file-other-window "./shynur-tex.el")
 (require 'shynur-abbrev)   ; (find-file-other-window "./shynur-abbrev.el")

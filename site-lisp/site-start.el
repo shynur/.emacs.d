@@ -10,6 +10,7 @@
       calendar-standard-time-zone-name "CST"
       ;; 夏令时 在中国好像已经废除了.
       calendar-daylight-time-zone-name "CDT")
+(setq calendar-week-start-day 1)  ; 周一是第一天.
 
 ;; 通过某种方法 (e.g., NFS, Samba) 访问驻留在遵循不同的 EOL 约定
 ;; 的系统上的文件系统时, 不应该加以转换.

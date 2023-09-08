@@ -7,7 +7,39 @@
 ;; 如有必要, 会在 写入/重命名 文件后 执行 ‘normal-mode’ 以使用恰当的 major mode.
 (setq change-major-mode-with-file-name t)
 
+;;; File Local Variable
+
+(setq safe-local-variable-values (let ((shynur--safe-local-variable-values ()))
+                                   (named-let get-vars ((dir-locals (mapcan (lambda (file-path)
+                                                                              (when (file-exists-p file-path)
+                                                                                (with-temp-buffer
+                                                                                  (insert-file-contents file-path)
+                                                                                  (read (current-buffer))))) `[,@(mapcar (lambda (dir-loc)
+                                                                                                                           "囊括诸如‘~/.emacs.d/’下的‘.dir-locals.el’文件."
+                                                                                                                           (file-name-concat user-emacs-directory
+                                                                                                                                             dir-loc)) [".dir-locals.el"
+                                                                                                                                                        ".dir-locals-2.el"])
+                                                                                                               "d:/Desktop/CheatSheets/.dir-locals.el"
+                                                                                                               ])))
+                                     (dolist (mode-vars dir-locals)
+                                       (let ((vars (cdr mode-vars)))
+                                         (if (stringp (car mode-vars))
+                                             (get-vars vars)
+                                           (dolist (var-pair vars)
+                                             (push var-pair shynur--safe-local-variable-values))))))
+                                   shynur--safe-local-variable-values))
+
 ;;; Minibuffer:
+
+(add-hook 'minibuffer-mode-hook
+          (lambda ()
+            (keymap-set minibuffer-local-completion-map "SPC"
+                        #'self-insert-command)
+            (keymap-set minibuffer-local-completion-map "?"
+                        #'self-insert-command)))
+
+;;; Invoke Command
+(keymap-global-unset "C-x ESC ESC")  ; ‘repeat-complex-command’
 
 ;;; Minibuffer Completion
 (setq completion-cycle-threshold nil  ; 补全时, 按 <tab> 会轮换候选词.
@@ -34,6 +66,10 @@
 ;;; Minibuffer History
 (setq history-delete-duplicates t)
 (setq history-length t)  ; 无上限.
+
+;;; Confirmation
+;; TODO: 取消 minibuffer 中 <return> 的补全功能.
+;;       当可能匹配的结果只有一个时, 它会补全, 但这有些自作主张.
 
 ;;; Register:
 
@@ -51,6 +87,10 @@
       ;; 如果一个 autoloaded 符号的 autoload 形式没有提供 docstring,
       ;; 那就加载包含它的定义的文件 以查看 docstring.
       help-enable-symbol-autoload t)
+
+;;; Visit:
+
+(put 'narrow-to-region 'disabled '(query nil "禁用该命令 只是为了 演示一下 如何 禁用命令"))
 
 (provide 'shynur-general)
 

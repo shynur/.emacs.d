@@ -2,7 +2,7 @@
 
 (setq hanoi-use-faces nil)  ; 不要使用彩色动画, 因为看起来很鬼畜.
 
-(provide 'shynur-game)
+(provide 'shynur-amuse)
 
 ;; Local Variables:
 ;; coding: utf-8-unix

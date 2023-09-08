@@ -31,7 +31,7 @@
 
 ;; 只有设为自己在 OS 中的 username, 才能屏蔽启动时 echo area 的 “For information about GNU Emacs and the GNU system, type C-h C-a.”
 (put 'inhibit-startup-echo-area-message  ; 需要如此 hack.
-     'saved-value (setq inhibit-startup-echo-area-message user-login-name))
+     'saved-value `(,(setq inhibit-startup-echo-area-message user-login-name)))
 
 (add-hook 'window-setup-hook
           (lambda ()

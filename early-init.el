@@ -6,7 +6,7 @@
                                                            [gc-cons-threshold            ,most-positive-fixnum shynur--expected-value]
                                                            ;; 同上, 但是是以 heap 被分配的比例裁定.
                                                            ;; 若该值更小, 则服从 ‘gc-cons-threshold’.
-                                                           [gc-cons-percentage           0.9999999999999999    shynur--expected-value]
+                                                           [gc-cons-percentage           1.0                   shynur--expected-value]
                                                            [frame-inhibit-implied-resize t                     shynur--expected-value]
                                                            [inhibit-file-name-handlers   t                     shynur--expected-value]
                                                            [inhibit-menubar-update       t                     shynur--expected-value]

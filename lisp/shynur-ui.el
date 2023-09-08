@@ -379,13 +379,20 @@
 ;; MS-Windows
 (with-eval-after-load 'pop-select
   (let (shynur--cursor-animation?)
+
     (add-hook 'window-scroll-functions
               (lambda (_window _position)
                 (setq shynur--cursor-animation? nil)))
+    (advice-add (prog1 'pixel-scroll-precision
+                  (require 'pixel-scroll)) :after
+                (lambda (&rest _)
+                  (setq shynur--cursor-animation? nil)))
+
     (advice-add (prog1 'recenter-top-bottom
                   (require 'window)) :after
                 (lambda (&rest _)
                   (setq shynur--cursor-animation? t)))
+
     (add-hook 'post-command-hook
               (let ((shynur--cursor-color     (face-background  'cursor))
                     (shynur--background-color (face-background 'default))
@@ -461,6 +468,19 @@
                                 "pwsh"
                                 "-File" (expand-file-name (file-name-concat user-emacs-directory
                                                                             "etc/restart-SmoothScroll.ps1"))))))
+(add-hook 'post-command-hook
+          (let ((shynur--gc-cons-percentage gc-cons-percentage)
+                (shynur--gc-cons-threshold  gc-cons-threshold ))
+            (lambda ()
+              (if (eq this-command 'pixel-scroll-precision)
+                  (unless (eq last-command 'pixel-scroll-precision)
+                    (setq shynur--gc-cons-percentage gc-cons-percentage
+                          shynur--gc-cons-threshold  gc-cons-threshold
+                          gc-cons-percentage 1.0
+                          gc-cons-threshold  most-positive-fixnum))
+                (when (eq last-command 'pixel-scroll-precision)
+                  (setq gc-cons-percentage shynur--gc-cons-percentage
+                        gc-cons-threshold  shynur--gc-cons-threshold))))))
 
 ;; Scroll 以使 window 底端的 N 行呈现到顶端.
 (setq next-screen-context-lines 5)

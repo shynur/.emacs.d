@@ -688,45 +688,6 @@
  '(compilation-always-kill nil
                            nil (compile)))
 
-;;; Feature: ‘files’
-(with-eval-after-load 'files
-  (setq safe-local-variable-values `(,@safe-local-variable-values
-                                     ,@(let ((shynur--safe-local-variable-values (list)))
-                                         (named-let get-vars ((dir-locals (mapcan (lambda (file-path)
-                                                                                    (when (file-exists-p file-path)
-                                                                                      (with-temp-buffer
-                                                                                        (insert-file-contents file-path)
-                                                                                        (read (current-buffer))))) `[,@(mapcar (lambda (dir-loc)
-                                                                                                                                 "囊括诸如‘~/.emacs.d/’下的‘.dir-locals.el’文件."
-                                                                                                                                 (file-name-concat user-emacs-directory
-                                                                                                                                                   dir-loc)) [".dir-locals.el"
-                                                                                                                                                              ".dir-locals-2.el"])
-                                                                                                                     "d:/Desktop/CheatSheets/.dir-locals.el"
-                                                                                                                     ])))
-                                           (dolist (mode-vars dir-locals)
-                                             (let ((vars (cdr mode-vars)))
-                                               (if (stringp (car mode-vars))
-                                                   (get-vars vars)
-                                                 (dolist (var-pair vars)
-                                                   (push var-pair shynur--safe-local-variable-values))))))
-                                         shynur--safe-local-variable-values))))
-
-(put 'narrow-to-region 'disabled nil)
-
-;;; Feature: ‘project’
-(shynur/custom:appdata/ project-list-file el)
-(setq project-switch-commands #'project-find-file)  ; “C-x p p”选中项目后, 立刻执行指定的 command.
-
-;;; Feature: ‘html’
-(add-hook 'html-mode-hook
-          (lambda ()
-            (when (and (buffer-file-name)
-                       (zerop (buffer-size)))
-              (insert "<!DOC"))))
-
-;;; Feature: ‘nsm’
-(shynur/custom:appdata/ nsm-settings-file data)  ; 记录已知的安全 connection.
-
 ;;; Feature: ‘company’
 (setq company-idle-delay 0
       company-minimum-prefix-length 2)
@@ -753,11 +714,6 @@
 ;; (setq dired-listing-switches list-directory-verbose-switches) 在 MS-Windows 上用不了
 (setq dired-switches-in-mode-line nil)
 
-;;; Feature: ‘simple’
-(keymap-global-unset "C-x m")    ; ‘compose-mail’
-(keymap-global-unset "C-x 4 m")  ; ‘compose-mail’
-(keymap-global-unset "C-x 5 m")  ; ‘compose-mail’
-
 ;;; Feature: ‘desktop’ [X]
 (setq desktop-restore-eager t)  ; 尽快恢复 buffer, 而不是 idle 时逐步恢复.
 (setq desktop-load-locked-desktop t)  ; Lock 文件 是为了 防止其它 Emacs 实例将其复写, 但我的电脑上只会有一个 Emacs 实例. 所以即使文件是 locked, 也只能是因为上一次 session 中 Emacs 崩溃了.
@@ -772,14 +728,6 @@
   ;; 基于‘desktop-dirname’.
   "desktop-base-lock-name.el")
 (setq desktop-save t)
-
-;;; Feature: ‘minibuffer’
-(add-hook 'minibuffer-mode-hook
-          (lambda ()
-            (define-key minibuffer-local-completion-map " "
-              #'self-insert-command)
-            (define-key minibuffer-local-completion-map "?"
-              #'self-insert-command)))
 
 ;;; Feature: ‘recentf’
 (shynur/custom:appdata/ recentf-save-file el)
@@ -889,7 +837,6 @@
 (keymap-global-unset "C-x 5 C-o")  ; ‘display-buffer-other-frame’
 (keymap-global-unset "C-x 5 b")    ; ‘switch-to-buffer-other-frame’
 (keymap-global-unset "C-x 5 d")    ; ‘dired-other-frame’
-(keymap-global-unset "C-x 5 m")    ; ‘compose-mail-other-frame’
 (keymap-global-unset "C-x 5 r")    ; ‘find-file-read-only-other-frame’
 (keymap-global-unset "C-x RET C-\\")  ; ‘set-input-method’
 (keymap-global-unset "C-x \\")     ; ‘activate-transient-input-method’

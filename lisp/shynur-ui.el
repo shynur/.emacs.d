@@ -378,58 +378,58 @@
     (holo-layer-enable)))
 ;; MS-Windows
 (with-eval-after-load 'pop-select
-  (let ((shynur--cursor-animation-color-R 0)
-        (shynur--cursor-animation-color-G 0)
-        (shynur--cursor-animation-color-B 0)
-        shynur--cursor-animation?)
+  (let (shynur--cursor-animation?)
     (add-hook 'window-scroll-functions
               (lambda (_window _position)
                 (setq shynur--cursor-animation? nil)))
+    (advice-add (prog1 'recenter-top-bottom
+                  (require 'window)) :after
+                (lambda (&rest _)
+                  (setq shynur--cursor-animation? t)))
     (add-hook 'post-command-hook
-              (lambda ()
-                (when-let ((window-absolute-pixel-position
-                            (when (or shynur--cursor-animation?
-                                      (memq this-command '(recenter-top-bottom
-                                                           )))
-                              (window-absolute-pixel-position))))
-                  (let ((line-pixel-height (line-pixel-height)))
-                    (pop-select/beacon-animation
-                     (car window-absolute-pixel-position) (if header-line-format
-                                                              (- (cdr window-absolute-pixel-position)
-                                                                 line-pixel-height)
-                                                            (cdr window-absolute-pixel-position))
-                     (if (eq cursor-type 'bar)
-                         1
-                       (if-let ((glyph (let ((point (point)))
-                                         (when (< point (point-max))
-                                           (aref (font-get-glyphs (font-at point)
-                                                                  point (1+ point)) 0)))))
-                           (aref glyph 4)
-                         (window-font-width))) line-pixel-height
-                     180 100
-                     shynur--cursor-animation-color-R shynur--cursor-animation-color-G shynur--cursor-animation-color-B
-                     ;; 排除大约是单个半角字符的距离:
-                     24)))
-                (setq shynur--cursor-animation? t)))
-    (letrec ((shynur--cursor-animation-color-setter
-              (lambda ()
-                (remove-hook 'server-after-make-frame-hook shynur--cursor-animation-color-setter)
-                (let ((shynur--cursor-animation-color-RGB
-                       (cl-mapcar (let* ((ratio 0.5)
-                                         (1-ratio (- 1 ratio)))
-                                    (lambda (cursor-color default-color)
-                                      "按照 ratio:(1-ratio) 的比例混合光标颜色和背景色."
-                                      (floor (* (+ (*   ratio  cursor-color)
-                                                   (* 1-ratio default-color))
-                                                255.9999999999999))))
-                                  (color-name-to-rgb (face-background 'cursor))
-                                  (color-name-to-rgb (face-background 'default)))))
-                  (setq shynur--cursor-animation-color-R (cl-first  shynur--cursor-animation-color-RGB)
-                        shynur--cursor-animation-color-G (cl-second shynur--cursor-animation-color-RGB)
-                        shynur--cursor-animation-color-B (cl-third  shynur--cursor-animation-color-RGB))))))
-      (add-hook 'server-after-make-frame-hook shynur--cursor-animation-color-setter)
-      (unless (daemonp)
-        (add-hook 'emacs-startup-hook shynur--cursor-animation-color-setter 90)))))
+              (let ((shynur--cursor-color     (face-background  'cursor))
+                    (shynur--background-color (face-background 'default))
+                    (shynur--cursor-animation-color-R 0)
+                    (shynur--cursor-animation-color-G 0)
+                    (shynur--cursor-animation-color-B 0))
+                (lambda ()
+                  (unless (and (eq shynur--cursor-color     (face-background  'cursor))
+                               (eq shynur--background-color (face-background 'default)))
+                    (setq shynur--cursor-color     (face-background  'cursor)
+                          shynur--background-color (face-background 'default))
+                    (let ((shynur--cursor-animation-color-RGB (cl-mapcar (let* ((ratio 0.5)
+                                                                                (1-ratio (- 1 ratio)))
+                                                                           (lambda (cursor-color default-color)
+                                                                             "按照 ratio:(1-ratio) 的比例混合光标颜色和背景色."
+                                                                             (floor (* (+ (*   ratio  cursor-color)
+                                                                                          (* 1-ratio default-color))
+                                                                                       255.9999999999999))))
+                                                                         (color-name-to-rgb shynur--cursor-color)
+                                                                         (color-name-to-rgb shynur--background-color))))
+                      (setq shynur--cursor-animation-color-R (cl-first  shynur--cursor-animation-color-RGB)
+                            shynur--cursor-animation-color-G (cl-second shynur--cursor-animation-color-RGB)
+                            shynur--cursor-animation-color-B (cl-third  shynur--cursor-animation-color-RGB))))
+                  (if-let ((window-absolute-pixel-position (when shynur--cursor-animation?
+                                                             (window-absolute-pixel-position)))
+                           (line-pixel-height (line-pixel-height)))
+                      (pop-select/beacon-animation
+                       (car window-absolute-pixel-position) (if header-line-format
+                                                                (- (cdr window-absolute-pixel-position)
+                                                                   line-pixel-height)
+                                                              (cdr window-absolute-pixel-position))
+                       (if (eq cursor-type 'bar)
+                           1
+                         (if-let ((glyph (let ((point (point)))
+                                           (when (< point (point-max))
+                                             (aref (font-get-glyphs (font-at point)
+                                                                    point (1+ point)) 0)))))
+                             (aref glyph 4)
+                           (window-font-width))) line-pixel-height
+                       180 100
+                       shynur--cursor-animation-color-R shynur--cursor-animation-color-G shynur--cursor-animation-color-B
+                       ;; 排除大约是单个半角字符的距离:
+                       24)
+                    (setq shynur--cursor-animation? t)))))))
 (when (and (eq system-type 'windows-nt)
            (or (display-graphic-p)
                (daemonp)))

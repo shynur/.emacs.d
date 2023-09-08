@@ -1,7 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 
-;; (find-file-other-window "./lisp/shynur-init.el")
-(require 'shynur-init)
+(require 'shynur-init)  ; (find-file-other-window "./lisp/shynur-init.el")
 
 ;; Local Variables:
 ;; coding: utf-8-unix

@@ -32,8 +32,7 @@
 (push (file-name-concat user-emacs-directory
                         "lisp/") load-path)
 
-;; (find-file-other-window "./lisp/shynur-early-init.el")
-(require 'shynur-early-init)
+(require 'shynur-early-init)  ; (find-file-other-window "./lisp/shynur-early-init.el")
 
 ;; Local Variables:
 ;; coding: utf-8-unix

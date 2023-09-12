@@ -33,10 +33,10 @@
                          ;; 没有前缀参数时执行.
                          (= 1 arg)
                          (or (save-match-data
-                               (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=")))
+                               (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=") nil))
                              (and (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
                                   (save-match-data
-                                    (looking-back (concat search-whitespace-regexp "\\="))))))
+                                    (looking-back (concat search-whitespace-regexp "\\=") nil)))))
                     (prog1 nil
                       (c-hungry-delete))
                   t)))
@@ -48,7 +48,7 @@
                          (= 1 arg)
                          (or (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
                              (and (save-match-data
-                                    (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=")))
+                                    (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=") nil))
                                   (looking-at-p (concat "\\=" search-whitespace-regexp)))))
                     (prog1 nil
                       (c-hungry-delete-forward))

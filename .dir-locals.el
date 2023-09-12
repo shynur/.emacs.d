@@ -9,14 +9,14 @@
 ((auto-mode-alist . (;; 诸如 auto-save 之类的文件.
                      ("[~#]\\'" . (ignore t))  ; e.g., ‘a.txt~’, ‘#a.txt#’.
 
-                     ("/[^/[blank]]+\\.ps1\\'" . powershell-mode)
+                     ("/[^/[:blank:]]+\\.ps1\\'" . powershell-mode)
 
-                     ("/[^/[blank]]+\\.md\\'"      . markdown-mode)
-                     ("/[^/[blank]]+\\.textile\\'" . textile-mode)
+                     ("/[^/[:blank:]]+\\.md\\'"      . markdown-mode)
+                     ("/[^/[:blank:]]+\\.textile\\'" . textile-mode)
 
                      ("/\\.nosearch\\'" . text-mode)
-                     ("/[^/[blank]]+\\.ya?ml\\'" . yaml-mode)
-                     ("/etc/yas-snippets/[^/[blank]]+-mode/\\(?:\\.yas-skip\\|\\.yas-parents\\|[^/[blank]]+\\.yasnippet\\)\\'" . snippet-mode)
+                     ("/[^/[:blank:]]+\\.ya?ml\\'" . yaml-mode)
+                     ("/etc/yas-snippets/[^/[:blank:]]+-mode/\\(?:\\.yas-skip\\|\\.yas-parents\\|[^/[:blank:]]+\\.yasnippet\\)\\'" . snippet-mode)
 
                      ("/\\.gitignore\\'" . gitignore-mode)
                      ("/\\.gitmodules\\'" . gitconfig-mode)
@@ -43,7 +43,7 @@
          (which-func-modes . t)
 
          (eval . (when-let ((buffer-file-name (buffer-file-name)))
-                   (when (string-match-p "\\`\\(?:LICENSE\\|COPYING\\)\\(?:\\.[^.[blank]]+\\)?\\'"  ; ‘LICENSE’ 没有注释语法, 只能写在这里了.
+                   (when (string-match-p "\\`\\(?:LICENSE\\|COPYING\\)\\(?:\\.[^.[:blank:]]+\\)?\\'"  ; ‘LICENSE’ 没有注释语法, 只能写在这里了.
                                          (file-name-nondirectory buffer-file-name))
                      (setq-local buffer-read-only t))))
 

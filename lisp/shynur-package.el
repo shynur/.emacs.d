@@ -39,7 +39,6 @@
 
 (setq package-selected-packages '(ivy
                                   sly
-                                  dimmer
                                   swiper
                                   company
                                   helpful

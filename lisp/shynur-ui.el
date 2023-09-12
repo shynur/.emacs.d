@@ -134,10 +134,10 @@
 ;;; Frame Title:
 
 (setq frame-title-format (prog1 '("" default-directory "  " shynur/ui:frame-title)
-                           (defvar shynur/ui:frame-title "21st GC (4s total): 742.3M VM, 3.5h runtime, 455/546 keys"
+                           (defvar shynur/ui:frame-title "21st GC (4s total): 742.3M VM, 3.5h runtime, 455/546 key/event"
                              "执行 垃圾回收 的 次数 (它们总共花费 4 秒): (截至这一次 垃圾回收 时) 估算 Emacs 虚拟内存的占用, 运行时间/h, number of key-sequences/input-events processed")
                            (let ((shynur/ui:frame-title-updater (lambda ()
-                                                                  (setq shynur/ui:frame-title (format-spec "%N GC (%ts total): %M VM, %hh runtime, %k keys"
+                                                                  (setq shynur/ui:frame-title (format-spec "%N GC (%ts total): %M VM, %hh runtime, %k key/event"
                                                                                                            `((?N . ,(let ((gcs-done+1 (1+ gcs-done)))  ; 似乎此时 ‘gcs-done’ 还未更新.
                                                                                                                       (format "%d%s"
                                                                                                                               gcs-done+1
@@ -159,7 +159,7 @@
                                                                                                              (?h . ,(format "%.1f"
                                                                                                                             (/ (time-to-seconds (time-since before-init-time))
                                                                                                                                3600.0)))
-                                                                                                             ;; 鼠标滚轮 也属于 key-sequence/input-events,
+                                                                                                             ;; 鼠标滚轮 也属于 key-sequences/input-events,
                                                                                                              ;; 但在这里它 (特别是开启像素级滚动) 显然不合适 :(
                                                                                                              (?k . ,(format "%d/%d"
                                                                                                                             num-input-keys
@@ -236,13 +236,15 @@
 
 (setq window-resize-pixelwise t)
 
-;;; [[package:melpa][dimmer]]
-(dimmer-mode)
-
 (setq window-min-height 4
       window-min-width  1)
 
 (global-hl-line-mode)
+
+;;; Text Area:
+
+;; 除了当前选中的 window, 还 高亮 non-selected window 的 active region.
+(setq highlight-nonselected-windows t)
 
 ;;; Fringe:
 
@@ -251,10 +253,9 @@
 (setq display-line-numbers-type t  ; 启用绝对行号.
       ;; 开启 relative/visual 行号时, 当前行仍然显示 absolute 行号.
       display-line-numbers-current-absolute t)
-(setq display-line-numbers-widen t)  ; 无视 narrowing, 行号从 buffer 的起始点计算.
-(setq display-line-numbers-width nil  ; 动态改变为行号预留的列数.
-      ;; 行号占用的列数可以动态减少.
-      display-line-numbers-grow-only nil)
+(setq-default display-line-numbers-widen t)  ; 无视 narrowing, 行号从 buffer 的起始点计算.
+(setq-default display-line-numbers-width nil)  ; 动态改变为行号预留的列数.
+(setq display-line-numbers-grow-only nil)      ; 行号占用的列数可以动态减少.
 
 (setq line-number-display-limit nil  ; 当 buffer 的 size 太大时是否启用行号, 以节约性能.
       ;; 单行太长也会消耗性能用于计算行号, 因此,
@@ -265,7 +266,7 @@
 (global-display-line-numbers-mode t)
 
 ;; 若开启, buffer 尾行之后的区域的右流苏区域会显示密集的刻度线.
-(setq indicate-empty-lines nil)
+(setq-default indicate-empty-lines nil)
 (setq overflow-newline-into-fringe t)
 
 ;;; Scroll Bar:
@@ -354,14 +355,14 @@
 (blink-cursor-mode -1)
 ;; 以下设置无效, 因为‘blink-cursor-mode’关掉了.
 (setq blink-cursor-delay  0  ; Cursor 静止一段时间之后开始闪烁.
-      blink-cursor-blinks 0  ; 闪烁次数
+      blink-cursor-blinks 0  ; 闪烁次数.
       blink-cursor-interval 0.5
       ;; 映射: ‘cursor-type’ -> 光标黯淡时的造型.
       blink-cursor-alist '((box  . nil)
                            (bar  . box)
                            (hbar . bar)))
 
-;; TUI下, 尽可能地 使 cursor 外形或特征 更加显著.
+;; TUI 下, 尽可能地 使 cursor 外形或特征 更加显著.
 (setq visible-cursor t)
 
 ;;; 果冻光标
@@ -394,8 +395,8 @@
                   (setq shynur--cursor-animation? t)))
 
     (add-hook 'post-command-hook
-              (let ((shynur--cursor-color     (face-background  'cursor))
-                    (shynur--background-color (face-background 'default))
+              (let ((shynur--cursor-color     "Cursor Color")
+                    (shynur--background-color "Default Background Color")
                     (shynur--cursor-animation-color-R 0)
                     (shynur--cursor-animation-color-G 0)
                     (shynur--cursor-animation-color-B 0))
@@ -419,23 +420,24 @@
                   (if-let ((window-absolute-pixel-position (when shynur--cursor-animation?
                                                              (window-absolute-pixel-position)))
                            (line-pixel-height (line-pixel-height)))
-                      (pop-select/beacon-animation
-                       (car window-absolute-pixel-position) (if header-line-format
-                                                                (- (cdr window-absolute-pixel-position)
-                                                                   line-pixel-height)
-                                                              (cdr window-absolute-pixel-position))
-                       (if (eq cursor-type 'bar)
-                           1
-                         (if-let ((glyph (let ((point (point)))
-                                           (when (< point (point-max))
-                                             (aref (font-get-glyphs (font-at point)
-                                                                    point (1+ point)) 0)))))
-                             (aref glyph 4)
-                           (window-font-width))) line-pixel-height
-                       180 100
-                       shynur--cursor-animation-color-R shynur--cursor-animation-color-G shynur--cursor-animation-color-B
-                       ;; 排除大约是单个半角字符的距离:
-                       24)
+                      (ignore-error 'error  ; 错误信息: Specified window is not displaying the current buffer
+                        (pop-select/beacon-animation
+                         (car window-absolute-pixel-position) (if header-line-format
+                                                                  (- (cdr window-absolute-pixel-position)
+                                                                     line-pixel-height)
+                                                                (cdr window-absolute-pixel-position))
+                         (if (eq cursor-type 'bar)
+                             1
+                           (if-let ((glyph (let ((point (point)))
+                                             (when (< point (point-max))
+                                               (aref (font-get-glyphs (font-at point)
+                                                                      point (1+ point)) 0)))))
+                               (aref glyph 4)
+                             (window-font-width))) line-pixel-height
+                         180 100
+                         shynur--cursor-animation-color-R shynur--cursor-animation-color-G shynur--cursor-animation-color-B
+                         ;; 排除大约是单个半角字符的距离:
+                         24))
                     (setq shynur--cursor-animation? t)))))))
 (when (and (eq system-type 'windows-nt)
            (or (display-graphic-p)
@@ -464,6 +466,16 @@
   (run-at-time nil 2000
                (lambda ()
                  "重启 ‘SmoothScroll’."
+                 ;; P.S. 我的 ‘SmoothScroll’ 配置:
+                 ;;
+                 ;;          Step size [px] _500_
+                 ;;     Animation time [ms] _400_
+                 ;; Acceleration delta [ms] _999_
+                 ;;   Acceleration max  [x] __1__
+                 ;; Tail to head ratio  [x] __3__
+                 ;;
+                 ;; [V] Enable for all apps by default
+                 ;; [V] Animation easing
                  (start-process "Restart SmoothScroll" nil
                                 "pwsh"
                                 "-File" (expand-file-name (file-name-concat user-emacs-directory

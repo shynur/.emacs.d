@@ -4,6 +4,8 @@
 
 (setq-default major-mode 'text-mode)
 
+(setq auto-mode-case-fold t)
+
 ;; 如有必要, 会在 写入/重命名 文件后 执行 ‘normal-mode’ 以使用恰当的 major mode.
 (setq change-major-mode-with-file-name t)
 
@@ -88,9 +90,22 @@
       ;; 那就加载包含它的定义的文件 以查看 docstring.
       help-enable-symbol-autoload t)
 
-;;; Visit:
+;;; 阅览:
+
+;;; 文字方向
+(setq bidi-inhibit-bpa t)  ; 实测 Unicode 字符 202E 仍能生效.
+(setq-default bidi-paragraph-direction 'left-to-right)
 
 (put 'narrow-to-region 'disabled '(query nil "禁用该命令 只是为了 演示一下 如何 禁用命令"))
+
+;;; Idle:
+
+(setq idle-update-delay most-positive-fixnum)  ; (Experimental) 永不 update 某些东西.
+
+;;; GC:
+
+;; 不清除 字体 缓存.
+(setq inhibit-compacting-font-caches t)
 
 (provide 'shynur-general)
 

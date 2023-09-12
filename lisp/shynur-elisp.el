@@ -36,9 +36,7 @@
 ;; GC 时在 echo area 显示信息, 但不会并入到 “*Messages*” 中.
 (setq garbage-collection-messages t)
 
-;;; Feature: ‘emacs-lisp’
-
-;;; Compile Elisp
+;;; Compilation:
 
 (defun shynur/elisp:compile-dir (dir)
   (interactive "DCompile ELisp Files Under: ")

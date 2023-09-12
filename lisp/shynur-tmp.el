@@ -29,9 +29,6 @@
  '(custom-unlispify-remove-prefixes nil
                                     nil (cus-edit)
                                     "无视‘defgroup’中的‘:prefix’关键字")
- '(highlight-nonselected-windows t
-                                 nil ()
-                                 "除了当前选中的window,还highlight非选中的window的active-region")
  `(,(set 'shynur--tmp 'shynur--tmp) ,(progn
                                        (shynur/custom:appdata/ transient-history-file el)
                                        (shynur/custom:appdata/ transient-levels-file el)
@@ -534,9 +531,6 @@
  '(before-save-hook `(,@(bound-and-true-p before-save-hook)
                       ,#'whitespace-cleanup)
                     nil (files))
- '(large-file-warning-threshold 1000000
-                                nil (files)
-                                "打开达到该字节数的大文件时询问相关事宜;重点在于可以借此开启literally读取模式,这会关闭一些昂贵的功能,以提高访问速度")
  '(find-file-wildcards t
                        nil (files)
                        "允许Bash style的路径通配符")

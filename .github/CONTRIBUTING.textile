@@ -68,15 +68,10 @@ h1=. TODO
 
 h2=. Feature
 
-不应该单纯开启 @global-display-line-numbers-mode@, 而是应该给出一个分类机制, 有需要的 mode 才打开 @display-line-numbers-mode@.
-有的 mode (e.g., @neotree@, @calendar@, @vc-annotate-mode@) 显示行号反而会占用空间.
-
 将任何 non-selected window 且是 @prog-mode@ 的 buffer 开启全局彩虹括号.
 当前 buffer 默认开启 @highlight-parentheses@.
 
 @VS Code@ 式 右侧栏代码浏览缩略图.
-
-类似 @VS Code@ @noctis@ 的主题, @solarized@ 也不错.
 
 h2=. Bug
 
@@ -88,15 +83,7 @@ h3<. Documentation Bug
 
 @dframe-mouse-click-function@: "our".
 
-??emacs?? @C-x p d@: not root
-
 ??emacs?? 28, 49.1.2: customize-group
-
-??emacs?? @custom-theme-directory@
-
-??emacs?? 28, 49.1.7 Custom Themes: '(' 加空格.
-
-??elisp?? 17.5 Evaluation During Compilation: some-new-thing
 
 ??elisp?? hash-notation, @#[...@
 

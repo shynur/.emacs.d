@@ -1,10 +1,8 @@
 ;;; -*- lexical-binding: t; -*-
 
-;;; Commentary:
-;;
-;; For ‘sh-mode’, ‘eshell’, and ‘shell’.
+(keymap-global-set "C-z" #'shell)
 
-;;; Feature: ‘eshell’
+;;; ‘eshell’:
 
 (shynur/custom:appdata/ eshell-directory-name /)
 (shynur/custom:appdata/ eshell-history-file-name txt)
@@ -15,28 +13,21 @@
             "‘eshell’中‘company-mode’卡得一批."
             (company-mode -1)))
 
-;;; Feature: ‘shell’
+;;; ‘shell’:
+
+(setq shell-file-name (pcase system-type
+                        ('windows-nt
+                         (if-let ((--pwsh-path (executable-find "pwsh")))
+                             --pwsh-path
+                           shell-file-name))
+                        (_
+                         shell-file-name)))
 
 (add-hook 'shell-mode-hook
           (lambda ()
             "设置编解码."
             (set-buffer-process-coding-system shynur/custom:shell-coding
                                               shynur/custom:shell-coding)))
-
-(add-hook 'shell-mode-hook
-          (lambda ()
-            "设置 PowerShell."
-            (when (or (string= shynur/custom:os "MS-Windows 10")
-                      (string= shynur/custom:os "MS-Windows 11"))
-              (make-thread (lambda ()
-                             (let ((attempts 100000))
-                               (while (and (natnump attempts)
-                                           (length> "Microsoft Windows" (buffer-size)))
-                                 (thread-yield)
-                                 (cl-decf attempts)))
-                             (when (save-excursion
-                                     (re-search-backward "Microsoft Windows"))
-                               (execute-kbd-macro [?p ?w ?s ?h ?\C-m])))))))
 
 (add-hook 'shell-mode-hook
           (lambda ()

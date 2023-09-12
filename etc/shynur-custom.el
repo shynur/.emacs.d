@@ -9,9 +9,9 @@
 
 ;; 建议: 填入指向高性能 SSD 的路径.
 (defconst shynur/c:appdata/ "d:/Documents/Apps/emacs/"
-  "    存放杂七杂八的数据的目录 (绝对路径), 不包括配置文件.
+  "存放杂七杂八的数据的目录 (绝对路径), 不包括配置文件.
 可能包含隐私信息 (e.g., 最近访问的文件名).
-    你必须拥有对该目录的绝对访问权限 (e.g., ‘chmod’任何文件).")
+你必须拥有对该目录的绝对访问权限 (e.g., ‘chmod’任何文件).")
 
 (add-hook 'before-init-hook
           (lambda ()
@@ -22,7 +22,7 @@
             (defconst shynur/c:email "one.last.kiss@outlook.com")
             (defconst shynur/c:filename-coding 'chinese-gb18030)
             (defconst shynur/c:os "MS-Windows 11")
-            (defconst shynur/c:python-path "python")
+            (defconst shynur/c:python-path "D:/Progs/anaconda3/python.exe")
             (defconst shynur/c:shell-coding 'chinese-gb18030)
             (defconst shynur/c:truename "谢骐")))
 

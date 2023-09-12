@@ -1,7 +1,10 @@
 ;;; -*- lexical-binding: t; -*-
 
 (setq abbrev-file-name (file-name-concat user-emacs-directory
-                                         "etc/abbrev_defs.el"))
+                                         "etc/abbrev_defs.el")
+      save-abbrevs "ask")
+
+(setq only-global-abbrevs nil)
 
 (provide 'shynur-abbrev)
 

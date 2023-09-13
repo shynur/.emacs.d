@@ -59,11 +59,12 @@
 
          (before-save-hook . ((lambda ()
                                 "自动加 UTF-8-UNIX 编码的声明."
-                                (save-excursion
-                                  (funcall (if (bound-and-true-p shynur/.emacs.d:add-coding-at-propline?)
-                                               #'add-file-local-variable-prop-line
-                                             #'add-file-local-variable)
-                                           'coding 'utf-8-unix)))
+                                (when (not (bound-and-true-p shynur/.emacs.d:dont-add-coding-automatically))
+                                  (save-excursion
+                                    (funcall (if (bound-and-true-p shynur/.emacs.d:add-coding-at-propline?)
+                                                 #'add-file-local-variable-prop-line
+                                               #'add-file-local-variable)
+                                             'coding 'utf-8-unix))))
                               delete-trailing-whitespace
                               whitespace-cleanup
                               (lambda ()  ; 在 ‘whitespace-cleanup’ 之后查看第一行的内容.
@@ -128,14 +129,20 @@
 
  ("media/images/" . ((nil . ((mode . image-minor)))))
 
+ ;; TODO: 希望只对用户 read-only.
+ ("var/" . ((nil . ((shynur/.emacs.d:dont-add-coding-automatically . t)))))
+
  ("modules/src/" . ((nil . ((eval . (when-let ((buffer-file-name (buffer-file-name)))
                                       (when (string-match-p "emacs-module"  ; 这玩意有 GPL 污染, 切割!
                                                             (file-name-nondirectory buffer-file-name))
                                         (setq-local buffer-read-only t))))
 
                             (tags-file-name . "ETAGS.txt")
-                            (eval . (when (buffer-file-name)  ; 正在访问文件, 而不是 ‘Dired’ 之类的 buffer.
-                                      (let ((default-directory (file-name-concat user-emacs-directory
+                            (eval . (when-let ((--buffer-file-name (buffer-file-name)))  ; 正在访问文件, 而不是 ‘Dired’ 之类的 buffer.
+                                      (let ((default-directory (file-name-concat (with-temp-buffer
+                                                                                   (insert --buffer-file-name)
+                                                                                   (search-backward "/modules/src/")
+                                                                                   (buffer-substring-no-properties 1 (point)))
                                                                                  "modules/src/")))
                                         (when (or (not (file-exists-p tags-file-name))
                                                   (> (time-to-number-of-days (time-since (file-attribute-modification-time (file-attributes tags-file-name))))

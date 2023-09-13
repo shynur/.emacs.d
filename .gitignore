@@ -21,6 +21,7 @@
 !/scripts/
 !/shynur-elpa/
 !/site-lisp/
+!/var/
 
 ##outline:  ./.github/
 /.github/*
@@ -43,7 +44,6 @@
 
 ##outline:  ./etc/
 /etc/*
-!/etc/abbrev_defs.el
 !/etc/clang-format.yaml
 !/etc/emacs-v.ps1
 !/etc/restart-SmoothScroll.ps1
@@ -112,6 +112,12 @@
 ###outline:   ./site-lisp/their-sites/
 /site-lisp/their-sites/*
 !/site-lisp/their-sites/.nosearch
+
+##outline:  ./var/
+/var/*
+!/var/abbrev_defs.el
+!/var/snake-scores.txt
+!/var/tetris-scores.txt
 
 #outline:
 

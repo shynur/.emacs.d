@@ -91,7 +91,6 @@
 (require 'shynur-proj)     ; (find-file-other-window "./shynur-proj.el")
 (require 'shynur-general)  ; (find-file-other-window "./shynur-general.el")
 (require 'shynur-host)     ; (find-file-other-window "./shynur-host.el")
-(require 'shynur-abbrev)   ; (find-file-other-window "./shynur-abbrev.el")
 (require 'shynur-server)   ; (find-file-other-window "./shynur-server.el")
 (require 'shynur-lang)     ; (find-file-other-window "./shynur-lang.el")
 (require 'shynur-net)      ; (find-file-other-window "./shynur-net.el")
@@ -106,11 +105,11 @@
 
 ;;; After Loading Init File
 
-;; default
+;; Library ‘default’
 (setq inhibit-default-init nil)
 
-;; abbrevs
-;; 上一页中已经设置过了.
+;; Abbrev
+;; “./shynur-edit.el”中已经设置过了.
 
 (provide 'shynur-init)
 

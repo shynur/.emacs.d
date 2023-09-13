@@ -9,27 +9,16 @@
 ;; 如有必要, 会在 写入/重命名 文件后 执行 ‘normal-mode’ 以使用恰当的 major mode.
 (setq change-major-mode-with-file-name t)
 
-;;; File Local Variable
+;;; Custom Mode:
 
-(setq safe-local-variable-values (let ((shynur--safe-local-variable-values ()))
-                                   (named-let get-vars ((dir-locals (mapcan (lambda (file-path)
-                                                                              (when (file-exists-p file-path)
-                                                                                (with-temp-buffer
-                                                                                  (insert-file-contents file-path)
-                                                                                  (read (current-buffer))))) `[,@(mapcar (lambda (dir-loc)
-                                                                                                                           "囊括诸如‘~/.emacs.d/’下的‘.dir-locals.el’文件."
-                                                                                                                           (file-name-concat user-emacs-directory
-                                                                                                                                             dir-loc)) [".dir-locals.el"
-                                                                                                                                                        ".dir-locals-2.el"])
-                                                                                                               "d:/Desktop/CheatSheets/.dir-locals.el"
-                                                                                                               ])))
-                                     (dolist (mode-vars dir-locals)
-                                       (let ((vars (cdr mode-vars)))
-                                         (if (stringp (car mode-vars))
-                                             (get-vars vars)
-                                           (dolist (var-pair vars)
-                                             (push var-pair shynur--safe-local-variable-values))))))
-                                   shynur--safe-local-variable-values))
+(setq custom-search-field nil)  ; 感觉不如‘customize-apropos’.
+(setq custom-buffer-done-kill nil)  ; 按“[Exit]”(GUI 下 该图标 位于 tool bar) 并不 kill buffer.
+
+(shynur/custom:appdata/ custom-file el)  ; 该文件需要 手动‘load-file’, 所以 直接 设置 即可, 无后顾之忧.
+
+;;; Buffer:
+
+(keymap-global-set "C-x C-b" #'bs-show)
 
 ;;; Minibuffer:
 
@@ -72,6 +61,42 @@
 ;;; Confirmation
 ;; TODO: 取消 minibuffer 中 <return> 的补全功能.
 ;;       当可能匹配的结果只有一个时, 它会补全, 但这有些自作主张.
+
+(let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
+                                                (concat
+                                                 "\\(?:" regexp "\\)"
+                                                 "\\|\\`:?shynur[^[:alnum:]]")) '(;; 滤除 ‘prefix--*’ (i.e., 不允许两个 “-” 连续出现).
+                                                                                  "\\`-?\\(?:[^-]+\\(?:-[^-]+\\)*-?\\)?\\'"
+                                                                                  ;; 滤除 ‘*-internal’ (i.e., 不允许出现 “-internal”).
+                                                                                  "\\(?:\\(?:\\`\\|[^l]\\)\\|\\(?:\\`\\|[^a]\\)l\\|\\(?:\\`\\|[^n]\\)al\\|\\(?:\\`\\|[^r]\\)nal\\|\\(?:\\`\\|[^e]\\)rnal\\|\\(?:\\`\\|[^t]\\)ernal\\|\\(?:\\`\\|[^n]\\)ternal\\|\\(?:\\`\\|[^i]\\)nternal\\|\\(?:\\`\\|[^-]\\)internal\\)\\'")))
+      (completers [try-completion
+                   test-completion
+                   all-completions]))
+  (seq-doseq (key ["C-h f"
+                   "C-h o"
+                   "C-h v"
+                   ;; "C-h w"  ; 未生效.
+                   "C-h x"
+                   "M-x"
+                   "M-S-x"])
+    (let ((original-command (keymap-global-lookup key)))
+      (keymap-global-set key
+                         (lambda ()
+                           (interactive)
+                           (unwind-protect
+                               (progn
+                                 (let ((shynur--completion-regexp-list+ `(,@completion-regexp-list
+                                                                          ,@shynur--completion-regexp-list)))
+                                   (seq-doseq (completer completers)
+                                     (advice-add completer :around
+                                                 (lambda (advised-function &rest arguments)
+                                                   "Bug#64351#20"
+                                                   (let ((completion-regexp-list shynur--completion-regexp-list+))
+                                                     (apply advised-function
+                                                            arguments))) '((name . "shynur--let-bind-completion-regexp-list")))))
+                                 (call-interactively original-command))
+                             (seq-doseq (completer completers)
+                               (advice-remove completer "shynur--let-bind-completion-regexp-list"))))))))
 
 ;;; Register:
 

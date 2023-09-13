@@ -25,15 +25,7 @@ init.el
         |
         |__ lisp/shynur-tmp.el
         |
-        |__ lisp/shynur-org.el
-        |
-        |__ lisp/shynur-tex.el
-        |
-        |__ lisp/shynur-abbrev.el
-        |
         |__ lisp/shynur-server.el
-        |
-        |__ lisp/shynur-cc.el
         |
         |__ lisp/shynur-kbd.el
         |
@@ -57,7 +49,7 @@ init.el
 
 site-lisp/default.el
 
-etc/abbrev_defs.el
+var/abbrev_defs.el
 ```
 
 位于 `modules/` 下的动态链接库也可加载, 这是可选的.

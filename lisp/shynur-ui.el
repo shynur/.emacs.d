@@ -134,18 +134,17 @@
 ;;; Frame Title:
 
 (setq frame-title-format (prog1 '("" default-directory "  " shynur/ui:frame-title)
-                           (defvar shynur/ui:frame-title "21st GC (4s total): 742.3M VM, 3.5h runtime, 455/546 key/event"
-                             "执行 垃圾回收 的 次数 (它们总共花费 4 秒): (截至这一次 垃圾回收 时) 估算 Emacs 虚拟内存的占用, 运行时间/h, number of key-sequences/input-events processed")
+                           (defvar shynur/ui:frame-title "21st GC (4s total): 742.3M VM, 3:20 runtime, 455/546 key/event"
+                             "执行 垃圾回收 的 次数 (它们总共花费 4 秒): (截至这一次 垃圾回收 时) 估算 Emacs 虚拟内存的占用, 小时:分钟 运行时间, number of key-sequences/input-events processed")
                            (let ((shynur/ui:frame-title-updater (lambda ()
-                                                                  (setq shynur/ui:frame-title (format-spec "%N GC (%ts total): %M VM, %hh runtime, %k key/event"
-                                                                                                           `((?N . ,(let ((gcs-done+1 (1+ gcs-done)))  ; 似乎此时 ‘gcs-done’ 还未更新.
-                                                                                                                      (format "%d%s"
-                                                                                                                              gcs-done+1
-                                                                                                                              (pcase (mod gcs-done+1 10)
-                                                                                                                                (1 "st")
-                                                                                                                                (2 "nd")
-                                                                                                                                (3 "rd")
-                                                                                                                                (_ "th")))))
+                                                                  (setq shynur/ui:frame-title (format-spec "%N GC (%ts total): %M VM, %T runtime, %k key/event"
+                                                                                                           `((?N . ,(format "%d%s"
+                                                                                                                            gcs-done
+                                                                                                                            (pcase (mod gcs-done 10)
+                                                                                                                              (1 "st")
+                                                                                                                              (2 "nd")
+                                                                                                                              (3 "rd")
+                                                                                                                              (_ "th"))))
                                                                                                              (?t . ,(round gc-elapsed))
                                                                                                              (?M . ,(progn
                                                                                                                       (eval-when-compile
@@ -156,9 +155,7 @@
                                                                                                                                return (format "%.1f%c"
                                                                                                                                               shynur--memory
                                                                                                                                               shynur--memory-unit))))
-                                                                                                             (?h . ,(format "%.1f"
-                                                                                                                            (/ (time-to-seconds (time-since before-init-time))
-                                                                                                                               3600.0)))
+                                                                                                             (?T . ,(emacs-uptime "%h:%.2m"))
                                                                                                              ;; 鼠标滚轮 也属于 key-sequences/input-events,
                                                                                                              ;; 但在这里它 (特别是开启像素级滚动) 显然不合适 :(
                                                                                                              (?k . ,(format "%d/%d"
@@ -411,7 +408,7 @@
                                                                              "按照 ratio:(1-ratio) 的比例混合光标颜色和背景色."
                                                                              (floor (* (+ (*   ratio  cursor-color)
                                                                                           (* 1-ratio default-color))
-                                                                                       255.9999999999999))))
+                                                                                       255.99999999999997))))
                                                                          (color-name-to-rgb shynur--cursor-color)
                                                                          (color-name-to-rgb shynur--background-color))))
                       (setq shynur--cursor-animation-color-R (cl-first  shynur--cursor-animation-color-RGB)

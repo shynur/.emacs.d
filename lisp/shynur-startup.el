@@ -33,41 +33,54 @@
 (put 'inhibit-startup-echo-area-message  ; 需要如此 hack.
      'saved-value `(,(setq inhibit-startup-echo-area-message user-login-name)))
 
-(add-hook 'window-setup-hook
-          (lambda ()
-            (let ((shynur/startup:time (time-to-seconds (time-since before-init-time))))
-              (message #("Shynur: 启动耗时 %.2fs"
-                         13 17 (face bold))
-                       shynur/startup:time)
-              (when (daemonp)
-                ;; 发出通知: Emacs 后台进程启动了.
-                (let ((shynur/startup:balloon-title "Emacs Daemon Launched")
-                      (shynur/startup:balloon-body (format "Emacs 已经在后台启动了
-耗时 %.2f 秒"
-                                                           shynur/startup:time)))
-                  (pcase system-type
-                    ('windows-nt (make-thread (let* ((shynur/startup:balloon-emitting-frame (let (before-make-frame-hook
-                                                                                                  window-system-default-frame-alist initial-frame-alist default-frame-alist
-                                                                                                  after-make-frame-functions server-after-make-frame-hook)
-                                                                                              (make-frame-on-display (symbol-name initial-window-system)
-                                                                                                                     '((visibility . nil)))))
-                                                     (shynur/startup:balloon (with-selected-frame shynur/startup:balloon-emitting-frame
-                                                                               (w32-notification-notify
-                                                                                :level 'info
-                                                                                :title shynur/startup:balloon-title
-                                                                                :body shynur/startup:balloon-body))))
-                                                (lambda ()
-                                                  (sleep-for 0.1)  ; 必须歇一会儿 (bug), 消息气球才会显示由 ‘:level’ 指示的图标.
-                                                  (with-selected-frame shynur/startup:balloon-emitting-frame
-                                                    (w32-notification-close shynur/startup:balloon)
-                                                    (let (delete-frame-functions
-                                                          after-delete-frame-functions)
-                                                      (delete-frame)))))))
-                    (_ (require 'notifications)
-                       (notifications-notify
-                        :title shynur/startup:balloon-title
-                        :body shynur/startup:balloon-body
-                        :transient t)))))))
+(add-hook 'post-command-hook
+          (letrec ((shynur/startup:indicator (lambda ()
+                                               (remove-hook 'post-command-hook shynur/startup:indicator)
+                                               (let ((emacs-init-time (time-to-seconds (time-since before-init-time))))
+                                                 (message #("Shynur: 启动耗时 %.2fs"
+                                                            13 17 (face bold))
+                                                          emacs-init-time)
+                                                 (when (daemonp)
+                                                   ;; 发出通知: Emacs 后台进程启动了.
+                                                   (let ((shynur/startup:balloon-title "Emacs Daemon Launched")
+                                                         (shynur/startup:balloon-body (format "Emacs 已经在后台启动了\n耗时 %.2f 秒"
+                                                                                              emacs-init-time)))
+                                                     (pcase system-type
+                                                       ('windows-nt
+                                                        (advice-add 'w32-notification-notify :before
+                                                                    (let* ((shynur/startup:balloon-emitting-frame (let (before-make-frame-hook
+                                                                                                                        window-system-default-frame-alist initial-frame-alist default-frame-alist
+                                                                                                                        after-make-frame-functions server-after-make-frame-hook)
+                                                                                                                    (make-frame-on-display (symbol-name initial-window-system)
+                                                                                                                                           '((visibility . nil)))))
+                                                                           (shynur/startup:balloon (with-selected-frame shynur/startup:balloon-emitting-frame
+                                                                                                     (w32-notification-notify
+                                                                                                      :level 'info
+                                                                                                      :title shynur/startup:balloon-title
+                                                                                                      :body shynur/startup:balloon-body)))
+                                                                           (shynur/startup:message-closer (lambda ()
+                                                                                                            "关闭 ‘shynur/startup:balloon’ 后, 顺便将其设为字符串 “closed”."
+                                                                                                            (with-selected-frame shynur/startup:balloon-emitting-frame
+                                                                                                              (w32-notification-close (prog1 shynur/startup:balloon
+                                                                                                                                        (setq shynur/startup:balloon "closed")))
+                                                                                                              (let (delete-frame-functions
+                                                                                                                    after-delete-frame-functions)
+                                                                                                                (delete-frame))))))
+                                                                      (run-with-idle-timer 10 nil
+                                                                                           (lambda ()
+                                                                                             (unless (stringp shynur/startup:balloon)
+                                                                                               (funcall shynur/startup:message-closer))))
+                                                                      (lambda (&rest _)
+                                                                        (advice-remove 'w32-notification-notify "shynur/startup:message-closer")
+                                                                        (unless (stringp shynur/startup:balloon)
+                                                                          (funcall shynur/startup:message-closer)))) '((name . "shynur/startup:message-closer"))))
+                                                       (_
+                                                        (require 'notifications)
+                                                        (notifications-notify
+                                                         :title shynur/startup:balloon-title
+                                                         :body shynur/startup:balloon-body
+                                                         :transient t)))))))))
+            shynur/startup:indicator)
           100)
 
 (provide 'shynur-startup)

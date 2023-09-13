@@ -509,14 +509,6 @@
  '(temp-buffer-resize-mode t
                            nil (help)
                            "e.g.,使“*Completions*”不会几乎占用整个frame")
- '(enable-local-variables t
-                          nil (files)
-                          "尽量不询问,但提供记忆功能(可能会修改‘custom-file’的文件内容)")
- '(enable-dir-local-variables t
-                              nil (files))
- '(enable-remote-dir-locals t
-                            nil (files)
-                            "远程时也向上寻找“.dir-locals.el”以应用directory local变量")
  '(imenu-auto-rescan t
                      nil (imenu))
  '(imenu-sort-function #'imenu--sort-by-name
@@ -682,19 +674,6 @@
  '(compilation-always-kill nil
                            nil (compile)))
 
-;;; Feature: ‘company’
-(setq company-idle-delay 0
-      company-minimum-prefix-length 2)
-(setq company-dabbrev-code-everywhere t)  ; 还在 comment 和 string 中进行 completion.
-(setq company-dabbrev-code-other-buffers t  ; 在具有相同‘major-mode’的 buffer 中搜索候选词.
-      ;; 在 current buffer 中搜索代码块中的关键词的时间限制.
-      company-dabbrev-code-time-limit 2)
-(setq company-show-quick-access t  ; 给候选词编号.
-      company-tooltip-offset-display 'lines  ; 原本在候选词界面的右侧是由 scroll bar, 现改成: 上/下面分别有多少候选词.
-      company-tooltip-limit 10)
-(setq company-clang-executable shynur/custom:clang-path)
-(global-company-mode)
-
 ;;; Feature: ‘savehist’
 (shynur/custom:appdata/ savehist-file el)
 (setq savehist-autosave-interval nil)
@@ -783,11 +762,6 @@
 
 ;;; Feature: ‘so-long’
 (global-so-long-mode)
-
-;;; Feature: ‘cus-edit’
-(setq custom-search-field nil)  ; 感觉不如‘customize-apropos’.
-(setq custom-buffer-done-kill nil)  ; 按“[Exit]”(GUI 下 该图标 位于 tool bar) 并不 kill buffer.
-(shynur/custom:appdata/ custom-file el)  ; 该文件需要 手动‘load-file’, 所以 直接 设置 即可, 无后顾之忧.
 
 (keymap-global-unset "C-h g")
 (keymap-global-unset "C-h h")
@@ -873,46 +847,6 @@
 (keymap-global-unset "C-]")      ; ‘abort-recursive-edit’
 (keymap-global-unset "C-x X a")  ; ‘abort-recursive-edit’
 
-(let ((shynur--completion-regexp-list (mapcar (lambda (regexp)
-                                                (concat
-                                                 "\\(?:" regexp "\\)"
-                                                 "\\|\\`:?shynur[^[:alnum:]]")) '(;; 滤除‘prefix--*’(i.e., 不允许两个“-”连续出现).
-                                                                                  "\\`-?\\(?:[^-]+\\(?:-[^-]+\\)*-?\\)?\\'"
-                                                                                  ;; 滤除‘*-internal’(i.e., 不允许出现“-internal”).
-                                                                                  "\\(?:\\(?:\\`\\|[^l]\\)\\|\\(?:\\`\\|[^a]\\)l\\|\\(?:\\`\\|[^n]\\)al\\|\\(?:\\`\\|[^r]\\)nal\\|\\(?:\\`\\|[^e]\\)rnal\\|\\(?:\\`\\|[^t]\\)ernal\\|\\(?:\\`\\|[^n]\\)ternal\\|\\(?:\\`\\|[^i]\\)nternal\\|\\(?:\\`\\|[^-]\\)internal\\)\\'")))
-      (completers [try-completion
-                   test-completion
-                   all-completions]))
-  (seq-doseq (key ["C-h f"
-                   "C-h o"
-                   "C-h v"
-                   ;; "C-h w"  ; 未生效.
-                   "C-h x"
-                   "M-x"
-                   "M-S-x"])
-    (let ((original-command (keymap-global-lookup key)))
-      (keymap-global-set key
-                         (lambda ()
-                           (interactive)
-                           (unwind-protect
-                               (progn
-                                 (let ((shynur--completion-regexp-list+ `(,@completion-regexp-list
-                                                                          ,@shynur--completion-regexp-list)))
-                                   (seq-doseq (completer completers)
-                                     (advice-add completer :around
-                                                 (lambda (advised-function &rest arguments)
-                                                   "Bug#64351#20"
-                                                   (let ((completion-regexp-list shynur--completion-regexp-list+))
-                                                     (apply advised-function
-                                                            arguments))) '((name . "shynur--let-bind-completion-regexp-list")))))
-                                 (call-interactively original-command))
-                             (seq-doseq (completer completers)
-                               (advice-remove completer "shynur--let-bind-completion-regexp-list"))))))))
-
-(keymap-global-set "C-x C-b"
-                   #'bs-show)
-(keymap-global-set "<mouse-2>"
-                   #'mouse-yank-at-click)
 (mapc (lambda (postkey-function)
         (keymap-global-set (concat "C-c " (car postkey-function))
                            (cdr postkey-function)))
@@ -967,7 +901,7 @@
                                    (format "--assume-filename=a.%s" programming-language)
                                    (format "--cursor=%d" (1- (point)))
                                    options)
-                            (beginning-of-buffer)
+                            (goto-char 1)
                             (goto-char (1+ (string-to-number (prog1 (let ((case-fold-search nil))
                                                                       (save-match-data
                                                                         (buffer-substring-no-properties
@@ -1000,6 +934,8 @@
                   (set-frame-parameter nil 'fullscreen nil)
                   (set-frame-position nil 220 130)
                   (set-frame-size nil 800 600 t)))))
+
+
 
 (provide 'shynur-tmp)
 

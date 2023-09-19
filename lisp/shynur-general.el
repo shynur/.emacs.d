@@ -30,6 +30,8 @@
                         #'self-insert-command)))
 
 ;;; Invoke Command
+(setq meta-prefix-char ?\e)
+
 (keymap-global-unset "C-x ESC ESC")  ; ‘repeat-complex-command’
 
 ;;; Minibuffer Completion
@@ -127,7 +129,7 @@
 
 (setq idle-update-delay most-positive-fixnum)  ; (Experimental) 永不 update 某些东西.
 
-;;; GC:
+;;; 改善性能:
 
 ;; 不清除 字体 缓存.
 (setq inhibit-compacting-font-caches t)

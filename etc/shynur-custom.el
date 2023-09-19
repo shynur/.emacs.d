@@ -22,7 +22,7 @@
             (defconst shynur/c:email "one.last.kiss@outlook.com")
             (defconst shynur/c:filename-coding 'chinese-gb18030)
             (defconst shynur/c:os "MS-Windows 11")
-            (defconst shynur/c:python-path "D:/Progs/anaconda3/python.exe")
+            (defconst shynur/c:python-path "d:/Progs/Python/python.exe")
             (defconst shynur/c:shell-coding 'chinese-gb18030)
             (defconst shynur/c:truename "谢骐")))
 

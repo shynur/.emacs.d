@@ -44,10 +44,18 @@
 ;;; Predefined Text:
 
 ;;; Abbreviation
-(setq abbrev-file-name (file-name-concat user-emacs-directory
-                                         "var/abbrev_defs.el")
+(setq abbrev-file-name (prog1 (cl-some (lambda (.extension)
+                                         (let ((shynur--abbrev-file (file-name-concat user-emacs-directory
+                                                                                      "var" (concat "abbrev_defs" .extension))))
+                                           (when (file-exists-p shynur--abbrev-file)
+                                             shynur--abbrev-file))) load-suffixes)
+                         (add-hook 'after-init-hook
+                                   (lambda ()
+                                     (shynur/custom:appdata/ abbrev-file-name el))))
       ;; 触发 ‘保存’ 时会询问, 此时可查看是否包含隐私信息.
       save-abbrevs "ask")
+(set-register ?a `(file . ,(file-name-concat user-emacs-directory
+                                             "var" "abbrev_defs.el")))
 (setq only-global-abbrevs nil
       abbrev-minor-mode-table-alist '())
 ;; ‘POSIX’ => “Portable Operating System Interface”
@@ -59,6 +67,8 @@
 ;; (customize-set-variable 'abbrev-mode t)
 (keymap-global-unset "C-x a i")  ; ‘inverse-add-{mode,global}-abbrev’
 (keymap-global-unset "C-x a e")  ; ‘expand-abbrev’
+
+;;; Dynamic Abbreviation
 (setq dabbrev-limit nil  ; 不限制 Dynamic Abbrev Expansion 的搜索范围.
       dabbrev-check-other-buffers t
       dabbrev-check-all-buffers   nil)

@@ -30,6 +30,13 @@
             "有续行"
             (toggle-truncate-lines 0)))
 
+;;; Binary:
+
+(add-hook 'hexl-mode-hook
+          (lambda ()
+            "初始化 ‘before-save-hook’, 排除元素 t 以阻止运行全局 ‘before-save-hook’."
+            (setq-local before-save-hook ())))
+
 ;;; Web:
 
 (add-hook 'html-mode-hook
@@ -37,6 +44,10 @@
             (when (and (buffer-file-name)
                        (zerop (buffer-size)))
               (insert "<!DOC"))))
+
+;;; SQL:
+
+(setq sql-product 'ansi)  ; 选择方言以使用合适的高亮方案.
 
 ;;; CC:
 

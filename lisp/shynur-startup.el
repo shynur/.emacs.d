@@ -58,22 +58,25 @@
                                                                                                       :level 'info
                                                                                                       :title shynur/startup:balloon-title
                                                                                                       :body shynur/startup:balloon-body)))
+                                                                           (shynur/startup:balloon-lock (make-mutex))
                                                                            (shynur/startup:message-closer (lambda ()
                                                                                                             "关闭 ‘shynur/startup:balloon’ 后, 顺便将其设为字符串 “closed”."
                                                                                                             (with-selected-frame shynur/startup:balloon-emitting-frame
-                                                                                                              (w32-notification-close (prog1 shynur/startup:balloon
-                                                                                                                                        (setq shynur/startup:balloon "closed")))
+                                                                                                              (w32-notification-close shynur/startup:balloon)
+                                                                                                              (setq shynur/startup:balloon "closed")
                                                                                                               (let (delete-frame-functions
                                                                                                                     after-delete-frame-functions)
                                                                                                                 (delete-frame))))))
                                                                       (run-with-idle-timer 10 nil
                                                                                            (lambda ()
-                                                                                             (unless (stringp shynur/startup:balloon)
-                                                                                               (funcall shynur/startup:message-closer))))
+                                                                                             (with-mutex shynur/startup:balloon-lock
+                                                                                               (unless (stringp shynur/startup:balloon)
+                                                                                                 (funcall shynur/startup:message-closer)))))
                                                                       (lambda (&rest _)
                                                                         (advice-remove 'w32-notification-notify "shynur/startup:message-closer")
-                                                                        (unless (stringp shynur/startup:balloon)
-                                                                          (funcall shynur/startup:message-closer)))) '((name . "shynur/startup:message-closer"))))
+                                                                        (with-mutex shynur/startup:balloon-lock
+                                                                          (unless (stringp shynur/startup:balloon)
+                                                                            (funcall shynur/startup:message-closer))))) '((name . "shynur/startup:message-closer"))))
                                                        (_
                                                         (require 'notifications)
                                                         (notifications-notify

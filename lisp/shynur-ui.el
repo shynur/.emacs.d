@@ -71,7 +71,7 @@
 ;; 透明
 (add-to-list 'default-frame-alist
              `(,(pcase system-type
-                  ("I don’t know how to test whether the platform supports this parameter!" 'alpha-background)
+                  ("TODO: I don’t know how to test whether the platform supports this parameter!" 'alpha-background)
                   (_ 'alpha))
                . 75))
 
@@ -117,6 +117,8 @@
                                                              (   add-hook 'delete-frame-functions       shynur/ui:frame-size&position-setter)))
                      (shynur/ui:frame-size&position-setter (lambda (frame-to-be-deleted)
                                                              (when (length= (frames-on-display-list) 1)
+                                                               ;; MS-Windows 上的 “最小化窗口” 似乎就只是把窗口挪到屏幕之外, 所以得先把它挪回来.
+                                                               (make-frame-visible frame-to-be-deleted)
                                                                (dolist (parameter-value shynur/ui:frame-size&position)
                                                                  (setcdr parameter-value (frame-parameter frame-to-be-deleted (car parameter-value))))
                                                                (setq shynur/ui:frame-size&position-stored? t)
@@ -125,6 +127,7 @@
                                                                ;; 因此之后新建的 frame 必然是 server 弹出的, 所以此处无需使用‘after-make-frame-functions’.
                                                                (   add-hook 'server-after-make-frame-hook shynur/ui:frame-size&position-getter)))))
               shynur/ui:frame-size&position-getter)))
+;; TODO: If there is an invisible frame ...
 
 ;; 必须先设置 window divider 的参数!
 (setq window-divider-default-places      'right-only  ; 横向 divider 可以用 mode line代替.
@@ -226,6 +229,13 @@
       tab-line-separator "")
 ;; Tab line 就是为了方便使用鼠标而存在的, 直接用鼠标点就行了.
 (setq tab-line-switch-cycling nil)
+(setq-default tab-line-format `(:eval (mapcar ',(lambda (buffer-tab-line-name)
+                                                  (concat (if (get-buffer buffer-tab-line-name)
+                                                              (with-current-buffer buffer-tab-line-name
+                                                                (require 'all-the-icons)
+                                                                (all-the-icons-icon-for-buffer))
+                                                            "") buffer-tab-line-name))
+                                              (tab-line-format))))
 
 (global-tab-line-mode)
 
@@ -245,7 +255,7 @@
 
 ;;; Fringe:
 
-(setq fringe-mode '(0 . nil))  ; Right-only.
+(set-fringe-mode '(0 . nil))  ; Right-only.
 
 (setq display-line-numbers-type t  ; 启用绝对行号.
       ;; 开启 relative/visual 行号时, 当前行仍然显示 absolute 行号.
@@ -365,15 +375,16 @@
 ;;; 果冻光标
 ;; GNU/Linux
 (setq holo-layer-python-command shynur/custom:python-path)
-(setq holo-layer-enable-cursor-animation t
-      holo-layer-cursor-alpha 140
+(setq holo-layer-cursor-alpha 140
       holo-layer-cursor-animation-duration 170
       holo-layer-cursor-animation-interval 30
       holo-layer-cursor-animation-type "jelly")
-(require 'holo-layer nil t)
 (with-eval-after-load 'holo-layer
   (when (eq system-type 'gnu/linux)
+    (setq holo-layer-enable-cursor-animation t)
+    ;; 重复调用是安全的.
     (holo-layer-enable)))
+(require 'holo-layer nil t)
 ;; MS-Windows
 (with-eval-after-load 'pop-select
   (let (shynur--cursor-animation?)

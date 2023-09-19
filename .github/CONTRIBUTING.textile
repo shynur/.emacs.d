@@ -75,8 +75,6 @@ h2=. Feature
 
 h2=. Bug
 
-@hexl-mode@: 保存文件时会删除一些字符.
-
 h2=. Patch to Be Reported
 
 h3<. Documentation Bug

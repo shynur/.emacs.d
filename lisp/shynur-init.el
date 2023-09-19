@@ -93,6 +93,7 @@
 (require 'shynur-host)     ; (find-file-other-window "./shynur-host.el")
 (require 'shynur-server)   ; (find-file-other-window "./shynur-server.el")
 (require 'shynur-lang)     ; (find-file-other-window "./shynur-lang.el")
+(require 'shynur-stu)      ; (find-file-other-window "./shynur-stu.el")
 (require 'shynur-net)      ; (find-file-other-window "./shynur-net.el")
 (require 'shynur-kbd)      ; (find-file-other-window "./shynur-kbd.el")
 (require 'shynur-sh)       ; (find-file-other-window "./shynur-sh.el")

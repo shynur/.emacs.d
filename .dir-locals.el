@@ -31,6 +31,7 @@
          (no-byte-compile . t)
 
          (mode . auto-save)
+         (auto-revert-verbose . nil)
 
          (project-vc-merge-submodules . nil)
 
@@ -59,12 +60,11 @@
 
          (before-save-hook . ((lambda ()
                                 "自动加 UTF-8-UNIX 编码的声明."
-                                (when (not (bound-and-true-p shynur/.emacs.d:dont-add-coding-automatically))
-                                  (save-excursion
-                                    (funcall (if (bound-and-true-p shynur/.emacs.d:add-coding-at-propline?)
-                                                 #'add-file-local-variable-prop-line
-                                               #'add-file-local-variable)
-                                             'coding 'utf-8-unix))))
+                                (save-excursion
+                                  (funcall (if (bound-and-true-p shynur/.emacs.d:add-coding-at-propline?)
+                                               #'add-file-local-variable-prop-line
+                                             #'add-file-local-variable)
+                                           'coding 'utf-8-unix)))
                               delete-trailing-whitespace
                               whitespace-cleanup
                               (lambda ()  ; 在 ‘whitespace-cleanup’ 之后查看第一行的内容.
@@ -130,7 +130,7 @@
  ("media/images/" . ((nil . ((mode . image-minor)))))
 
  ;; TODO: 希望只对用户 read-only.
- ("var/" . ((nil . ((shynur/.emacs.d:dont-add-coding-automatically . t)))))
+ ("var/" . ((nil . ())))
 
  ("modules/src/" . ((nil . ((eval . (when-let ((buffer-file-name (buffer-file-name)))
                                       (when (string-match-p "emacs-module"  ; 这玩意有 GPL 污染, 切割!

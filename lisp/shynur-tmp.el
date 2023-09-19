@@ -5,7 +5,6 @@
                                ,(lambda ()
                                   "把没用的minor mode都关了"
                                   (make-thread (lambda ()
-                                                 "关了‘highlight-changes-mode’和‘highlight-changes-visible-mode’会因为试图移除face导致报错"
                                                  (sleep-for 0.4)
                                                  (company-mode -1)
                                                  (electric-indent-local-mode -1)
@@ -211,8 +210,6 @@
  '(mouse-highlight t
                    nil ()
                    "当鼠标位于clickable位置时,高亮此处的文本")
- '(global-highlight-changes-mode t
-                                 nil (hilit-chg))
  '(highlight-changes-visibility-initial-state nil
                                               nil (hilit-chg))
  '(python-shell-interpreter shynur/custom:python-path

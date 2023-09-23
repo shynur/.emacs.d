@@ -132,6 +132,8 @@
  ;; TODO: 希望只对用户 read-only.
  ("var/" . ((nil . ())))
 
+ ("local-elpa/" . ((nil . ((before-save-hook . (t))))))
+
  ("modules/src/" . ((nil . ((eval . (when-let ((buffer-file-name (buffer-file-name)))
                                       (when (string-match-p "emacs-module"  ; 这玩意有 GPL 污染, 切割!
                                                             (file-name-nondirectory buffer-file-name))

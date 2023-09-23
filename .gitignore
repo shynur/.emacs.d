@@ -19,7 +19,7 @@
 !/media/
 !/modules/
 !/scripts/
-!/shynur-elpa/
+!/local-elpa/
 !/site-lisp/
 !/var/
 
@@ -97,9 +97,9 @@
 !/scripts/ielm-cli.el
 !/scripts/make-shynur-emacs.el
 
-##outline:  ./shynur-elpa/
-/shynur-elpa/*
-!/shynur-elpa/shynur-elpa.el
+##outline:  ./local-elpa/
+/local-elpa/*
+!/local-elpa/shynur-elpa.el
 
 ##outline:  ./site-lisp/
 /site-lisp/*

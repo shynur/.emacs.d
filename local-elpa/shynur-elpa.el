@@ -6,7 +6,7 @@
 ;; subdirectories.  Here we specify them:
 
 (let ((default-directory (file-name-concat user-emacs-directory
-                                           "shynur-elpa/")))
+                                           "local-elpa/")))
   (normal-top-level-add-to-load-path '(
                                        "holo-layer"
                                        )))

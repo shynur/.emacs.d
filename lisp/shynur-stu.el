@@ -8,7 +8,8 @@
   (setq holo-layer-enable-place-info t)
   ;; 重复调用是安全的.
   (holo-layer-enable))
-(require 'holo-layer nil t)
+(when (eq system-type 'gnu/linux)
+  (require 'holo-layer nil t))
 
 ;;; 家庭作业:
 
@@ -19,4 +20,5 @@
 
 ;; Local Variables:
 ;; coding: utf-8-unix
+;; no-byte-compile: nil
 ;; End:

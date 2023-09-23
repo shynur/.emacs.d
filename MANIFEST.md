@@ -13,7 +13,7 @@ early-init.el
         |
         |__ lisp/shynur-package.el
               |
-              |__ shynur-elpa/shynur-elpa.el
+              |__ local-elpa/shynur-elpa.el
 
 site-lisp/site-start.el
 

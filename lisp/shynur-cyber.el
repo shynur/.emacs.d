@@ -11,8 +11,9 @@
 (keymap-global-unset "C-x 5 m")  ; ‘compose-mail’
 (keymap-global-unset "C-x 5 m")  ; ‘compose-mail-other-frame’
 
-(provide 'shynur-net)
+(provide 'shynur-cyber)
 
 ;; Local Variables:
 ;; coding: utf-8-unix
+;; no-byte-compile: nil
 ;; End:

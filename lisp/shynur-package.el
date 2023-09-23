@@ -71,7 +71,7 @@
   ;; (package-autoremove)  ; 我记得这好像需要手动确认.
   )
 
-(require 'shynur-elpa)  ; (find-file-other-window "../shynur-elpa/shynur-elpa.el")
+(require 'shynur-elpa)  ; (find-file-other-window "../local-elpa/shynur-elpa.el")
 
 (provide 'shynur-package)
 

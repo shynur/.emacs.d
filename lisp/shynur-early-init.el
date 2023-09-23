@@ -19,7 +19,7 @@
 ;;   or ‘tty-setup-hook’.
 
 (dolist (subdir '("lisp/themes/"
-                  "shynur-elpa/"
+                  "local-elpa/"
                   "modules/"
                   "media/images/"  ; for ‘find-image’ to search in ‘image-load-path’.
                   ))

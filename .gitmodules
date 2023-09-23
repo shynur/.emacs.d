@@ -1,13 +1,13 @@
-[submodule "site-lisp/copilot.el"]
-    path = shynur-elpa/copilot.el
+[submodule "local-elpa/copilot.el"]
+    path = local-elpa/copilot.el
     url = git@github.com:zerolfx/copilot.el.git
 
-[submodule "shynur-elpa/holo-layer"]
-    path = shynur-elpa/holo-layer
+[submodule "local-elpa/holo-layer"]
+    path = local-elpa/holo-layer
     url = git@github.com:manateelazycat/holo-layer.git
 
-[submodule "site-lisp/lsp-bridge"]
-    path = shynur-elpa/lsp-bridge
+[submodule "local-elpa/lsp-bridge"]
+    path = local-elpa/lsp-bridge
     url = git@github.com:manateelazycat/lsp-bridge.git
 
 [submodule "modules/src/pop-select"]

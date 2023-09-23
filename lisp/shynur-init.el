@@ -94,7 +94,7 @@
 (require 'shynur-server)   ; (find-file-other-window "./shynur-server.el")
 (require 'shynur-lang)     ; (find-file-other-window "./shynur-lang.el")
 (require 'shynur-stu)      ; (find-file-other-window "./shynur-stu.el")
-(require 'shynur-net)      ; (find-file-other-window "./shynur-net.el")
+(require 'shynur-cyber)    ; (find-file-other-window "./shynur-cyber.el")
 (require 'shynur-kbd)      ; (find-file-other-window "./shynur-kbd.el")
 (require 'shynur-sh)       ; (find-file-other-window "./shynur-sh.el")
 (require 'shynur-amuse)    ; (find-file-other-window "./shynur-amuse.el")

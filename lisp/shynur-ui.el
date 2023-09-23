@@ -229,12 +229,12 @@
       tab-line-separator "")
 ;; Tab line 就是为了方便使用鼠标而存在的, 直接用鼠标点就行了.
 (setq tab-line-switch-cycling nil)
-(setq-default tab-line-format `(:eval (mapcar ',(lambda (buffer-tab-line-name)
-                                                  (concat (if (get-buffer buffer-tab-line-name)
-                                                              (with-current-buffer buffer-tab-line-name
-                                                                (require 'all-the-icons)
-                                                                (all-the-icons-icon-for-buffer))
-                                                            "") buffer-tab-line-name))
+(setq-default tab-line-format `(:eval (mapcar ',(prog1 (lambda (buffer-tab-line-name)
+                                                         (concat (if (get-buffer buffer-tab-line-name)
+                                                                     (with-current-buffer buffer-tab-line-name
+                                                                       (all-the-icons-icon-for-buffer))
+                                                                   "") buffer-tab-line-name))
+                                                  (require 'all-the-icons))
                                               (tab-line-format))))
 
 (global-tab-line-mode)
@@ -375,16 +375,16 @@
 ;;; 果冻光标
 ;; GNU/Linux
 (setq holo-layer-python-command shynur/custom:python-path)
-(setq holo-layer-cursor-alpha 140
+(setq holo-layer-enable-cursor-animation t
+      holo-layer-cursor-alpha 140
       holo-layer-cursor-animation-duration 170
       holo-layer-cursor-animation-interval 30
       holo-layer-cursor-animation-type "jelly")
 (with-eval-after-load 'holo-layer
-  (when (eq system-type 'gnu/linux)
-    (setq holo-layer-enable-cursor-animation t)
-    ;; 重复调用是安全的.
-    (holo-layer-enable)))
-(require 'holo-layer nil t)
+  ;; 重复调用是安全的.
+  (holo-layer-enable))
+(when (eq system-type 'gnu/linux)
+  (require 'holo-layer nil t))
 ;; MS-Windows
 (with-eval-after-load 'pop-select
   (let (shynur--cursor-animation?)
@@ -527,8 +527,10 @@
       hscroll-step 1)
 
 ;;; Tooltip:
+(require 'tooltip)
 
-;; (setq tooltip-frame-parameters ...) 还没想好要设置什么.
+(require 'let-alist)
+(let-alist tooltip-frame-parameters)
 
 (setq tooltip-delay       0
       tooltip-short-delay 0

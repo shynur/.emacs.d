@@ -29,8 +29,22 @@
   (set-text-properties beginning end
                        (text-properties-at same-as-where)))
 
+(defun shynur/desemi ()
+  (interactive)
+  (goto-char 1)
+  (while (re-search-forward "，\\|、" nil t)
+    (replace-match ", " nil nil))
+  (goto-char 1)
+  (while (re-search-forward "。" nil t)
+    (replace-match ".  " nil nil))
+  (goto-char 1)
+  (while (re-search-forward "：" nil t)
+    (replace-match ": " nil nil))
+  (goto-char 1)
+  (while (re-search-forward "（\\(:1.*?\\)）" nil t)
+    (replace-match " (\1) " nil nil)))
 
-(provide 'shynur-lib)
+(provide 'mylib)
 
 ;; Local Variables:
 ;; coding: utf-8-unix

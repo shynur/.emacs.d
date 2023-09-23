@@ -28,6 +28,7 @@
               ;; For Chinese characters.
               (set-fontset-font t '(#x4e00 . #x9fff)
                                 (font-spec :family family)))
+
             (custom-set-faces
              '(cursor
                ((t . (:background "chartreuse")))
@@ -52,13 +53,15 @@
                        :weight black))))
              '(window-divider
                ((t . (:foreground "SlateBlue4"))))
-             ;; (我把 ‘indent-guide’ 删了.)
+             ;; ;; 我把 ‘indent-guide’ 删了.
              ;; (setq indent-guide-recursive t
              ;;       indent-guide-char "\N{BOX DRAWINGS LIGHT VERTICAL}")
              '(indent-guide-face
                ((t . (:foreground "dark sea green"))))
              '(fill-column-indicator
-               ((t . ( :background "black"
+               ((t . ( :inherit shadow
+                       :height  unspecified
+                       :background "black"
                        :foreground "yellow")))))))
 
 ;;; Frame:
@@ -297,9 +300,10 @@
 (setq doom-modeline-height 1)
 (doom-modeline-mode)
 
-(column-number-mode)
 ;; 从 1 开始计数.
-(setq mode-line-position-column-format '(" " "C%C" " "))
+(setq mode-line-position-column-format '(" " "C%C" " ")
+      doom-modeline-column-zero-based nil)
+(column-number-mode)
 
 ;; Face ‘mode-line-inactive’ for non-selected window’s mode line.
 (setq mode-line-in-non-selected-windows t)

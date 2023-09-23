@@ -85,6 +85,8 @@ h3<. Documentation Bug
 
 ??elisp?? hash-notation, @#[...@
 
+??elisp?? 27.1.3 Making and Deleting Numbered Backup Files: Dired command
+
 h3<. Code Error
 
 ###.. Texitle 格式说明 见 "$":https://textile-lang.com.

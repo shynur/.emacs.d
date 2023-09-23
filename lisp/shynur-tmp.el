@@ -33,9 +33,7 @@
                                        (shynur/custom:appdata/ transient-levels-file el)
                                        (shynur/custom:appdata/ transient-values-file el)
                                        (shynur/custom:appdata/ tramp-persistency-file-name el)
-                                       (shynur/custom:appdata/ tramp-auto-save-directory /)
                                        (shynur/custom:appdata/ filesets-menu-cache-file el)
-                                       (shynur/custom:appdata/ auto-save-list-file-prefix /)
                                        (shynur/custom:appdata/ bookmark-default-file el)
                                        (shynur/custom:appdata/ url-cache-directory /)
                                        (shynur/custom:appdata/ url-cookie-file)
@@ -532,13 +530,8 @@
  '(query-about-changed-file t
                             nil (files)
                             "外部改动发生后,重新访问已经读取到buffer中的文件时,询问是否要revert")
- '(make-backup-files t
-                     nil (files))
  '(vc-make-backup-files nil
                         nil (vc-hooks))
- '(version-control nil
-                   nil (files)
-                   "对numbered-backup文件制作number-backup;否则,制作单备份")
  '(file-preserve-symlinks-on-save t
                                   nil (files))
  '(write-region-inhibit-fsync t)
@@ -547,46 +540,6 @@
                     "当对文件关联的buffer作出首个改动时,给文件上锁")
  '(remote-file-name-inhibit-locks nil
                                   nil (files))
- '(revert-buffer-with-fine-grain-max-seconds most-positive-fixnum
-                                             nil (files))
- '(revert-buffer-quick-short-answers t
-                                     nil (files))
- '(global-auto-revert-mode t
-                           nil (autorevert))
- '(auto-revert-verbose t
-                       nil (autorevert))
- '(auto-revert-remote-files t
-                            nil (autorevert))
- '(auto-revert-use-notify t
-                          nil (autorevert))
- '(auto-revert-avoid-polling t
-                             nil (autorevert)
-                             "默认情况下‘auto-revert-mode’同时使用被动的OS级file-notification和主动的poll(poll在编辑remote-file时无可替代),该变量关闭polling")
- '(global-auto-revert-non-file-buffers t
-                                       nil (autorevert))
- '(auto-revert-interval 5
-                        nil (autorevert)
-                        "buffer-menu只使用poll更新")
- '(auto-revert-check-vc-info t
-                             nil (autorevert)
-                             "autorevert时检查VC状态,即使文件没有修改时也检查")
- '(buffer-auto-revert-by-notification t
-                                      nil (files)
-                                      "dired可以使用file-notification")
- '(auto-save-interval 20
-                      nil ()
-                      "键入如此之多个character之后auto-save")
- '(auto-save-timeout 30
-                     nil ()
-                     "经过如此之多的秒数的idleness之后auto-save,还可能执行一次GC.(这是一条heuristic的建议,Emacs可以不遵循,e.g.,编辑大文件)")
- '(auto-save-no-message nil)
- '(delete-auto-save-files t
-                          nil ()
-                          "“C-x C-s”会自动删除auto-save-file")
- '(kill-buffer-delete-auto-save-files nil)
- '(auto-save-default t
-                     nil (files)
-                     "Emacs在发生致命错误(e.g.,“kill %emacs”)时会直接触发auto-save")
  '(list-directory-brief-switches "-C --classify"
                                  nil (files))
  '(list-directory-verbose-switches "-1 --almost-all --author --color=auto --classify --format=verbose --human-readable --size --sort=extension --time-style=long-iso"

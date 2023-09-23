@@ -16,7 +16,7 @@
 
                      ("/\\.nosearch\\'" . text-mode)
                      ("/[^/[:blank:]]+\\.ya?ml\\'" . yaml-mode)
-                     ("/etc/yas-snippets/[^/[:blank:]]+-mode/\\(?:\\.yas-skip\\|\\.yas-parents\\|[^/[:blank:]]+\\.yasnippet\\)\\'" . snippet-mode)
+                     ("/var/yas-snippets/[^/[:blank:]]+-mode/\\(?:\\.yas-skip\\|\\.yas-parents\\|[^/[:blank:]]+\\.yasnippet\\)\\'" . snippet-mode)
 
                      ("/\\.gitignore\\'" . gitignore-mode)
                      ("/\\.gitmodules\\'" . gitconfig-mode)
@@ -24,14 +24,15 @@
                      ("/media/images/shynur-[^/]+\\.xpm\\'" . c-mode)
                      ))
 
- (nil . ((outline-minor-mode-cycle . t)
+ (nil . ((make-backup-files . nil)
+         (mode . auto-save)
+         (auto-revert-verbose . nil)
+
+         (outline-minor-mode-cycle . t)
          (outline-minor-mode-prefix . [nil])
 
          (lexical-binding . t)
          (no-byte-compile . t)
-
-         (mode . auto-save)
-         (auto-revert-verbose . nil)
 
          (project-vc-merge-submodules . nil)
 
@@ -122,15 +123,13 @@
 
  (yaml-mode . ((tab-width . 2)))
 
- ("etc/yas-snippets/" . ((snippet-mode . ((require-final-newline . nil)
-                                          (mode . whitespace-newline)
-
-                                          (shynur/.emacs.d:add-coding-at-propline? . t)))))
-
  ("media/images/" . ((nil . ((mode . image-minor)))))
 
- ;; TODO: 希望只对用户 read-only.
- ("var/" . ((nil . ())))
+ ("var/" . ((nil . ())
+            ("yas-snippets/" . ((snippet-mode . ((require-final-newline . nil)
+                                                 (mode . whitespace-newline)
+
+                                                 (shynur/.emacs.d:add-coding-at-propline? . t)))))))
 
  ("local-elpa/" . ((nil . ((before-save-hook . (t))))))
 

@@ -7,27 +7,27 @@
 
 (define-abbrev-table 'sql-mode-abbrev-table
   `(
-    ("BtAd" "BETWEEN AND "
+    ("btad" "BETWEEN AND "
      ,(lambda nil (backward-char 5)))
-    ("Ct" "COUNT)"
+    ("ct" "COUNT)"
      backward-char)
-    ("Dp" "DROP")
-    ("Dstct" "DISTINCT")
-    ("GrpB" "GROUP BY")
-    ("Hv" "HAVING")
-    ("I" "IN)"
+    ("dstct" "DISTINCT")
+    ("grpb" "GROUP BY")
+    ("i" "IN)"
      backward-char)
-    ("IsN" "IS NULL")
-    ("IstIt" "INSERT INTO")
-    ("Lk" "LIKE '"
+    ("isn" "IS NULL")
+    ("istit" "INSERT INTO")
+    ("injo" "INNER JOIN ON "
+     ,(lambda () (backward-char 4)))
+    ("lk" "LIKE '"
      backward-char)
-    ("OdB" "ORDER BY")
-    ("SlctFr" "SELECT FROM "
+    ("odb" "ORDER BY")
+    ("prmrk" "PRIMARY KEY")
+    ("ntn" "NOT NULL")
+    ("slctfr" "SELECT FROM "
      ,(lambda () (backward-char 6)))
-    ("Tb" "TABLE")
-    ("Vls" "VALUES)"
+    ("vls" "VALUES)"
      backward-char)
-    ("We" "WHERE")
    ))
 
 ;; Local Variables:

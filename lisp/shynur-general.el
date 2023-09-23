@@ -134,6 +134,52 @@
 ;; 不清除 字体 缓存.
 (setq inhibit-compacting-font-caches t)
 
+;;; Backup & Auto-Saving & Reverting:
+
+(setopt make-backup-files t
+        ;; 备份到哪个目录列表, 默认为当前目录.
+        backup-directory-alist ())
+(setopt backup-by-copying nil
+        backup-by-copying-when-linked t
+        ;; 当不 copy 就会改变文件的 owner/group 时,
+        backup-by-copying-when-mismatch t
+        ;; 对所有用户应用 ‘backup-by-copying-when-mismatch’.
+        backup-by-copying-when-privileged-mismatch most-positive-fixnum)
+(setopt version-control nil  ; 自动选择是否使用记数备份 (e.g., “file.txt.~42~”).
+        kept-old-versions 1  ; 仅保留最初版本
+        kept-new-versions 3  ; 和 3 个最新版本.
+        delete-old-versions t
+        ;; 执行 ‘dired-clean-directory’ 时保留的新版本数.
+        dired-kept-versions kept-new-versions)
+
+;; 此外, Emacs 在发生致命错误 (e.g., “kill %emacs”) 时会直接触发自动保存.
+(setopt auto-save-default t
+        auto-save-no-message nil)
+(setopt auto-save-interval 20  ; 键入这么多个字符之后触发自动保存.
+        ;; 经过这么多秒数的 idleness 之后触发自动保存,
+        ;; 还可能执行一次 GC (这是一条 heuristic 的建议, Emacs 可以不遵循, e.g., 当编辑大文件时).
+        auto-save-timeout 30)
+(setopt delete-auto-save-files t  ; 保存时自动删除 auto-save-file.
+        kill-buffer-delete-auto-save-files nil)
+(shynur/custom:appdata/ tramp-auto-save-directory /)
+(shynur/custom:appdata/ auto-save-list-file-prefix /)
+
+(setopt revert-without-query '("[^z-a]")  ; 调用 ‘revert-buffer’ 时无需确认.
+        revert-buffer-quick-short-answers t)
+(setq revert-buffer-with-fine-grain-max-seconds most-positive-fixnum)
+(setopt auto-revert-use-notify t
+        ;; 默认同时使用被动的 OS 级 file-notification 和主动的 poll (poll 在编辑 remote-file 时无可替代).
+        ;; 在此关闭 polling.
+        auto-revert-avoid-polling t)
+(setq-local buffer-auto-revert-by-notification t)  ; E.g., 令 Dired 使用 file-notification.
+(setopt auto-revert-remote-files t
+        global-auto-revert-non-file-buffers t
+        ;; Auto-revert 时还检查 VC 状态, 即使文件没有修改时也检查.
+        auto-revert-check-vc-info t)
+(setopt auto-revert-verbose t)
+(setopt auto-revert-interval 5)  ; Buffer-menu 只使用 poll 更新.
+(global-auto-revert-mode)
+
 (provide 'shynur-general)
 
 ;; Local Variables:

@@ -79,7 +79,7 @@
 
 ;;; Snippet
 (setq yas-snippet-dirs `(,(file-name-concat user-emacs-directory
-                                            "etc/yas-snippets/")))
+                                            "var/yas-snippets/")))
 (require 'yasnippet)
 (yas-reload-all)
 (keymap-set yas-minor-mode-map "TAB"

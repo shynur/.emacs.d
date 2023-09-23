@@ -102,7 +102,6 @@
 (require 'shynur-profile)  ; (find-file-other-window "./shynur-profile.el")
 (require 'shynur-startup)  ; (find-file-other-window "./shynur-startup.el")
 (require 'shynur-ui)       ; (find-file-other-window "./shynur-ui.el")
-(require 'shynur-lib)      ; (find-file-other-window "./shynur-lib.el")
 
 ;;; After Loading Init File
 

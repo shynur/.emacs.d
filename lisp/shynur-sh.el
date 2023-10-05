@@ -1,6 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
-(keymap-global-set "C-z" #'shell)
+;; 真的需要换绑吗?  虽说在 MS-Windows 上有 “Alt+Tab” 平替.
+;; (keymap-global-set "C-z" #'shell)
 
 ;;; ‘eshell’:
 
@@ -10,7 +11,7 @@
 
 (add-hook 'eshell-mode-hook
           (lambda ()
-            "‘eshell’中‘company-mode’卡得一批."
+            "‘eshell’ 中 ‘company-mode’ 卡得一批."
             (company-mode -1)))
 
 ;;; ‘shell’:

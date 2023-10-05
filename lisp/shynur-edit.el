@@ -11,35 +11,38 @@
 
 ;;; Deletion:
 
-(progn
-  (require 'cc-mode)
-  (advice-add 'backward-kill-word :before-while
-              (lambda (arg)
-                "前面顶多只有空白字符 或 后面顶多只有空白字符且前面有空白字符 时,删除前方所有空白"
-                (if (and (called-interactively-p 'any)  ; 只在使用键盘且
-                         ;; 没有前缀参数时执行.
-                         (= 1 arg)
-                         (or (save-match-data
-                               (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=") nil))
-                             (and (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
-                                  (save-match-data
-                                    (looking-back (concat search-whitespace-regexp "\\=") nil)))))
-                    (prog1 nil
-                      (c-hungry-delete))
-                  t)))
-  (advice-add 'kill-word :before-while
-              (lambda (arg)
-                "后面顶多只有空白字符 或 前面顶多只有空白字符且后面有空白字符 时, 删除后面所有空白"
-                (if (and (called-interactively-p 'any)  ; 只在使用键盘且
-                         ;; 没有前缀参数时执行.
-                         (= 1 arg)
-                         (or (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
-                             (and (save-match-data
-                                    (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=") nil))
-                                  (looking-at-p (concat "\\=" search-whitespace-regexp)))))
-                    (prog1 nil
-                      (c-hungry-delete-forward))
-                  t))))
+(require 'cc-mode)
+(advice-add 'backward-kill-word :before-while
+            (lambda (arg)
+              "若间断地调用该命令, 则当 前面顶多只有空白字符 或 后面顶多只有空白字符且前面有空白字符 时, 删除前方所有空白."
+              (if (and (called-interactively-p 'any)  ; 只在使用键盘, 且
+                       ;; 没有前缀参数时执行.
+                       (= 1 arg)
+                       ;; 只在第一次调用时, 考虑是否要清除空白.
+                       (not (eq real-last-command 'backward-kill-word))
+                       (or (save-match-data
+                             (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=") nil))
+                           (and (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
+                                (save-match-data
+                                  (looking-back (concat search-whitespace-regexp "\\=") nil)))))
+                  (prog1 nil
+                    (c-hungry-delete))
+                t)) '((name . "shynur/edit: delete whitespaces hungrily")))
+(advice-add 'kill-word :before-while
+            (lambda (arg)
+              "若间断地调用该命令, 则当 后面顶多只有空白字符 或 前面顶多只有空白字符且后面有空白字符 时, 删除后面所有空白."
+              (if (and (called-interactively-p 'any)  ; 只在使用键盘, 且
+                       ;; 没有前缀参数时执行.
+                       (= 1 arg)
+                       ;; 只在第一次调用时, 考虑是否要清除空白.
+                       (not (eq real-last-command 'kill-word))
+                       (or (looking-at-p (concat "\\=\\(" search-whitespace-regexp "\\)?$"))
+                           (and (save-match-data
+                                  (looking-back (concat "^\\(" search-whitespace-regexp "\\)?\\=") nil))
+                                (looking-at-p (concat "\\=" search-whitespace-regexp)))))
+                  (prog1 nil
+                    (c-hungry-delete-forward))
+                t)) '((name . "shynur/edit: delete whitespaces hungrily")))
 
 ;;; Predefined Text:
 

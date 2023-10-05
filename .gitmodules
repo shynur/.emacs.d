@@ -1,19 +1,10 @@
-[submodule "local-elpa/copilot.el"]
-    path = local-elpa/copilot.el
-    url = git@github.com:zerolfx/copilot.el.git
-
 [submodule "local-elpa/holo-layer"]
     path = local-elpa/holo-layer
     url = git@github.com:manateelazycat/holo-layer.git
 
-[submodule "local-elpa/lsp-bridge"]
-    path = local-elpa/lsp-bridge
-    url = git@github.com:manateelazycat/lsp-bridge.git
-
 [submodule "modules/src/pop-select"]
     path = modules/src/pop-select
     url = git@github.com:lynnux/pop-select.git
-
 
 # Local Variables:
 # coding: utf-8-unix

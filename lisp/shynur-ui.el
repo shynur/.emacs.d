@@ -60,7 +60,7 @@
                ((t . (:foreground "dark sea green"))))
              '(fill-column-indicator
                ((t . ( :inherit shadow
-                       :height  unspecified
+                       :height  unspecified  ; 使其跟随整体缩放.
                        :background "black"
                        :foreground "yellow")))))))
 
@@ -140,10 +140,10 @@
 ;;; Frame Title:
 
 (setq frame-title-format (prog1 '("" default-directory "  " shynur/ui:frame-title)
-                           (defvar shynur/ui:frame-title "21st GC (4s total): 742.3M VM, 3:20 runtime, 455/546 key/event"
-                             "执行 垃圾回收 的 次数 (它们总共花费 4 秒): (截至这一次 垃圾回收 时) 估算 Emacs 虚拟内存的占用, 小时:分钟 运行时间, number of key-sequences/input-events processed")
+                           (defvar shynur/ui:frame-title "21st🧹(4s): 💾623.1MiB ⏱️3:20 🎹455/546"
+                             "执行 垃圾回收 的 次数 (它们总共花费 4 秒): (截至这一次 垃圾回收 时) 估算 Emacs 内存的占用 (不包括已分配但未使用的内存), 小时:分钟 运行时间, number of key-sequences/input-events processed")
                            (let ((shynur/ui:frame-title-updater (lambda ()
-                                                                  (setq shynur/ui:frame-title (format-spec "%N GC (%ts total): %M VM, %T runtime, %k key/event"
+                                                                  (setq shynur/ui:frame-title (format-spec "%N🧹(%ts): 💾%M ⏱️%T 🎹%k"
                                                                                                            `((?N . ,(format "%d%s"
                                                                                                                             gcs-done
                                                                                                                             (pcase (mod gcs-done 10)
@@ -155,10 +155,14 @@
                                                                                                              (?M . ,(progn
                                                                                                                       (eval-when-compile
                                                                                                                         (require 'cl-lib))
-                                                                                                                      (cl-loop for shynur--memory = (memory-limit) then (/ shynur--memory 1024.0)
+                                                                                                                      (cl-loop for shynur--memory
+                                                                                                                               ;; 这里算的是实际物理内存, 若要算虚拟内存, 请用 ‘memory-limit’.
+                                                                                                                               = (let ((default-directory temporary-file-directory))
+                                                                                                                                   (alist-get 'rss (process-attributes (emacs-pid))))
+                                                                                                                               then (/ shynur--memory 1024.0)
                                                                                                                                for shynur--memory-unit across "KMGT"  ; 可能占用 1 TiB 内存吗?
                                                                                                                                when (< shynur--memory 1024)
-                                                                                                                               return (format "%.1f%c"
+                                                                                                                               return (format "%.1f%ciB"
                                                                                                                                               shynur--memory
                                                                                                                                               shynur--memory-unit))))
                                                                                                              (?T . ,(emacs-uptime "%h:%.2m"))

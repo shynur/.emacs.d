@@ -45,6 +45,7 @@
                                   neotree
                                   git-modes
                                   highlight
+                                  on-screen
                                   which-key
                                   yaml-mode
                                   yasnippet

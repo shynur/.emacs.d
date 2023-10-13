@@ -66,6 +66,21 @@
 
 ;;; Frame:
 
+;; 默认位置 (显示器相关)
+(add-to-list 'default-frame-alist '(left  . 301))
+(add-to-list 'default-frame-alist '(width . 66))
+(add-to-list 'default-frame-alist '(top    . 121))
+(add-to-list 'default-frame-alist '(height . 26))
+
+;; 将 frame 恢复到 默认 尺寸和位置.
+(keymap-global-set "C-c z"
+                   (lambda ()
+                     (interactive)
+                     (set-frame-parameter nil 'fullscreen nil)
+                     (let-alist default-frame-alist
+                       (set-frame-position nil .left .top)
+                       (set-frame-size nil .width .height))))
+
 ;; 使 frame 根据 背景色的 亮暗, 让 face 自行选择对应的方案.
 (setq frame-background-mode nil)
 
@@ -139,88 +154,75 @@
 
 ;;; Frame Title:
 
-(setq frame-title-format (prog1 '("" default-directory "  " shynur/ui:frame-title)
-                           (defvar shynur/ui:frame-title "21st🧹(4s): 💾623.1MiB ⏱️3:20 🎹455/546"
-                             "执行 垃圾回收 的 次数 (它们总共花费 4 秒): (截至这一次 垃圾回收 时) 估算 Emacs 内存的占用 (不包括已分配但未使用的内存), 小时:分钟 运行时间, number of key-sequences/input-events processed")
-                           (let ((shynur/ui:frame-title-updater (lambda ()
-                                                                  (setq shynur/ui:frame-title (format-spec "%N🧹(%ts): 💾%M ⏱️%T 🎹%k"
-                                                                                                           `((?N . ,(format "%d%s"
-                                                                                                                            gcs-done
-                                                                                                                            (pcase (mod gcs-done 10)
-                                                                                                                              (1 "st")
-                                                                                                                              (2 "nd")
-                                                                                                                              (3 "rd")
-                                                                                                                              (_ "th"))))
-                                                                                                             (?t . ,(round gc-elapsed))
-                                                                                                             (?M . ,(progn
-                                                                                                                      (eval-when-compile
-                                                                                                                        (require 'cl-lib))
-                                                                                                                      (cl-loop for shynur--memory
-                                                                                                                               ;; 这里算的是实际物理内存, 若要算虚拟内存, 请用 ‘memory-limit’.
-                                                                                                                               = (let ((default-directory temporary-file-directory))
-                                                                                                                                   (alist-get 'rss (process-attributes (emacs-pid))))
-                                                                                                                               then (/ shynur--memory 1024.0)
-                                                                                                                               for shynur--memory-unit across "KMGT"  ; 可能占用 1 TiB 内存吗?
-                                                                                                                               when (< shynur--memory 1024)
-                                                                                                                               return (format "%.1f%ciB"
-                                                                                                                                              shynur--memory
-                                                                                                                                              shynur--memory-unit))))
-                                                                                                             (?T . ,(emacs-uptime "%h:%.2m"))
-                                                                                                             ;; 鼠标滚轮 也属于 key-sequences/input-events,
-                                                                                                             ;; 但在这里它 (特别是开启像素级滚动) 显然不合适 :(
-                                                                                                             (?k . ,(format "%d/%d"
-                                                                                                                            num-input-keys
-                                                                                                                            num-nonmacro-input-events))))))))
-                             (funcall shynur/ui:frame-title-updater)
-                             (add-hook 'post-gc-hook
-                                       shynur/ui:frame-title-updater)))
-      icon-title-format (progn
-                          (defvar shynur/ui:icon-title nil)
-                          `(:eval (prog1 'shynur/ui:icon-title
-                                    (setq shynur/ui:icon-title (mapconcat ,(lambda (buffer)
-                                                                             "以 “[buffer1] [buffer2] ... [buffer3]” 的方式 不重复地 列出 frame 中的 window 显示的 buffer."
-                                                                             (with-current-buffer buffer
-                                                                               (format "[%s]"
-                                                                                       (buffer-name)))) (delete-dups (mapcar (lambda (window)
-                                                                                                                               (with-selected-window window
-                                                                                                                                 (current-buffer))) (window-list)))
-                                                                                       "\s"))))))
+(setq frame-title-format '("" default-directory
+                           "\t" "🧹x" (:eval (number-to-string gcs-done))
+                           "" " (" (:eval (number-to-string (round gc-elapsed))) "s): "
+                           "" "💾" (:eval (prog1 'shynur/emacs:rss
+                                            (put 'shynur/emacs:rss :test-times (1+ (or (get 'shynur/emacs:rss :test-times) 1)))
+                                            ;; 每查询一定量的次数才更新, 从而减少 ‘process-attributes’ 的调用次数以提高性能.
+                                            (when (zerop (mod (get 'shynur/emacs:rss :test-times) 50))
+                                              (eval-when-compile (require 'cl-lib))
+                                              ;; 将 ‘shynur/emacs:rss’ 设为形如 “823.1MiB” 这样的字符串.
+                                              (set 'shynur/emacs:rss (cl-loop for shynur--memory = (let ((default-directory temporary-file-directory))
+                                                                                                     ;; 这里算的是实际物理内存, 若要算虚拟内存, 请用 ‘memory-limit’.
+                                                                                                     (alist-get 'rss (process-attributes (emacs-pid)))) then (/ shynur--memory 1024.0)
+                                                                              for shynur--memory-unit across "KMGTPEZ"
+                                                                              when (< shynur--memory 1024) return (format "%.1f%ciB"
+                                                                                                                          shynur--memory
+                                                                                                                          shynur--memory-unit))))))
+                           "" "⏱️" (:eval (emacs-uptime "%h:%.2m")) " "
+                           ;; 鼠标滚轮 也属于 key-sequences/input-events, 但在这里它 (特别是开启像素级滚动) 显然不合适.
+                           ;; 将 CAR 上的 t 改为 nil 以关闭该功能.
+                           (t ("" "🎹" (:eval (number-to-string num-input-keys)) "/" (:eval (number-to-string num-nonmacro-input-events)))))
+      icon-title-format `((:eval (prog1 #1='#:icon-title  ; 相当于一次性的 frame local variable, 因为 每个 frame 的 icon-title 是不一样的.
+                                   (set #1# (mapconcat ',(lambda (buffer)
+                                                           "以 “[buffer1] [buffer2] ...” 的方式 (限定宽度) 不重复地 列出 frame 中正在显示的 buffer."
+                                                           (with-current-buffer buffer
+                                                             (format "[%.5s]"
+                                                                     (buffer-name))))
+                                                       (delete-dups (mapcar ',(lambda (window)
+                                                                                (with-selected-window window
+                                                                                  (current-buffer)))
+                                                                            (window-list)))
+                                                       "\s"))))))
 
 ;;; Menu Bar:
 
-(keymap-global-unset "<menu-bar> <file> <open-file>")
-(keymap-global-unset "<menu-bar> <file> <kill-buffer>")
-(keymap-global-unset "<menu-bar> <file> <make-tab>")
 (keymap-global-unset "<menu-bar> <file> <close-tab>")
-(keymap-global-unset "<menu-bar> <file> <exit-emacs>")
 (keymap-global-unset "<menu-bar> <file> <delete-this-frame>")
+(keymap-global-unset "<menu-bar> <file> <exit-emacs>")
+(keymap-global-unset "<menu-bar> <file> <kill-buffer>")
 (keymap-global-unset "<menu-bar> <file> <make-frame>")
+(keymap-global-unset "<menu-bar> <file> <make-tab>")
 (keymap-global-unset "<menu-bar> <file> <new-window-below>")
 (keymap-global-unset "<menu-bar> <file> <new-window-on-right>")
 (keymap-global-unset "<menu-bar> <file> <one-window>")
+(keymap-global-unset "<menu-bar> <file> <open-file>")
 (keymap-global-unset "<menu-bar> <file> <save-buffer>")
 
-(keymap-global-unset "<menu-bar> <edit> <undo>")
-(keymap-global-unset "<menu-bar> <edit> <undo-redo>")
-(keymap-global-unset "<menu-bar> <edit> <cut>")
 (keymap-global-unset "<menu-bar> <edit> <copy>")
-(keymap-global-unset "<menu-bar> <edit> <paste>")
+(keymap-global-unset "<menu-bar> <edit> <cut>")
 (keymap-global-unset "<menu-bar> <edit> <mark-whole-buffer>")
+(keymap-global-unset "<menu-bar> <edit> <paste>")
+(keymap-global-unset "<menu-bar> <edit> <undo-redo>")
+(keymap-global-unset "<menu-bar> <edit> <undo>")
 
 (keymap-global-unset "<menu-bar> <options> <cua-mode>")
-(keymap-global-unset "<menu-bar> <options> <save>")
 (keymap-global-unset "<menu-bar> <options> <customize> <customize-saved>")
+(keymap-global-unset "<menu-bar> <options> <save>")
 
 (keymap-global-unset "<menu-bar> <buffer> <select-named-buffer>")
 
+(keymap-global-unset "<menu-bar> <tools> <browse-web>")
 (keymap-global-unset "<menu-bar> <tools> <gnus>")
 
-(keymap-global-unset "<menu-bar> <help-menu> <emacs-manual>")
-(keymap-global-unset "<menu-bar> <help-menu> <getting-new-versions>")
-(keymap-global-unset "<menu-bar> <help-menu> <describe-copying>")
-(keymap-global-unset "<menu-bar> <help-menu> <describe-no-warranty>")
 (keymap-global-unset "<menu-bar> <help-menu> <about-emacs>")
 (keymap-global-unset "<menu-bar> <help-menu> <about-gnu-project>")
+(keymap-global-unset "<menu-bar> <help-menu> <describe-copying>")
+(keymap-global-unset "<menu-bar> <help-menu> <describe-no-warranty>")
+(keymap-global-unset "<menu-bar> <help-menu> <emacs-manual>")
+(keymap-global-unset "<menu-bar> <help-menu> <getting-new-versions>")
+(keymap-global-unset "<menu-bar> <help-menu> <more-manuals> <order-emacs-manuals>")
 
 ;;; Tool Bar:
 
@@ -525,10 +527,11 @@
       scroll-minibuffer-conservatively t)
 
 ;; Scroll 时 通过 高亮 即将 滚走/来 的 篇幅 以 提示 滚动方向.
-;; (这个包被我删了.)
-(setq on-screen-inverse-flag t
-      on-screen-highlight-method 'shadow
-      on-screen-delay 0.4)
+;; (仅在翻阅 ‘*Completions*’ buffer 的候选词时启用.)
+(setopt on-screen-inverse-flag t
+        on-screen-highlight-method 'shadow
+        on-screen-delay 0.4)
+(add-hook 'completion-list-mode-hook #'on-screen-mode)
 
 ;;; Horizontal
 (setq hscroll-margin 5

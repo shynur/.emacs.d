@@ -43,31 +43,34 @@
                   (prog1 nil
                     (c-hungry-delete-forward))
                 t)) '((name . "shynur/edit: delete whitespaces hungrily")))
+
+(setopt delete-active-region t)  ; 当 选中 region 时, 与删除相关的命令可以删除整个 region.
 
 ;;; Predefined Text:
 
 ;;; Abbreviation
-(setq abbrev-file-name (prog1 (cl-some (lambda (.extension)
-                                         (let ((shynur--abbrev-file (file-name-concat user-emacs-directory
-                                                                                      "var" (concat "abbrev_defs" .extension))))
-                                           (when (file-exists-p shynur--abbrev-file)
-                                             shynur--abbrev-file))) load-suffixes)
-                         (add-hook 'after-init-hook
-                                   (lambda ()
-                                     (shynur/custom:appdata/ abbrev-file-name el))))
-      ;; 触发 ‘保存’ 时会询问, 此时可查看是否包含隐私信息.
-      save-abbrevs "ask")
+(setopt abbrev-file-name (prog1 (cl-some (lambda (.extension)
+                                           (let ((shynur--abbrev-file (file-name-concat user-emacs-directory
+                                                                                        "var" (concat "abbrev_defs" .extension))))
+                                             (when (file-exists-p shynur--abbrev-file)
+                                               shynur--abbrev-file))) load-suffixes)
+                           (add-hook 'after-init-hook
+                                     (lambda ()
+                                       (shynur/custom:appdata/ abbrev-file-name el))))
+        ;; 触发 保存 时不需要询问, 因为就算包含隐私信息 (也不需要担心), 也是存到了 ‘shynur/custom:appdata/’ 目录下,
+        ;; 而不是 Emacs 启动时会读取的 ‘abbrev_defs’ 库, 也就是那个被纳入 Git 管理的文件.
+        save-abbrevs 'silently)
 (set-register ?a `(file . ,(file-name-concat user-emacs-directory
-                                             "var" "abbrev_defs.el")))
+                                             "var" "abbrev_defs.el")))  ; “C-x r j a” 跳过去.
 (setq only-global-abbrevs nil
       abbrev-minor-mode-table-alist '())
 ;; ‘POSIX’ => “Portable Operating System Interface”
 ;; instead of “PORTABLE OPERATING SYSTEM INTERFACE”.
-(setq abbrev-all-caps nil)
-(setq abbrev-suggest t  ; 手动写下 expansion 时, 提示可以用 abbrev.
-      ;; 若写 abbrev 比手写 expansion 节约这么多字符数, 则启用 ‘abbrev-suggest’.
-      abbrev-suggest-hint-threshold 0)
-;; (customize-set-variable 'abbrev-mode t)
+(setopt abbrev-all-caps nil)
+(setopt abbrev-suggest t  ; 手动写下 expansion 时, 提示可以用 abbrev.
+        ;; 若写 abbrev 比手写 expansion 节约这么多字符数, 则启用 ‘abbrev-suggest’.
+        abbrev-suggest-hint-threshold 0)
+"(customize-set-variable 'abbrev-mode t)"
 (keymap-global-unset "C-x a i")  ; ‘inverse-add-{mode,global}-abbrev’
 (keymap-global-unset "C-x a e")  ; ‘expand-abbrev’
 
@@ -146,6 +149,29 @@
 
 ;; 选中文本后输入字符, 会先删除刚刚选择的文本, 再插入输入的字符.
 (delete-selection-mode)
+
+;; 整体移动 region.
+(defconst shynur/region:drag-map (let ((shynur/region:drag-map (make-sparse-keymap)))
+                                   (require 'drag-stuff)
+                                   (keymap-global-set           "C-c d M-<up>"    #'drag-stuff-up)
+                                   (keymap-set shynur/region:drag-map "M-<up>"    #'drag-stuff-up)
+                                   (put                                            'drag-stuff-up
+                                                                                   'repeat-map 'shynur/region:drag-map)
+                                   (keymap-global-set           "C-c d M-<down>"  #'drag-stuff-down)
+                                   (keymap-set shynur/region:drag-map "M-<down>"  #'drag-stuff-down)
+                                   (put                                            'drag-stuff-down
+                                                                                   'repeat-map 'shynur/region:drag-map)
+                                   (keymap-global-set           "C-c d M-<left>"  #'drag-stuff-left)
+                                   (keymap-set shynur/region:drag-map "M-<left>"  #'drag-stuff-left)
+                                   (put                                            'drag-stuff-left
+                                                                                   'repeat-map 'shynur/region:drag-map)
+                                   (keymap-global-set           "C-c d M-<right>" #'drag-stuff-right)
+                                   (keymap-set shynur/region:drag-map "M-<right>" #'drag-stuff-right)
+                                   (put                                            'drag-stuff-right
+                                                                                   'repeat-map 'shynur/region:drag-map)
+                                   shynur/region:drag-map)
+  "供 command 的 ‘repeat-map’ property 参考.
+按下 “C-c d” 后, 按住 “<Meta>” 不放, 再随意按 上/下/左/右 键, 整体挪动 region/当前行.")
 
 ;;; Jump:
 
@@ -159,6 +185,13 @@
       ;; 最后设置的 mark, 这相当于将 buffer 作为节点的路径;
       ;; 因此, 可以设置为较大的值.
       global-mark-ring-max most-positive-fixnum)
+
+;;; Time Stamp:
+
+(setopt time-stamp-format "%3a, %3b %01d, %Y")
+"E.g., (add-hook 'before-save-hook #'time-stamp)"
+(setopt time-stamp-active nil
+        time-stamp-warn-inactive t)
 
 (provide 'shynur-edit)
 

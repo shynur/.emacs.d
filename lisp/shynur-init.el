@@ -99,6 +99,7 @@
 (require 'shynur-sh)       ; (find-file-other-window "./shynur-sh.el")
 (require 'shynur-amuse)    ; (find-file-other-window "./shynur-amuse.el")
 (require 'shynur-edit)     ; (find-file-other-window "./shynur-edit.el")
+(require 'shynur-media)    ; (find-file-other-window "./shynur-media.el")
 (require 'shynur-profile)  ; (find-file-other-window "./shynur-profile.el")
 (require 'shynur-startup)  ; (find-file-other-window "./shynur-startup.el")
 (require 'shynur-ui)       ; (find-file-other-window "./shynur-ui.el")
@@ -110,6 +111,8 @@
 
 ;; Abbrev
 ;; “./shynur-edit.el”中已经设置过了.
+
+(require 'mylib)
 
 (provide 'shynur-init)
 

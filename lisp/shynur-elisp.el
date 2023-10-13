@@ -1,6 +1,4 @@
-;;; -*- lexical-binding: t; -*-
-
-;;; 与 语言 核心 有关的 设置:
+;;; 与 语言 核心 有关的 设置.  -*- lexical-binding: t; -*-
 
 (setq print-gensym t)
 

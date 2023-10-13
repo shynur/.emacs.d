@@ -116,6 +116,8 @@
       ;; 如果一个 autoloaded 符号的 autoload 形式没有提供 docstring,
       ;; 那就加载包含它的定义的文件 以查看 docstring.
       help-enable-symbol-autoload t)
+
+(keymap-global-set "C-c s" #'shortdoc-display-group)
 
 ;;; 阅览:
 

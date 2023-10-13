@@ -250,9 +250,6 @@
  '(use-empty-active-region nil
                            nil (simple)
                            "有些命令的行为取决于是否有active region.  Region长度为0时应该让那些命令无视region,因为用户很难识别长度为0的region")
- '(delete-active-region t
-                        nil (simple)
-                        "当region是active时,删除命令删除整个region而非单个字符")
  '(set-mark-command-repeat-pop nil
                                nil (simple)
                                "置t的话,轮流跳转到‘mark-ring’中指定的位置时,只有第一次需要加‘C-u’前缀,后续全部只需要‘C-SPC’即可")
@@ -796,96 +793,6 @@
 (keymap-global-unset "C-M-c")    ; ‘exit-recursive-edit’
 (keymap-global-unset "C-]")      ; ‘abort-recursive-edit’
 (keymap-global-unset "C-x X a")  ; ‘abort-recursive-edit’
-
-(mapc (lambda (postkey-function)
-        (keymap-global-set (concat "C-c " (car postkey-function))
-                           (cdr postkey-function)))
-      `(("c" . ,#'highlight-changes-visible-mode)
-        ,@(prog1 '(("d M-<left>"  . drag-stuff-left)
-                   ("d M-<down>"  . drag-stuff-down)
-                   ("d M-<up>"    . drag-stuff-up)
-                   ("d M-<right>" . drag-stuff-right))
-            (defconst shynur/drag-stuff-map
-              (let ((shynur/drag-stuff-map (make-sparse-keymap)))
-                (require 'drag-stuff)
-                (define-key shynur/drag-stuff-map (kbd "M-<left>")
-                            #'drag-stuff-left)
-                (define-key shynur/drag-stuff-map (kbd "M-<down>")
-                            #'drag-stuff-down)
-                (define-key shynur/drag-stuff-map (kbd "M-<up>")
-                            #'drag-stuff-up)
-                (define-key shynur/drag-stuff-map (kbd "M-<right>")
-                            #'drag-stuff-right)
-                shynur/drag-stuff-map))
-            (progn
-              (require 'repeat)
-              (put #'drag-stuff-left  'repeat-map 'shynur/drag-stuff-map)
-              (put #'drag-stuff-down  'repeat-map 'shynur/drag-stuff-map)
-              (put #'drag-stuff-up    'repeat-map 'shynur/drag-stuff-map)
-              (put #'drag-stuff-right 'repeat-map 'shynur/drag-stuff-map)))
-        ("f" . ,(lambda ()
-                  "调用“clang-format --Werror --fallback-style=none --ferror-limit=0 --style=file:~/.emacs.d/etc/clang-format.yaml”.
-在 C 语系中直接 (整个 buffer 而不仅是 narrowed region) 美化代码, 否则美化选中区域."
-                  (interactive)
-                  (let ((clang-format shynur/custom:clang-format-path)
-                        (options `("--Werror"
-                                   "--fallback-style=none"
-                                   "--ferror-limit=0"
-                                   ,(format "--style=file:%s"
-                                            (expand-file-name "~/.emacs.d/etc/clang-format.yaml"))))
-                        (programming-language (pcase major-mode
-                                                ('c-mode    "c"   )
-                                                ('c++-mode  "cpp" )
-                                                ('java-mode "java")
-                                                ('js-mode   "js"  )
-                                                (_ (unless mark-active
-                                                     (user-error (shynur/message-format "无法使用“clang-format”处理当前语言")))))))
-                    (if (stringp programming-language)
-                        (shynur/save-cursor-relative-position-in-window
-                          ;; shynur/TODO:
-                          ;;     不确定这边的‘without-restriction’有没有必要,
-                          ;;   以及要不要和‘shynur/save-cursor-relative-position-in-window’互换位置.
-                          (without-restriction
-                            (apply #'call-process-region
-                                   1 (point-max) clang-format t t nil
-                                   (format "--assume-filename=a.%s" programming-language)
-                                   (format "--cursor=%d" (1- (point)))
-                                   options)
-                            (goto-char 1)
-                            (goto-char (1+ (string-to-number (prog1 (let ((case-fold-search nil))
-                                                                      (save-match-data
-                                                                        (buffer-substring-no-properties
-                                                                         (re-search-forward "\\`[[:blank:]]*{[[:blank:]]*\"Cursor\":[[:blank:]]*")
-                                                                         (re-search-forward "[[:digit:]]+"))))
-                                                               (delete-line)))))))
-                      (let ((formatted-code (let ((buffer-substring `(,(current-buffer) ,(region-beginning) ,(region-end))))
-                                              (with-temp-buffer
-                                                (apply #'insert-buffer-substring-no-properties
-                                                       buffer-substring)
-                                                (apply #'call-process-region
-                                                       1 (point-max) clang-format t t nil
-                                                       (format "--assume-filename=a.%s"
-                                                               (completing-read #("assume language: "
-                                                                                  0 16 (face italic))
-                                                                                '("c" "cpp" "java" "js" "json" "cs")))
-                                                       options)
-                                                (buffer-substring-no-properties 1 (point-max)))))
-                            (point-at-region-end (prog1 (= (point) (region-end))
-                                                   (delete-active-region))))
-                        (if point-at-region-end
-                            (insert formatted-code)
-                          (save-excursion
-                            (insert formatted-code))))))))
-        ("h" . ,#'hlt-highlight-region)
-        ("s" . ,#'shortdoc-display-group)
-        ("z" . ,(lambda ()
-                  "更换屏幕时记得修改这些参数"
-                  (interactive)
-                  (set-frame-parameter nil 'fullscreen nil)
-                  (set-frame-position nil 220 130)
-                  (set-frame-size nil 800 600 t)))))
-
-
 
 (provide 'shynur-tmp)
 

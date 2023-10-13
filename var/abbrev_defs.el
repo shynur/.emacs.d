@@ -7,14 +7,16 @@
 
 (defun shynur/abbrev:e.g.->E.g.\,\  ()
   "作为扩展的勾函数, 在用户键入 “eg”+逗号 后 (此处仅以 “eg” 为例), “eg” 被扩展为 “e.g.”, 然后,
-1. 判断是否需要首字母大写, 如有必要则将其替换为 “E.g.”.  (TODO: 有时未能识别出需要大写.)
-2. 在其后添加 逗号 和 空格.
+1. 判断是否需要首字母大写, 如有必要则将其替换为 “E.g.”.
+2. 在其后添加 逗号 和 空格 (TODO: 并删除原有的多余的空格).
 3. 阻止用户键入的那个 逗号 被插入."
   (save-excursion
     ;; 检测是否需要将 “e.g.” 替换为 “E.g.”.
     (backward-sentence)
-    (re-search-forward "[[:lower:]]")
-    (backward-char)
+    (re-search-forward (rx point
+                           (one-or-more (or (or ?\( ?\))
+                                            ?\s)))
+                       nil t 1)
     (when (= (point) last-abbrev-location)
       (upcase-char 1)))
   (insert ",\s")
@@ -25,6 +27,7 @@
 ;; TODO: 该 abbrev 表中的某些词条应当放入到 ‘text-mode-abbrev-table’ 中.
 (define-abbrev-table 'global-abbrev-table
   `(
+    ("1021"   "10215102427")
     ("eg"     "e.g."       shynur/abbrev:e.g.->E.g.\,\ )
     ("elisp"  "Emacs Lisp")
     ("gnu"    "GNU")
@@ -41,6 +44,7 @@
   `(
     ("add"           "ADD")
     ("alter"         "ALTER TABLE")
+    ("and"           "AND")
     ("as"            "AS")
     ("begin"         "BEGIN")
     ("between"       "BETWEEN AND "             ,(lambda ()
@@ -103,6 +107,7 @@
     ("numeric"       "NUMERIC")
     ("nvarchar"      "NVARCHAR")
     ("open"          "OPEN")
+    ("or"            "OR")
     ("order"         "ORDER BY")
     ("outer"         "OUTER JOIN ON "           ,(lambda ()
                                                    (backward-char 4)))

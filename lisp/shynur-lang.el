@@ -48,6 +48,8 @@
 ;;; SQL:
 
 (setq sql-product 'ansi)  ; 选择方言以使用合适的高亮方案.
+
+(add-hook 'sql-mode-hook #'abbrev-mode)
 
 ;;; CC:
 
@@ -74,6 +76,64 @@
 (setq c-basic-offset 4)
 
 (setq c-tab-always-indent t)
+
+;;; 混用:
+
+(keymap-set
+ prog-mode-map "C-c f"
+ (lambda ()
+   "调用“clang-format --Werror --fallback-style=none --ferror-limit=0 --style=file:~/.emacs.d/etc/clang-format.yaml”.
+在 C 语系中直接 (整个 buffer 而不仅是 narrowed region) 美化代码, 否则美化选中区域."
+   (interactive)
+   (let ((clang-format shynur/custom:clang-format-path)
+         (options `("--Werror"
+                    "--fallback-style=none"
+                    "--ferror-limit=0"
+                    ,(format "--style=file:%s"
+                             (expand-file-name "~/.emacs.d/etc/clang-format.yaml"))))
+         (programming-language (pcase major-mode
+                                 ('c-mode    "c"   )
+                                 ('c++-mode  "cpp" )
+                                 ('java-mode "java")
+                                 ('js-mode   "js"  )
+                                 (_ (unless mark-active
+                                      (user-error (shynur/message-format "无法使用“clang-format”处理当前语言")))))))
+     (if (stringp programming-language)
+         (shynur/save-cursor-relative-position-in-window
+           ;; shynur/TODO:
+           ;;     不确定这边的‘without-restriction’有没有必要,
+           ;;   以及要不要和‘shynur/save-cursor-relative-position-in-window’互换位置.
+           (without-restriction
+             (apply #'call-process-region
+                    1 (point-max) clang-format t t nil
+                    (format "--assume-filename=a.%s" programming-language)
+                    (format "--cursor=%d" (1- (point)))
+                    options)
+             (goto-char 1)
+             (goto-char (1+ (string-to-number (prog1 (let ((case-fold-search nil))
+                                                       (save-match-data
+                                                         (buffer-substring-no-properties
+                                                          (re-search-forward "\\`[[:blank:]]*{[[:blank:]]*\"Cursor\":[[:blank:]]*")
+                                                          (re-search-forward "[[:digit:]]+"))))
+                                                (delete-line)))))))
+       (let ((formatted-code (let ((buffer-substring `(,(current-buffer) ,(region-beginning) ,(region-end))))
+                               (with-temp-buffer
+                                 (apply #'insert-buffer-substring-no-properties
+                                        buffer-substring)
+                                 (apply #'call-process-region
+                                        1 (point-max) clang-format t t nil
+                                        (format "--assume-filename=a.%s"
+                                                (completing-read #("assume language: "
+                                                                   0 16 (face italic))
+                                                                 '("c" "cpp" "java" "js" "json" "cs")))
+                                        options)
+                                 (buffer-substring-no-properties 1 (point-max)))))
+             (point-at-region-end (prog1 (= (point) (region-end))
+                                    (delete-active-region))))
+         (if point-at-region-end
+             (insert formatted-code)
+           (save-excursion
+             (insert formatted-code))))))))
 
 (provide 'shynur-lang)
 

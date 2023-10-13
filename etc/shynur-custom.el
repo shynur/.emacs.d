@@ -13,18 +13,17 @@
 可能包含隐私信息 (e.g., 最近访问的文件名).
 你必须拥有对该目录的绝对访问权限 (e.g., ‘chmod’任何文件).")
 
-(add-hook 'before-init-hook
-          (lambda ()
-            "定义一些 从逻辑上讲 不需要 在 loading ‘early-init.el’ 时使用的变量."
-            (defconst shynur/c:clang-format-path "d:/Progs/LLVM/bin/clang-format.exe")
-            (defconst shynur/c:clang-path "d:/Progs/LLVM/bin/clang.exe")
-            (defconst shynur/c:commonlisp-path "d:/Progs/Steel_Bank_Common_Lisp/sbcl.exe")
-            (defconst shynur/c:email "one.last.kiss@outlook.com")
-            (defconst shynur/c:filename-coding 'chinese-gb18030)
-            (defconst shynur/c:os "MS-Windows 11")
-            (defconst shynur/c:python-path "d:/Progs/Python/python.exe")
-            (defconst shynur/c:shell-coding 'chinese-gb18030)
-            (defconst shynur/c:truename "谢骐")))
+;; 一些 从逻辑上讲 不需要 在 加载 ‘early-init.el’ 时使用的变量,
+;; IOW, 下列表达式可以放在 ‘before-init-hook’ 中.
+(defconst shynur/c:clang-format-path "d:/Progs/LLVM/bin/clang-format.exe")
+(defconst shynur/c:clang-path "d:/Progs/LLVM/bin/clang.exe")
+(defconst shynur/c:commonlisp-path "d:/Progs/Steel_Bank_Common_Lisp/sbcl.exe")
+(defconst shynur/c:email "one.last.kiss@outlook.com")
+(defconst shynur/c:filename-coding 'chinese-gb18030)
+(defconst shynur/c:os "MS-Windows 11")
+(defconst shynur/c:python-path "d:/Progs/Python/python.exe")
+(defconst shynur/c:shell-coding 'utf-8-dos)
+(defconst shynur/c:truename "谢骐")
 
 ;;; Commentary:
 ;;

@@ -4,7 +4,22 @@
 ;;
 ;; 一些日常使用的函数.
 
-(defun shynur/reverse-characters (beginning end)
+(defun shynur:open-file-with (file)
+  (interactive "f")
+  (let ((programs '(
+                    ("emacs-Q"  "emacs.exe" "-Q")
+                    ("explorer" "explorer.exe")  ; 有 bug.
+                    ("notepad"  "notepad.exe")
+                    ("typora"   "D:/Progs/Typora/Typora.exe")
+                    )))
+    (apply #'start-process
+           "进程名 (瞎取一个)" nil
+           `(,@(cdr (assoc-string (completing-read "用哪款软件打开?  "
+                                                  (mapcar #'cl-first programs))
+                                 programs))
+             ,(encode-coding-string file 'chinese-gb18030)))))
+
+(defun shynur:reverse-characters (beginning end)
   "将选中的区域的所有字符倒序排列"
   (declare (pure   nil)
            (indent nil)
@@ -17,7 +32,7 @@
   (interactive "r")
   (insert (nreverse (delete-and-extract-region beginning end))))
 
-(defun shynur/propertize-as (beginning end same-as-where)
+(defun shynur:propertize-as (beginning end same-as-where)
   "将选中区域的字符串的property设置得和指定的point所指处的一样"
   (declare (interactive-only t)
            (side-effect-free nil)
@@ -29,20 +44,66 @@
   (set-text-properties beginning end
                        (text-properties-at same-as-where)))
 
-(defun shynur/desemi ()
+(defun shynur:desemi (bor eor)
+  (interactive "*r")
+  (let ((this-buffer (current-buffer)))
+    (with-temp-buffer
+      (insert-buffer-substring-no-properties this-buffer
+                                             bor eor)
+      (with-current-buffer this-buffer
+        (delete-region bor eor))
+
+      (goto-char 1)
+      (while (re-search-forward "，\\|、" nil t)
+        (replace-match ", " nil nil))
+
+      (goto-char 1)
+      (while (re-search-forward "。" nil t)
+        (replace-match ".  " nil nil))
+
+      (goto-char 1)
+      (while (re-search-forward "？" nil t)
+        (replace-match "?  " nil nil))
+
+      (goto-char 1)
+      (while (re-search-forward "：" nil t)
+        (replace-match ": " nil nil))
+
+      (goto-char 1)
+      (while (re-search-forward "；" nil t)
+        (replace-match "; " nil nil))
+
+      (goto-char 1)
+      (while (re-search-forward "（\\(.*?\\)）" nil t)
+        (replace-match " (\\1) " nil nil))
+
+      (goto-char 1)
+      (while (re-search-forward "[[:blank:]]*\\([[:digit:]]+\\)[[:blank:]]*" nil t)
+        (replace-match " \\1" nil nil))
+
+      (goto-char 1)
+      (while (re-search-forward "[[:blank:]]*\\([[:alpha:]-.]+\\)[[:blank:]]*" nil t)
+        (replace-match " \\1" nil nil))
+
+      (let ((tmp-buffer (current-buffer)))
+        (with-current-buffer this-buffer
+          (insert-buffer tmp-buffer))))))
+
+(defun shynur:school-week ()
   (interactive)
-  (goto-char 1)
-  (while (re-search-forward "，\\|、" nil t)
-    (replace-match ", " nil nil))
-  (goto-char 1)
-  (while (re-search-forward "。" nil t)
-    (replace-match ".  " nil nil))
-  (goto-char 1)
-  (while (re-search-forward "：" nil t)
-    (replace-match ": " nil nil))
-  (goto-char 1)
-  (while (re-search-forward "（\\(:1.*?\\)）" nil t)
-    (replace-match " (\1) " nil nil)))
+  (let (message-log-max)
+    (apply #'message
+           #("开学第%d周,还剩%d周😅"
+             3 5 (face (bold
+                        (:foreground "green")))
+             9 11 (face (bold
+                         (:foreground "red"))))
+           (let ((开学第一天 "Mon, Sep 11, 2023")
+                 (学期总周数 18))
+             `(,#1=(1+ (/ (- (date-to-day (calendar-date-string (calendar-current-date)))
+                             (date-to-day 开学第一天))
+                          7))
+                   ,(- 学期总周数 #1#))))))
 
 (provide 'mylib)
 

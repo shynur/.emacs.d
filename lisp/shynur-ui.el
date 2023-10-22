@@ -1,5 +1,12 @@
 ;;; -*- lexical-binding: t; -*-
 
+ '(overline-margin 0
+                   nil ()
+                   "上划线的高度+宽度")
+ '(mouse-highlight t
+                   nil ()
+                   "当鼠标位于clickable位置时,高亮此处的文本")
+
 ;;; Theme:
 
 (require 'shynur-themes)   ; (find-file-other-window "./themes/shynur-themes.el")
@@ -33,7 +40,7 @@
              '(cursor
                ((t . (:background "chartreuse")))
                nil
-               "该face仅有‘:background’字段有效")
+               "该 face 仅有 ‘:background’ 字段有效")
              '(tooltip
                ((t . ( :height     100
                        :background "dark slate gray"))))
@@ -82,14 +89,14 @@
                        (set-frame-size nil .width .height))))
 
 ;; 使 frame 根据 背景色的 亮暗, 让 face 自行选择对应的方案.
-(setq frame-background-mode nil)
+(setopt frame-background-mode nil)
 
-(setq frame-resize-pixelwise t)
+(setopt frame-resize-pixelwise t)
 
 ;; 透明
 (add-to-list 'default-frame-alist
              `(,(pcase system-type
-                  ("TODO: I don’t know how to test whether the platform supports this parameter!" 'alpha-background)
+                  ("TODO: Dunno how to test whether the platform supports this parameter." 'alpha-background)
                   (_ 'alpha))
                . 75))
 
@@ -147,8 +154,7 @@
               shynur/ui:frame-size&position-getter)))
 ;; TODO: If there is an invisible frame ...
 
-;; 必须先设置 window divider 的参数!
-(setq window-divider-default-places      'right-only  ; 横向 divider 可以用 mode line代替.
+(setopt window-divider-default-places      'right-only  ; 横向 divider 可以用 mode line代替.
       window-divider-default-right-width 12)
 (window-divider-mode)
 
@@ -210,6 +216,8 @@
 (keymap-global-unset "<menu-bar> <options> <cua-mode>")
 (keymap-global-unset "<menu-bar> <options> <customize> <customize-saved>")
 (keymap-global-unset "<menu-bar> <options> <save>")
+(keymap-global-unset "<menu-bar> <options> <transient-mark-mode>")
+(keymap-global-unset "<menu-bar> <options> <highlight-paren-mode>")
 
 (keymap-global-unset "<menu-bar> <buffer> <select-named-buffer>")
 
@@ -284,6 +292,9 @@
 ;; 若开启, buffer 尾行之后的区域的右流苏区域会显示密集的刻度线.
 (setq-default indicate-empty-lines nil)
 (setq overflow-newline-into-fringe t)
+
+;; 启用 word-wrap 时在换行处显示 down-arrow.
+(setopt visual-line-fringe-indicators '(nil down-arrow))
 
 ;;; Scroll Bar:
 
@@ -305,6 +316,8 @@
 ;; 尽可能地窄.
 (setq doom-modeline-height 1)
 (doom-modeline-mode)
+
+(size-indication-mode)  ; 在 mode line 上显示 buffer 大小.
 
 ;; 从 1 开始计数.
 (setq mode-line-position-column-format '(" " "C%C" " ")
@@ -360,6 +373,18 @@
 ;;; Mouse:
 
 (setq mouse-fine-grained-tracking nil)
+
+(setopt display-hourglass t  ; When Emacs is busy, 将鼠标指针显示为 漏斗.
+        ;; When Emacs is busy, 立刻将鼠标指针显示为漏斗.
+        hourglass-delay 0)
+
+;; 输入文本时不需要隐藏鼠标指针, 因为可以使用 ‘mouse-avoidance-mode’.
+(setopt make-pointer-invisible nil)
+(setopt mouse-avoidance-animation-delay 0.05)
+(setopt mouse-avoidance-threshold  2  ; >=2
+        mouse-avoidance-nudge-var  1  ; >=1
+        mouse-avoidance-nudge-dist 2)
+(mouse-avoidance-mode 'animate)
 
 ;;; Cursor:
 
@@ -541,7 +566,8 @@
 (require 'tooltip)
 
 (require 'let-alist)
-(let-alist tooltip-frame-parameters)
+(let-alist tooltip-frame-parameters
+  "让 compiler 闭嘴.")
 
 (setq tooltip-delay       0
       tooltip-short-delay 0

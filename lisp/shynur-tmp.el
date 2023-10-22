@@ -106,21 +106,9 @@
  '(minibuffer-follows-selected-frame t
                                      nil ()
                                      "切换frame时,minibuffer跟着跳转(但仍然在原来的那个frame中生效)")
- '(read-circle t
-               nil ()
-               "允许(字面上)读取循环结构")
- '(max-specpdl-size max-specpdl-size
-                    nil ()
-                    "似乎在emacs-29中被废弃了")
- '(shr-offer-extend-specpdl t
-                            nil (shr)
-                            "HTML可能会有很深的嵌套,因此需要更多的PDL.该变量决定自动增长PDL的大小")
  '(save-place-mode t
                    nil (saveplace)
                    "在session之间保存访问文件时的浏览位置")
- '(size-indication-mode t
-                        nil (simple)
-                        "mode-line显示buffer大小(k=10^3,M=10^6,...)")
  '(suggest-key-bindings most-positive-fixnum
                         nil (simple)
                         "_1_通过函数名调用command时,在minibuffer中提示这个command可能绑定的快捷键;_2_决定‘extended-command-suggest-shorter’的显示持续时间;_3_将前面这两个提示信息持续显示5秒;_4_使command候选词列表中,各函数名的后面显示该函数绑定的快捷键")
@@ -149,32 +137,15 @@
  '(uniquify-strip-common-suffix t
                                 nil (uniquify)
                                 "当‘uniquify-buffer-name-style’的设置涉及补全文件路径时,保留显示路径名之间相同的部分")
- '(Info-mode-hook `(,@Info-mode-hook
-                    ,(lambda ()
+ '(Info-mode-hook `(,(lambda ()
                        "单词之间换行"
                        (visual-line-mode))))
- '(help-mode-hook `(,@(bound-and-true-p help-mode-hook)
-                    ,(lambda ()
+ '(help-mode-hook `(,(lambda ()
                        "单词之间换行"
                        (visual-line-mode))))
- '(visual-line-fringe-indicators '(nil down-arrow)
-                                 nil (simple)
-                                 "word-wrap打开时在换行处显示down-arrow")
  '(global-highlight-parentheses-mode t
                                      nil (highlight-parentheses)
                                      "给内层括号换种颜色")
- '(sentence-end-double-space t)
- '(sentence-end-without-period nil)
- '(colon-double-space nil)
- '(prog-mode-hook `(,@prog-mode-hook
-                    ,(lambda ()
-                       (rainbow-mode))
-                    ,(lambda ()
-                       (rainbow-delimiters-mode))
-                    ,(lambda ()
-                       (eldoc-mode)))
-                  nil (prog-mode)
-                  "e.g.,让“#ffffff”显示白色")
  '(hs-hide-comments-when-hiding-all t
                                     nil (hideshow))
  '(hs-isearch-open t
@@ -190,36 +161,12 @@
                           "此为默认值,不生效;仅供buffer-local时使用")
  '(prettify-symbols-unprettify-at-point nil
                                         nil (prog-mode))
- '(display-hourglass t
-                     nil ()
-                     "当Emacs是busy时,将鼠标指针显示为漏斗")
- '(hourglass-delay 0
-                   nil ()
-                   "当Emacs进入busy状态时,立刻将鼠标指针显示为漏斗(而不是过一段时间再显示)")
- '(make-pointer-invisible nil
-                          nil ()
-                          "原本用户typing时鼠标指针会被隐藏,但现在可以用‘mouse-avoidance-mode’达到更好的效果")
- '(mouse-avoidance-mode nil
-                        nil (avoid)
-                        "目前有bug")
- '(overline-margin 0
-                   nil ()
-                   "上划线的高度+宽度")
- '(mouse-highlight t
-                   nil ()
-                   "当鼠标位于clickable位置时,高亮此处的文本")
  '(highlight-changes-visibility-initial-state nil
                                               nil (hilit-chg))
  '(python-shell-interpreter shynur/custom:python-path
                             nil (python))
  '(python-shell-interpreter-interactive-arg nil
                                             nil (python))
- '(eval-expression-debug-on-error t
-                                  nil (simple)
-                                  "在‘eval-expression’时暂时地将‘debug-on-error’设置为t")
- '(debug-on-quit nil
-                 nil ()
-                 "按下“C-g”时是否要进入debugger")
  '(bookmark-save-flag 1
                       nil (bookmark)
                       "每次保存bookmark时都会写进文件")
@@ -744,6 +691,7 @@
 (keymap-global-unset "C-x <right>")       ; ‘next-buffer’
 (keymap-global-unset "C-x C-q")           ; ‘read-only-mode’
 (keymap-global-unset "C-<down-mouse-1>")  ; ‘mouse-buffer-menu’
+(keymap-global-unset "C-<down-mouse-2>")  ; ‘facemenu-menu’
 (keymap-global-unset "C-<down-mouse-3>")  ; 右键菜单式(context-menu)的mode-specific menubar
 (keymap-global-unset "C-x 4 0")    ; ‘kill-buffer-and-window’
 (keymap-global-unset "C-x 4 f")    ; ‘find-file-other-window’

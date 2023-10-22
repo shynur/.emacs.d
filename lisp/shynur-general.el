@@ -182,6 +182,12 @@
 (setopt auto-revert-interval 5)  ; Buffer-menu 只使用 poll 更新.
 (global-auto-revert-mode)
 
+;;; Evaluation:
+
+(setopt debug-on-quit nil  ; 按下 “C-g” 时是否要进入 debugger.
+        ;; 在 ‘eval-expression’ 时暂时地将 ‘debug-on-error’ 设置为 t.
+        eval-expression-debug-on-error t)
+
 (provide 'shynur-general)
 
 ;; Local Variables:

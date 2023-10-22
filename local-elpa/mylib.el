@@ -5,12 +5,14 @@
 ;; 一些日常使用的函数.
 
 (defun shynur:open-file-with (file)
-  (interactive "f")
-  (let ((programs '(
+  (interactive "G")
+  (let ((programs `(
                     ("emacs-Q"  "emacs.exe" "-Q")
-                    ("explorer" "explorer.exe")  ; 有 bug.
+                    ("explorer" "runemacs.exe" "-Q" "--load" ,(expand-file-name (file-name-concat user-emacs-directory
+                                                                                                  "scripts/explorer.elc")))
                     ("notepad"  "notepad.exe")
                     ("typora"   "D:/Progs/Typora/Typora.exe")
+                    ("runemacs" "runemacs.exe")
                     )))
     (apply #'start-process
            "进程名 (瞎取一个)" nil
@@ -87,7 +89,7 @@
 
       (let ((tmp-buffer (current-buffer)))
         (with-current-buffer this-buffer
-          (insert-buffer tmp-buffer))))))
+          (insert-buffer-substring-no-properties tmp-buffer))))))
 
 (defun shynur:school-week ()
   (interactive)

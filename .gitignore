@@ -82,6 +82,7 @@
 
 ##outline:  ./scripts/
 /scripts/*
+!/scripts/explorer.el
 !/scripts/ielm-cli.el
 !/scripts/make-shynur-emacs.el
 

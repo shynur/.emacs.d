@@ -101,12 +101,13 @@
       kill-do-not-save-duplicates t)
 (setq kill-whole-line nil)  ; ‘kill’ 不删除换行符.
 (setq kill-read-only-ok nil)  ; Kill 只读的文本时, beep 且显示 error 消息.
-;; (该例选自 <https://gnu.org/s/emacs/manual/html_node/emacs/Kill-Options.html>.)
-(setq kill-transform-function (lambda (killed-text)
-                                "将它应用到被 kill 的文本上, 并将其返回值加入到 ‘kill-ring’ 中; 若返回 nil 则不加入."
-                                (if (string-blank-p killed-text)
-                                    killed-text
-                                  (string-trim killed-text))))
+;; 该例选自 <https://gnu.org/s/emacs/manual/html_node/emacs/Kill-Options.html>.
+(add-hook 'yank-transform-functions
+          (lambda (text-to-yank)
+            "若含有非空白字符, 则去除首尾的空白."
+            (if (string-blank-p text-to-yank)
+                text-to-yank
+              (string-trim text-to-yank))))
 
 (keymap-global-set "<mouse-2>" #'mouse-yank-at-click)
 

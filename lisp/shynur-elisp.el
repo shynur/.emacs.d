@@ -19,7 +19,9 @@
 (setq print-level nil
       eval-expression-print-level nil)
 
-(setq print-circle t)  ; 使用“#N=(#N#)”语法 打印 递归结构.
+(setq print-circle t  ; 使用 “#N=(#N#)” 语法 打印 递归结构.
+      ;; 允许 (字面上) 读取循环结构.
+      read-circle t)
 
 (setq print-integers-as-characters nil  ; 打印 字符常量 的方式: “115 (#o163, ...)” instea of “?s (#o163, ...)”.
       ;; 打印 字符常量 时 括号内: “(#o163, #x73)” instead of “(#o163, #x73, ?s)”.

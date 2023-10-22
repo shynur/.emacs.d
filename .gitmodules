@@ -1,3 +1,7 @@
+[submodule "etc/fonts/maple-mono"]
+    path = etc/fonts/maple-mono
+    url = git@github.com:subframe7536/maple-font.git
+
 [submodule "local-elpa/holo-layer"]
     path = local-elpa/holo-layer
     url = git@github.com:manateelazycat/holo-layer.git

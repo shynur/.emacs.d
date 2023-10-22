@@ -1,29 +1,32 @@
 ;;; -*- lexical-binding: t; -*-
 
+;;; 书写习惯:
+
+(setopt sentence-end-without-period nil
+        sentence-end-double-space t
+        colon-double-space nil)
+
 ;;; Org:
 
 (add-hook 'org-mode-hook
           (lambda ()
             (local-set-key [f9] "\N{ZERO WIDTH SPACE}")))
 
-(add-hook 'org-mode-hook
-          #'org-num-mode)
+(add-hook 'org-mode-hook #'org-num-mode)
 
 ;; [[package:melpa][org-superstar]]
-(add-hook 'org-mode-hook
-          #'org-superstar-mode)
+(add-hook 'org-mode-hook #'org-superstar-mode)
 
-(add-hook 'org-mode-hook
-          #'yas-minor-mode)
+(add-hook 'org-mode-hook #'yas-minor-mode)
 
 (add-hook 'org-mode-hook
           (lambda ()
             (when (bound-and-true-p electric-indent-mode)
               (electric-indent-local-mode -1))))
 
-(setq org-link-descriptive nil)  ; 展开link.
+(setopt org-link-descriptive nil)  ; 展开link.
 
-(setq org-support-shift-select t)
+(setopt org-support-shift-select t)
 
 (add-hook 'org-mode-hook
           (lambda ()
@@ -39,15 +42,31 @@
 
 ;;; Web:
 
+;;; HTML
 (add-hook 'html-mode-hook
           (lambda ()
             (when (and (buffer-file-name)
                        (zerop (buffer-size)))
               (insert "<!DOC"))))
+;; E.g., 让 “#ffffff” 显示白色.
+(add-hook 'html-mode-hook  #'rainbow-mode)
+;; 有时 HTML 会嵌套很深, 因此需要更大的PDL.  在此使 PDL 自动增长.
+(setopt shr-offer-extend-specpdl t)
+
+(add-hook 'css-mode-hook   #'rainbow-mode)
+(add-hook 'javascript-mode-hook #'rainbow-mode)
+
+;;; Lisp
+
+;; E.g., 让 “#ffffff” 显示白色.
+(add-hook 'emacs-lisp-mode-hook #'rainbow-mode)
+
+(add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
+(add-hook 'ielm-mode-hook  #'eldoc-mode)
 
 ;;; SQL:
 
-(setq sql-product 'ansi)  ; 选择方言以使用合适的高亮方案.
+(setopt sql-product 'ansi)  ; 选择方言以使用合适的高亮方案.
 
 (add-hook 'sql-mode-hook #'abbrev-mode)
 
@@ -73,11 +92,12 @@
               (define-key c-mode-base-map "\C-m"
                 #'c-context-line-break))))
 
-(setq c-basic-offset 4)
-
-(setq c-tab-always-indent t)
+(setopt c-basic-offset 4
+        c-tab-always-indent t)
 
 ;;; 混用:
+
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 (keymap-set
  prog-mode-map "C-c f"
@@ -100,7 +120,7 @@
                                       (user-error (shynur/message-format "无法使用“clang-format”处理当前语言")))))))
      (if (stringp programming-language)
          (shynur/save-cursor-relative-position-in-window
-           ;; shynur/TODO:
+           ;; TODO:
            ;;     不确定这边的‘without-restriction’有没有必要,
            ;;   以及要不要和‘shynur/save-cursor-relative-position-in-window’互换位置.
            (without-restriction

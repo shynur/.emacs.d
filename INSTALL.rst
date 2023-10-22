@@ -120,7 +120,7 @@ Start process
                 --create-frame
 
 此时 Emacs 首先在后台创建了一个 daemon (see `如何运行 Emacs 作为后台服务进程? <./docs/Emacs-use_daemon.md>`_),
-然后 (耐心点) 会弹出一个窗口, 默认会打开 ``user-emacs-directory/`` 目录.
+然后 (耐心点) 会弹出一个窗口, 默认会打开 ``*scratch*`` buffer.
 
 Create frame
 ^^^^^^^^^^^^

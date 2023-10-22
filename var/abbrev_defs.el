@@ -8,20 +8,27 @@
 (defun shynur/abbrev:e.g.->E.g.\,\  ()
   "作为扩展的勾函数, 在用户键入 “eg”+逗号 后 (此处仅以 “eg” 为例), “eg” 被扩展为 “e.g.”, 然后,
 1. 判断是否需要首字母大写, 如有必要则将其替换为 “E.g.”.
-2. 在其后添加 逗号 和 空格 (TODO: 并删除原有的多余的空格).
+2. 在其后添加 逗号 和 空格 (并删除原有的多余的空白字符).
 3. 阻止用户键入的那个 逗号 被插入."
-  (save-excursion
-    ;; 检测是否需要将 “e.g.” 替换为 “E.g.”.
-    (backward-sentence)
-    (re-search-forward (rx point
-                           (one-or-more (or (or ?\( ?\))
-                                            ?\s)))
-                       nil t 1)
-    (when (= (point) last-abbrev-location)
-      (upcase-char 1)))
-  (insert ",\s")
-  ;; 返回 non-nil 值, 以阻止用户键入的字符被插入.
-  "不要插入用户键入的那个 逗号")
+  (when (eq last-command-event ?,)
+    (save-excursion
+      ;; 检测是否需要将 “e.g.” 替换为 “E.g.”.
+      (backward-sentence)
+      (re-search-forward (rx point
+                             (one-or-more (or ?\s ?\n ?\t ?\r
+                                              ?' ?\" ?‘ ?’ ?“ ?\”
+                                              (or ?\( ?\))
+                                              ?/
+                                              )))
+                         nil t 1)
+      (when (= (point) last-abbrev-location)
+        (upcase-char 1)))
+    (insert-char ?,)
+    (insert-char ?\s) (backward-char) (with-restriction (point) (line-end-position)
+                                        (c-hungry-delete-forward))
+    (insert-char ?\s)
+    ;; 返回 non-nil 值, 以阻止用户键入的字符被插入.
+    "不要插入用户键入的那个 逗号"))
 (put 'shynur/abbrev:e.g.->E.g.\,\  'no-self-insert t)
 
 ;; TODO: 该 abbrev 表中的某些词条应当放入到 ‘text-mode-abbrev-table’ 中.
@@ -46,6 +53,7 @@
     ("alter"         "ALTER TABLE")
     ("and"           "AND")
     ("as"            "AS")
+    ("asc"           "ASC")
     ("begin"         "BEGIN")
     ("between"       "BETWEEN AND "             ,(lambda ()
                                                    (backward-char 5)))
@@ -71,6 +79,7 @@
     ("declare"       "DECLARE")
     ("default"       "DEFAULT")
     ("delete"        "DELETE FROM")
+    ("desc"          "DESC")
     ("distinct"      "DISTINCT")
     ("drop"          "DROP")
     ("end"           "END")
@@ -95,11 +104,13 @@
     ("integer"       "INTEGER")
     ("into"          "INTO")
     ("is"            "IS")
+    ("left"          "LEFT")
     ("like"          "LIKE''"                   ,(lambda ()
                                                    (backward-char 2)
                                                    (make-thread (lambda ()
                                                                   (thread-yield)
                                                                   (forward-char)))))
+    ("natural"       "NATURAL JOIN")
     ("nchar"         "NCHAR")
     ("not"           "NOT")
     ("null"          "NULL")

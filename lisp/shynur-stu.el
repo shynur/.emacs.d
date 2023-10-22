@@ -16,6 +16,10 @@
 ;; ‘C-x r j s’ 跳转至作业文件夹.
 (set-register ?s '(file . "d:/Desktop/schoolwork/"))
 
+;;; CheatSheets:
+
+(set-register ?o '(file . "d:/Desktop/.emacs.d/docs/Org-quickstart.org"))
+
 (provide 'shynur-stu)
 
 ;; Local Variables:

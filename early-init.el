@@ -10,7 +10,7 @@
                                                            [frame-inhibit-implied-resize t                     shynur--expected-value]
                                                            [inhibit-file-name-handlers   t                     shynur--expected-value]
                                                            [inhibit-menubar-update       t                     shynur--expected-value]
-                                                           [inhibit-message              t                     shynur--expected-value]
+                                                           ;; ‘inhibit-message’ 必须为 t, 为了有时能正常向终端输出消息.
                                                            [inhibit-redisplay            t                     shynur--expected-value]
                                                            ]))
             (mapc (lambda (variable-new-expected)

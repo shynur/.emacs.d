@@ -44,18 +44,9 @@
  '(case-replace t
                 nil (replace)
                 "文本替换时,大小写敏感")
- '(completion-styles '(basic partial-completion initials)
-                     nil (minibuffer)
-                     "minibuffer的补全风格(从‘completion-styles-alist’中选取)")
  '(debug-on-error nil
                   nil ()
                   "没有对应的handler时进入debugger;debugger直接在error所在的环境中运行,所以很方便;但是有些package没有使用user-error,所以若此变量开启,会时常进入debugger,非常麻烦,所以暂时来说,应该关掉")
- '(completion-auto-help t
-                        nil (minibuffer)
-                        "一次TAB以显示help列表")
- '(completions-detailed t
-                        nil (minibuffer)
-                        "在minibuffer中对符号进行completion时,在符号所在的那一行显示符号的类型和docstring的第一行")
  '(truncate-lines nil
                   nil ()
                   "溢出的行尾转向下一个screen-line")
@@ -68,17 +59,13 @@
  '(file-name-coding-system shynur/custom:filename-coding)
  '(neo-show-hidden-files t
                          nil (neotree))
- '(neotree-mode-hook `(,@neotree-mode-hook
-                       ,(lambda ()
+ '(neotree-mode-hook `(,(lambda ()
                           "关闭neotree的行号"
                           (display-line-numbers-mode -1)))
                      nil (neotree))
  '(echo-keystrokes 0.001
                    nil ()
                    "若快捷键未完整击入,则等待该时长后在echo-area显示已经击入的键")
- '(visible-bell t
-                nil ()
-                "响铃可视化.在 MS-Windows 上表现为,任务栏图标闪烁")
  '(table-fixed-width-mode nil
                           nil (table)
                           "基于文本的表格自动调节尺寸")
@@ -112,9 +99,6 @@
  '(suggest-key-bindings most-positive-fixnum
                         nil (simple)
                         "_1_通过函数名调用command时,在minibuffer中提示这个command可能绑定的快捷键;_2_决定‘extended-command-suggest-shorter’的显示持续时间;_3_将前面这两个提示信息持续显示5秒;_4_使command候选词列表中,各函数名的后面显示该函数绑定的快捷键")
- '(text-quoting-style nil
-                      nil ()
-                      "渲染成对的单引号时,尽可能使用‘curve’这种样式,退而求此次地可以使用`grave'这种样式")
  '(track-eol nil
              nil (simple)
              "上下移动时,不紧贴行尾")
@@ -188,9 +172,6 @@
                            (_           comint-process-echoes))
                          nil (comint)
                          "Windows上的PowerShell会回显输入的命令(至少在‘shell-mode’中是这样),设置此变量以删除它")
- '(selection-coding-system selection-coding-system
-                           nil (select)
-                           "与X/Windows交互clipboard时的编码/解码方式")
  '(list-colors-sort nil
                     nil (facemenu)
                     "决定‘list-colors-display’如何排列颜色")
@@ -457,11 +438,6 @@
  '(confirm-kill-processes nil
                           nil (files)
                           "退出时,不询问是否要kill子进程")
- '(require-final-newline t
-                         nil (files))
- '(before-save-hook `(,@(bound-and-true-p before-save-hook)
-                      ,#'whitespace-cleanup)
-                    nil (files))
  '(find-file-wildcards t
                        nil (files)
                        "允许Bash style的路径通配符")
@@ -501,8 +477,6 @@
  '(edebug-all-defs nil
                    nil (edebug)
                    "置t则颠倒[C-M-x]对前缀参数的处理")
- '(life-step-time 0.2
-                  nil (life))
  '(split-window-keep-point nil
                            nil (window)
                            "Cursor在下半window时,新建window在上半部分;反之则反.简言之,尽可能少地重绘.缺点是,新窗口的point未必与原先一致")
@@ -653,9 +627,6 @@
                                  ;; ‘年份’前面加两个空格, 使右侧和‘分钟’对齐.
                                  "%m/%d  %Y"))
 (setq ls-lisp-support-shell-wildcards t)
-
-;;; Feature: ‘so-long’
-(global-so-long-mode)
 
 (keymap-global-unset "C-h g")
 (keymap-global-unset "C-h h")

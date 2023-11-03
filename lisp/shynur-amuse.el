@@ -14,6 +14,10 @@
 (setq tetris-score-file (expand-file-name (file-name-concat user-emacs-directory
                                                             "var/tetris-scores.txt")))
 
+;;; 生命游戏:
+
+(setopt life-step-time 0.2)
+
 (provide 'shynur-amuse)
 
 ;; Local Variables:

@@ -132,10 +132,13 @@
               tab-width 4)
 
 ;; 执行 ‘delete-trailing-whitespace’ 时, 还删除首尾的多余的空行.
-(setq delete-trailing-lines t)
+(setopt delete-trailing-lines t)
 
 ;; 不高亮行尾的 whitespace, 因为没必要.
-(setq show-trailing-whitespace nil)
+(setq-default show-trailing-whitespace nil)
+
+(setopt require-final-newline t)
+(add-hook 'before-save-hook #'whitespace-cleanup)
 
 ;;; Indent:
 

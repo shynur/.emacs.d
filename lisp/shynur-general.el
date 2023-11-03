@@ -35,8 +35,12 @@
 (keymap-global-unset "C-x ESC ESC")  ; ‘repeat-complex-command’
 
 ;;; Minibuffer Completion
-(setq completion-cycle-threshold nil  ; 补全时, 按 <tab> 会轮换候选词.
-      completion-ignored-extensions '())
+(setopt completion-cycle-threshold nil  ; 补全时, 按 <tab> 会轮换候选词.
+        completion-ignored-extensions '()
+        completion-styles '(basic partial-completion initials))
+(setopt completion-auto-help t  ; 按一次 <tab> 以显示 help 列表.
+        ;; 对符号进行 completion 时, 在符号所在的那一行显示符号的类型和文档首行.
+        completions-detailed t)
 
 ;;; Read
 (setq read-extended-command-predicate #'command-completion-default-include-p
@@ -135,6 +139,8 @@
 
 ;; 不清除 字体 缓存.
 (setq inhibit-compacting-font-caches t)
+
+(global-so-long-mode)
 
 ;;; Backup & Auto-Saving & Reverting:
 

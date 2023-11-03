@@ -7,6 +7,7 @@
 (defun shynur:open-file-with (file)
   (interactive "G")
   (let ((programs `(
+                    ("edge"     "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe")
                     ("emacs-Q"  "emacs.exe" "-Q")
                     ("explorer" "runemacs.exe" "-Q" "--load" ,(expand-file-name (file-name-concat user-emacs-directory
                                                                                                   "scripts/explorer.elc")))
@@ -106,6 +107,44 @@
                              (date-to-day 开学第一天))
                           7))
                    ,(- 学期总周数 #1#))))))
+
+
+
+(defun shynur:transient-notify (&rest args)
+  (pcase system-type
+    ('windows-nt
+     (advice-add 'w32-notification-notify :before
+                 (let* ((balloon-emitting-frame (let (before-make-frame-hook
+                                                      window-system-default-frame-alist initial-frame-alist default-frame-alist
+                                                      after-make-frame-functions server-after-make-frame-hook)
+                                                  (make-frame-on-display (symbol-name initial-window-system)
+                                                                         '((visibility . nil)))))
+                        (balloon (with-selected-frame balloon-emitting-frame
+                                   (apply #'w32-notification-notify
+                                          args)))
+                        (balloon-lock (make-mutex))
+                        (message-closer (lambda ()
+                                          (with-selected-frame balloon-emitting-frame
+                                            (w32-notification-close balloon)
+                                            (setq balloon "closed")
+                                            (let (delete-frame-functions
+                                                  after-delete-frame-functions)
+                                              (delete-frame))))))
+                   (run-with-idle-timer 10 nil
+                                        (lambda ()
+                                          (with-mutex balloon-lock
+                                            (unless (stringp balloon)
+                                              (funcall message-closer)))))
+                   (lambda (&rest _)
+                     (advice-remove 'w32-notification-notify "message-closer")
+                     (with-mutex balloon-lock
+                       (unless (stringp balloon)
+                         (funcall message-closer))))) '((name . "message-closer"))))
+    (_
+     (require 'notifications)
+     (apply #'notifications-notify
+            :transient t
+            args))))  ;; title body
 
 (provide 'mylib)
 

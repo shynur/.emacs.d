@@ -160,23 +160,30 @@
 
 ;;; Frame Title:
 
-(setq frame-title-format '("" default-directory
-                           "\t" "🧹x" (:eval (number-to-string gcs-done))
-                           "" " (" (:eval (number-to-string (round gc-elapsed))) "s): "
-                           "" "💾" (:eval (prog1 'shynur/emacs:rss
-                                            (put 'shynur/emacs:rss :test-times (1+ (or (get 'shynur/emacs:rss :test-times) 1)))
-                                            ;; 每查询一定量的次数才更新, 从而减少 ‘process-attributes’ 的调用次数以提高性能.
-                                            (when (zerop (mod (get 'shynur/emacs:rss :test-times) 50))
-                                              (eval-when-compile (require 'cl-lib))
-                                              ;; 将 ‘shynur/emacs:rss’ 设为形如 “823.1MiB” 这样的字符串.
-                                              (set 'shynur/emacs:rss (cl-loop for shynur--memory = (let ((default-directory temporary-file-directory))
-                                                                                                     ;; 这里算的是实际物理内存, 若要算虚拟内存, 请用 ‘memory-limit’.
-                                                                                                     (alist-get 'rss (process-attributes (emacs-pid)))) then (/ shynur--memory 1024.0)
-                                                                              for shynur--memory-unit across "KMGTPEZ"
-                                                                              when (< shynur--memory 1024) return (format "%.1f%ciB"
-                                                                                                                          shynur--memory
-                                                                                                                          shynur--memory-unit))))))
-                           "" "⏱️" (:eval (emacs-uptime "%h:%.2m")) " "
+(setq frame-title-format `(""
+                           default-directory "\t"
+                           "🧹x" (:eval (number-to-string gcs-done))
+                           "~" (:eval (number-to-string (round gc-elapsed))) "s "
+                           "💾" (:eval (prog1 'shynur/emacs:rss
+                                         ,(put 'shynur/emacs:rss :test-times 0)
+                                         ,(add-hook 'post-gc-hook
+                                                    (lambda ()
+                                                      (when (not (eq last-command 'pixel-scroll-precision))
+                                                        (put 'shynur/emacs:rss :test-times -1))))
+                                         (put 'shynur/emacs:rss :test-times (1+ (get 'shynur/emacs:rss :test-times)))
+                                         ;; 每查询一定量的次数才更新, 从而减少 ‘process-attributes’ 的调用次数以提高性能.
+                                         (when (zerop (mod (get 'shynur/emacs:rss :test-times) 50))
+                                           (funcall ',(lambda ()
+                                                        (eval-when-compile (require 'cl-lib))
+                                                        ;; 将 ‘shynur/emacs:rss’ 设为形如 “823.1MiB” 这样的字符串.
+                                                        (set 'shynur/emacs:rss (cl-loop for shynur--memory = (let ((default-directory temporary-file-directory))
+                                                                                                               ;; 这里算的是实际物理内存, 若要算虚拟内存, 请用 ‘memory-limit’.
+                                                                                                               (alist-get 'rss (process-attributes (emacs-pid)))) then (/ shynur--memory 1024.0)
+                                                                                                               for shynur--memory-unit across "KMGTPEZ"
+                                                                                                               when (< shynur--memory 1024) return (format "%.1f%ciB"
+                                                                                                                                                           shynur--memory
+                                                                                                                                                           shynur--memory-unit))))))))
+                           "⏱️" (:eval (emacs-uptime "%h:%.2m")) " "
                            ;; 鼠标滚轮 也属于 key-sequences/input-events, 但在这里它 (特别是开启像素级滚动) 显然不合适.
                            ;; 将 CAR 上的 t 改为 nil 以关闭该功能.
                            (t ("" "🎹" (:eval (number-to-string num-input-keys)) "/" (:eval (number-to-string num-nonmacro-input-events)))))
@@ -268,7 +275,10 @@
 ;;; Text Area:
 
 ;; 除了当前选中的 window, 还 高亮 non-selected window 的 active region.
-(setq highlight-nonselected-windows t)
+(setopt highlight-nonselected-windows t)
+
+;; 渲染成对的单引号时, 尽可能使用 ‘curve’ 这种样式, 退而求此次地可以使用 `grave' 这种样式.
+(setopt text-quoting-style nil)
 
 ;;; Fringe:
 
@@ -591,6 +601,11 @@
 ;;; Render:
 
 (setq no-redraw-on-reenter t)
+
+;;; Icon:
+
+;; 响铃可视化 (在 MS-Windows 上表现为 任务栏图标闪烁).
+(setopt visible-bell t)
 
 (provide 'shynur-ui)
 

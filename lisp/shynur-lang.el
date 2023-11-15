@@ -24,7 +24,7 @@
             (when (bound-and-true-p electric-indent-mode)
               (electric-indent-local-mode -1))))
 
-(setopt org-link-descriptive nil)  ; 展开link.
+(setopt org-link-descriptive nil)  ; 展开 link.
 
 (setopt org-support-shift-select t)
 
@@ -32,6 +32,10 @@
           (lambda ()
             "有续行"
             (toggle-truncate-lines 0)))
+
+(add-hook 'outline-mode-hook #'page-break-lines-mode)
+
+(setopt org-entities-user '(("newline" "\\\\" "\\\\" "<br />" "\n" "\n" "\n")))
 
 ;;; Binary:
 
@@ -63,6 +67,11 @@
 
 (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
 (add-hook 'ielm-mode-hook  #'eldoc-mode)
+
+;;; Python:
+
+(setopt python-shell-interpreter shynur/custom:python-path
+        python-shell-interpreter-interactive-arg nil)
 
 ;;; SQL:
 

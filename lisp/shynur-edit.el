@@ -111,19 +111,34 @@
 
 (keymap-global-set "<mouse-2>" #'mouse-yank-at-click)
 
+;;; Undo & Redo:
+
+(keymap-global-unset "C-x u")  ; “C-_”
+(keymap-global-unset "C-/")    ; “C-_”
+(keymap-global-unset "C-?")    ; “C-M-_”,有些终端不认识这个字符
+
+(setopt undo-limit most-positive-fixnum  ; (字节) 可以超过该大小; 尽量保证在达到该大小的前提下, 移除最先前的信息.
+        ;; (字节) 任何使总量超出该大小的操作 (不包括最近的一次) 将被遗忘.
+        undo-strong-limit most-positive-fixnum
+        ;; (字节) 这是唯一使最近的一次操作无法 ‘undo’ 的情行;
+        ;; 如果单次操作生产的数据大于该值, 则会被直接遗忘.
+        undo-outer-limit most-positive-fixnum)
+
 ;;; Completion:
 
 ;;; ‘company’
-(setq company-idle-delay 0
-      company-minimum-prefix-length 2)
-(setq company-dabbrev-code-everywhere t)  ; 还在 comment 和 string 中进行 completion.
-(setq company-dabbrev-code-other-buffers t  ; 在具有相同‘major-mode’的 buffer 中搜索候选词.
-      ;; 在 current buffer 中搜索代码块中的关键词的时间限制.
-      company-dabbrev-code-time-limit 2)
-(setq company-show-quick-access t  ; 给候选词编号.
-      company-tooltip-offset-display 'lines  ; 原本在候选词界面的右侧是由 scroll bar, 现改成: 上/下面分别有多少候选词.
-      company-tooltip-limit 10)
-(setq company-clang-executable shynur/custom:clang-path)
+(setopt company-idle-delay 0
+        company-minimum-prefix-length 2)
+(setopt company-dabbrev-code-everywhere t)  ; 还在 comment 和 string 中进行 completion.
+(setopt company-dabbrev-code-other-buffers t  ; 在具有相同‘major-mode’的 buffer 中搜索候选词.
+        ;; 在 current buffer 中搜索代码块中的关键词的时间限制.
+        company-dabbrev-code-time-limit 2)
+(setopt company-show-quick-access t  ; 给候选词编号.
+        ;; 原本在候选词界面的右侧是由 scroll bar, 现改成: 上/下面分别有多少候选词.
+        company-tooltip-offset-display 'lines
+        company-tooltip-limit 10)
+(setopt company-clang-executable shynur/custom:clang-path)
+(require 'company)
 (global-company-mode)
 
 ;;; Whitespace:

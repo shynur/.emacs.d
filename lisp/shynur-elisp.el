@@ -1,5 +1,7 @@
 ;;; 与 语言 核心 有关的 设置.  -*- lexical-binding: t; -*-
 
+(setq integer-width 127)  ; Bignum 的位宽.
+
 (setq print-gensym t)
 
 (setq print-quoted t) ; 打印成“'foo”而非“(quote foo)”.
@@ -28,13 +30,13 @@
       eval-expression-print-maximum-character most-positive-fixnum)
 
 ;; Debugger 以 C 风格 显示 函数调用, 而不是 Lisp 风格.
-(setq debugger-stack-frame-as-list nil)
+(setopt debugger-stack-frame-as-list nil)
 
 ;; 有关该值的合适范围的讨论 (无果): <https://emacs.stackexchange.com/q/76246/39388>
-(setq max-lisp-eval-depth 800)
+(setopt max-lisp-eval-depth 800)
 
 ;; GC 时在 echo area 显示信息, 但不会并入到 “*Messages*” 中.
-(setq garbage-collection-messages t)
+(setopt garbage-collection-messages t)
 
 ;;; Compilation:
 

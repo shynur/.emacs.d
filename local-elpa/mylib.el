@@ -14,13 +14,14 @@
                     ("notepad"  "notepad.exe")
                     ("typora"   "D:/Progs/Typora/Typora.exe")
                     ("runemacs" "runemacs.exe")
+                    ;; ("word"     "C:/Program Files/Microsoft Office/root/Office16/WINWORD.EXE")
                     )))
     (apply #'start-process
            "进程名 (瞎取一个)" nil
            `(,@(cdr (assoc-string (completing-read "用哪款软件打开?  "
                                                   (mapcar #'cl-first programs))
-                                 programs))
-             ,(encode-coding-string file 'chinese-gb18030)))))
+                                  programs))
+             ,(encode-coding-string file 'chinese-gb18030))))
 
 (defun shynur:reverse-characters (beginning end)
   "将选中的区域的所有字符倒序排列"
@@ -92,8 +93,14 @@
         (with-current-buffer this-buffer
           (insert-buffer-substring-no-properties tmp-buffer))))))
 
-(defun shynur:school-week ()
-  (interactive)
+(defun shynur:school-week (from-date)
+  "Usage:
+  ‘(shynur:school-week \"\")’,
+  ‘(shynur:school-week \"日\")’,
+  ‘(shynur:school-week \"月 日\")’,
+  或 ‘(shynur:school-week \"年 月 日\")’."
+  (interactive "M")
+  (setq from-date (mapcar #'string-to-number (split-string from-date)))  ; “()”, “(日)”, “(月, 日)”, 或 “(年 月 日)”.
   (let (message-log-max)
     (apply #'message
            #("开学第%d周,还剩%d周😅"
@@ -103,12 +110,18 @@
                          (:foreground "red"))))
            (let ((开学第一天 "Mon, Sep 11, 2023")
                  (学期总周数 18))
-             `(,#1=(1+ (/ (- (date-to-day (calendar-date-string (calendar-current-date)))
+             `(,#1=(1+ (/ (- (date-to-day (calendar-date-string (let ((month-day-year (calendar-current-date)))
+                                                                  (pcase (length from-date)
+                                                                    (1 (setf (cl-second month-day-year) (cl-first  from-date)))
+                                                                    (2 (setf (cl-first  month-day-year) (cl-first  from-date)
+                                                                             (cl-second month-day-year) (cl-second from-date)))
+                                                                    (3 (setf (cl-third  month-day-year) (cl-first  from-date)
+                                                                             (cl-first  month-day-year) (cl-second from-date)
+                                                                             (cl-second month-day-year) (cl-third  from-date))))
+                                                                  month-day-year)))
                              (date-to-day 开学第一天))
                           7))
                    ,(- 学期总周数 #1#))))))
-
-
 
 (defun shynur:transient-notify (&rest args)
   (pcase system-type

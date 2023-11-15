@@ -44,6 +44,7 @@
                                     swiper
                                     company
                                     helpful
+                                    htmlize
                                     neotree
                                     git-modes
                                     highlight

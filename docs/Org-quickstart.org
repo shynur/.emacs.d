@@ -1,4 +1,7 @@
 #+title: 快速入门 Org Mode
+#+language: zh-CN
+#+options: html-postamble:nil
+#+HTML_HEAD: <style type="text/css"> table, th, td {border: 1px solid} </style>
 
 * 关于文档自身
 
@@ -375,7 +378,6 @@ August 12, 2023
 任何见解 (issue) 或修改 (pull request) *请先到 [[https://github.com/shynur/.emacs.d/tree/main/docs/]] 提议*.
 
 -----
-
 
 # Local Variables:
 # coding: utf-8-unix

@@ -20,7 +20,9 @@
 
 ;; 打开达到该字节数的大文件时询问相关事宜;
 ;; 重点在于可以借此开启 literally 读取模式, 这会关闭一些昂贵的功能以提高访问速度.
-(setq large-file-warning-threshold (* 1024 1024))
+(setopt large-file-warning-threshold (* 1024 1024))
+
+(setopt delete-by-moving-to-trash t)
 
 (provide 'shynur-host)
 

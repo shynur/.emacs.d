@@ -1,20 +1,19 @@
 ;;; -*- lexical-binding: t; -*-
 
 (custom-set-variables
- '(completion-list-mode-hook `(,@(bound-and-true-p completion-list-mode-hook)
-                               ,(lambda ()
-                                  "把没用的minor mode都关了"
-                                  (make-thread (lambda ()
-                                                 (sleep-for 0.4)
-                                                 (company-mode -1)
+ '(completion-list-mode-hook '((lambda ()
+                                 "把没用的minor mode都关了"
+                                 (make-thread (lambda ()
+                                                (sleep-for 0.4)
+                                                (company-mode -1)
                                                  (electric-indent-local-mode -1)
                                                  (page-break-lines-mode -1))))
-                               ,(lambda ()
-                                  "1 screen line/一个条目"
-                                  (make-thread (lambda ()
-                                                 (sleep-for 0.4)
-                                                 (let ((inhibit-message t))
-                                                   (toggle-truncate-lines 1))))))
+                               (lambda ()
+                                 "1 screen line/一个条目"
+                                 (make-thread (lambda ()
+                                                (sleep-for 0.4)
+                                                (let ((inhibit-message t))
+                                                  (toggle-truncate-lines 1))))))
                              nil (simple))
  '(marginalia-mode t
                    nil (marginalia)
@@ -59,9 +58,9 @@
  '(file-name-coding-system shynur/custom:filename-coding)
  '(neo-show-hidden-files t
                          nil (neotree))
- '(neotree-mode-hook `(,(lambda ()
-                          "关闭neotree的行号"
-                          (display-line-numbers-mode -1)))
+ '(neotree-mode-hook '((lambda ()
+                         "关闭neotree的行号"
+                         (display-line-numbers-mode -1)))
                      nil (neotree))
  '(echo-keystrokes 0.001
                    nil ()
@@ -72,15 +71,9 @@
  '(insert-default-directory t
                             nil (minibuffer)
                             "‘find-file’时,给出默认目录")
- '(integer-width (* 8 16)
-                 nil ()
-                 "bignum的位宽")
  '(line-move-visual t
                     nil (simple)
                     "按照screen line上下移动")
- '(line-number-mode nil
-                    nil (simple)
-                    "mode-line不显示行号")
  '(message-log-max t
                    nil ()
                    "对于“*Messages*”的最大行数,不做限制")
@@ -96,9 +89,6 @@
  '(save-place-mode t
                    nil (saveplace)
                    "在session之间保存访问文件时的浏览位置")
- '(suggest-key-bindings most-positive-fixnum
-                        nil (simple)
-                        "_1_通过函数名调用command时,在minibuffer中提示这个command可能绑定的快捷键;_2_决定‘extended-command-suggest-shorter’的显示持续时间;_3_将前面这两个提示信息持续显示5秒;_4_使command候选词列表中,各函数名的后面显示该函数绑定的快捷键")
  '(track-eol nil
              nil (simple)
              "上下移动时,不紧贴行尾")
@@ -121,12 +111,12 @@
  '(uniquify-strip-common-suffix t
                                 nil (uniquify)
                                 "当‘uniquify-buffer-name-style’的设置涉及补全文件路径时,保留显示路径名之间相同的部分")
- '(Info-mode-hook `(,(lambda ()
-                       "单词之间换行"
-                       (visual-line-mode))))
- '(help-mode-hook `(,(lambda ()
-                       "单词之间换行"
-                       (visual-line-mode))))
+ '(Info-mode-hook '((lambda ()
+                      "单词之间换行"
+                      (visual-line-mode))))
+ '(help-mode-hook ((lambda ()
+                     "单词之间换行"
+                     (visual-line-mode))))
  '(global-highlight-parentheses-mode t
                                      nil (highlight-parentheses)
                                      "给内层括号换种颜色")
@@ -147,10 +137,6 @@
                                         nil (prog-mode))
  '(highlight-changes-visibility-initial-state nil
                                               nil (hilit-chg))
- '(python-shell-interpreter shynur/custom:python-path
-                            nil (python))
- '(python-shell-interpreter-interactive-arg nil
-                                            nil (python))
  '(bookmark-save-flag 1
                       nil (bookmark)
                       "每次保存bookmark时都会写进文件")
@@ -191,34 +177,28 @@
  '(help-char ?\C-h
              nil ()
              "默认是“C-h”")
- '(scroll-preserve-screen-position nil
-                                   nil ()
-                                   "若非nil,则scroll时(尤其是鼠标滚轮)保持point在屏幕上的位置,但这样会扯坏region")
  '(text-scale-mode-step text-scale-mode-step
                         nil (face-remap)
                         "放缩字体大小时的倍率")
- '(emacs-startup-hook `(,@(bound-and-true-p emacs-startup-hook)
-                        ,(lambda ()
-                           (prefer-coding-system 'utf-8-unix)
-                           (set-coding-system-priority 'utf-8-unix))
-                        ,(lambda ()
-                           "[menu-bar]->[File]->[Filesets]"
-                           (filesets-init))
-                        ,(lambda ()
-                           (shynur/buffer-eval-after-created "*scratch*"
-                             (with-current-buffer "*scratch*"
-                               (setq-local prettify-symbols-alist (default-value 'prettify-symbols-alist))
-                               (prettify-symbols-mode))))
-                        ,(lambda ()
-                           "解决‘mouse-drag-and-drop-region’总是copy的问题(bug#63872)"
-                           (advice-add (prog1 'mouse-drag-and-drop-region
-                                         (require 'mouse)) :around
-                                         (lambda (mouse-drag-and-drop-region_ &rest arguments)
-                                           (let ((mark-even-if-inactive t))
-                                             (apply mouse-drag-and-drop-region_ arguments)))))))
- '(makefile-gmake-mode-hook `(,@(bound-and-true-p makefile-gmake-mode-hook)
-                              ,(lambda ()
-                                 (indent-tabs-mode)))
+ '(emacs-startup-hook '((lambda ()
+                          (prefer-coding-system 'utf-8-unix)
+                          (set-coding-system-priority 'utf-8-unix))
+                        (lambda ()
+                          "[menu-bar]->[File]->[Filesets]"
+                          (filesets-init))
+                        (lambda ()
+                          (shynur/buffer-eval-after-created "*scratch*"
+                            (with-current-buffer "*scratch*"
+                              (setq-local prettify-symbols-alist (default-value 'prettify-symbols-alist))
+                              (prettify-symbols-mode))))
+                        (lambda ()
+                          "解决‘mouse-drag-and-drop-region’总是copy的问题(bug#63872)"
+                          (advice-add (prog1 'mouse-drag-and-drop-region
+                                        (require 'mouse)) :around
+                                        (lambda (mouse-drag-and-drop-region_ &rest arguments)
+                                          (let ((mark-even-if-inactive t))
+                                            (apply mouse-drag-and-drop-region_ arguments)))))))
+ '(makefile-gmake-mode-hook '(indent-tabs-mode)
                             nil (make-mode))
  '(inferior-lisp-program shynur/custom:commonlisp-path
                          nil (sly))
@@ -228,12 +208,6 @@
  '(yank-pop-change-selection nil
                              nil (simple)
                              "“M-y”不改变clipboard的内容")
- '(help-at-pt-display-when-idle t
-                                nil (help-at-pt)
-                                "光标移到active-text处时,在echo-area显示tooltip")
- '(help-at-pt-timer-delay 0
-                          nil (help-at-pt)
-                          "让‘help-at-pt-display-when-idle’的效果没有延迟")
  '(which-key-mode t
                   nil (which-key))
  '(font-lock-maximum-decoration t
@@ -248,10 +222,9 @@
  '(adaptive-fill-mode t
                       nil ()
                       "“M-q”时自动选择每行首的填充前缀")
- '(text-mode-hook `(,@(bound-and-true-p text-mode-hook)
-                    ,(lambda ()
-                       (when (eq major-mode 'text-mode)
-                         (display-fill-column-indicator-mode)))))
+ '(text-mode-hook '((lambda ()
+                      (when (eq major-mode 'text-mode)
+                        (display-fill-column-indicator-mode)))))
  '(comment-multi-line t
                      nil (newcomment)
                      "“M-j”时,“/* lines */”而不是“/* */ \n /* */”")
@@ -279,9 +252,6 @@
                                         "默认值参考fill-column")
  '(display-fill-column-indicator-character ?\N{BOX DRAWINGS LIGHT VERTICAL}
                                            nil (display-fill-column-indicator))
- '(indicate-buffer-boundaries nil
-                              nil ()
-                              "控制是否在fringe所在的区域上显示首尾指示符(window的四个边角区域)")
  '(repeat-mode t
                nil (repeat))
  '(selective-display-ellipses t
@@ -406,21 +376,11 @@
                             nil (outline))
  '(outline-minor-mode-prefix [nil]
                              nil (outline))
- '(occur-mode-hook `(,@occur-mode-hook
-                     ,(lambda ()
-                        (progn
-                          (require 'display-line-numbers)
-                          (display-line-numbers-mode -1))))
+ '(occur-mode-hook '((lambda ()
+                       (progn
+                         (require 'display-line-numbers)
+                         (display-line-numbers-mode -1))))
                    nil (replace))
- '(undo-limit most-positive-fixnum
-              nil ()
-              "(字节)可以超过该大小;尽量保证在达到该大小的前提下,移除最先前的信息")
- '(undo-strong-limit most-positive-fixnum
-                     nil ()
-                     "(字节)任何使总量超出该大小的操作(不包括最近的一次)将被遗忘")
- '(undo-outer-limit most-positive-fixnum
-                    nil ()
-                    "(字节)这是唯一使最近的一次操作无法undo的情行;如果单次操作生产的数据大于该值,则会被直接遗忘")
  '(kmacro-execute-before-append nil
                                 nil (kmacro)
                                 "“C-u F3”:附加定义;“C-u C-u ... F3”:重执行且附加定义")
@@ -464,7 +424,6 @@
                                  nil (files))
  '(list-directory-verbose-switches "-1 --almost-all --author --color=auto --classify --format=verbose --human-readable --size --sort=extension --time-style=long-iso"
                                    nil (files))
- '(delete-by-moving-to-trash t)
  '(copy-directory-create-symlink nil
                                  nil (files)
                                  "制作symlink的话请使用‘make-symbolic-link’")
@@ -628,16 +587,6 @@
                                  "%m/%d  %Y"))
 (setq ls-lisp-support-shell-wildcards t)
 
-(keymap-global-unset "C-h g")
-(keymap-global-unset "C-h h")
-(keymap-global-unset "C-h t")
-(keymap-global-unset "C-h C-a")
-(keymap-global-unset "C-h C-c")
-(keymap-global-unset "C-h C-m")
-(keymap-global-unset "C-h C-o")
-(keymap-global-unset "C-h C-p")
-(keymap-global-unset "C-h C-t")
-(keymap-global-unset "C-h C-w")
 (keymap-global-unset "C-M-S-l")  ; ‘recenter-other-window’
 (keymap-global-unset "C-x s")    ; ‘save-some-buffers’
 (keymap-global-unset "C-x C-o")  ; 删除附近空行
@@ -680,9 +629,6 @@
 (keymap-global-unset "C-t")        ; ‘transpose-chars’
 (keymap-global-unset "M-t")        ; ‘transpose-words’
 (keymap-global-unset "C-x C-t")    ; ‘transpose-lines’
-(keymap-global-unset "C-x u")      ; “C-_”
-(keymap-global-unset "C-/")        ; “C-_”
-(keymap-global-unset "C-?")        ; “C-M-_”,有些终端不认识这个字符
 (keymap-global-unset "M-<drag-mouse-1>")  ; 与X的secondary selection兼容的功能
 (keymap-global-unset "M-<down-mouse-1>")  ; 与X的secondary selection兼容的功能
 (keymap-global-unset "M-<down-mouse-3>")  ; 与X的secondary selection兼容的功能

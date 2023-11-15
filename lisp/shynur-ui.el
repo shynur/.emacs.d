@@ -252,7 +252,7 @@
       ;; 关闭 tab-line-name 之间默认的空格.
       tab-line-separator "")
 ;; Tab line 就是为了方便使用鼠标而存在的, 直接用鼠标点就行了.
-(setq tab-line-switch-cycling nil)
+(setopt tab-line-switch-cycling nil)
 (setq-default tab-line-format `(:eval (mapcar ',(prog1 (lambda (buffer-tab-line-name)
                                                          (concat (if (get-buffer buffer-tab-line-name)
                                                                      (with-current-buffer buffer-tab-line-name
@@ -265,10 +265,10 @@
 
 ;;; Window:
 
-(setq window-resize-pixelwise t)
+(setopt window-resize-pixelwise t)
 
-(setq window-min-height 4
-      window-min-width  1)
+(setopt window-min-height 4
+        window-min-width  1)
 
 (global-hl-line-mode)
 
@@ -284,69 +284,78 @@
 
 (set-fringe-mode '(0 . nil))  ; Right-only.
 
-(setq display-line-numbers-type t  ; 启用绝对行号.
-      ;; 开启 relative/visual 行号时, 当前行仍然显示 absolute 行号.
-      display-line-numbers-current-absolute t)
-(setq-default display-line-numbers-widen t)  ; 无视 narrowing, 行号从 buffer 的起始点计算.
-(setq-default display-line-numbers-width nil)  ; 动态改变为行号预留的列数.
-(setq display-line-numbers-grow-only nil)      ; 行号占用的列数可以动态减少.
+(setopt display-line-numbers-type t  ; 启用绝对行号.
+        ;; 开启 relative/visual 行号时, 当前行仍然显示 absolute 行号.
+        display-line-numbers-current-absolute t)
+(setopt display-line-numbers-widen t  ; 无视 narrowing, 行号从 buffer 的起始点计算.
+        ;; 动态改变为行号预留的列数.
+        display-line-numbers-width nil
+        ;; 行号占用的列数可以动态减少.
+        display-line-numbers-grow-only nil)
 
-(setq line-number-display-limit nil  ; 当 buffer 的 size 太大时是否启用行号, 以节约性能.
-      ;; 单行太长也会消耗性能用于计算行号, 因此,
-      ;; 如果当前行附近的行的平均宽度大于该值, 则不计算行号.
-      line-number-display-limit-width most-positive-fixnum)
+(setopt line-number-display-limit nil  ; 当 buffer 的 size 太大时是否启用行号, 以节约性能.
+        ;; 单行太长也会消耗性能用于计算行号, 因此,
+        ;; 如果当前行附近的行的平均宽度大于该值, 则不计算行号.
+        line-number-display-limit-width most-positive-fixnum)
 ;; 每 10 行就用 ‘line-number-major-tick’ 高亮一次行号.
-(setq display-line-numbers-major-tick 10)
+(setopt display-line-numbers-major-tick 10)
 (global-display-line-numbers-mode t)
 
 ;; 若开启, buffer 尾行之后的区域的右流苏区域会显示密集的刻度线.
-(setq-default indicate-empty-lines nil)
-(setq overflow-newline-into-fringe t)
+(setopt indicate-empty-lines nil)
+(setopt overflow-newline-into-fringe t)
 
 ;; 启用 word-wrap 时在换行处显示 down-arrow.
 (setopt visual-line-fringe-indicators '(nil down-arrow))
+
+;; 控制是否在 fringe 所在的区域上显示首尾指示符 (window 的四个边角区域).
+(setopt indicate-buffer-boundaries nil)
 
 ;;; Scroll Bar:
 
-(setq scroll-bar-mode 'right)
+(setopt scroll-bar-mode 'right)
 
 ;; 滚动条落至底部 (overscrolling) 时的行为.
-(setq scroll-bar-adjust-thumb-portion nil)
+(setopt scroll-bar-adjust-thumb-portion nil)
 
 (setq-default scroll-bar-width 28)
 
 ;;; Mode Line:
 
 ;;; [[package:melpa][doom-modeline]]: [[package][all-the-icons]]
-(setq doom-modeline-minor-modes t)
+(setopt doom-modeline-minor-modes t)
 ;; 即使当前窗口宽度很小, 也尽量显示所有信息.
-(setq doom-modeline-window-width-limit nil)
+(setopt doom-modeline-window-width-limit nil)
 ;; 左侧 小竖条 (装饰品) 的 宽度.
-(setq doom-modeline-bar-width 3)
+(setopt doom-modeline-bar-width 3)
 ;; 尽可能地窄.
-(setq doom-modeline-height 1)
+(setopt doom-modeline-height 1)
 (doom-modeline-mode)
 
 (size-indication-mode)  ; 在 mode line 上显示 buffer 大小.
+(setq mode-line-column-line-number-mode-map ())  ; 使某些可点击文本不作出应答.
 
+(line-number-mode -1)  ; Mode line 上不要显示行号, 因为 window 左边缘已经显示行号了.
 ;; 从 1 开始计数.
-(setq mode-line-position-column-format '(" " "C%C" " ")
-      doom-modeline-column-zero-based nil)
+(setopt mode-line-position-column-format '(" C%C ")
+        doom-modeline-column-zero-based nil)
 (column-number-mode)
 
+
+
 ;; Face ‘mode-line-inactive’ for non-selected window’s mode line.
-(setq mode-line-in-non-selected-windows t)
+(setopt mode-line-in-non-selected-windows t)
 
 ;;; End of Line
-(setq eol-mnemonic-unix " LF "
-      eol-mnemonic-mac  " CR "
-      eol-mnemonic-dos  " CRLF "
-      eol-mnemonic-undecided " ?EOL ")
+(setopt eol-mnemonic-unix " LF "
+        eol-mnemonic-mac  " CR "
+        eol-mnemonic-dos  " CRLF "
+        eol-mnemonic-undecided " ?EOL ")
 
 ;;; Display Time Mode
 (require 'time)
-(setq display-time-day-and-date t
-      display-time-24hr-format nil)
+(setopt display-time-day-and-date t
+        display-time-24hr-format nil)
 (setq display-time-mail-icon (find-image '(
                                            (:type xpm :file "shynur-letter.xpm" :ascent center)
                                            (:type pbm :file "letter.pbm" :ascent center)
@@ -359,26 +368,31 @@
       display-time-mail-file nil
       ;; 该目录下的所有非空文件都被当成新送达的邮件.
       display-time-mail-directory nil)
-(setq display-time-default-load-average 0  ; 显示过去 1min 的平均 CPU 荷载.
-      ;; 当 CPU 荷载 >= 0 时, 显示 CPU 荷载.
-      display-time-load-average-threshold 0)
-(setq display-time-interval 60)
+(setopt display-time-default-load-average 0  ; 显示过去 1min 的平均 CPU 荷载.
+        ;; 当 CPU 荷载 >= 0 时, 显示 CPU 荷载.
+        display-time-load-average-threshold 0)
+(setopt display-time-interval 60)
 (display-time-mode)
+(advice-add 'display-time-next-load-average  :before-until ; 使可点击文本 (CPU 负荷) 不作出应答.
+            (lambda ()
+              (and (called-interactively-p 'any)
+                   (when (listp last-command-event)
+                     (eq (car last-command-event) 'mouse-2)))))
 
 ;;; Display Battery Mode
-(setq battery-mode-line-format "[%p%%] ")
-(setq battery-update-interval 300)  ; 秒钟.
+(setopt battery-mode-line-format "[%p%%] ")
+(setopt battery-update-interval 300)  ; 秒钟.
 (display-battery-mode)
 
 ;;; Minibuffer & Echo Area:
 
-(setq max-mini-window-height 0.3)
+(setopt max-mini-window-height 0.3)
 
 ;; 由 输入 的 字符串 的 行数 决定如何 resize.
-(setq resize-mini-windows t)
+(setopt resize-mini-windows t)
 
 ;; Trim 首尾的空行.
-(setq resize-mini-frames #'fit-frame-to-buffer)
+(setopt resize-mini-frames #'fit-frame-to-buffer)
 
 ;;; Mouse:
 
@@ -398,24 +412,24 @@
 
 ;;; Cursor:
 
-(setq-default cursor-type 'box
-              ;; 在 non-selected window 中也 展示 cursor,
-              ;; 但是 是 镂空的.
-              cursor-in-non-selected-windows t)
-(setq x-stretch-cursor t)  ; 在 TAB 字符上拉长 cursor.
+(setopt cursor-type 'box
+        ;; 在 non-selected window 中也 展示 cursor,
+        ;; 但是 是 镂空的.
+        cursor-in-non-selected-windows t)
+(setopt x-stretch-cursor t)  ; 在 TAB 字符上拉长 cursor.
 
 (blink-cursor-mode -1)
 ;; 以下设置无效, 因为‘blink-cursor-mode’关掉了.
-(setq blink-cursor-delay  0  ; Cursor 静止一段时间之后开始闪烁.
-      blink-cursor-blinks 0  ; 闪烁次数.
-      blink-cursor-interval 0.5
-      ;; 映射: ‘cursor-type’ -> 光标黯淡时的造型.
-      blink-cursor-alist '((box  . nil)
-                           (bar  . box)
-                           (hbar . bar)))
+(setopt blink-cursor-delay  0  ; Cursor 静止一段时间之后开始闪烁.
+        blink-cursor-blinks 0  ; 闪烁次数.
+        blink-cursor-interval 0.5
+        ;; 映射: ‘cursor-type’ -> 光标黯淡时的造型.
+        blink-cursor-alist '((box  . nil)
+                             (bar  . box)
+                             (hbar . bar)))
 
 ;; TUI 下, 尽可能地 使 cursor 外形或特征 更加显著.
-(setq visible-cursor t)
+(setopt visible-cursor t)
 
 ;;; 果冻光标
 ;; GNU/Linux
@@ -501,8 +515,8 @@
 
 ;;; Click:
 
-(setq double-click-fuzz 3  ; 双击时, 两次 button-down 之间 允许 的 位移/像素.
-      double-click-time 400)
+(setopt double-click-fuzz 3  ; 双击时, 两次 button-down 之间 允许 的 位移/像素.
+        double-click-time 400)
 
 ;;; Scroll:
 
@@ -548,14 +562,14 @@
                         gc-cons-threshold  shynur--gc-cons-threshold))))))
 
 ;; Scroll 以使 window 底端的 N 行呈现到顶端.
-(setq next-screen-context-lines 5)
+(setopt next-screen-context-lines 5)
 
 ;; 无法再 scroll 时 就 停住, 而不是继续移动至 buffer 首/尾.
-(setq scroll-error-top-bottom nil)
+(setopt scroll-error-top-bottom nil)
 
-(setq scroll-margin 1
-      ;; ‘scroll-margin’的上界.
-      maximum-scroll-margin 0.5)
+(setopt scroll-margin 1
+        ;; ‘scroll-margin’的上界.
+        maximum-scroll-margin 0.5)
 
 (setq scroll-conservatively most-positive-fixnum
       ;; Minibuffer 永远 一行一行地 automatically scroll.
@@ -568,9 +582,12 @@
         on-screen-delay 0.4)
 (add-hook 'completion-list-mode-hook #'on-screen-mode)
 
+;; 若非 nil, 则 scroll 时 (e.g., ‘C-v’) 保持 point 在屏幕上的位置 (有点像打字机), 但这样会扯坏 region.
+(setopt scroll-preserve-screen-position nil)
+
 ;;; Horizontal
-(setq hscroll-margin 5
-      hscroll-step 1)
+(setopt hscroll-margin 5
+        hscroll-step 1)
 
 ;;; Tooltip:
 (require 'tooltip)
@@ -579,16 +596,16 @@
 (let-alist tooltip-frame-parameters
   "让 compiler 闭嘴.")
 
-(setq tooltip-delay       0
-      tooltip-short-delay 0
-      tooltip-hide-delay  most-positive-fixnum)
+(setopt tooltip-delay       0
+        tooltip-short-delay 0
+        tooltip-hide-delay  most-positive-fixnum)
 
 (tooltip-mode)
 
 ;;; Dialog Box:
 
-(setq use-dialog-box t
-      use-file-dialog t)
+(setopt use-dialog-box t
+        use-file-dialog t)
 
 ;; 在 GTK+ 的 file-chooser-dialog 中显示隐藏文件.
 (setq x-gtk-show-hidden-files t)
@@ -600,7 +617,7 @@
 
 ;;; Render:
 
-(setq no-redraw-on-reenter t)
+(setopt no-redraw-on-reenter t)
 
 ;;; Icon:
 

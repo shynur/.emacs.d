@@ -112,14 +112,34 @@
 
 ;;; Help:
 
-;; 通过不完整的函数名调用 command 时, 在 echo area 中提示 command 全名.
-(setq extended-command-suggest-shorter t)
+(keymap-global-unset "C-h g")
+(keymap-global-unset "C-h h")
+(keymap-global-unset "C-h t")
+(keymap-global-unset "C-h C-a")
+(keymap-global-unset "C-h C-c")
+(keymap-global-unset "C-h C-m")
+(keymap-global-unset "C-h C-o")
+(keymap-global-unset "C-h C-p")
+(keymap-global-unset "C-h C-t")
+(keymap-global-unset "C-h C-w")
 
-(setq help-enable-autoload t
-      help-enable-completion-autoload t
-      ;; 如果一个 autoloaded 符号的 autoload 形式没有提供 docstring,
-      ;; 那就加载包含它的定义的文件 以查看 docstring.
-      help-enable-symbol-autoload t)
+(setopt help-at-pt-display-when-idle t  ; 光标移到 activated text 处时, 在 echo area 显 示tooltip.
+        ;; 让 ‘help-at-pt-display-when-idle’ 的效果没有延迟.
+        help-at-pt-timer-delay 0)
+
+;; 通过不完整的函数名调用 command 时, 在 echo area 中提示 command 全名.
+(setopt extended-command-suggest-shorter t
+        ;; 1. 通过函数名调用 command 时, 在 minibuffer 中提示这个 command 可能绑定的快捷键.
+        ;; 2. 决定 ‘extended-command-suggest-shorter’ 的显示持续时间.
+        ;; 3. 将前面这两个提示信息持续显示 5 秒.
+        ;; 4. 使 command 候选词列表中, 各函数名的后面显示该函数绑定的快捷键.
+        suggest-key-bindings most-positive-fixnum)
+
+(setopt help-enable-autoload t
+        help-enable-completion-autoload t
+        ;; 如果一个 autoloaded 符号的 autoload 形式没有提供 docstring,
+        ;; 那就加载包含它的定义的文件 以查看 docstring.
+        help-enable-symbol-autoload t)
 
 (keymap-global-set "C-c s" #'shortdoc-display-group)
 

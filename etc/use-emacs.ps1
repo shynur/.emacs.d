@@ -12,34 +12,53 @@ $SHYNUR_EMACS_CONFIG_DIR = &            `
        '--eval' '(princ (expand-file-name user-emacs-directory))'
 
 $env:EMACSLOADPATH = "$SHYNUR_EMACS_CONFIG_DIR/site-lisp/$(if ($IsWindows) {';'} else {':'})"
-[System.Environment]::SetEnvironmentVariable(
-    'EMACSLOADPATH', $env:EMACSLOADPATH,
-    [System.EnvironmentVariableTarget]::User
-)  # TODO: 这句耗时很多, 应改为: 若不等, 则调用 SetEnvironmentVariable.
+if ([System.Environment]::GetEnvironmentVariable(
+        'EMACSLOADPATH', [System.EnvironmentVariableTarget]::User
+    ) -ne $env:EMACSLOADPATH) {
+        [System.Environment]::SetEnvironmentVariable(
+            'EMACSLOADPATH', $env:EMACSLOADPATH,
+            [System.EnvironmentVariableTarget]::User
+        )
+    }
 
-$env:EDITOR = "$SHYNUR_EMACS_PREFIXDIR_BIN/emacsclient$(if ($IsWindows) {'w'} else {''}) `
-                 --server-file=$(&                                      `
-                   $SHYNUR_EMACS_PREFIXDIR_BIN/emacs                    `
-                   -Q --batch                                           `
-                   --load $SHYNUR_EMACS_CONFIG_DIR/etc/shynur-custom.el `
-                   --eval '(princ (expand-file-name shynur/custom:appdata/))'
-                 )/server-auth-dir/server-name.txt                                       `
-                 --alternate-editor=                                                     `
-                   --create-frame" -replace "`n", " "
-
-# TODO: 下面这段耗时很多, 应改为: 若不等, 则调用 SetEnvironmentVariable.
-[System.Environment]::SetEnvironmentVariable(
-    'EDITOR', $env:EDITOR,
-    [System.EnvironmentVariableTarget]::User
-)
-[System.Environment]::SetEnvironmentVariable(
-    'VISUAL', $env:EDITOR,
-    [System.EnvironmentVariableTarget]::User
-); $env:VISUAL = $env:EDITOR
-[System.Environment]::SetEnvironmentVariable(
-    'TEXEDIT', $env:EDITOR,
-    [System.EnvironmentVariableTarget]::User
-); $env:TEXEDIT = $env:EDITOR
+$env:TEXEDIT = `
+$env:VISUAL  = `
+$env:EDITOR  = "$SHYNUR_EMACS_PREFIXDIR_BIN/emacsclient$(if ($IsWindows) {'w'} else {''}) `
+                  --server-file=$(&                                      `
+                    $SHYNUR_EMACS_PREFIXDIR_BIN/emacs                    `
+                    -Q --batch                                           `
+                    --load $SHYNUR_EMACS_CONFIG_DIR/etc/shynur-custom.el `
+                    --eval '(princ (expand-file-name shynur/custom:appdata/))'
+                  )/server-auth-dir/server-name.txt                                       `
+                  --alternate-editor=                                                     `
+                  --create-frame" -replace "`n", " "
+if ([System.Environment]::GetEnvironmentVariable(
+        'EDITOR',
+        [System.EnvironmentVariableTarget]::User
+    ) -ne $env:EDITOR) {
+        [System.Environment]::SetEnvironmentVariable(
+            'EDITOR', $env:EDITOR,
+            [System.EnvironmentVariableTarget]::User
+        )
+    }
+if ([System.Environment]::GetEnvironmentVariable(
+        'VISUAL',
+        [System.EnvironmentVariableTarget]::User
+    ) -ne $env:VISUAL) {
+        [System.Environment]::SetEnvironmentVariable(
+            'VISUAL', $env:VISUAL,
+            [System.EnvironmentVariableTarget]::User
+        )
+    }
+if ([System.Environment]::GetEnvironmentVariable(
+        'TEXEDIT',
+        [System.EnvironmentVariableTarget]::User
+    ) -ne $env:TEXEDIT) {
+        [System.Environment]::SetEnvironmentVariable(
+            'TEXEDIT', $env:TEXEDIT,
+            [System.EnvironmentVariableTarget]::User
+        )
+    }
 
 function shynur-EmacsClient {
     Invoke-Expression "$env:EDITOR $args"

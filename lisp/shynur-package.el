@@ -8,14 +8,12 @@
 ;;   file.
 
 (setopt package-quickstart nil  ; 每次启动时 re-computing 而不是 使用 precomputed 的文件.
-
         ;; 相当于在 加载“init.el” 前 执行‘package-initialize’.
         ;; 这其实是 默认行为.
         package-enable-at-startup t)
 
 (shynur/custom:appdata/ package-user-dir /)
 
-;; Feature: ‘nsm’
 ;; 设置 mirror 时会询问是否连接, 此时 Emacs 的 GUI 窗口甚至还没弹出来.
 ;; 干脆降低安全系数.
 (setopt network-security-level 'low)
@@ -37,7 +35,7 @@
                                      ("melpa"  . 1))
         package-menu-hide-low-priority t)
 
-(setopt package-check-signature nil)  ; 暂时不知道检查签名有什么用,先关了再说.
+(setopt package-check-signature nil)  ; 暂时不知道检查签名有什么用, 先关了再说.
 
 (setopt package-selected-packages '(ivy
                                     sly

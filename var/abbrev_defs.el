@@ -40,6 +40,7 @@
     ("gnu"    "GNU")
     ("ie"     "i.e."       shynur/abbrev:e.g.->E.g.\,\ )
     ("ios"    "iOS")
+    ("java"   "Java")
     ("js"     "JavaScript")
     ("linux"  "Linux")
     ("nb"     "n.b."       shynur/abbrev:e.g.->E.g.\,\ )

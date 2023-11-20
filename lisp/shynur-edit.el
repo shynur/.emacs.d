@@ -191,6 +191,9 @@
                                    shynur/region:drag-map)
   "供 command 的 ‘repeat-map’ property 参考.
 按下 “C-c d” 后, 按住 “<Meta>” 不放, 再随意按 上/下/左/右 键, 整体挪动 region/当前行.")
+
+;; 按下左键拖动鼠标选中文本时, 鼠标指针离开 window 边缘后会自动滚屏.
+(setopt mouse-scroll-min-lines 1)
 
 ;;; Jump:
 

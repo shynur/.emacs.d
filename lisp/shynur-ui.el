@@ -254,10 +254,13 @@
 ;; Tab line 就是为了方便使用鼠标而存在的, 直接用鼠标点就行了.
 (setopt tab-line-switch-cycling nil)
 (setq-default tab-line-format `(:eval (mapcar ',(prog1 (lambda (buffer-tab-line-name)
-                                                         (concat (if (get-buffer buffer-tab-line-name)
-                                                                     (with-current-buffer buffer-tab-line-name
-                                                                       (all-the-icons-icon-for-buffer))
-                                                                   "") buffer-tab-line-name))
+                                                         (concat (let ((-buffer-icon (when (get-buffer buffer-tab-line-name)
+                                                                                       (with-current-buffer buffer-tab-line-name
+                                                                                         (all-the-icons-icon-for-buffer)))))
+                                                                   (if (stringp -buffer-icon)
+                                                                       -buffer-icon
+                                                                     ""))
+                                                                 buffer-tab-line-name))
                                                   (require 'all-the-icons))
                                               (tab-line-format))))
 
@@ -340,8 +343,6 @@
 (setopt mode-line-position-column-format '(" C%C ")
         doom-modeline-column-zero-based nil)
 (column-number-mode)
-
-
 
 ;; Face ‘mode-line-inactive’ for non-selected window’s mode line.
 (setopt mode-line-in-non-selected-windows t)
@@ -526,6 +527,13 @@
       redisplay-skip-fontification-on-input t
       ;; TUI 下, recenter 时不 redraw frame, 可能造成屏幕有少许显示错误.  所以 此处仅考虑 TTY.
       recenter-redisplay 'tty)
+
+(setopt mouse-wheel-follow-mouse t)
+;; 匀速滚屏, 而不是滚轮越快, 滚屏速度越越越越快.
+(setopt mouse-wheel-progressive-speed nil)
+(setopt mouse-wheel-tilt-scroll t
+        mouse-wheel-scroll-amount-horizontal 1)
+(mouse-wheel-mode)
 
 (pixel-scroll-precision-mode)
 (when (and (string= shynur/custom:truename "谢骐")

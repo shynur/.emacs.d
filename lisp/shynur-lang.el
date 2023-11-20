@@ -37,6 +37,10 @@
 
 (setopt org-entities-user '(("newline" "\\\\" "\\\\" "<br />" "\n" "\n" "\n")))
 
+;;; Makefile:
+
+(add-hook 'makefile-gmake-mode-hook #'indent-tabs-mode)
+
 ;;; Binary:
 
 (add-hook 'hexl-mode-hook
@@ -60,13 +64,16 @@
 (add-hook 'css-mode-hook   #'rainbow-mode)
 (add-hook 'javascript-mode-hook #'rainbow-mode)
 
-;;; Lisp
+;;; Lisp:
 
 ;; E.g., 让 “#ffffff” 显示白色.
 (add-hook 'emacs-lisp-mode-hook #'rainbow-mode)
 
 (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
 (add-hook 'ielm-mode-hook  #'eldoc-mode)
+
+;; Common Lisp 解释器
+(setopt inferior-lisp-program shynur/custom:commonlisp-path)
 
 ;;; Python:
 

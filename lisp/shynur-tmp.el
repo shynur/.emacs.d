@@ -198,10 +198,6 @@
                                         (lambda (mouse-drag-and-drop-region_ &rest arguments)
                                           (let ((mark-even-if-inactive t))
                                             (apply mouse-drag-and-drop-region_ arguments)))))))
- '(makefile-gmake-mode-hook '(indent-tabs-mode)
-                            nil (make-mode))
- '(inferior-lisp-program shynur/custom:commonlisp-path
-                         nil (sly))
  '(save-interprogram-paste-before-kill t
                                        nil (simple)
                                        "因‘kill-do-not-save-duplicates’导致‘kill-ring’只保留了不重复的文本,所以大可放心置t")
@@ -463,22 +459,9 @@
  '(focus-follows-mouse nil
                        nil ()
                        "告诉Emacs当前window manager通过鼠标指针选择聚焦窗口的方式,因为Emacs无法自动侦window manager使用何种策略")
- '(mouse-scroll-min-lines 1
-                          nil (mouse)
-                          "按下左键拖动鼠标选中文本时,鼠标指针离开window边缘后会自动滚屏.一次最少滚动一行")
  '(mouse-yank-at-point t
                        nil (mouse)
                        "<mouse-2>只yank而不移动point")
- '(mouse-wheel-mode t
-                    nil (mwheel))
- '(mouse-wheel-follow-mouse t
-                            nil (mwheel))
- '(mouse-wheel-progressive-speed t
-                                 nil (mwheel))
- '(mouse-wheel-scroll-amount-horizontal 1
-                                        nil (mwheel))
- '(mouse-wheel-tilt-scroll t
-                           nil (mwheel))
  '(mouse-select-region-move-to-beginning nil
                                          nil (mouse)
                                          "在开/闭括号处双击左键,point自动移动到闭括号处")
@@ -658,6 +641,8 @@
 (keymap-global-unset "C-M-c")    ; ‘exit-recursive-edit’
 (keymap-global-unset "C-]")      ; ‘abort-recursive-edit’
 (keymap-global-unset "C-x X a")  ; ‘abort-recursive-edit’
+
+;;; 测试区:
 
 (provide 'shynur-tmp)
 

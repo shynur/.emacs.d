@@ -236,6 +236,8 @@
 (keymap-global-unset "<menu-bar> <help-menu> <describe-copying>")
 (keymap-global-unset "<menu-bar> <help-menu> <describe-no-warranty>")
 (keymap-global-unset "<menu-bar> <help-menu> <emacs-manual>")
+(keymap-global-unset "<menu-bar> <help-menu> <emacs-tutorial>")
+(keymap-global-unset "<menu-bar> <help-menu> <external-packages>")
 (keymap-global-unset "<menu-bar> <help-menu> <getting-new-versions>")
 (keymap-global-unset "<menu-bar> <help-menu> <more-manuals> <order-emacs-manuals>")
 
@@ -245,7 +247,12 @@
 
 (tool-bar-mode -1)
 
-;;; Tab Line
+;;; Tab Bar:
+
+(with-eval-after-load 'tab-bar
+  (setq tab-prefix-map nil))
+
+;;; Tab Line:
 
 (setq tab-line-close-button-show nil
       tab-line-new-button-show nil
@@ -302,7 +309,7 @@
         line-number-display-limit-width most-positive-fixnum)
 ;; 每 10 行就用 ‘line-number-major-tick’ 高亮一次行号.
 (setopt display-line-numbers-major-tick 10)
-(global-display-line-numbers-mode t)
+(global-display-line-numbers-mode)
 
 ;; 若开启, buffer 尾行之后的区域的右流苏区域会显示密集的刻度线.
 (setopt indicate-empty-lines nil)
@@ -337,6 +344,11 @@
 
 (size-indication-mode)  ; 在 mode line 上显示 buffer 大小.
 (setq mode-line-column-line-number-mode-map ())  ; 使某些可点击文本不作出应答.
+
+;; 当 buffer 对应的文件名相同时, 在 buffer 名字之前补全文件的路径, 使 buffer 的名字互异.
+(setopt uniquify-buffer-name-style 'forward
+        ;; 当‘uniquify-buffer-name-style’的设置涉及补全文件路径时, 保留显示路径名之间相同的部分.
+        uniquify-strip-common-suffix t)
 
 (line-number-mode -1)  ; Mode line 上不要显示行号, 因为 window 左边缘已经显示行号了.
 ;; 从 1 开始计数.
@@ -384,6 +396,11 @@
 (setopt battery-mode-line-format "[%p%%] ")
 (setopt battery-update-interval 300)  ; 秒钟.
 (display-battery-mode)
+
+(setopt keycast-mode-line-format "%k%c%r "
+        keycast-mode-line-insert-after (cl-first mode-line-format)
+        keycast-mode-line-remove-tail-elements nil)
+;; (keycast-mode-line-mode)
 
 ;;; Minibuffer & Echo Area:
 

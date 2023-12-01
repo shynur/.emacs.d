@@ -37,6 +37,7 @@ export EDITOR="${SHYNUR_EMACS_PREFIXDIR_BIN}/emacsclient                        
                                    --load ${SHYNUR_EMACS_CONFIG_DIR}/etc/shynur-custom.el                                       \
                                    --eval '(princ (expand-file-name shynur/custom:appdata/))'`/server-auth-dir/server-name.txt' \
                  --alternate-editor=                                                                                            \
+                 --quiet                                                                                                        \
                  --create-frame"
 export VISUAL="$EDITOR"
 export TEXEDIT="$EDITOR"  # TeX 的默认编辑器.

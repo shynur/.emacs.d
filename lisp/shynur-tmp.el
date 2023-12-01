@@ -105,25 +105,12 @@
                           nil (apropos))
  '(apropos-documentation-sort-by-scores 'verbose
                                         nil (apropos))
- '(uniquify-buffer-name-style 'forward
-                              nil (uniquify)
-                              "当buffer对应的文件名相同时,在buffer名字之前补全文件的路径,使buffer的名字互异(行为上的细节受‘uniquify-strip-common-suffix’影响)")
- '(uniquify-strip-common-suffix t
-                                nil (uniquify)
-                                "当‘uniquify-buffer-name-style’的设置涉及补全文件路径时,保留显示路径名之间相同的部分")
  '(Info-mode-hook '((lambda ()
                       "单词之间换行"
                       (visual-line-mode))))
- '(help-mode-hook ((lambda ()
-                     "单词之间换行"
-                     (visual-line-mode))))
- '(global-highlight-parentheses-mode t
-                                     nil (highlight-parentheses)
-                                     "给内层括号换种颜色")
- '(hs-hide-comments-when-hiding-all t
-                                    nil (hideshow))
- '(hs-isearch-open t
-                   nil (hideshow))
+ '(help-mode-hook '((lambda ()
+                      "单词之间换行"
+                      (visual-line-mode))))
  '(calendar-mark-holidays-flag t
                                nil (calendar))
  '(prettify-symbols-alist '(("lambda" . ?λ)
@@ -204,8 +191,6 @@
  '(yank-pop-change-selection nil
                              nil (simple)
                              "“M-y”不改变clipboard的内容")
- '(which-key-mode t
-                  nil (which-key))
  '(font-lock-maximum-decoration t
                                 nil (font-lock)
                                 "不限制fontification的数量")
@@ -224,25 +209,6 @@
  '(comment-multi-line t
                      nil (newcomment)
                      "“M-j”时,“/* lines */”而不是“/* */ \n /* */”")
- '(blink-matching-paren t
-                        nil (simple)
-                        "功能之一是在echo area显示匹配的paren")
- '(show-paren-mode t
-                   nil (paren))
- '(show-paren-delay 0.1
-                    nil (paren))
- '(show-paren-highlight-openparen t
-                                  nil (paren)
-                                  "光标位于左paren上“.(...)时,高亮左paren")
- '(show-paren-style 'parenthesis
-                    nil (paren)
-                    "只高亮两个paren")
- '(show-paren-when-point-in-periphery nil
-                                      nil (paren)
-                                      "当光标置于sexp周边的空白区域时")
- '(what-cursor-show-names t
-                          nil (simple)
-                          "使“C-x =”(‘what-cursor-position’)顺便显示字符的Unicode名字")
  '(display-fill-column-indicator-column t
                                         nil (display-fill-column-indicator)
                                         "默认值参考fill-column")
@@ -484,11 +450,6 @@
  '(compilation-always-kill nil
                            nil (compile)))
 
-;;; Feature: ‘savehist’
-(shynur/custom:appdata/ savehist-file el)
-(setq savehist-autosave-interval nil)
-(savehist-mode)  ; 保存 minibuffer 的历史记录
-
 ;;; Feature: ‘dired’
 (keymap-global-unset "C-x C-j")    ; ‘dired-jump’
 (keymap-global-unset "C-x 4 C-j")  ; ‘dired-jump-other-window’
@@ -497,27 +458,6 @@
 ;; (setq dired-listing-switches list-directory-verbose-switches) 在 MS-Windows 上用不了
 (setq dired-switches-in-mode-line nil)
 
-;;; Feature: ‘desktop’ [X]
-(setq desktop-restore-eager t)  ; 尽快恢复 buffer, 而不是 idle 时逐步恢复.
-(setq desktop-load-locked-desktop t)  ; Lock 文件 是为了 防止其它 Emacs 实例将其复写, 但我的电脑上只会有一个 Emacs 实例. 所以即使文件是 locked, 也只能是因为上一次 session 中 Emacs 崩溃了.
-(setq desktop-auto-save-timeout nil)  ; Idle 时不自动保存, 毕竟 session 结束时会自动保存.
-(setq desktop-restore-frames nil)
-;; ‘desktop-files-not-to-save’: 默认不保存 Remote file.
-(shynur/custom:appdata/ desktop-dirname /)
-(shynur/custom:appdata/ desktop-base-file-name nil nil
-  ;; 基于‘desktop-dirname’.
-  "desktop-base-file-name.el")
-(shynur/custom:appdata/ desktop-base-lock-name nil nil
-  ;; 基于‘desktop-dirname’.
-  "desktop-base-lock-name.el")
-(setq desktop-save t)
-
-;;; Feature: ‘recentf’
-(shynur/custom:appdata/ recentf-save-file el)
-(setq recentf-max-saved-items nil)
-(setq recentf-max-menu-items 30)
-(recentf-mode)
-
 ;;; Feature: ‘electric’
 (setq electric-quote-paragraph t
       electric-quote-comment t
@@ -525,27 +465,6 @@
       ;; 不替换 双引号.
       electric-quote-replace-double nil)
 (electric-indent-mode)
-
-;;; [[package][ivy]]
-(keymap-global-set "C-s"
-                   (lambda ()
-                     (interactive)
-                     (ivy-mode)
-                     (unwind-protect
-                         (swiper)
-                       (ivy-mode -1))))
-(keymap-global-unset "C-r")
-(keymap-global-unset "C-M-r")
-(setq ivy-count-format "%d/%d ")
-(setq ivy-height 6)
-(add-hook 'minibuffer-setup-hook
-          (lambda ()
-            "令 ivy 的 minibuffer 拥有自适应高度."
-            (add-hook 'post-command-hook
-                      (lambda ()
-                        (when (bound-and-true-p ivy-mode)
-                          (shrink-window (1+ ivy-height))))
-                      nil t)))
 
 ;;; melpa:‘page-break-lines’
 (setq page-break-lines-modes '(emacs-lisp-mode

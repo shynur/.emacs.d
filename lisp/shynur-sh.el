@@ -16,19 +16,18 @@
 
 ;;; ‘shell’:
 
-(setq shell-file-name (pcase system-type
-                        ('windows-nt
-                         (if-let ((--pwsh-path (executable-find "pwsh")))
-                             --pwsh-path
-                           shell-file-name))
-                        (_
-                         shell-file-name)))
 
-(add-hook 'shell-mode-hook
-          (lambda ()
-            "设置编解码."
-            (set-buffer-process-coding-system shynur/custom:shell-coding
-                                              shynur/custom:shell-coding)))
+;; (add-hook 'shell-mode-hook
+;;           (lambda ()
+;;             "设置编解码"
+;;             (set-buffer-process-coding-system ...)))
+
+(when (and (eq system-type 'windows-nt)
+           (executable-find "pwsh.exe"))
+  (add-hook 'shell-mode-hook
+            (lambda ()
+              (when (not (file-remote-p default-directory))
+                (execute-kbd-macro (kbd "pwsh.exe "))))))
 
 (add-hook 'shell-mode-hook
           (lambda ()

@@ -39,15 +39,16 @@
 
 (setopt package-selected-packages '(ivy
                                     sly
+                                    embark
                                     swiper
                                     company
                                     helpful
                                     htmlize
+                                    keycast
                                     neotree
                                     git-modes
                                     highlight
                                     on-screen
-                                    which-key
                                     yaml-mode
                                     yasnippet
                                     drag-stuff

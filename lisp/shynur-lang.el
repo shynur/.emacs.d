@@ -10,7 +10,14 @@
 
 (add-hook 'org-mode-hook
           (lambda ()
-            (local-set-key [f9] "\N{ZERO WIDTH SPACE}")))
+            (make-variable-buffer-local 'prettify-symbols-alist)) -100)
+(add-hook 'org-mode-hook #'prettify-symbols-mode 99)
+
+(with-eval-after-load 'org
+  (keymap-set org-mode-map "<f9>" "\N{ZERO WIDTH SPACE}"))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (push '("\N{ZERO WIDTH SPACE}" . ?‸) prettify-symbols-alist)))
 
 (add-hook 'org-mode-hook #'org-num-mode)
 
@@ -63,6 +70,9 @@
 
 (add-hook 'css-mode-hook   #'rainbow-mode)
 (add-hook 'javascript-mode-hook #'rainbow-mode)
+
+;;; JavaScript
+(add-hook 'javascript-mode-hook #'hs-minor-mode)
 
 ;;; Lisp:
 
@@ -71,6 +81,8 @@
 
 (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
 (add-hook 'ielm-mode-hook  #'eldoc-mode)
+
+(add-hook 'emacs-lisp-mode-hook #'hs-minor-mode)
 
 ;; Common Lisp 解释器
 (setopt inferior-lisp-program shynur/custom:commonlisp-path)
@@ -88,25 +100,25 @@
 
 ;;; CC:
 
-(with-eval-after-load 'cc-mode
-  (add-hook 'c-mode-common-hook
-            (lambda ()
-              "使用 行注释 注释掉 region."
-              (c-toggle-comment-style -1)))
+(add-hook 'c-mode-common-hook #'hs-minor-mode)
 
-  ;; 只保留 当前编译环境下 生效的 ifdef 从句.
-  (add-hook 'c-mode-common-hook
-            #'hide-ifdef-mode)
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            "使用 行注释 注释掉 region."
+            (c-toggle-comment-style -1)))
 
-  (add-hook 'c-mode-common-hook
-            (lambda ()
-              (c-set-offset 'case-label '+)))
+;; 只保留 当前编译环境下 生效的 ifdef 从句.
+(add-hook 'c-mode-hook #'hide-ifdef-mode)
 
-  (add-hook 'c-initialization-hook
-            (lambda ()
-              "写 C 宏 时换行自动加反斜线; 写注释时换行相当于‘c-indent-new-comment-line’."
-              (define-key c-mode-base-map "\C-m"
-                #'c-context-line-break))))
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (c-set-offset 'case-label '+)))
+
+(add-hook 'c-initialization-hook
+          (lambda ()
+            "写 C 宏 时换行自动加反斜线; 写注释时换行相当于‘c-indent-new-comment-line’."
+            (define-key c-mode-base-map "\C-m"
+                        #'c-context-line-break)))
 
 (setopt c-basic-offset 4
         c-tab-always-indent t)

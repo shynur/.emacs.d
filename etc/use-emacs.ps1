@@ -31,6 +31,7 @@ $env:EDITOR  = "$SHYNUR_EMACS_PREFIXDIR_BIN/emacsclient$(if ($IsWindows) {'w'} e
                     --eval '(princ (expand-file-name shynur/custom:appdata/))'
                   )/server-auth-dir/server-name.txt                                       `
                   --alternate-editor=                                                     `
+                  --quiet                                                                 `
                   --create-frame" -replace "`n", " "
 if ([System.Environment]::GetEnvironmentVariable(
         'EDITOR',

@@ -42,23 +42,22 @@ EXTENSION 可能的值为:
 
 返回值为 BASE."
   (declare (indent 3))
-  `(set ',base
-        ,(if forms
-             `(progn
-                ,@forms)
-           `(,(or seq-type
-                  'identity)
-             ,(let ((&appdata/* (gensym "shynur/")))
-                `(let ((,&appdata/* (file-name-concat shynur/c:appdata/
-                                                      (concat (symbol-name ',base)
-                                                              ,(if extension
-                                                                   `(concat ,(if (not (eq extension '/))
-                                                                                 "."
-                                                                               "")
-                                                                            (symbol-name ',extension))
-                                                                 "")))))
-                   (prog1 ,&appdata/*
-                     (make-directory (file-name-directory ,&appdata/*) "DWIM"))))))))
+  `(setopt ,base ,(if forms
+                      `(progn
+                         ,@forms)
+                    `(,(or seq-type
+                           'identity)
+                      ,(let ((&appdata/* (gensym "shynur/")))
+                         `(let ((,&appdata/* (file-name-concat shynur/c:appdata/
+                                                               (concat (symbol-name ',base)
+                                                                       ,(if extension
+                                                                            `(concat ,(if (not (eq extension '/))
+                                                                                          "."
+                                                                                        "")
+                                                                                     (symbol-name ',extension))
+                                                                          "")))))
+                            (prog1 ,&appdata/*
+                              (make-directory (file-name-directory ,&appdata/*) "DWIM"))))))))
 
 (provide 'shynur/custom)
 

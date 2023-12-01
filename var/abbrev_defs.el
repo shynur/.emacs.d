@@ -35,8 +35,12 @@
 (define-abbrev-table 'global-abbrev-table
   `(
     ("1021"   "10215102427")
+    ("cpp"    "C++")
     ("eg"     "e.g."       shynur/abbrev:e.g.->E.g.\,\ )
     ("elisp"  "Emacs Lisp")
+    ("etc"    "etc."       ,(lambda ()
+                              (when (eq (elt (this-command-keys-vector) 0) ?.)
+                                (backward-delete-char 1))))
     ("gnu"    "GNU")
     ("ie"     "i.e."       shynur/abbrev:e.g.->E.g.\,\ )
     ("ios"    "iOS")
@@ -73,6 +77,7 @@
     ("count"         "COUNT)"                   backward-char)
     ("create"        "CREATE")
     ("cursor"        "CURSOR")
+    ("database"      "DATABASE")
     ("date"          "DATE")
     ("datetime"      "DATETIME")
     ("dbms"          "DBMS")

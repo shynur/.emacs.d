@@ -22,6 +22,9 @@
 
 ;;; Minibuffer:
 
+;; 默认情况下, 点击 “echo area” 会打开 “*Messages*”, 在此关闭这个功能.
+(keymap-unset minibuffer-inactive-mode-map "<mouse-1>")  ; ‘view-echo-area-messages’
+
 (add-hook 'minibuffer-mode-hook
           (lambda ()
             (keymap-set minibuffer-local-completion-map "SPC"
@@ -117,7 +120,8 @@
 (keymap-global-unset "C-h t")
 (keymap-global-unset "C-h C-a")
 (keymap-global-unset "C-h C-c")
-(keymap-global-unset "C-h C-m")
+(keymap-global-unset "C-h C-e")
+(keymap-global-unset "C-h RET")
 (keymap-global-unset "C-h C-o")
 (keymap-global-unset "C-h C-p")
 (keymap-global-unset "C-h C-t")
@@ -134,6 +138,13 @@
         ;; 3. 将前面这两个提示信息持续显示 5 秒.
         ;; 4. 使 command 候选词列表中, 各函数名的后面显示该函数绑定的快捷键.
         suggest-key-bindings most-positive-fixnum)
+
+(setq prefix-help-command #'embark-prefix-help-command)
+(advice-add 'embark-prefix-help-command :before
+            (lambda (&rest _)
+              (make-thread (lambda ()
+                             (sleep-for 0.2)
+                             (execute-kbd-macro (kbd "<tab>"))))))
 
 (setopt help-enable-autoload t
         help-enable-completion-autoload t

@@ -1,8 +1,25 @@
 ;;; -*- lexical-binding: t; -*-
 
-;;; Delimiter:
+;;; Delimiter & Block:
 
-(setq blink-matching-paren-highlight-offscreen t)
+(setopt blink-matching-paren t  ; 功能之一是在 echo area 显示匹配的 paren.
+        blink-matching-paren-highlight-offscreen t)
+(setopt show-paren-delay 0.1  ; 适度的粘滞感.
+        show-paren-highlight-openparen t
+        ;; 只高亮 paren 而不包括其中的内容.
+        show-paren-style 'parenthesis
+        show-paren-when-point-in-periphery nil)
+(show-paren-mode)
+
+(global-highlight-parentheses-mode)  ; 光标进入 sexp 时, 给括号换色.
+
+(setopt hs-hide-comments-when-hiding-all t
+        hs-isearch-open t)
+
+;;; Character:
+
+;; 使 “C-x =” (‘what-cursor-position’) 顺便显示字符的 Unicode 名字.
+(setopt what-cursor-show-names t)
 
 ;;; Cursor Motion:
 
@@ -94,6 +111,26 @@
             ;; yas-maybe-expand
             nil)
 
+;;; Search & Replace:
+
+(keymap-global-unset "C-r")
+(keymap-global-unset "C-M-r")
+
+(keymap-global-set "C-s" (lambda ()
+                           (interactive)
+                           (let ((ivy-count-format "%d/%d ")
+                                 (ivy-height 6))
+                             (ivy-mode)
+                             (unwind-protect
+                                 (swiper)
+                               (ivy-mode -1)))))
+(add-hook 'minibuffer-setup-hook (lambda ()
+                                   "令 ivy 的 minibuffer 拥有自适应高度."
+                                   (add-hook 'post-command-hook (lambda ()
+                                                                  (when (bound-and-true-p ivy-mode)
+                                                                    (shrink-window (1+ ivy-height))))
+                                             nil t)))
+
 ;;; CUA:
 
 (setq kill-ring-max most-positive-fixnum
@@ -143,8 +180,8 @@
 
 ;;; Whitespace:
 
-(setq-default indent-tabs-mode nil
-              tab-width 4)
+(setopt indent-tabs-mode nil
+        tab-width 4)
 
 ;; 执行 ‘delete-trailing-whitespace’ 时, 还删除首尾的多余的空行.
 (setopt delete-trailing-lines t)
@@ -157,14 +194,14 @@
 
 ;;; Indent:
 
-(setq tab-always-indent t)
+(setopt tab-always-indent t)
 
 ;;; Region:
 
-(setq mark-even-if-inactive nil)
+(setopt mark-even-if-inactive nil)
 (transient-mark-mode)  ; 高亮 region.
 
-(setq shift-select-mode t)
+(setopt shift-select-mode t)
 
 ;; 选中文本后输入字符, 会先删除刚刚选择的文本, 再插入输入的字符.
 (delete-selection-mode)

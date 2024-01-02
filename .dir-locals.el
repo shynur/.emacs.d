@@ -78,15 +78,6 @@
                                         (when (not (string-match-p "\\`[[:blank:]]*/\\*[[:blank:]]*XPM[[:blank:]]*\\*/[[:blank:]]*\\'" (buffer-substring-no-properties 1 (line-end-position))))
                                           (insert "/* XPM */\n" ?\n)))))))
                               t))
-
-         (after-save-hook . ((lambda ()
-                               "自动编译 Emacs Lisp 文件."
-                               (when-let ((buffer-file-name (buffer-file-name)))
-                                 (when (string-match-p "/[^/]+\\.el\\'" buffer-file-name)
-                                   (let ((byte-compile-log-warning-function #'ignore))
-                                     ;; 建议手动‘check-declare-file’一下.
-                                     (byte-compile-file (buffer-file-name))))))
-                             t))
          ))
 
  (prog-mode . ((mode . electric-quote-local)))

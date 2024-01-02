@@ -164,6 +164,17 @@
 ;;; Completion:
 
 ;;; ‘company’
+(with-eval-after-load 'company
+  (global-company-mode)
+  (require 'company-quickhelp))
+(with-eval-after-load 'company-quickhelp
+  (when (or (and (eq system-type 'windows-nt)
+                 (display-graphic-p)))
+    (company-quickhelp-mode))
+  (add-hook 'company-mode-hook (lambda ()
+                                 (company-quickhelp-local-mode (if company-mode
+                                                                   1
+                                                                 -1)))))
 (setopt company-idle-delay 0
         company-minimum-prefix-length 2)
 (setopt company-dabbrev-code-everywhere t)  ; 还在 comment 和 string 中进行 completion.
@@ -176,18 +187,18 @@
         company-tooltip-limit 10)
 (setopt company-clang-executable shynur/custom:clang-path)
 (require 'company)
-(global-company-mode)
 
 ;;; Whitespace:
 
 (setopt indent-tabs-mode nil
         tab-width 4)
 
+(add-hook 'before-save-hook #'delete-trailing-whitespace)
 ;; 执行 ‘delete-trailing-whitespace’ 时, 还删除首尾的多余的空行.
 (setopt delete-trailing-lines t)
 
 ;; 不高亮行尾的 whitespace, 因为没必要.
-(setq-default show-trailing-whitespace nil)
+(setopt show-trailing-whitespace nil)
 
 (setopt require-final-newline t)
 (add-hook 'before-save-hook #'whitespace-cleanup)
@@ -238,6 +249,8 @@
 (setq goto-line-history-local t)
 
 ;;; Mark:
+
+(keymap-global-unset "C-x C-x")  ; ‘exchange-point-and-mark’
 
 (setq mark-ring-max 10  ; 太大的话就不能轮回访问了.
       ;; ‘global-mark-ring’ 只会在离开某个 buffer 时, 记住那个 buffer

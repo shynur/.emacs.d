@@ -32,7 +32,6 @@
                                        (shynur/custom:appdata/ transient-levels-file el)
                                        (shynur/custom:appdata/ transient-values-file el)
                                        (shynur/custom:appdata/ tramp-persistency-file-name el)
-                                       (shynur/custom:appdata/ filesets-menu-cache-file el)
                                        (shynur/custom:appdata/ bookmark-default-file el)
                                        (shynur/custom:appdata/ url-cache-directory /)
                                        (shynur/custom:appdata/ url-cookie-file)
@@ -114,8 +113,6 @@
  '(calendar-mark-holidays-flag t
                                nil (calendar))
  '(prettify-symbols-alist '(("lambda" . ?λ)
-                            ("<="     . ?≤)
-                            (">="     . ?≥)
                             ("::"     . ?∷)
                             ("->"     . ?→))
                           nil (prog-mode)
@@ -172,7 +169,17 @@
                           (set-coding-system-priority 'utf-8-unix))
                         (lambda ()
                           "[menu-bar]->[File]->[Filesets]"
-                          (filesets-init))
+                          (shynur/custom:appdata/ filesets-menu-cache-file el)
+                          (filesets-init)
+
+                          (push `("_emacs"
+                                  . ((:tree ,user-emacs-directory "\\`[^#]*\\([^cn#~]\\|[^l#][cn]\\|[^e#]l[cn]\\|[^.#]el[cn]\\)/?\\'")
+                                     (:filter-dirs-flag t)
+                                     (:tree-max-level ,most-positive-fixnum))) filesets-data)
+                          (filesets-rebuild-this-submenu "_emacs")
+                          ;; 排除‘user-emacs-directory’下的文件, 因为我用‘filesets’.
+                          (with-eval-after-load 'recentf
+                            (push "./\\.emacs\\.d/" recentf-exclude)))
                         (lambda ()
                           (shynur/buffer-eval-after-created "*scratch*"
                             (with-current-buffer "*scratch*"
@@ -351,12 +358,6 @@
  '(temp-buffer-resize-mode t
                            nil (help)
                            "e.g.,使“*Completions*”不会几乎占用整个frame")
- '(imenu-auto-rescan t
-                     nil (imenu))
- '(imenu-sort-function #'imenu--sort-by-name
-                       nil (imenu))
- '(which-function-mode t
-                       nil (which-func))
  '(confirm-kill-processes nil
                           nil (files)
                           "退出时,不询问是否要kill子进程")

@@ -4,24 +4,40 @@
 ;;
 ;; 一些日常使用的函数.
 
-(defun shynur:open-file-with (file)
+(defun shynur:open-file-with (file &optional prog)
   (interactive "G")
   (let ((programs `(
-                    ("edge"     "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe")
-                    ("emacs-Q"  "emacs.exe" "-Q")
-                    ("explorer" "runemacs.exe" "-Q" "--load" ,(expand-file-name (file-name-concat user-emacs-directory
-                                                                                                  "scripts/explorer.elc")))
-                    ("notepad"  "notepad.exe")
+                    ("edge.exe"     "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe")
+                    ("emacs-Q"  "runemacs.exe" "-Q")
+                    ("explorer.exe" "runemacs.exe" "-Q" "--basic-display" "--iconic"
+                     "--load" ,(let ((tmp-file-path (file-name-concat temporary-file-directory #1="shynur-mylib-open-file-with-explorer.el")))
+                                 (with-temp-file (file-name-concat temporary-file-directory #1#)
+                                   (insert "
+(make-frame-invisible nil \"force\")
+(process-lines-ignore-status \"explorer.exe\" (string-replace \"/\" \"\\\\\" (elt argv 0)))
+(kill-emacs)  ; 不要换成“--kill”参数, 否则会先读取当前目录的 local variables 再退出."))
+                                 tmp-file-path))
+                    ("notepad.exe"  "notepad.exe")
+                    ("term"     "runemacs.exe" "-Q" "--basic-display" "--iconic"
+                     "--batch" "--eval" "(shell-command \"start \\\"C:/Program Files/WindowsApps/Microsoft.WindowsTerminal_1.18.3181.0_x64__8wekyb3d8bbwe/WindowsTerminal.exe\\\"\")")
                     ("typora"   "D:/Progs/Typora/Typora.exe")
-                    ("runemacs" "runemacs.exe")
-                    ;; ("word"     "C:/Program Files/Microsoft Office/root/Office16/WINWORD.EXE")
+                    ("runemacs.exe" "runemacs.exe")
+                    ("word.exe" "runemacs.exe" "-Q" "--basic-display" "--iconic"
+                     "--load" ,(let ((tmp-file-path (file-name-concat temporary-file-directory #2="shynur-mylib-open-file-with-MSword.el")))
+                                 (with-temp-file (file-name-concat temporary-file-directory #2#)
+                                   (insert "
+(make-frame-invisible nil \"force\")
+(process-lines-ignore-status \"C:/Program Files/Microsoft Office/root/Office16/WINWORD.EXE\" (string-replace \"/\" \"\\\\\" (elt argv 0)))
+(kill-emacs)  ; 不要换成“--kill”参数, 否则会先读取当前目录的 local variables 再退出."))
+                                 tmp-file-path))
                     )))
     (apply #'start-process
            "进程名 (瞎取一个)" nil
-           `(,@(cdr (assoc-string (completing-read "用哪款软件打开?  "
-                                                  (mapcar #'cl-first programs))
+           `(,@(cdr (assoc-string (or prog
+                                      (completing-read "用哪款软件打开?  "
+                                                       (mapcar #'cl-first programs)))
                                   programs))
-             ,(encode-coding-string file 'chinese-gb18030))))
+             ,(encode-coding-string file 'chinese-gb18030)))))
 
 (defun shynur:reverse-characters (beginning end)
   "将选中的区域的所有字符倒序排列"
@@ -143,7 +159,7 @@
                                             (let (delete-frame-functions
                                                   after-delete-frame-functions)
                                               (delete-frame))))))
-                   (run-with-idle-timer 10 nil
+                   (run-with-idle-timer (max idle-update-delay 10) nil
                                         (lambda ()
                                           (with-mutex balloon-lock
                                             (unless (stringp balloon)

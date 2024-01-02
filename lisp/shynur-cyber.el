@@ -4,6 +4,15 @@
 
 (shynur/custom:appdata/ nsm-settings-file data)  ; 记录已知的安全 connection.
 
+;;; Information:
+
+(when (eq system-type 'windows-nt)
+  (with-eval-after-load 'net-utils
+    (eval-when-compile
+      (require 'net-utils))
+    (when (string= netstat-program "netstat")
+      (setopt netstat-program-options '("-a" "-n" "-o")))))
+
 ;;; E-Mail:
 
 (keymap-global-unset "C-x m")    ; ‘compose-mail’

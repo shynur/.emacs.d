@@ -7,15 +7,7 @@
 (setopt server-use-tcp t)
 (when (and (string= shynur/custom:truename "谢骐")
            (string= (system-name) "ASUS-TX2"))
-  ;; 喜欢绕远路, 不使用“localhost”.
-  (setopt server-host (mapconcat #'identity
-                                 (butlast (mapcar #'number-to-string
-                                                  (alist-get "wlan2"
-                                                             (network-interface-list nil 'ipv4)
-                                                             [127 0 0 1 0]
-                                                             nil
-                                                             #'string=)))
-                                 ".")
+  (setopt server-host "localhost"
           ;; 随机分配 端口号 给 TCP 使用.
           server-port nil))
 ;; MS-Windows 上, server file (见 emacsclient 的命令行参数 “--server-file”) 一般放在该目录下.

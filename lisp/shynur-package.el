@@ -47,7 +47,6 @@
                                     keycast
                                     neotree
                                     git-modes
-                                    highlight
                                     on-screen
                                     yaml-mode
                                     yasnippet
@@ -60,7 +59,6 @@
                                     all-the-icons
                                     doom-modeline
                                     markdown-mode
-                                    org-superstar
                                     page-break-lines
                                     company-quickhelp
                                     rainbow-delimiters

@@ -10,7 +10,6 @@
 ;;; Theme:
 
 (require 'shynur-themes)   ; (find-file-other-window "./themes/shynur-themes.el")
-(enable-theme 'modus-vivendi)
 
 ;;; Face (其实应该放到 theme 中去):
 
@@ -98,7 +97,7 @@
              `(,(pcase system-type
                   ("TODO: Dunno how to test whether the platform supports this parameter." 'alpha-background)
                   (_ 'alpha))
-               . 75))
+               . 80))
 
 ;; 当最后一个 frame 关闭时, 存入它的 位置/尺寸;
 ;; 当桌面上没有 frame 时, 下一个打开的 frame 将使用那个被存入的 位置/尺寸.
@@ -185,8 +184,8 @@
                                                                                                                                                            shynur--memory-unit))))))))
                            "⏱️" (:eval (emacs-uptime "%h:%.2m")) " "
                            ;; 鼠标滚轮 也属于 key-sequences/input-events, 但在这里它 (特别是开启像素级滚动) 显然不合适.
-                           ;; 将 CAR 上的 t 改为 nil 以关闭该功能.
-                           (t ("" "🎹" (:eval (number-to-string num-input-keys)) "/" (:eval (number-to-string num-nonmacro-input-events)))))
+                           ;; 将 CAR 设为 t/nil 以打开/关闭该功能:
+                           (nil ("" "🎹" (:eval (number-to-string num-input-keys)) "/" (:eval (number-to-string num-nonmacro-input-events)))))
       icon-title-format `((:eval (prog1 #1='#:icon-title  ; 相当于一次性的 frame local variable, 因为 每个 frame 的 icon-title 是不一样的.
                                    (set #1# (mapconcat ',(lambda (buffer)
                                                            "以 “[buffer1] [buffer2] ...” 的方式 (限定宽度) 不重复地 列出 frame 中正在显示的 buffer."
@@ -223,6 +222,8 @@
 (keymap-global-unset "<menu-bar> <options> <cua-mode>")
 (keymap-global-unset "<menu-bar> <options> <customize> <customize-saved>")
 (keymap-global-unset "<menu-bar> <options> <save>")
+(keymap-global-unset "<menu-bar> <options> <uniquify>")
+(keymap-global-unset "<menu-bar> <options> <save-place>")
 (keymap-global-unset "<menu-bar> <options> <transient-mark-mode>")
 (keymap-global-unset "<menu-bar> <options> <highlight-paren-mode>")
 
@@ -230,6 +231,15 @@
 
 (keymap-global-unset "<menu-bar> <tools> <browse-web>")
 (keymap-global-unset "<menu-bar> <tools> <gnus>")
+
+;;; Imenu
+(setopt imenu-auto-rescan t
+        ;; Buffer 很大, ‘imenu’你忍一下.
+        imenu-auto-rescan-maxout most-positive-fixnum
+        ;; 超过 这几秒 就算了.
+        imenu-max-index-time (* 0.3 idle-update-delay))
+(setopt imenu-sort-function #'imenu--sort-by-name)
+;; (add-hook 'XXX-mode-hook #'imenu-add-menubar-index)
 
 (keymap-global-unset "<menu-bar> <help-menu> <about-emacs>")
 (keymap-global-unset "<menu-bar> <help-menu> <about-gnu-project>")
@@ -280,7 +290,8 @@
 (setopt window-min-height 4
         window-min-width  1)
 
-(global-hl-line-mode)
+;; 不需要高亮_当前行_, 因为_当前行号_是高亮的.
+(global-hl-line-mode -1)
 
 ;;; Text Area:
 
@@ -302,7 +313,6 @@
         display-line-numbers-width nil
         ;; 行号占用的列数可以动态减少.
         display-line-numbers-grow-only nil)
-
 (setopt line-number-display-limit nil  ; 当 buffer 的 size 太大时是否启用行号, 以节约性能.
         ;; 单行太长也会消耗性能用于计算行号, 因此,
         ;; 如果当前行附近的行的平均宽度大于该值, 则不计算行号.
@@ -332,15 +342,23 @@
 
 ;;; Mode Line:
 
-;;; [[package:melpa][doom-modeline]]: [[package][all-the-icons]]
-(setopt doom-modeline-minor-modes t)
-;; 即使当前窗口宽度很小, 也尽量显示所有信息.
-(setopt doom-modeline-window-width-limit nil)
-;; 左侧 小竖条 (装饰品) 的 宽度.
-(setopt doom-modeline-bar-width 3)
-;; 尽可能地窄.
-(setopt doom-modeline-height 1)
+;; Face ‘mode-line-inactive’ for non-selected window’s mode line.
+(setopt mode-line-in-non-selected-windows t)
+
+(setopt mode-line-compact nil)  ; 不要设 t, 否则即使有多余的空间, 它也倾向于挤在一起.
+(setopt mode-line-right-align-edge 'window)  ; 与 window 的边缘对齐.
+
+(setopt doom-modeline-display-misc-in-all-mode-lines t  ; 没看出有什么区别, 先设 t, 继续观察...
+        doom-modeline-minor-modes nil)
+(setopt doom-modeline-bar-width 3  ; 左侧 小竖条 (装饰品) 的 宽度.
+        ;; 尽可能地窄.
+        doom-modeline-height 1
+        ;; 即使当前窗口宽度很小, 也尽量显示所有信息.
+        doom-modeline-window-width-limit nil)
 (doom-modeline-mode)
+
+(setopt mode-line-percent-position t
+        doom-modeline-percent-position mode-line-percent-position)
 
 (size-indication-mode)  ; 在 mode line 上显示 buffer 大小.
 (setq mode-line-column-line-number-mode-map ())  ; 使某些可点击文本不作出应答.
@@ -352,12 +370,9 @@
 
 (line-number-mode -1)  ; Mode line 上不要显示行号, 因为 window 左边缘已经显示行号了.
 ;; 从 1 开始计数.
-(setopt mode-line-position-column-format '(" C%C ")
+(setopt mode-line-position-column-format '("C%C")
         doom-modeline-column-zero-based nil)
 (column-number-mode)
-
-;; Face ‘mode-line-inactive’ for non-selected window’s mode line.
-(setopt mode-line-in-non-selected-windows t)
 
 ;;; End of Line
 (setopt eol-mnemonic-unix " LF "
@@ -365,9 +380,12 @@
         eol-mnemonic-dos  " CRLF "
         eol-mnemonic-undecided " ?EOL ")
 
+(setopt mode-line-process t)  ; E.g., ‘Shell :run’.
+
 ;;; Display Time Mode
 (require 'time)
-(setopt display-time-day-and-date t
+(setopt display-time-format "%a%b%d%p%I:%M"
+        display-time-day-and-date "若‘display-time-format’是 nil 则使用默认的日期显示方式"
         display-time-24hr-format nil)
 (setq display-time-mail-icon (find-image '(
                                            (:type xpm :file "shynur-letter.xpm" :ascent center)
@@ -386,11 +404,17 @@
         display-time-load-average-threshold 0)
 (setopt display-time-interval 60)
 (display-time-mode)
-(advice-add 'display-time-next-load-average  :before-until ; 使可点击文本 (CPU 负荷) 不作出应答.
+(advice-add 'display-time-next-load-average :before-until ; 使可点击文本 (CPU 负荷) 不作出应答.
             (lambda ()
               (and (called-interactively-p 'any)
                    (when (listp last-command-event)
                      (eq (car last-command-event) 'mouse-2)))))
+
+(setopt which-func-maxout most-positive-fixnum
+        which-func-modes t  ; 服务任何 mode.
+        ;; 不知道当前函数是什么时的显示词.
+        which-func-unknown "?")
+(which-function-mode)  ; 依赖 ‘imenu’ 提供的数据, 在 modeline 上显示当前 defun 名.
 
 ;;; Display Battery Mode
 (setopt battery-mode-line-format "[%p%%] ")
@@ -523,7 +547,8 @@
                          shynur--cursor-animation-color-R shynur--cursor-animation-color-G shynur--cursor-animation-color-B
                          ;; 排除大约是单个半角字符的距离:
                          24))
-                    (setq shynur--cursor-animation? t)))))))
+                    (setq shynur--cursor-animation? t))))
+              99)))
 (when (and (eq system-type 'windows-nt)
            (or (display-graphic-p)
                (daemonp)))
@@ -555,7 +580,7 @@
 (pixel-scroll-precision-mode)
 (when (and (string= shynur/custom:truename "谢骐")
            (string= shynur/custom:os "MS-Windows 11"))
-  (run-at-time nil 2000
+  (run-at-time nil (max idle-update-delay 2000)
                (lambda ()
                  "重启 ‘SmoothScroll’."
                  ;; P.S. 我的 ‘SmoothScroll’ 配置:

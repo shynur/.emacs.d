@@ -16,6 +16,11 @@
 
 (shynur/custom:appdata/ custom-file el)  ; 该文件需要 手动‘load-file’, 所以 直接 设置 即可, 无后顾之忧.
 
+;;; Splitting Window:
+
+;; Sensibly 分割 window 时, 如果能保证 window 宽于该值, 则倾向于竖着切.
+(setopt split-width-threshold 120)
+
 ;;; Buffer:
 
 (keymap-global-set "C-x C-b" #'bs-show)
@@ -162,16 +167,14 @@
 
 (put 'narrow-to-region 'disabled '(query nil "禁用该命令 只是为了 演示一下 如何 禁用命令"))
 
-;;; Idle:
-
-(setq idle-update-delay most-positive-fixnum)  ; (Experimental) 永不 update 某些东西.
-
-;;; 改善性能:
+;;; 性能相关:
 
 ;; 不清除 字体 缓存.
 (setq inhibit-compacting-font-caches t)
 
 (global-so-long-mode)
+
+(setopt idle-update-delay 5)
 
 ;;; Backup & Auto-Saving & Reverting:
 
@@ -197,7 +200,7 @@
 (setopt auto-save-interval 20  ; 键入这么多个字符之后触发自动保存.
         ;; 经过这么多秒数的 idleness 之后触发自动保存,
         ;; 还可能执行一次 GC (这是一条 heuristic 的建议, Emacs 可以不遵循, e.g., 当编辑大文件时).
-        auto-save-timeout 30)
+        auto-save-timeout (max idle-update-delay 30))
 (setopt delete-auto-save-files t  ; 保存时自动删除 auto-save-file.
         kill-buffer-delete-auto-save-files nil)
 (shynur/custom:appdata/ tramp-auto-save-directory /)

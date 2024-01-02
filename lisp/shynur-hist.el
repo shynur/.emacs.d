@@ -28,6 +28,11 @@
 (shynur/custom:appdata/ recentf-save-file el)
 (setopt recentf-max-saved-items nil
         recentf-max-menu-items 30)
+(with-eval-after-load 'recentf
+  (push (lambda (path)
+          (string-equal-ignore-case
+           (upcase (expand-file-name filesets-menu-cache-file))
+           (upcase path))) recentf-exclude))
 (recentf-mode)
 
 (provide 'shynur-hist)

@@ -26,8 +26,8 @@
                              (seq-doseq (variable-new-expected shynur--performance-impactful-variables)
                                (set-default-toplevel-value (aref variable-new-expected 0) (aref variable-new-expected 2))))))))
 
-(setq load-prefer-newer nil
-      force-load-messages t)
+(setq force-load-messages t)
+(setopt load-prefer-newer nil)
 
 (push (file-name-concat user-emacs-directory
                         "lisp/") load-path)

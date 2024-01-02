@@ -86,10 +86,10 @@
              lexical-binding))))
 
 ;; 顺序应当是不重要的.
+(require 'shynur-general)  ; (find-file-other-window "./shynur-general.el")
 (require 'shynur-elisp)    ; (find-file-other-window "./shynur-elisp.el")
 (require 'shynur-tmp)      ; (find-file-other-window "./shynur-tmp.el")
 (require 'shynur-proj)     ; (find-file-other-window "./shynur-proj.el")
-(require 'shynur-general)  ; (find-file-other-window "./shynur-general.el")
 (require 'shynur-host)     ; (find-file-other-window "./shynur-host.el")
 (require 'shynur-server)   ; (find-file-other-window "./shynur-server.el")
 (require 'shynur-lang)     ; (find-file-other-window "./shynur-lang.el")

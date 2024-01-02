@@ -8,9 +8,24 @@
 
 ;;; Org:
 
+;; headline
 (add-hook 'org-mode-hook
           (lambda ()
-            (make-variable-buffer-local 'prettify-symbols-alist)) -100)
+            "打开 Org 文件时, 折叠所有其余部分."
+            (when (and (featurep 'saveplace)
+                       (default-value 'save-place-mode))
+              (org-fold-hide-block-all)
+              (org-fold-hide-sublevels most-positive-fixnum)
+              (org-reveal)))
+          99)
+(add-hook 'org-mode-hook #'org-num-mode)
+;; Org 似乎已经有了‘org-eldoc-load’, 加上这一句反而不能开启.
+;; (add-hook 'org-mode-hook #'eldoc-mode)  ; 编辑 headline 时显示层级.
+(setopt org-tags-column -60)  ; 将 tags 的右边缘与 C60 对齐.
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            (setq-local prettify-symbols-alist prettify-symbols-alist)) -100)
 (add-hook 'org-mode-hook #'prettify-symbols-mode 99)
 
 (with-eval-after-load 'org
@@ -18,13 +33,6 @@
 (add-hook 'org-mode-hook
           (lambda ()
             (push '("\N{ZERO WIDTH SPACE}" . ?‸) prettify-symbols-alist)))
-
-(add-hook 'org-mode-hook #'org-num-mode)
-
-;; [[package:melpa][org-superstar]]
-(add-hook 'org-mode-hook #'org-superstar-mode)
-
-(add-hook 'org-mode-hook #'yas-minor-mode)
 
 (add-hook 'org-mode-hook
           (lambda ()
@@ -43,6 +51,26 @@
 (add-hook 'outline-mode-hook #'page-break-lines-mode)
 
 (setopt org-entities-user '(("newline" "\\\\" "\\\\" "<br />" "\n" "\n" "\n")))
+
+;; Babel
+(with-eval-after-load 'recentf
+  (push (lambda (path)
+          (string-prefix-p
+           (file-name-concat temporary-file-directory "babel-")
+           path
+           t)) recentf-exclude))
+(progn
+  (make-variable-buffer-local 'shynur/org:remove-RESUILTS-before-saving)
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook
+                        (lambda ()
+                          (when (bound-and-true-p shynur/org:remove-RESUILTS-before-saving)
+                            (org-babel-remove-result-one-or-many t)))
+                        -90 "buffer local"))))
+
+;; TODO
+(setopt org-export-with-priority t)
 
 ;;; Makefile:
 
@@ -82,15 +110,14 @@
 (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
 (add-hook 'ielm-mode-hook  #'eldoc-mode)
 
-(add-hook 'emacs-lisp-mode-hook #'hs-minor-mode)
-
 ;; Common Lisp 解释器
 (setopt inferior-lisp-program shynur/custom:commonlisp-path)
 
 ;;; Python:
 
 (setopt python-shell-interpreter shynur/custom:python-path
-        python-shell-interpreter-interactive-arg nil)
+        ;; python-shell-interpreter-interactive-arg "-i"
+        )
 
 ;;; SQL:
 

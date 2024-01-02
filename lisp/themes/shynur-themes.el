@@ -25,6 +25,8 @@
 (require-theme 'shynur-dark-theme)   ; (find-file-other-window "./shynur-dark-theme.el")
 
 (require-theme 'modus-vivendi-theme)
+(enable-theme 'modus-vivendi)
+(set-face-background 'help-key-binding (face-background 'default))
 
 (provide 'shynur-themes)
 

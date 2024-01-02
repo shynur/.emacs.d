@@ -27,7 +27,7 @@
   (add-hook 'shell-mode-hook
             (lambda ()
               (when (not (file-remote-p default-directory))
-                (execute-kbd-macro (kbd "pwsh.exe "))))))
+                (execute-kbd-macro "set EMACS_INVOKED_PWSH=true   pwsh.exe ")))))
 
 (add-hook 'shell-mode-hook
           (lambda ()

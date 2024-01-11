@@ -97,7 +97,7 @@
              `(,(pcase system-type
                   ("TODO: Dunno how to test whether the platform supports this parameter." 'alpha-background)
                   (_ 'alpha))
-               . 80))
+               . 72))
 
 ;; 当最后一个 frame 关闭时, 存入它的 位置/尺寸;
 ;; 当桌面上没有 frame 时, 下一个打开的 frame 将使用那个被存入的 位置/尺寸.

@@ -44,7 +44,7 @@
                                                                       . ,(lambda ()
                                                                            (interactive)
                                                                            (browse-url-default-browser "file://localhost/D:/Desktop/ToRead/HowNetworksWork.pdf")
-                                                                           (w32-notification-close (w32-notification-notify :title "读到了 4.1.3" :body " "))
+                                                                           (w32-notification-close (w32-notification-notify :title "读到了 6.3.3" :body " "))
                                                                            (delete-frame))))
 
 (global-set-key [menu-bar 我的学习 计算机组成与设计] `("计算机组成与设计"

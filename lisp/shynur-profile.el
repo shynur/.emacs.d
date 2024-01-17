@@ -1,11 +1,0 @@
-;;; -*- lexical-binding: t; -*-
-
-(setopt user-full-name    shynur/custom:truename
-        user-mail-address shynur/custom:email)
-
-(provide 'shynur-profile)
-
-;; Local Variables:
-;; coding: utf-8-unix
-;; no-byte-compile: nil
-;; End:

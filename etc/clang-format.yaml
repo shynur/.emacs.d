@@ -75,17 +75,18 @@ SpacesInConditionalStatement: false
 SpacesInContainerLiterals: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
+...
 
 ---
 Language: Cpp
 IndentWidth: 4
 IndentAccessModifiers: false  # 使用 `AccessModifierOffset` 控制缩进
 AccessModifierOffset: -2  # `public:` 的缩进与基础缩进叠加, 所以是负的.
-Alignafteropenbracket: BlockIndent
+AlignAfterOpenBracket: BlockIndent
 # func_name(
 #     arg1, arg2
 # )
-AlignarrayOfStructures: Right
+AlignArrayOfStructures: Right
 # {
 #     { 10, },
 #     {  2, },  // 右对齐
@@ -140,6 +141,7 @@ PPIndentWidth: 2
 # #  define BAR
 # #endif
 PackConstructorInitializers: NextLine
+ConstructorInitializerIndentWidth: 0
 PointerAlignment: Right
 QualifierAlignment: Custom
 QualifierOrder:
@@ -171,6 +173,7 @@ SpacesInParensOptions:
   InEmptyParentheses: false
   Other: false
 # TODO: AlignConsecutiveShortCaseStatements
+...
 
 ---
 Language: JavaScript

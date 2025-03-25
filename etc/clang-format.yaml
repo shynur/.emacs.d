@@ -178,7 +178,6 @@ SpacesInParensOptions:
   InCStyleCasts: false
   InEmptyParentheses: false
   Other: false
-SpaceBeforeCtorInitializerColon: false
 # TODO: AlignConsecutiveShortCaseStatements
 ...
 

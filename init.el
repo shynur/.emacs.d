@@ -13,7 +13,7 @@
   (when (file-exists-p custom-file)
     (load custom-file))
   (add-hook 'kill-emacs-query-functions
-            #'custom-prompt-customize-unsaved-options))
+            'custom-prompt-customize-unsaved-options))
 
 (use-package emacs
   :config
@@ -25,12 +25,32 @@
 	  initial-scratch-message "")
 
   (setopt default-input-method "chinese-py")
-)
+
+  (setopt x-stretch-cursor t)
+
+  (setopt echo-keystrokes 0.1)
+  )
+
+(use-package company
+  :ensure t
+  :defer t)
+
+(use-package prog-mode
+  :config
+  (add-hook 'prog-mode-hook 'company-mode))
+
+(use-package delsel
+  :config
+  (delete-selection-mode))
 
 (use-package tool-bar
   :if (display-graphic-p)
   :config
   (tool-bar-mode -1))
+
+(use-package repeat
+  :config
+  (repeat-mode))
 
 (use-package savehist
   :config

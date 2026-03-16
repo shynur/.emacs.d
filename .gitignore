@@ -1,6 +1,5 @@
-/*
-!/.gitignore
-
-!/custom.el
-!/early-init.el
-!/init.el
+/eln-cache/
+/elpa/
+/history
+/places
+/recentf

@@ -25,6 +25,11 @@
   (push 0.25 mouse-wheel-scroll-amount)  ; 一次滚动 25% 屏幕
   )
 
+(use-package font-lock
+  :after faces
+  :config
+  (set-face-italic 'font-lock-keyword-face t))
+
 (use-package modus-themes
   :defer t
   :config

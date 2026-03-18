@@ -3,17 +3,21 @@
 (use-package package
   :custom
   (package-archives '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-		      ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")	  
+		      ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
 		      ("melpa-stable" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/stable-melpa/"))))
 
 (use-package cus-edit
   :custom
   (custom-file (locate-user-emacs-file "custom.el"))
-  :config  
+  :config
   (when (file-exists-p custom-file)
     (load custom-file))
-  ;(add-hook 'kill-emacs-query-functions 'custom-prompt-customize-unsaved-options)  ; 连 xterm-mouse-mode 都要询问是否记住, 太啰嗦!
+  ;;(add-hook 'kill-emacs-query-functions 'custom-prompt-customize-unsaved-options)  ; 连 xterm-mouse-mode 都要询问是否记住, 太啰嗦!
   )
+
+(use-package term/xterm
+  :custom
+  (xterm-set-window-title t))
 
 (use-package page-break-lines
   :ensure t
@@ -34,6 +38,11 @@
   :defer t
   :custom
   (modus-themes-italic-constructs t))
+
+(use-package custom
+  :config
+  (when (display-graphic-p)
+    (setopt custom-enabled-themes '(modus-vivendi))))
 
 (use-package treesit
   :defer t
@@ -108,25 +117,164 @@
   (inhibit-startup-screen t)
   (initial-major-mode 'markdown-mode)
   (initial-scratch-message "")
-  
+
   (default-input-method "chinese-py")
-  
+
   (x-stretch-cursor t)
-  
+
   (echo-keystrokes 0.1)
-  
+
   :config
   (eval '(setq inhibit-startup-echo-area-message "shynur"))
-  (eval '(setq inhibit-startup-echo-area-message "root")))
+  (eval '(setq inhibit-startup-echo-area-message "root"))
+
+  (prefer-coding-system 'utf-8-unix)
+
+  (when (daemonp)
+    (add-hook 'window-setup-hook
+	      (lambda ()
+		(apply
+		 'make-process
+                 :name "Emacs Daemon 启动时用来显示通知的临时载体"
+                 :command `(,(file-name-concat invocation-directory "emacs")
+                            "-Q" "--basic-display" "--iconic"
+                            "-eval" ,(prin1-to-string
+				      '(let ((--title "《 Emacs 已在后台启动 》")
+					     (--body  "守护进程将会常驻后台哦～\n\\t\\t         Good Luck!"))
+					 (pcase system-type
+					   ('windows-nt
+					    (w32-notification-notify
+					     :title --title
+					     :body  --body
+					     :level 'info))
+					   (_
+					    (require 'notifications)
+                                            (notifications-notify
+					     :title --title
+					     :body  --body
+					     :transient t)))))
+                            "-eval" "(sleep-for 0.1)"
+                            "-funcall" "kill-emacs")
+                 :noquery t
+		 `(,@(when (and (eq system-type 'windows-nt)
+				(seq-some (lambda (tz)
+					    (string= (format-time-string "%Z") tz))
+					  ["中国标准时间" "CST"]))
+		       '(:coding 'chinese-gbk)))))))
+
+  (when (and (eq system-type 'windows-nt)
+	     (seq-some (lambda (tz)
+		         (string= (format-time-string "%Z") tz))
+		       ["中国标准时间" "CST"]))
+    (setq file-name-coding-system 'chinese-gb18030))
+
+  (setq frame-title-format `(""
+                             default-directory "\t"
+                             "🧹x" (:eval (number-to-string gcs-done)) "~" (:eval (number-to-string (round gc-elapsed))) "s\s"
+                             "💾" (:eval ,(prog1 '#1=#:rss
+					    (set '#1# 0)
+                                            (add-hook 'post-gc-hook
+						      (lambda ()
+							(set '#1# (cl-loop for #2=#:rss = (let ((default-directory temporary-file-directory))
+											    (alist-get 'rss (process-attributes (emacs-pid))))
+                                                                           then (/ #2# 1024.0)
+                                                                           for #3=#:ram-unit across "KMGTPEZ"
+                                                                           when (< #2# 1024)
+									   return (format "%.1f%ciB"
+                                                                                          #2# #3#))))))) "\s"
+                             "⏱️" (:eval (emacs-uptime "%h:%.2m:%.2s")) "\s"
+                             (pixel-scroll-precision-mode
+                              nil
+                              ("🎹" (:eval (number-to-string num-input-keys)) "/" (:eval (number-to-string num-nonmacro-input-events))))))
+
+  (setq icon-title-format '((:eval (mapconcat (lambda (buffer)
+						(with-current-buffer buffer
+						  (format "[%.4s]" (buffer-name))))
+					      (delete-dups (mapcar (lambda (window)
+								     (with-selected-window window
+								       (current-buffer))) (window-list)))
+					      "\s"))))
+  )
+
+(use-package keymap
+  :config
+  (let ((#1=#:key-swapper (let ((#2=#:terminals-swapped ()))
+			    (lambda (frame)
+			      (unless (seq-contains ["/dev/tty"] (terminal-name))
+				(unless (memq (frame-terminal) #2#)
+				  (with-selected-frame frame
+                                    (key-translate "[" "(")
+                                    (key-translate "]" ")")
+                                    (key-translate "(" "[")
+                                    (key-translate ")" "]")
+                                    (push (frame-terminal) #2#))))))))
+    (add-hook 'after-make-frame-functions #1#)
+    (unless (daemonp)
+      (funcall #1# (selected-frame)))))
+
+(use-package isearch
+  :defer t
+  :config
+  (keymap-global-unset "C-r")
+  (keymap-global-unset "C-M-r"))
+
+(use-package swiper
+  :ensure t
+  :defer t)
+
+(use-package ivy
+  :ensure t
+  :bind
+  ("C-s" . (lambda ()
+             (interactive)
+             (let ((ivy-count-format "%d/%d ")
+                   (ivy-height 6))
+               (ivy-mode)
+               (unwind-protect
+                   (swiper)
+                 (ivy-mode -1)))))
+  :config
+  (add-hook 'minibuffer-setup-hook (lambda ()
+                                     "令 ivy 的 minibuffer 拥有自适应高度."
+                                     (add-hook 'post-command-hook
+					       (lambda ()
+                                                 (when (bound-and-true-p ivy-mode)
+                                                   (shrink-window (1+ ivy-height))))
+                                               nil "buffer local")))
+  :custom
+  (ivy-on-del-error-function #'ignore))
+
+(use-package rainbow-delimiters
+  :defer t
+  :ensure t)
 
 (use-package company
   :ensure t
   :defer t)
 
+(use-package ielm
+  :defer t
+  :config
+  (add-hook 'ielm-mode-hook 'company-mode))
+
 (use-package prog-mode
   :defer t
   :config
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'prog-mode-hook (lambda ()
+                              (setq-local require-final-newline t)
+                              (add-hook 'before-save-hook
+					#'delete-trailing-whitespace
+					nil "buffer local")))
   (add-hook 'prog-mode-hook 'company-mode))
+
+(use-package text-mode
+  :config
+  (add-hook 'text-mode-hook (lambda ()
+                              (setq-local require-final-newline t)
+                              (add-hook 'before-save-hook
+					#'delete-trailing-whitespace
+					nil "buffer local"))))
 
 (use-package delsel
   :config
@@ -154,8 +302,18 @@
   :config
   (save-place-mode))
 
+(use-package fringe
+  :custom
+  (fringe-mode '(0 . nil)))
+
 (use-package frame
   :config
+  (modify-all-frames-parameters '((alpha . (80 . 55))
+				  (height . 25)
+				  (width . 80)
+				  (top . 25)
+				  (left . 1)))
+
   (blink-cursor-mode -1))
 
 (use-package simple

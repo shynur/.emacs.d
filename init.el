@@ -1,5 +1,9 @@
 ;; -*- lexical-binding: t; -*-
 
+(use-package use-package
+  :custom
+  (use-package-always-defer t))
+
 (use-package package
   :custom
   (package-archives '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -35,7 +39,6 @@
   (set-face-italic 'font-lock-keyword-face t))
 
 (use-package modus-themes
-  :defer t
   :custom
   (modus-themes-italic-constructs t))
 
@@ -45,7 +48,6 @@
     (setopt custom-enabled-themes '(modus-vivendi))))
 
 (use-package treesit
-  :defer t
   :custom
   (treesit-font-lock-level 4))
 
@@ -54,7 +56,6 @@
   (facemenu-update))
 
 (use-package menu-bar
-  :defer t
   :config
   (keymap-global-unset "<menu-bar> <file> <new-file>")
   (keymap-global-unset "<menu-bar> <file> <open-file>")
@@ -213,21 +214,19 @@
       (funcall #1# (selected-frame)))))
 
 (use-package isearch
-  :defer t
   :config
   (keymap-global-unset "C-r")
   (keymap-global-unset "C-M-r"))
 
 (use-package swiper
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package ivy
   :ensure t
   :bind
   ("C-s" . (lambda ()
              (interactive)
-             (let ((ivy-count-format "%d/%d ")
+             (dlet ((ivy-count-format "%d/%d ")
                    (ivy-height 6))
                (ivy-mode)
                (unwind-protect
@@ -245,20 +244,17 @@
   (ivy-on-del-error-function #'ignore))
 
 (use-package rainbow-delimiters
-  :defer t
   :ensure t)
 
 (use-package company
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package ielm
-  :defer t
   :config
+  (add-hook 'ielm-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'ielm-mode-hook 'company-mode))
 
 (use-package prog-mode
-  :defer t
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'prog-mode-hook (lambda ()
@@ -282,7 +278,6 @@
 
 (use-package tool-bar
   :if (display-graphic-p)
-  :defer t
   :config
   (tool-bar-mode -1))
 
@@ -329,53 +324,40 @@
   (global-display-line-numbers-mode))
 
 (use-package dockerfile-mode
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package csv-mode
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package git-modes
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package go-mode
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package json-mode
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package markdown-mode
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package nginx-mode
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package rainbow-mode
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package sed-mode
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package typescript-mode
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package web-mode
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package yaml-mode
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package cmake-mode
-  :ensure t
-  :defer t)
+  :ensure t)

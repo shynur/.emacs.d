@@ -1,15 +1,15 @@
 ;; -*- lexical-binding: t; -*-
 
 (use-package package
-  :config
-  (setopt package-archives
-	  '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-            ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")	  
-	    ("melpa-stable" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/stable-melpa/"))))
+  :custom
+  (package-archives '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+		      ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")	  
+		      ("melpa-stable" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/stable-melpa/"))))
 
 (use-package cus-edit
-  :config
-  (setopt custom-file (locate-user-emacs-file "custom.el"))
+  :custom
+  (custom-file (locate-user-emacs-file "custom.el"))
+  :config  
   (when (file-exists-p custom-file)
     (load custom-file))
   ;(add-hook 'kill-emacs-query-functions 'custom-prompt-customize-unsaved-options)  ; 连 xterm-mouse-mode 都要询问是否记住, 太啰嗦!
@@ -22,7 +22,7 @@
 
 (use-package mwheel
   :config
-  (push 0.25 mouse-wheel-scroll-amount)  ; 一次滚动 25% 屏幕
+  (push .25 mouse-wheel-scroll-amount)  ; 一次滚动 25% 屏幕
   )
 
 (use-package font-lock
@@ -32,13 +32,13 @@
 
 (use-package modus-themes
   :defer t
-  :config
-  (setopt modus-themes-italic-constructs t))
+  :custom
+  (modus-themes-italic-constructs t))
 
 (use-package treesit
   :defer t
-  :config
-  (setopt treesit-font-lock-level 4))
+  :custom
+  (treesit-font-lock-level 4))
 
 (use-package facemenu
   :config
@@ -104,19 +104,20 @@
   (keymap-global-unset "<menu-bar> <help-menu> <about-gnu-project>"))
 
 (use-package emacs
+  :custom
+  (inhibit-startup-screen t)
+  (initial-major-mode 'markdown-mode)
+  (initial-scratch-message "")
+  
+  (default-input-method "chinese-py")
+  
+  (x-stretch-cursor t)
+  
+  (echo-keystrokes 0.1)
+  
   :config
-  (setopt inhibit-startup-screen t)
   (eval '(setq inhibit-startup-echo-area-message "shynur"))
-  (eval '(setq inhibit-startup-echo-area-message "root"))
-
-  (setopt initial-major-mode 'markdown-mode
-	  initial-scratch-message "")
-
-  (setopt default-input-method "chinese-py")
-
-  (setopt x-stretch-cursor t)
-
-  (setopt echo-keystrokes 0.1))
+  (eval '(setq inhibit-startup-echo-area-message "root")))
 
 (use-package company
   :ensure t
@@ -162,9 +163,8 @@
   (column-number-mode)
   (line-number-mode -1)
   (size-indication-mode)
-
-  (setopt blink-matching-paren-highlight-offscreen t)
-  )
+  :custom
+  (blink-matching-paren-highlight-offscreen t))
 
 (use-package display-line-numbers
   :config

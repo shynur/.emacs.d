@@ -19,6 +19,9 @@
   ;;(add-hook 'kill-emacs-query-functions 'custom-prompt-customize-unsaved-options)  ; 连 xterm-mouse-mode 都要询问是否记住, 太啰嗦!
   )
 
+(use-package diff-mode
+  :mode "/.git/COMMIT_EDITMSG\\'")
+
 (use-package term/xterm
   :custom
   (xterm-set-window-title t))
@@ -125,6 +128,8 @@
 
   (echo-keystrokes 0.1)
 
+  (tab-always-indent t)
+
   :config
   (eval '(setq inhibit-startup-echo-area-message "shynur"))
   (eval '(setq inhibit-startup-echo-area-message "root"))
@@ -197,6 +202,17 @@
 					      "\s"))))
   )
 
+(use-package help-mode
+  :config
+  (add-hook 'help-mode-hook (lambda ()
+			      (display-line-numbers-mode -1))))
+
+(use-package cc-mode
+  :custom
+  (c-tab-always-indent t)
+  (add-hook 'c-mode-common-hook (lambda ()
+                                  (c-toggle-comment-style -1))))
+
 (use-package keymap
   :config
   (let ((#1=#:key-swapper (let ((#2=#:terminals-swapped ()))
@@ -258,6 +274,9 @@
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'prog-mode-hook (lambda ()
+                              (unless (derived-mode-p 'lisp-data-mode 'scheme-mode)
+				(electric-pair-local-mode))))
+  (add-hook 'prog-mode-hook (lambda ()
                               (setq-local require-final-newline t)
                               (add-hook 'before-save-hook
 					#'delete-trailing-whitespace
@@ -317,6 +336,7 @@
   (line-number-mode -1)
   (size-indication-mode)
   :custom
+  (indent-tabs-mode nil)
   (blink-matching-paren-highlight-offscreen t))
 
 (use-package display-line-numbers

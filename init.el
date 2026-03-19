@@ -181,7 +181,7 @@
                             "-Q" "--basic-display" "--iconic"
                             "-eval" ,(prin1-to-string
 				      '(let ((--title "《 Emacs 已在后台启动 》")
-					     (--body  "守护进程将会常驻后台哦～\n\\t\\t         Good Luck!"))
+					     (--body  "守护进程将会常驻后台哦～\n\t\t         Good Luck!"))
 					 (pcase system-type
 					   ('windows-nt
 					    (w32-notification-notify
@@ -201,7 +201,7 @@
 				(seq-some (lambda (tz)
 					    (string= (format-time-string "%Z") tz))
 					  ["中国标准时间" "CST"]))
-		       '(:coding 'chinese-gbk)))))))
+		       '(:coding chinese-gbk)))))))
 
   (when (and (eq system-type 'windows-nt)
 	     (seq-some (lambda (tz)

@@ -74,11 +74,6 @@
   :custom
   (modus-themes-italic-constructs t))
 
-(use-package custom
-  :config
-  (when (display-graphic-p)
-    (setopt custom-enabled-themes '(modus-vivendi))))
-
 (use-package treesit
   :custom
   (treesit-font-lock-level 4))

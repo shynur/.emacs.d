@@ -346,7 +346,6 @@
   (delete-selection-mode))
 
 (use-package tool-bar
-  :if (display-graphic-p)
   :config
   (tool-bar-mode -1))
 

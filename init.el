@@ -21,6 +21,14 @@
   (add-hook 'completion-list-mode-hook (lambda ()
                                          (setq-local truncate-lines t))))
 
+(use-package python-mode
+  :ensure t
+  :custom
+  (python-indent-guess-indent-offset nil)
+  (python-indent-offset 4)
+
+  (python-fill-docstring-style 'pep-257-nn))
+
 (use-package rust-mode
   :ensure t
   :custom

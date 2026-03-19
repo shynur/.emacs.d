@@ -8,7 +8,25 @@
   :custom
   (package-archives '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
 		      ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
-		      ("melpa-stable" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/stable-melpa/"))))
+		      ("melpa-stable" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/stable-melpa/")
+                      ("melpa"        . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/"))))
+
+(use-package marginalia
+  :ensure t
+  :demand t
+  :config
+  (marginalia-mode)
+  (add-hook 'completion-list-mode-hook (lambda ()
+                                         (display-line-numbers-mode -1)))
+  (add-hook 'completion-list-mode-hook (lambda ()
+                                         (setq-local truncate-lines t))))
+
+(use-package rust-mode
+  :ensure t
+  :custom
+  (rust-format-on-save t)
+  :config
+  (add-hook 'rust-mode-hook #'eglot-ensure))
 
 (use-package cus-edit
   :custom
@@ -16,7 +34,7 @@
   :config
   (when (file-exists-p custom-file)
     (load custom-file))
-  ;;(add-hook 'kill-emacs-query-functions 'custom-prompt-customize-unsaved-options)  ; 连 xterm-mouse-mode 都要询问是否记住, 太啰嗦!
+  ;;(add-hook 'kill-emacs-query-functions #'custom-prompt-customize-unsaved-options)  ; 连 xterm-mouse-mode 都要询问是否记住, 太啰嗦!
   )
 
 (use-package diff-mode
@@ -28,10 +46,13 @@
 
 (use-package page-break-lines
   :ensure t
+  :demand t
   :config
   (global-page-break-lines-mode))
 
 (use-package mwheel
+  :custom
+  (mouse-wheel-progressive-speed nil)
   :config
   (push .25 mouse-wheel-scroll-amount)  ; 一次滚动 25% 屏幕
   )
@@ -130,9 +151,15 @@
 
   (tab-always-indent t)
 
+  (scroll-margin 2)
+  (scroll-conservatively 101)
+
   :config
   (eval '(setq inhibit-startup-echo-area-message "shynur"))
   (eval '(setq inhibit-startup-echo-area-message "root"))
+
+  (with-current-buffer (get-buffer-create " *Echo Area 0*" "no hooks")
+    (setq-local word-wrap t))
 
   (prefer-coding-system 'utf-8-unix)
 
@@ -207,11 +234,26 @@
   (add-hook 'help-mode-hook (lambda ()
 			      (display-line-numbers-mode -1))))
 
+(use-package time
+  :config
+  (display-time-mode)
+  :custom
+  (display-time-load-average t)
+  (display-time-load-average-threshold 0))
+
 (use-package cc-mode
   :custom
+  (c-default-style '((java-mode . "java")
+                     (awk-mode . "awk")
+                     (other . "java")))
   (c-tab-always-indent t)
   (add-hook 'c-mode-common-hook (lambda ()
                                   (c-toggle-comment-style -1))))
+
+(use-package c-ts-mode
+  :custom
+  (c-ts-mode-indent-style 'k&r)
+  (c-ts-mode-indent-offset 4))
 
 (use-package keymap
   :config
@@ -267,12 +309,12 @@
 
 (use-package ielm
   :config
-  (add-hook 'ielm-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'ielm-mode-hook 'company-mode))
+  (add-hook 'ielm-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'ielm-mode-hook #'company-mode))
 
 (use-package prog-mode
   :config
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'prog-mode-hook (lambda ()
                               (unless (derived-mode-p 'lisp-data-mode 'scheme-mode)
 				(electric-pair-local-mode))))
@@ -281,7 +323,7 @@
                               (add-hook 'before-save-hook
 					#'delete-trailing-whitespace
 					nil "buffer local")))
-  (add-hook 'prog-mode-hook 'company-mode))
+  (add-hook 'prog-mode-hook #'company-mode))
 
 (use-package text-mode
   :config
@@ -301,6 +343,7 @@
   (tool-bar-mode -1))
 
 (use-package repeat
+  :demand t
   :config
   (repeat-mode))
 
@@ -340,6 +383,7 @@
   (blink-matching-paren-highlight-offscreen t))
 
 (use-package display-line-numbers
+  :demand t
   :config
   (global-display-line-numbers-mode))
 
@@ -353,7 +397,19 @@
   :ensure t)
 
 (use-package go-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-hook         'go-mode-hook #'eglot-ensure)
+  (add-hook 'go-dot-mod-mode-hook #'eglot-ensure)
+  (mapc (lambda (mode-hook)
+          (add-hook mode-hook (lambda ()
+                                (setq-local tab-width 8))))
+        [go-mod-ts-mode-hook go-ts-mode-hook])
+  (let ((#1=formatter-setter (lambda ()
+                            (add-hook 'before-save-hook #'eglot-format-buffer
+                                      nil "buffer local"))))
+    (add-hook     'go-ts-mode-hook #1#)
+    (add-hook 'go-mod-ts-mode-hook #1#)))
 
 (use-package json-mode
   :ensure t)

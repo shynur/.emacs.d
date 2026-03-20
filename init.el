@@ -87,7 +87,7 @@
   (dired-listing-switches "-al -1 -F --format=verbose --human-readable --size --time-style=long-iso --group-directories-first")
   (dired-ls-F-marks-symlinks t)
   (dired-ls-sorting-switches "XSU")
-  (dired-switches-in-mode-line 'as-is))
+  (dired-switches-in-mode-line 0))
 
 (use-package menu-bar
   :config

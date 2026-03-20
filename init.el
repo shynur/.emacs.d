@@ -2,7 +2,6 @@
 
 (use-package use-package
   :custom
-  (use-package-always-ensure t)
   (use-package-always-defer t))
 
 (use-package package
@@ -13,6 +12,7 @@
                       ("melpa"        . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/"))))
 
 (use-package marginalia
+  :ensure t
   :config
   (marginalia-mode)
   :demand t)
@@ -48,6 +48,7 @@
   (xterm-set-window-title t))
 
 (use-package page-break-lines
+  :ensure t
   :demand t
   :config
   (global-page-break-lines-mode))
@@ -282,9 +283,11 @@
   (keymap-global-unset "C-r")
   (keymap-global-unset "C-M-r"))
 
-(use-package swiper)
+(use-package swiper
+  :ensure t)
 
 (use-package ivy
+  :ensure t
   :bind
   ("C-s" . (lambda ()
              (interactive)
@@ -306,9 +309,11 @@
   (ivy-on-del-error-function #'ignore))
 
 (use-package rainbow-delimiters
+  :ensure t
   :hook ((ielm-mode prog-mode text-mode) . rainbow-delimiters-mode))
 
-(use-package company)
+(use-package company
+  :ensure t)
 
 (use-package ielm
   :config
@@ -404,6 +409,7 @@
 (use-package git-modes)
 
 (use-package go-mode
+  :ensure t
   :config
   (mapc (lambda (mode-hook)
           (add-hook mode-hook #'eglot-ensure)

@@ -82,6 +82,13 @@
   :config
   (facemenu-update))
 
+(use-package dired
+  :custom
+  (dired-listing-switches "-al -1 -F --format=verbose --human-readable --size --time-style=long-iso --group-directories-first")
+  (dired-ls-F-marks-symlinks t)
+  (dired-ls-sorting-switches "XSU")
+  (dired-switches-in-mode-line 'as-is))
+
 (use-package menu-bar
   :config
   (keymap-global-unset "<menu-bar> <file> <new-file>")

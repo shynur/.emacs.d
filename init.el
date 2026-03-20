@@ -337,6 +337,7 @@
 					nil "buffer local"))))
 
 (use-package delsel
+  :demand t
   :config
   (delete-selection-mode))
 
@@ -350,14 +351,17 @@
   (repeat-mode))
 
 (use-package savehist
+  :demand t
   :config
   (savehist-mode))
 
 (use-package recentf
+  :demand t
   :config
   (recentf-mode))
 
 (use-package saveplace
+  :demand t
   :config
   (save-place-mode))
 

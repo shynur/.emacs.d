@@ -375,6 +375,14 @@
 
 (use-package frame
   :config
+  (if (and (not (daemonp)))
+      (when (display-graphic-p)
+        (load-theme 'modus-vivendi t))
+    (add-hook 'after-make-frame-functions (lambda (frame)
+                                            (with-selected-frame frame
+                                              (when (display-graphic-p)
+                                                (load-theme 'modus-vivendi t))))))
+
   (modify-all-frames-parameters '((alpha . (80 . 55))
                                   (height . 25)
                                   (width . 80)

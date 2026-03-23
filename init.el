@@ -428,6 +428,7 @@
 (use-package nginx-mode)
 
 (use-package rainbow-mode
+  :ensure t
   :hook (prog-mode text-mode))
 
 (use-package sed-mode)

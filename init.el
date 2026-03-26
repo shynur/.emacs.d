@@ -413,7 +413,8 @@
   :config
   (global-display-line-numbers-mode))
 
-(use-package dockerfile-mode)
+(use-package dockerfile-mode
+  :ensure t)
 
 (use-package csv-mode)
 
@@ -448,6 +449,7 @@
 
 (use-package web-mode)
 
-(use-package yaml-mode)
+(use-package yaml-mode
+  :ensure t)
 
 (use-package cmake-mode)

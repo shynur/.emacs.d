@@ -267,19 +267,27 @@
 (use-package keymap
   :demand t
   :config
-  (let ((#1=#:key-swapper (let ((#2=#:terminals-swapped ()))
-                            (lambda (frame)
-                              (unless (seq-contains ["/dev/tty"] (terminal-name))
-                                (unless (memq (frame-terminal) #2#)
-                                  (with-selected-frame frame
-                                    (key-translate "[" "(")
-                                    (key-translate "]" ")")
-                                    (key-translate "(" "[")
-                                    (key-translate ")" "]")
-                                    (push (frame-terminal) #2#))))))))
+  (let* ((#3=#:terminal-need-swap-key-p (lambda (&optional terminal)
+                                          (seq-some (lambda (re)
+                                                      (string-match-p re (terminal-name terminal)))
+                                                    [
+                                                     "\\`/dev/tty\\'"
+                                                     "\\`/dev/pts/"
+                                                     ])))
+         (#1=#:key-swapper (let ((#2=#:terminals-swapped ()))
+                             (lambda (frame)
+                               (unless (funcall #3# frame)
+                                 (unless (memq (frame-terminal frame) #2#)
+                                   (with-selected-frame frame
+                                     (key-translate "[" "(")
+                                     (key-translate "]" ")")
+                                     (key-translate "(" "[")
+                                     (key-translate ")" "]")
+                                     (push (frame-terminal) #2#))))))))
     (add-hook 'after-make-frame-functions #1#)
     (unless (daemonp)
-      (funcall #1# (selected-frame)))))
+      (unless (funcall #3#)
+        (funcall #1# (selected-frame))))))
 
 (use-package isearch
   :config

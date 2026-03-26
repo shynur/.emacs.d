@@ -256,6 +256,9 @@
   (add-hook 'c-mode-common-hook (lambda ()
                                   (c-toggle-comment-style -1))))
 
+(use-package js
+  :mode ("\\.mjs\\'" . js-mode))
+
 (use-package c-ts-mode
   :custom
   (c-ts-mode-indent-style 'k&r)

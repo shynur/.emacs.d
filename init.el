@@ -442,6 +442,9 @@
 
 (use-package json-mode)
 
+(use-package systemd
+  :ensure t)
+
 (use-package markdown-mode
   :ensure t)
 

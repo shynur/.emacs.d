@@ -464,3 +464,8 @@
   :ensure t)
 
 (use-package cmake-mode)
+
+(use-package autorevert
+  :demand t
+  :config
+  (global-auto-revert-mode))

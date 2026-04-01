@@ -448,6 +448,9 @@
 (use-package markdown-mode
   :ensure t)
 
+(use-package typescript-mode
+  :ensure t)
+
 (use-package nginx-mode)
 
 (use-package rainbow-mode

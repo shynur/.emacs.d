@@ -40,7 +40,7 @@
   )
 
 (use-package diff-mode
-  :mode "/.git/COMMIT_EDITMSG\\'")
+  :mode "/\\.git/COMMIT_EDITMSG\\'")
 
 (use-package term/xterm
   :demand t

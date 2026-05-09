@@ -446,7 +446,8 @@
   :ensure t)
 
 (use-package markdown-mode
-  :ensure t)
+  :ensure t
+  :mode "\\`/tmp/gemini-edit-[[:alnum:]]\\{6\\}/buffer\\.txt\\'")
 
 (use-package typescript-mode
   :ensure t)

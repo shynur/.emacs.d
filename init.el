@@ -344,7 +344,7 @@
 
 (use-package conf-mode
   :config
-  (add-hook 'text-mode-hook (lambda ()
+  (add-hook 'conf-mode-hook (lambda ()
                               (setq-local require-final-newline t)
                               (add-hook 'before-save-hook
                                         #'delete-trailing-whitespace

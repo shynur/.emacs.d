@@ -336,12 +336,19 @@
                               (unless (derived-mode-p 'lisp-data-mode 'scheme-mode)
                                 (electric-pair-local-mode))))
   (add-hook 'prog-mode-hook (lambda ()
-                              (setq-local require-final-newline t)))
-  (add-hook 'prog-mode-hook (lambda ()
+                              (setq-local require-final-newline t)
                               (add-hook 'before-save-hook
                                         #'delete-trailing-whitespace
                                         nil "buffer local")))
   (add-hook 'prog-mode-hook #'company-mode))
+
+(use-package conf-mode
+  :config
+  (add-hook 'text-mode-hook (lambda ()
+                              (setq-local require-final-newline t)
+                              (add-hook 'before-save-hook
+                                        #'delete-trailing-whitespace
+                                        nil "buffer local"))))
 
 (use-package text-mode
   :config

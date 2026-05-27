@@ -449,6 +449,9 @@
   :ensure t
   :mode "\\`/tmp/gemini-edit-[[:alnum:]]\\{6\\}/buffer\\.txt\\'")
 
+(use-package conf-mode
+  :mode "/.conan2/profiles/.*[^/]\\'")
+
 (use-package typescript-mode
   :ensure t)
 

@@ -454,7 +454,8 @@
 
 (use-package markdown-mode
   :ensure t
-  :mode "\\`/tmp/gemini-edit-[[:alnum:]]\\{6\\}/buffer\\.txt\\'")
+  :mode "\\`/tmp/gemini-edit-[[:alnum:]]\\{6\\}/buffer\\.txt\\'"
+  :custom (markdown-fontify-code-blocks-natively t))
 
 (use-package conf-mode
   :mode "/.conan2/profiles/.*[^/]\\'")

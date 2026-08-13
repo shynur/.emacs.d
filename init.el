@@ -478,7 +478,8 @@
 (use-package yaml-mode
   :ensure t)
 
-(use-package cmake-mode)
+(use-package cmake-mode
+  :ensure t)
 
 (use-package autorevert
   :demand t

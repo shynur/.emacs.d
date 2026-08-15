@@ -72,6 +72,11 @@
   :custom
   (treesit-font-lock-level 4))
 
+(use-package minibuffer
+  :custom
+  (read-file-name-completion-ignore-case t)
+  (read-buffer-completion-ignore-case t))
+
 (use-package facemenu
   :demand t
   :config
@@ -158,6 +163,8 @@
 
   (scroll-margin 2)
   (scroll-conservatively 101)
+
+  (completion-ignore-case t)
 
   :config
   (eval '(setq inhibit-startup-echo-area-message "shynur"))

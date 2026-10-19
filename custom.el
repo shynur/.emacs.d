@@ -10,5 +10,5 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Maple Mono SC NF" :weight regular :height 151))))
+ '(default ((t (:family "Maple Mono NF CN" :weight regular :height 151))))
  '(cursor ((t (:background "chartreuse")))))
